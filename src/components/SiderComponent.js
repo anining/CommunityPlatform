@@ -1,0 +1,112 @@
+import React, { useState } from 'react'
+import { Layout, Menu } from 'antd'
+import LogoComponent from './LogoComponent'
+import sider1 from '../icons/sider/sider1.png'
+import sider2 from '../icons/sider/sider2.png'
+import sider3 from '../icons/sider/sider3.png'
+import sider4 from '../icons/sider/sider4.png'
+import sider5 from '../icons/sider/sider5.png'
+import sider6 from '../icons/sider/sider6.png'
+import sider7 from '../icons/sider/sider7.png'
+import sider8 from '../icons/sider/sider8.png'
+import sider9 from '../icons/sider/sider9.png'
+import sider10 from '../icons/sider/sider10.png'
+import sider11 from '../icons/sider/sider11.png'
+import sider12 from '../icons/sider/sider12.png'
+import sider13 from '../icons/sider/sider13.png'
+import sider14 from '../icons/sider/sider14.png'
+import sider15 from '../icons/sider/sider15.png'
+import sider16 from '../icons/sider/sider16.png'
+import sider17 from '../icons/sider/sider17.png'
+import sider18 from '../icons/sider/sider18.png'
+import sider19 from '../icons/sider/sider19.png'
+import sider20 from '../icons/sider/sider20.png'
+
+function SiderComponent ({ collapsed }) {
+  const [selectedKeys, setSelectedKeys] = useState([])
+
+  function menuItemClick ({ item, key, keyPath, domEvent }) {
+    console.log(key)
+    console.log(keyPath)
+    setSelectedKeys(keyPath)
+  }
+
+  return (
+    <Layout.Sider theme="light" trigger={null} collapsible={true} collapsed={collapsed} width={200}>
+      <LogoComponent />
+      <Menu theme="light" mode="inline" selectedKeys={selectedKeys} onClick={menuItemClick}>
+        <Menu.Item key="home" icon={<Icon keys="home" selectedKeys={selectedKeys}/>}>
+          用户首页
+        </Menu.Item>
+        <Menu.SubMenu key="statistics" icon={<Icon keys="statistics" selectedKeys={selectedKeys} />} title="数据统计">
+          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
+          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
+          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
+          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
+        </Menu.SubMenu>
+        <Menu.SubMenu key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务">
+          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
+          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
+          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
+          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
+        </Menu.SubMenu>
+        <Menu.SubMenu key="cardBusiness" icon={<Icon keys="cardBusiness" selectedKeys={selectedKeys} />} title="卡密业务">
+          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
+          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
+          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
+          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
+        </Menu.SubMenu>
+        <Menu.SubMenu key="services" icon={<Icon keys="services" selectedKeys={selectedKeys} />} title="增值服务">
+          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
+          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
+          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
+          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
+        </Menu.SubMenu>
+        <Menu.SubMenu key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录">
+          <Menu.Item key="communityOrder">社区订单</Menu.Item>
+          <Menu.Item key="cardOrder">卡密订单</Menu.Item>
+        </Menu.SubMenu>
+        <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}>
+          资金流水
+        </Menu.Item>
+        <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}>
+          用户管理
+        </Menu.Item>
+        <Menu.SubMenu key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置">
+          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
+          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
+          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
+          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
+        </Menu.SubMenu>
+        <Menu.SubMenu key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置">
+          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
+          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
+          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
+          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
+        </Menu.SubMenu>
+      </Menu>
+    </Layout.Sider>
+  )
+}
+
+function Icon ({ keys, selectedKeys = [] }) {
+  const obj = {
+    "home": [sider15, sider5],
+    "statistics": [sider18, sider14],
+    "communityBusiness": [sider12, sider4],
+    "cardBusiness": [sider2, sider6],
+    "services": [sider7, sider9],
+    "orderRecording": [sider13, sider10],
+    "capitalFlow": [sider17, sider3],
+    "user": [sider8, sider1],
+    "webSetting": [sider11, sider20],
+    "systemSetting": [sider19, sider16],
+  }
+  if (selectedKeys.includes(keys)) {
+    return <img src={obj[keys][1]} alt="" style={{height:15,width:15,marginBottom:6,marginRight:10}} />
+  } else {
+    return <img src={obj[keys][0]} alt="" style={{height:15,width:15,marginBottom:6,marginRight:10}} />
+  }
+}
+
+export default SiderComponent
