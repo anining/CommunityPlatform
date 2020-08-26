@@ -27,8 +27,6 @@ function SiderComponent ({ collapsed }) {
   const [selectedKeys, setSelectedKeys] = useState([])
 
   function menuItemClick ({ item, key, keyPath, domEvent }) {
-    console.log(key)
-    console.log(keyPath)
     const history = h.get();
     setSelectedKeys(keyPath)
     history.push(`/main/${key}`)
@@ -37,7 +35,7 @@ function SiderComponent ({ collapsed }) {
   return (
     <Layout.Sider theme="light" trigger={null} collapsible={true} collapsed={collapsed} width={200}>
       <LogoComponent />
-      <Menu theme="light" mode="inline" selectedKeys={selectedKeys} onClick={menuItemClick}>
+      <Menu theme="light" mode="inline" selectedKeys={selectedKeys} onClick={menuItemClick} style={{fontSize:12}}>
         <Menu.Item key="home" icon={<Icon keys="home" selectedKeys={selectedKeys}/>}>
           用户首页
         </Menu.Item>
@@ -66,8 +64,8 @@ function SiderComponent ({ collapsed }) {
           {/* <Menu.Item key="4">Option 4</Menu.Item> */}
         </Menu.SubMenu>
         <Menu.SubMenu key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录">
-          <Menu.Item key="communityOrder">社区订单</Menu.Item>
-          <Menu.Item key="cardOrder">卡密订单</Menu.Item>
+          <Menu.Item style={{fontSize:12}} key="communityOrder">社区订单</Menu.Item>
+          <Menu.Item style={{fontSize:12}} key="cardOrder">卡密订单</Menu.Item>
         </Menu.SubMenu>
         <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}>
           资金流水

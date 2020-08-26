@@ -5,13 +5,13 @@ import MainComponent from '../components/MainComponent'
 import { proxyRouter } from "../utils/history"
 
 function Router () {
-  const [loggedIn, setLoggedIn] = useState(true)
+  const [loggedIn, setLoggedIn] = useState(false)
   const history = useHistory()
   proxyRouter(history, 'login')
 
   return (
     <Switch>
-      <Route exact path="/">
+      <Route path="/">
         {loggedIn ? <Redirect to="/main" /> : <LoginView />}
       </Route>
       <Route path="/main">
