@@ -21,6 +21,7 @@ import sider17 from '../icons/sider/sider17.png'
 import sider18 from '../icons/sider/sider18.png'
 import sider19 from '../icons/sider/sider19.png'
 import sider20 from '../icons/sider/sider20.png'
+import { h } from '../utils/history'
 
 function SiderComponent ({ collapsed }) {
   const [selectedKeys, setSelectedKeys] = useState([])
@@ -28,7 +29,9 @@ function SiderComponent ({ collapsed }) {
   function menuItemClick ({ item, key, keyPath, domEvent }) {
     console.log(key)
     console.log(keyPath)
+    const history = h.get();
     setSelectedKeys(keyPath)
+    history.push(`/main/${key}`)
   }
 
   return (
