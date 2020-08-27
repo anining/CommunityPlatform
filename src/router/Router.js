@@ -6,12 +6,11 @@ import { proxyRouter } from "../utils/history"
 
 function Router () {
   const [loggedIn, setLoggedIn] = useState(false)
-  const history = useHistory()
-  proxyRouter(history, 'login')
+  proxyRouter(useHistory(), 'login')
 
   return (
     <Switch>
-      <Route path="/">
+      <Route exact path="/">
         {loggedIn ? <Redirect to="/main" /> : <LoginView />}
       </Route>
       <Route path="/main">
@@ -20,7 +19,7 @@ function Router () {
       <Route path="/login">
         <LoginView />
       </Route>
-      <Redirect to="/main"/>
+      <Redirect to="/"/>
     </Switch>
   )
 }

@@ -10,11 +10,16 @@ function LoginView () {
     console.log(`checked = ${e.target.checked}`);
   }
 
+  function submit () {
+    console.log("submit")
+  }
+
   return (
     <div style={styles.container}>
       <div style={styles.imgBg}>
         <div style={styles.view}>
-          <div style={styles.tips}>
+          <img src={auth2} alt="" style={styles.img} />
+          <div style={styles.leftView}>
             <div style={styles.tipsTitle}>欢迎加入分站社区！</div>
             <div style={styles.tipsContent}>
               <div>卡密实时到账</div>
@@ -22,27 +27,30 @@ function LoginView () {
               <div>社区任务超多</div>
             </div>
           </div>
-          <img src={auth2} alt="" style={styles.img} />
-          <div style={styles.inputView}>
-            <div style={{fontSize:15,fontWeight:600,color:'#141619'}}>登录</div>
-            <div>
-              <div style={{fontWeight:"#080808",fontSize:13}}>账号</div>
-              <Input style={styles.input} size="large" placeholder="请输入登录手机号" prefix={<UserOutlined />} />
+          <div style={styles.rightView}>
+            <div style={styles.inputView}>
+              <div style={{fontSize:15,fontWeight:600,color:'#141619'}}>登录</div>
+              <div>
+                <div style={{fontWeight:"#080808",fontSize:13}}>账号</div>
+                <Input size="large" style={styles.input} placeholder="请输入登录手机号" prefix={<UserOutlined />} />
+              </div>
+              <div>
+                <div style={{fontWeight:"#080808",fontSize:13}}>密码</div>
+                <Input size="large" style={styles.input}  placeholder="请输入登录密码" prefix={<PauseOutlined />} />
+              </div>
+              <Checkbox onChange={onChange} style={{color:'#2C67FF',fontSize:12}}>自动登录</Checkbox>
+              <Button type="primary" onClick={submit} style={styles.btn}>登录</Button>
             </div>
-            <div>
-              <div style={{fontWeight:"#080808",fontSize:13}}>密码</div>
-              <Input style={styles.input} size="large" placeholder="请输入登录密码" prefix={<PauseOutlined />} />
-            </div>
-            <Checkbox onChange={onChange} style={{color:'#2C67FF',fontSize:12}}>自动登录</Checkbox>
-            <Button type="primary" style={styles.btn}>登录</Button>
           </div>
         </div>
-        <div style={styles.itemView}>
-          <div style={styles.item}>帮助中心</div>
-          <div style={styles.item}>开放平台</div>
-          <div style={styles.item}>免责条款</div>
+        <div style={styles.bottomView}>
+          <div style={styles.itemView}>
+            <div style={styles.item}>帮助中心</div>
+            <div style={styles.item}>开放平台</div>
+            <div style={styles.item}>免责条款</div>
+          </div>
+          <div style={styles.footer}>Cooyright © 2020 光棱科技 </div>
         </div>
-        <div style={styles.footer}>Cooyright © 2020 光棱科技 </div>
       </div>
     </div>
   )
@@ -51,27 +59,31 @@ function LoginView () {
 const styles = {
   container: {
     width: '100%',
+    minWidth: 700,
+    minHeight: 500,
     height: '100%',
   },
   input: {
     marginTop: 5,
+    width: 250,
+    height: 35,
   },
   btn: {
-    width: '80%',
+    width: 250,
   },
   inputView: {
     boxSizing: 'border-box',
     paddingLeft: '10%',
-    paddingTop: '5%',
-    paddingBottom: '5%',
-    position: 'absolute',
-    right: '5%',
+    paddingRight: '10%',
+    paddingTop: '8%',
+    paddingBottom: '8%',
     background: '#fff',
     boxShadow: '0px 0px 11px 0px rgba(42,92,220,0.1)',
-    bottom: '10%',
     height: '80%',
-    width: '45%',
+    width: '80%',
     borderRadius: 4,
+    marginLeft: '10%',
+    marginTop: '10%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
@@ -81,6 +93,7 @@ const styles = {
     width: '100%',
     paddingLeft: '10%',
     paddingRight: '10%',
+    fontSize: 13,
     paddingTop: 15,
     color: '#2C67FF',
     display: 'flex',
@@ -88,55 +101,67 @@ const styles = {
     justifyContent: 'space-around',
   },
   tipsTitle: {
-    fontSize: 30,
+    fontSize: 25,
     color: '#2C67FF',
     fontWeight: 800
-  },
-  tips: {
-    width: '50%',
-    height: 200,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   img: {
     position: 'absolute',
     left: 0,
     bottom: 0,
-    width: 350,
-    height: 245.1
+    width: "50%",
   },
   item: {
     marginLeft: 25,
     marginRight: 25,
     color: '#fff',
-    marginTop: '10%',
+    fontSize: 13,
   },
   footer: {
     fontSize: 12,
     color: '#fff',
-    marginBottom: '3%',
   },
   imgBg: {
     width: '100%',
-    height: '100%',
+    height: "100%",
     backgroundImage: `url(${auth1})`,
-    backgroundSize: "100% 100%",
-    // paddingTop: '56.25%',
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: '#6e98ff'
+    justifyContent: 'flex-end',
   },
   view: {
     height: '70%',
     width: '70%',
     backgroundColor: '#fff',
-    borderRadius: 32,
-    marginTop: '6%',
+    borderRadius: 20,
     position: 'relative',
+    display: 'flex',
+  },
+  leftView: {
+    boxSizing: 'border-box',
+    paddingTop: '5%',
+    width: '50%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  rightView: {
+    height: '100%',
+    width: '50%',
+  },
+  bottomView: {
+    width: '100%',
+    height: '10%',
+    marginTop: '2%',
+    marginBottom: '2%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   itemView: {
     display: 'flex',

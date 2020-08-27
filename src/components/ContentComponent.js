@@ -12,7 +12,7 @@ function ContentComponent () {
   return (
     <Layout.Content style={{margin:24}}>
       <Switch>
-        <Route exact path="/main/home">
+        <Route path="/main/home">
           <HomeView />
         </Route>
         {/* <Route exact path="/main/statistics"> */}
@@ -27,18 +27,18 @@ function ContentComponent () {
         {/* <Route exact path="/main/services"> */}
         {/*   <ServicesView /> */}
         {/* </Route> */}
-        <Route exact path="/main/communityOrder">
-          <CommunityOrderView />
-        </Route>
-        <Route path="/main/cardOrder">
-          <CardOrderView />
-        </Route>
-        <Route path="/main/capitalFlow">
-          <CapitalFlowView />
-        </Route>
-        <Route path="/main/user">
-          <UserView />
-        </Route>
+        {/* <Route exact path="/main/communityOrder"> */}
+        {/*   <CommunityOrderView /> */}
+        {/* </Route> */}
+        {/* <Route path="/main/cardOrder"> */}
+        {/*   <CardOrderView /> */}
+        {/* </Route> */}
+        {/* <Route path="/main/capitalFlow"> */}
+        {/*   <CapitalFlowView /> */}
+        {/* </Route> */}
+        {/* <Route path="/main/user"> */}
+        {/*   <UserView /> */}
+        {/* </Route> */}
         {/* <Route path="/main/webSetting"> */}
         {/*   <WebSettingView /> */}
         {/* </Route> */}

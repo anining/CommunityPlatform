@@ -39,52 +39,52 @@ function SiderComponent ({ collapsed }) {
         <Menu.Item key="home" icon={<Icon keys="home" selectedKeys={selectedKeys}/>}>
           用户首页
         </Menu.Item>
-        <Menu.SubMenu key="statistics" icon={<Icon keys="statistics" selectedKeys={selectedKeys} />} title="数据统计">
-          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
-          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
-          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
-          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
-        </Menu.SubMenu>
-        <Menu.SubMenu key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务">
-          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
-          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
-          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
-          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
-        </Menu.SubMenu>
-        <Menu.SubMenu key="cardBusiness" icon={<Icon keys="cardBusiness" selectedKeys={selectedKeys} />} title="卡密业务">
-          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
-          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
-          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
-          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
-        </Menu.SubMenu>
-        <Menu.SubMenu key="services" icon={<Icon keys="services" selectedKeys={selectedKeys} />} title="增值服务">
-          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
-          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
-          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
-          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
-        </Menu.SubMenu>
-        <Menu.SubMenu key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录">
-          <Menu.Item style={{fontSize:12}} key="communityOrder">社区订单</Menu.Item>
-          <Menu.Item style={{fontSize:12}} key="cardOrder">卡密订单</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}>
-          资金流水
-        </Menu.Item>
-        <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}>
-          用户管理
-        </Menu.Item>
-        <Menu.SubMenu key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置">
-          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
-          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
-          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
-          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
-        </Menu.SubMenu>
-        <Menu.SubMenu key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置">
-          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
-          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
-          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
-          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
-        </Menu.SubMenu>
+        {/* <Menu.SubMenu key="statistics" icon={<Icon keys="statistics" selectedKeys={selectedKeys} />} title="数据统计"> */}
+        {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.SubMenu key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务"> */}
+        {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.SubMenu key="cardBusiness" icon={<Icon keys="cardBusiness" selectedKeys={selectedKeys} />} title="卡密业务"> */}
+        {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.SubMenu key="services" icon={<Icon keys="services" selectedKeys={selectedKeys} />} title="增值服务"> */}
+        {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.SubMenu key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录"> */}
+        {/*   <Menu.Item style={{fontSize:12}} key="communityOrder">社区订单</Menu.Item> */}
+        {/*   <Menu.Item style={{fontSize:12}} key="cardOrder">卡密订单</Menu.Item> */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}> */}
+        {/*   资金流水 */}
+        {/* </Menu.Item> */}
+        {/* <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}> */}
+        {/*   用户管理 */}
+        {/* </Menu.Item> */}
+        {/* <Menu.SubMenu key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置"> */}
+        {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.SubMenu key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置"> */}
+        {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
+        {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
+        {/* </Menu.SubMenu> */}
       </Menu>
     </Layout.Sider>
   )
@@ -105,9 +105,8 @@ function Icon ({ keys, selectedKeys = [] }) {
   }
   if (selectedKeys.includes(keys)) {
     return <img src={obj[keys][1]} alt="" style={{height:15,width:15,marginBottom:6,marginRight:10}} />
-  } else {
-    return <img src={obj[keys][0]} alt="" style={{height:15,width:15,marginBottom:6,marginRight:10}} />
   }
+  return <img src={obj[keys][0]} alt="" style={{height:15,width:15,marginBottom:6,marginRight:10}} />
 }
 
 export default SiderComponent
