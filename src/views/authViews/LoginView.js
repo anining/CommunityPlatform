@@ -3,6 +3,7 @@ import { Input, Checkbox, Button } from 'antd';
 import { UserOutlined, PauseOutlined } from '@ant-design/icons';
 import auth1 from '../../icons/auth/auth1.png'
 import auth2 from '../../icons/auth/auth2.png'
+import { h } from '../../utils/history'
 
 function LoginView () {
 
@@ -11,7 +12,8 @@ function LoginView () {
   }
 
   function submit () {
-    console.log("submit")
+    const history = h.get();
+    history.push('/guide')
   }
 
   return (
