@@ -7,6 +7,7 @@ import CommunityOrderView from '../views/orderRecordingViews/CommunityOrderView'
 import UserView from '../views/userViews/UserView'
 import CapitalFlowView from '../views/capitalFlowViews/CapitalFlowView'
 import GoodCategoryView from '../views/communityBusinessViews/GoodCategoryView'
+import EditGoodCategoryView from '../views/communityBusinessViews/EditGoodCategoryView'
 
 function ContentComponent () {
 
@@ -23,6 +24,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/goodCategory">
           <GoodCategoryView />
+        </Route>
+        <Route exact path="/main/editGoodCategory">
+          <EditGoodCategoryView />
         </Route>
         {/* <Route exact path="/main/statistics"> */}
         {/*   <StatisticsView /> */}

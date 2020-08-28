@@ -88,7 +88,7 @@ function RTable () {
       key: "action",
       render: (text, record) => (
         <Space size="small">
-          <a href="">编辑商品</a>
+          <a href="/main/editGoodCategory">编辑商品</a>
         </Space>
       )
   },
