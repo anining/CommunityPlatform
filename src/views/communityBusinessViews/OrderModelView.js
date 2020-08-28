@@ -6,7 +6,7 @@ import good2 from '../../icons/good/good2.png'
 import good3 from '../../icons/good/good3.png'
 import good4 from '../../icons/good/good4.png'
 
-function GoodCategoryView () {
+function OrderModelView () {
   return (
     <div style={styles.container}>
       <RTable />
@@ -344,4 +344,4 @@ const styles = {
   },
 }
 
-export default GoodCategoryView
+export default OrderModelView

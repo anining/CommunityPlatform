@@ -21,6 +21,8 @@ import sider17 from '../icons/sider/sider17.png'
 import sider18 from '../icons/sider/sider18.png'
 import sider19 from '../icons/sider/sider19.png'
 import sider20 from '../icons/sider/sider20.png'
+import sider21 from '../icons/sider/sider21.png'
+import sider22 from '../icons/sider/sider22.png'
 import { h } from '../utils/history'
 
 function SiderComponent ({ collapsed }) {
@@ -72,6 +74,10 @@ function SiderComponent ({ collapsed }) {
         {/* <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}> */}
         {/*   用户管理 */}
         {/* </Menu.Item> */}
+        <Menu.SubMenu key="childWeb" icon={<Icon keys="childWeb" selectedKeys={selectedKeys} />} title="分站管理">
+          <Menu.Item key="childWebList">分站列表</Menu.Item>
+          <Menu.Item key="childWebSetting">分站设置</Menu.Item>
+        </Menu.SubMenu>
         {/* <Menu.SubMenu key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置"> */}
         {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
         {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
@@ -101,6 +107,7 @@ function Icon ({ keys, selectedKeys = [] }) {
     "user": [sider8, sider1],
     "webSetting": [sider11, sider20],
     "systemSetting": [sider19, sider16],
+    "childWeb": [sider21, sider22],
   }
   if (selectedKeys.includes(keys)) {
     return <img src={obj[keys][1]} alt="" style={{height:15,width:15,marginBottom:6,marginRight:10}} />

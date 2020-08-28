@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Input, Button, Upload, message, Radio, Checkbox } from 'antd'
 import good5 from '../../icons/good/good5.png'
 
-function EditGoodCategoryView () {
+function EditCommunityGoodView () {
 
   return (
     <div style={styles.container}>
@@ -88,4 +88,4 @@ const styles = {
   }
 }
 
-export default EditGoodCategoryView
+export default EditCommunityGoodView

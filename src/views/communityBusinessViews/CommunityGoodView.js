@@ -7,7 +7,7 @@ import good3 from '../../icons/good/good3.png'
 import good4 from '../../icons/good/good4.png'
 import good6 from '../../icons/good/good6.png'
 
-function GoodCategoryView () {
+function CommunityGoodView () {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -435,4 +435,4 @@ const styles = {
   }
 }
 
-export default GoodCategoryView
+export default CommunityGoodView

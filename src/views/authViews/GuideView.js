@@ -5,7 +5,7 @@ import guide2 from '../../icons/guide/guide2.png'
 import guide3 from '../../icons/guide/guide3.png'
 import { h } from '../../utils/history'
 
-function Guide () {
+function GuideView () {
   const [guideId, setGuideId] = useState(0)
 
   function submit () {
@@ -332,4 +332,4 @@ const styles = {
   },
 }
 
-export default Guide
+export default GuideView

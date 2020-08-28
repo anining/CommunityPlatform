@@ -5,7 +5,7 @@ import good5 from '../../icons/good/good5.png'
 import good8 from '../../icons/good/good8.png'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
-function EditGoodCategoryView () {
+function EditOrderModelView () {
   const [imageUrl, setImageUrl] = useState()
   const [loading, setLoading] = useState()
   const [value, setValue] = useState()
@@ -220,4 +220,4 @@ const styles = {
   }
 }
 
-export default EditGoodCategoryView
+export default EditOrderModelView
