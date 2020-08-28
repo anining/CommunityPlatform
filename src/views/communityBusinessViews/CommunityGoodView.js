@@ -9,6 +9,12 @@ import good4 from '../../icons/good/good4.png'
 function GoodCategoryView () {
   return (
     <div style={styles.container}>
+      <div style={styles.header}>
+        <div style={styles.headerL}>
+          <HeaderItem />
+        </div>
+        <Button type="primary" size="small">添加卡密</Button>
+      </div>
       <RTable />
     </div>
   )
@@ -82,7 +88,7 @@ function RTable () {
       key: "action",
       render: (text, record) => (
         <Space size="small">
-          <a href="/main/editCommunityGood">编辑分类</a>
+          <a href="/main/editCommunityGood">编辑商品</a>
         </Space>
       )
   },
@@ -226,14 +232,34 @@ function RTable () {
         width:'96%',
       }}>
         <div>
-          <Input placeholder="请输入分类名称" size="small" style={{width:150,marginRight:15}}/>
+          <Input placeholder="请输入商品编号" size="small" style={{width:150}}/>
+          <Dropdown overlay={menu}>
+            <Button size="small" style={styles.dropdown}>
+              请选择商品分类 <DownOutlined />
+            </Button>
+          </Dropdown>
+          <Dropdown overlay={menu} style={styles.dropdown}>
+            <Button style={styles.dropdown} size="small">
+              请选择商品状态 <DownOutlined />
+            </Button>
+          </Dropdown>
+          <Dropdown overlay={menu} style={styles.dropdown}>
+            <Button style={styles.dropdown} size="small">
+              请选择用户权限 <DownOutlined />
+            </Button>
+          </Dropdown>
+          <Dropdown overlay={menu} style={styles.dropdown}>
+            <Button style={styles.dropdown} size="small">
+              请选择供货商 <DownOutlined />
+            </Button>
+          </Dropdown>
+        </div>
+        <div>
+          <Button size="small" style={{color:'#979BA3',marginRight:15}}>重置</Button>
           <Button size="small" type="primary" icon={<SearchOutlined />}>
-            搜索分类
+            Search
           </Button>
         </div>
-        <Button size="small" type="primary" icon={<SearchOutlined />}>
-          新建分类
-        </Button>
       </div>
       <div style={{
         display:'flex',
@@ -338,10 +364,27 @@ const styles = {
   },
   main: {
     width: '100%',
-    height: '100%',
+    height: '86%',
     background: '#fff',
     borderRadius: 2
   },
+  header: {
+    height: '12%',
+    width: '100%',
+    background: '#fff',
+    display: 'flex',
+    borderRadius: 2,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: '1%',
+    paddingRight: '2%'
+  },
+  headerL: {
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%',
+    width: '70%',
+  }
 }
 
 export default GoodCategoryView

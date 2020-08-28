@@ -46,6 +46,7 @@ function SiderComponent ({ collapsed }) {
         {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
         {/* </Menu.SubMenu> */}
         <Menu.SubMenu key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务">
+          <Menu.Item key="communityGood">社区商品</Menu.Item>
           <Menu.Item key="goodCategory">商品分类</Menu.Item>
           {/* <Menu.Item key="2">Option 2</Menu.Item> */}
           {/* <Menu.Item key="3">Option 3</Menu.Item> */}
