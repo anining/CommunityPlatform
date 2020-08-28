@@ -6,14 +6,23 @@ import CardOrderView from '../views/orderRecordingViews/CardOrderView'
 import CommunityOrderView from '../views/orderRecordingViews/CommunityOrderView'
 import UserView from '../views/userViews/UserView'
 import CapitalFlowView from '../views/capitalFlowViews/CapitalFlowView'
+import GoodCategoryView from '../views/communityBusinessViews/GoodCategoryView'
 
 function ContentComponent () {
 
   return (
-    <Layout.Content style={{margin:24}}>
+    <Layout.Content style={{
+      marginLeft:24,
+      marginRight:24,
+      marginBottom:24,
+      marginTop:84
+    }}>
       <Switch>
         <Route path="/main/home">
           <HomeView />
+        </Route>
+        <Route exact path="/main/goodCategory">
+          <GoodCategoryView />
         </Route>
         {/* <Route exact path="/main/statistics"> */}
         {/*   <StatisticsView /> */}

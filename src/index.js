@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css'
 import './styles/index.css'
+import './styles/row.css'
 import Router from '../src/router/Router';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom'

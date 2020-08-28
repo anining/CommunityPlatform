@@ -45,12 +45,12 @@ function SiderComponent ({ collapsed }) {
         {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
         {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
         {/* </Menu.SubMenu> */}
-        {/* <Menu.SubMenu key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务"> */}
-        {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
-        {/* </Menu.SubMenu> */}
+        <Menu.SubMenu key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务">
+          <Menu.Item key="goodCategory">商品分类</Menu.Item>
+          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
+          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
+          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
+        </Menu.SubMenu>
         {/* <Menu.SubMenu key="cardBusiness" icon={<Icon keys="cardBusiness" selectedKeys={selectedKeys} />} title="卡密业务"> */}
         {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
         {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
