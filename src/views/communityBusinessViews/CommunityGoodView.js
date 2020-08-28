@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Space } from 'antd'
+import { Button, Menu, Dropdown, Table, message, Input, Space, Modal } from 'antd'
 import good1 from '../../icons/good/good1.png'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import good2 from '../../icons/good/good2.png'
 import good3 from '../../icons/good/good3.png'
 import good4 from '../../icons/good/good4.png'
+import good6 from '../../icons/good/good6.png'
 
 function GoodCategoryView () {
   return (
@@ -22,6 +23,8 @@ function GoodCategoryView () {
 
 function RTable () {
   const [selectionType, setSelectionType] = useState('checkbox');
+  const [visible, setVisible] = useState(false)
+  const [actionId, setActionId] = useState(2)
 
   const columns = [
     {
@@ -216,77 +219,122 @@ function RTable () {
   </Menu>
   );
 
+  function handleOk (e) {
+    console.log(e);
+    setVisible(false)
+  };
+
+  function handleCancel (e) {
+    console.log(e);
+    setVisible(false)
+  };
+
   return (
-    <div style={styles.main}>
-      <div style={{
-        display:'flex',
-        alignItems:'center',
-        justifyContent:'space-between',
-        height:'12%',
-        flexWrap:'nowrap',
-        borderBottomWidth:1,
-        borderBottomStyle:'solid',
-        borderBottomColor:'#979BA3',
-        marginLeft:'2%',
-        marginRight:'2%',
-        width:'96%',
-      }}>
-        <div>
-          <Input placeholder="请输入商品编号" size="small" style={{width:150}}/>
+    <div style={{
+      height:'100%',
+    }}>
+      <Modal
+        // title="确定要删除此支付账户吗？"
+        visible={visible}
+        onOk={handleOk}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <div style={{
+          display:'flex',
+          flexDirection:'column',
+          alignItems:'center',
+          padding:25,
+          }}>
+          <img src={good6} alt="" style={{width:90}} />
+          <h4 style={{marginBottom:25,marginTop:25}}>{actionId===1?"确定要删除此支付账户吗？":"确定要删除这个分类吗？"}</h4>
+          {(()=>{
+          if(actionId===1){
+            return <p>分类<span style={{color:"#2C68FF"}}>哔哩哔哩</span> 一共包含了 15 个商品，包含商品的分类不允许被删除，请更改关联商品的分类之后重试。</p>
+          }
+            return <p>删除的分类不可被找回，请确认。</p>
+          })()}
+          <div style={{display:'flex',justifyContent:'space-around',marginTop:25,alignItems:'center',width:'100%'}}>
+            <Button key="back" style={{width:150}}>
+              取消
+            </Button>
+            <Button key="submit"style={{width:150}} type="primary" onClick={handleOk}>
+              确定
+            </Button>
+          </div>
+        </div>
+      </Modal>
+      <div style={styles.main}>
+        <div style={{
+          display:'flex',
+          alignItems:'center',
+          justifyContent:'space-between',
+          height:'12%',
+          flexWrap:'nowrap',
+          borderBottomWidth:1,
+          borderBottomStyle:'solid',
+          borderBottomColor:'#979BA3',
+          marginLeft:'2%',
+          marginRight:'2%',
+          width:'96%',
+        }}>
+          <div>
+            <Input placeholder="请输入商品编号" size="small" style={{width:150}}/>
+            <Dropdown overlay={menu}>
+              <Button size="small" style={styles.dropdown}>
+                请选择商品分类 <DownOutlined />
+              </Button>
+            </Dropdown>
+            <Dropdown overlay={menu} style={styles.dropdown}>
+              <Button style={styles.dropdown} size="small">
+                请选择商品状态 <DownOutlined />
+              </Button>
+            </Dropdown>
+            <Dropdown overlay={menu} style={styles.dropdown}>
+              <Button style={styles.dropdown} size="small">
+                请选择用户权限 <DownOutlined />
+              </Button>
+            </Dropdown>
+            <Dropdown overlay={menu} style={styles.dropdown}>
+              <Button style={styles.dropdown} size="small">
+                请选择供货商 <DownOutlined />
+              </Button>
+            </Dropdown>
+          </div>
+          <div>
+            <Button size="small" style={{color:'#979BA3',marginRight:15}}>重置</Button>
+            <Button size="small" type="primary" icon={<SearchOutlined />}>
+              Search
+            </Button>
+          </div>
+        </div>
+        <div style={{
+          display:'flex',
+          alignItems:'center',
+          height:'12%',
+          flexWrap:'nowrap',
+          paddingLeft:'2%',
+          paddingRight:'2%',
+          width:'100%',
+        }}>
           <Dropdown overlay={menu}>
-            <Button size="small" style={styles.dropdown}>
-              请选择商品分类 <DownOutlined />
+            <Button size="small">
+              批量操作 <DownOutlined />
             </Button>
           </Dropdown>
-          <Dropdown overlay={menu} style={styles.dropdown}>
-            <Button style={styles.dropdown} size="small">
-              请选择商品状态 <DownOutlined />
-            </Button>
-          </Dropdown>
-          <Dropdown overlay={menu} style={styles.dropdown}>
-            <Button style={styles.dropdown} size="small">
-              请选择用户权限 <DownOutlined />
-            </Button>
-          </Dropdown>
-          <Dropdown overlay={menu} style={styles.dropdown}>
-            <Button style={styles.dropdown} size="small">
-              请选择供货商 <DownOutlined />
-            </Button>
-          </Dropdown>
+          <Button style={{marginLeft:15}} onClick={()=>setVisible(true)} size="small">执行操作</Button>
         </div>
-        <div>
-          <Button size="small" style={{color:'#979BA3',marginRight:15}}>重置</Button>
-          <Button size="small" type="primary" icon={<SearchOutlined />}>
-            Search
-          </Button>
-        </div>
+      <Table columns={columns} rowSelection={{
+        type: selectionType,
+        ...rowSelection
+      }} dataSource={data} rowClassName={(record,index)=>{
+        if(record.name==="John Brown") {
+          return "greenRow"
+        }
+        console.log(index)
+        console.log(record)
+        }} size="small" onChange={onChange} />
       </div>
-      <div style={{
-        display:'flex',
-        alignItems:'center',
-        height:'12%',
-        flexWrap:'nowrap',
-        paddingLeft:'2%',
-        paddingRight:'2%',
-        width:'100%',
-      }}>
-        <Dropdown overlay={menu}>
-          <Button size="small">
-            批量操作 <DownOutlined />
-          </Button>
-        </Dropdown>
-        <Button style={{marginLeft:15}} size="small">执行操作</Button>
-      </div>
-    <Table columns={columns} rowSelection={{
-      type: selectionType,
-      ...rowSelection
-    }} dataSource={data} rowClassName={(record,index)=>{
-      if(record.name==="John Brown") {
-        return "greenRow"
-      }
-      console.log(index)
-      console.log(record)
-      }} size="small" onChange={onChange} />
     </div>
   )
 }
