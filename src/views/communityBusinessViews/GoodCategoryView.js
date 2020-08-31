@@ -1,30 +1,76 @@
 import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Space } from 'antd'
-import good1 from '../../icons/good/good1.png'
+import { Button, Menu, Dropdown, Table, message, Input, Space, Modal } from 'antd'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
-import good2 from '../../icons/good/good2.png'
-import good3 from '../../icons/good/good3.png'
-import good4 from '../../icons/good/good4.png'
+import good6 from '../../icons/good/good6.png'
+import good7 from '../../icons/good/good7.png'
+import good9 from '../../icons/good/good9.png'
 
 function GoodCategoryView () {
+  const [visible, setVisible] = useState(false)
+  const [actionId, setActionId] = useState(2)
+
+  function handleOk (e) {
+    console.log(e);
+    setVisible(false)
+  };
+
+  function handleCancel (e) {
+    console.log(e);
+    setVisible(false)
+  };
+
   return (
-    <div style={styles.container}>
-      <RTable />
+    <div className="container">
+      <div className="container" style={styles.container}>
+        <RTable setVisible={setVisible} />
+      </div>
+      <Modal
+        visible={visible}
+        onOk={handleOk}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <div style={{
+          display:'flex',
+          flexDirection:'column',
+          alignItems:'center',
+          padding:25,
+          }}>
+          <img src={good6} alt="" style={{width:90}} />
+          <h4 style={{marginBottom:25,marginTop:25,fontSize:18,fontWeight:500}}>{actionId===1?"确定要删除此支付账户吗？":"确定要删除这个分类吗？"}</h4>
+          {(()=>{
+          if(actionId===1){
+            return <p>分类<span style={{color:"#2C68FF"}}> 哔哩哔哩</span> 一共包含了 15 个商品，包含商品的分类不允许被删除，请更改关联商品的分类之后重试。</p>
+          }
+            return <p>删除的分类不可被找回，请确认。</p>
+          })()}
+          <div style={{display:'flex',justifyContent:'space-around',marginTop:25,alignItems:'center',width:'100%'}}>
+            <Button key="back" style={{width:150,height:32,fontSize:12}}>
+              取消
+            </Button>
+            <Button key="submit"style={{width:150,height:32,fontSize:12}} type="primary" onClick={handleOk}>
+              确定
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }
 
-function RTable () {
+function RTable ({ setVisible }) {
   const [selectionType, setSelectionType] = useState('checkbox');
 
   const columns = [
     {
       title: 'id',
       dataIndex: 'name',
+      align: 'center',
   },
     {
       title: '商品名称',
       dataIndex: 'chinese',
+      align: 'center',
       sorter: {
         compare: (a, b) => a.chinese - b.chinese,
         multiple: 3,
@@ -32,6 +78,7 @@ function RTable () {
   },
     {
       title: '商品分类',
+      align: 'center',
       dataIndex: 'math',
       sorter: {
         compare: (a, b) => a.math - b.math,
@@ -41,6 +88,7 @@ function RTable () {
     {
       title: '下单模型',
       dataIndex: 'english',
+      align: 'center',
       sorter: {
         compare: (a, b) => a.english - b.english,
         multiple: 1,
@@ -49,25 +97,31 @@ function RTable () {
     {
       title: '进价',
       dataIndex: 'name',
+      align: 'center',
   },
     {
       title: '售价',
       dataIndex: 'name',
+      align: 'center',
   },
     {
       title: '密价',
+      align: 'center',
       dataIndex: 'name',
   },
     {
       title: '单位',
       dataIndex: 'name',
+      align: 'center',
   },
     {
       title: '下单限制',
+      align: 'center',
       dataIndex: 'name',
   },
     {
       title: '状态',
+      align: 'center',
       dataIndex: 'name',
       render: name => {
         return (
@@ -79,10 +133,11 @@ function RTable () {
   },
     {
       title: '操作',
+      align: 'center',
       key: "action",
       render: (text, record) => (
         <Space size="small">
-          <a href="/main/editCommunityGood">编辑分类</a>
+          <a href="/main/editOrderModel">编辑商品</a>
         </Space>
       )
   },
@@ -91,7 +146,7 @@ function RTable () {
   const data = [
     {
       key: '1',
-      name: 'John Brown',
+      name: 'rown',
       chinese: 98,
       math: 60,
       english: 70,
@@ -216,125 +271,69 @@ function RTable () {
         display:'flex',
         alignItems:'center',
         justifyContent:'space-between',
-        height:'12%',
+        height:'10%',
         flexWrap:'nowrap',
         borderBottomWidth:1,
         borderBottomStyle:'solid',
-        borderBottomColor:'#979BA3',
+        borderBottomColor:'rgba(0, 0, 0, 0.09)',
         marginLeft:'2%',
         marginRight:'2%',
         width:'96%',
       }}>
         <div>
-          <Input placeholder="请输入分类名称" size="small" style={{width:150,marginRight:15}}/>
-          <Button size="small" type="primary" icon={<SearchOutlined />}>
-            搜索分类
-          </Button>
+          <Input placeholder="请输入分类名称" size="small" style={{width:120,fontSize:12}}/>
+          <Button icon={
+            <img src={good9} alt="" style={{width:10,marginRight:5,marginBottom:1}} />
+          }
+          type = "primary"
+          size = "small"
+            style = { { fontSize: 12,height:20,marginLeft:20} } > 搜索分类 < /Button>
         </div>
-        <Button size="small" type="primary" icon={<SearchOutlined />}>
-          新建分类
-        </Button>
+        <Button icon={
+          <img src={good7} alt="" style={{width:10,marginRight:5,marginBottom:1}} />
+        }
+        type = "primary"
+        size = "small"
+          style = { { fontSize: 12,height:20 } } > 新建分类 < /Button>
       </div>
       <div style={{
         display:'flex',
         alignItems:'center',
-        height:'12%',
+        height:'10%',
         flexWrap:'nowrap',
-        paddingLeft:'2%',
-        paddingRight:'2%',
         width:'100%',
       }}>
         <Dropdown overlay={menu}>
-          <Button size="small">
-            批量操作 <DownOutlined />
+          <Button size="small" style={{
+            marginLeft: 20,
+            height: 20,
+            fontSize: 12
+          }}>批量操作<DownOutlined />
           </Button>
         </Dropdown>
-        <Button style={{marginLeft:15}} size="small">执行操作</Button>
+        <Button style={{marginLeft:20,height:20,fontSize:12}} onClick={()=>setVisible(true)} size="small">执行操作</Button>
       </div>
     <Table columns={columns} rowSelection={{
       type: selectionType,
       ...rowSelection
     }} dataSource={data} rowClassName={(record,index)=>{
-      if(record.name==="John Brown") {
-        return "greenRow"
-      }
-      console.log(index)
-      console.log(record)
+      return "f1f5ff"
       }} size="small" onChange={onChange} />
     </div>
   )
 }
 
-function HeaderItem () {
-  const views = [];
-  const data = [
-    {
-      label: '商品总数',
-      number: 10100,
-      icon: good3,
-      id: 111,
-    },
-    {
-      label: '已上架数',
-      number: 10100,
-      icon: good1,
-      id: 222,
-    },
-    {
-      label: '已下架数',
-      number: 10100,
-      icon: good2,
-      id: 333,
-    },
-    {
-      label: '关闭下单',
-      number: 10100,
-      icon: good4,
-      id: 444,
-    },
-  ]
-
-  data.forEach((item, index) => {
-    const { label, number, icon, id } = item;
-    views.push(
-      <div style={{
-        boxSizing:'border-box',
-        display:'flex',
-        alignItems:'center',
-        paddingLeft:index?25:0,
-        height:'100%',
-        }} key={id}>
-        <img src={icon} alt="" style={{height:'100%'}} />
-        <div style={{
-          boxSizing:'border-box',
-          display: 'flex',
-          flexDirection:'column',
-          alignItems:'flex-start',
-          justifyContent:'center',
-          paddingRight:35,
-          borderRightColor:'#D6D7DB',
-          borderRightWidth:1,
-          borderRightStyle:'solid'
-        }}>
-          <div style={{color:'#000',fontSize:20,fontWeight:800}}>{number}</div>
-          <div style={{fontSize:12,color:'#6F717E'}}>{label}</div>
-        </div>
-      </div>
-    )
-  })
-
-  return views
-}
-
 const styles = {
   container: {
-    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
   dropdown: {
-    marginLeft: 15,
+    marginLeft: 20,
+    width: 120,
+    height: 20,
+    fontSize: 12
   },
   main: {
     width: '100%',

@@ -14,6 +14,7 @@ import OrderModelView from '../views/communityBusinessViews/OrderModelView'
 import EditOrderModelView from '../views/communityBusinessViews/EditOrderModelView'
 import ChildWebListView from '../views/childWebViews/ChildWebListView'
 import ChildWebSettingView from '../views/childWebViews/ChildWebSettingView'
+import CardGoodView from '../views/cardBusinessViews/CardGoodView'
 
 function ContentComponent () {
 
@@ -51,6 +52,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/childWebSetting">
           <ChildWebSettingView />
+        </Route>
+        <Route exact path="/main/cardGood">
+          <CardGoodView />
         </Route>
         {/* <Route exact path="/main/statistics"> */}
         {/*   <StatisticsView /> */}

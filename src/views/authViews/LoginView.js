@@ -1,8 +1,9 @@
 import React from 'react'
 import { Input, Checkbox, Button } from 'antd';
-import { UserOutlined, PauseOutlined } from '@ant-design/icons';
 import auth1 from '../../icons/auth/auth1.png'
 import auth2 from '../../icons/auth/auth2.png'
+import auth3 from '../../icons/auth/auth3.png'
+import auth4 from '../../icons/auth/auth4.png'
 import { h } from '../../utils/history'
 
 function LoginView () {
@@ -17,7 +18,7 @@ function LoginView () {
   }
 
   return (
-    <div style={styles.container}>
+    <div className="container">
       <div style={styles.imgBg}>
         <div style={styles.view}>
           <img src={auth2} alt="" style={styles.img} />
@@ -31,22 +32,26 @@ function LoginView () {
           </div>
           <div style={styles.rightView}>
             <div style={styles.inputView}>
-              <div style={{fontSize:15,fontWeight:600,color:'#141619'}}>登录</div>
+              <div style={{fontSize:15,fontWeight:600,color:'#141619',marginBottom:'5%'}}>登录</div>
               <div>
                 <div style={{fontWeight:"#080808",fontSize:13}}>账号</div>
-                <Input size="large" style={styles.input} placeholder="请输入登录手机号" prefix={<UserOutlined />} />
+                <Input size="small" style={styles.input} placeholder="请输入登录手机号" prefix={
+                  <img src={ auth3 } alt="" style={{width:13,marginRight:5}}/>
+                } />
               </div>
               <div>
                 <div style={{fontWeight:"#080808",fontSize:13}}>密码</div>
-                <Input size="large" style={styles.input}  placeholder="请输入登录密码" prefix={<PauseOutlined />} />
+                <Input size="small" style={styles.input}  placeholder="请输入登录密码" prefix={
+                  <img src={ auth4 } alt="" style={{width:13,marginRight:5}}/>
+                } />
+                <Checkbox onChange={onChange} style={{color:'#2C67FF',fontSize:12,marginTop:10,display:'block'}}>自动登录</Checkbox>
               </div>
-              <Checkbox onChange={onChange} style={{color:'#2C67FF',fontSize:12}}>自动登录</Checkbox>
               <Button type="primary" onClick={submit} style={styles.btn}>登录</Button>
             </div>
           </div>
         </div>
         <div style={styles.bottomView}>
-          <div style={styles.itemView}>
+          <div className="f">
             <div style={styles.item}>帮助中心</div>
             <div style={styles.item}>开放平台</div>
             <div style={styles.item}>免责条款</div>
@@ -59,22 +64,20 @@ function LoginView () {
 }
 
 const styles = {
-  container: {
-    width: '100%',
-    minWidth: 700,
-    minHeight: 500,
-    height: '100%',
-  },
   input: {
     marginTop: 5,
     width: 250,
     height: 35,
   },
   btn: {
+    marginTop: '15%',
     width: 250,
+    fontSize: 12,
   },
   inputView: {
     boxSizing: 'border-box',
+    position: 'relative',
+    zIndex: 1,
     paddingLeft: '10%',
     paddingRight: '10%',
     paddingTop: '8%',
@@ -95,7 +98,7 @@ const styles = {
     width: '100%',
     paddingLeft: '10%',
     paddingRight: '10%',
-    fontSize: 13,
+    fontSize: 12,
     paddingTop: 15,
     color: '#2C67FF',
     display: 'flex',
@@ -111,13 +114,13 @@ const styles = {
     position: 'absolute',
     left: 0,
     bottom: 0,
-    width: "50%",
+    width: "60%",
   },
   item: {
     marginLeft: 25,
     marginRight: 25,
     color: '#fff',
-    fontSize: 13,
+    fontSize: 12,
   },
   footer: {
     fontSize: 12,
@@ -144,7 +147,7 @@ const styles = {
   },
   leftView: {
     boxSizing: 'border-box',
-    paddingTop: '5%',
+    paddingTop: '7%',
     width: '50%',
     height: '100%',
     display: 'flex',
@@ -157,17 +160,14 @@ const styles = {
   },
   bottomView: {
     width: '100%',
-    height: '10%',
-    marginTop: '2%',
+    height: '8%',
+    marginTop: '4%',
     marginBottom: '2%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-around',
   },
-  itemView: {
-    display: 'flex',
-  }
 }
 
 export default LoginView;

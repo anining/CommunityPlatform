@@ -18,7 +18,7 @@ function GuideView () {
   }
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="container f-c-c-sb">
       <Title guideId={guideId}/>
       <div style={styles.content}>
         <Context guideId={guideId}/>
@@ -54,9 +54,10 @@ function Title ({ guideId }) {
       minText: ["你是第一次登陆，为了您的账户安全，建议您修改密码。 ", "您也可以通过“系统设置 - 修改密码”来重新设置密码。"]
     }
   ]
+
   return (
     <div style={styles.text}>
-      <div style={{color:'#34374A',fontSize:17}}>{obj[guideId].text}</div>
+      <div style={{color:'#34374A',fontSize:17,fontWeight:600}}>{obj[guideId].text}</div>
       <div style={styles.minText}>
         <div>{obj[guideId].minText[0]}</div>
         <div>{obj[guideId].minText[1]}</div>
@@ -160,7 +161,7 @@ function Context ({ guideId }) {
         const { label, id } = item
         views.push(
           <div style={styles.secondItem} key={id}>
-            <Checkbox onChange={(e)=>onChange(e,id)} style={{marginRight:15}}/>
+            <Checkbox onChange={(e)=>onChange(e,id)} style={{marginRight:10}}/>
             <div style={{color:selects.includes(id)?"#2C68FF":'#333649',fontSize:12}}>{label}</div>
         </div>
         )
@@ -172,7 +173,7 @@ function Context ({ guideId }) {
         views.push(
           <div style={styles.threeItem}>
             <div style={styles.second}>
-              <div style={{color:'#34374A',fontSize:13,alignSelf:'flex-start'}}>{label}</div>
+              <div style={{color:'#34374A',fontWeight:500,fontSize:13,alignSelf:'flex-start'}}>{label}</div>
               <div style={{fontSize:12,color:'#6F717E',marginTop:15,marginBottom:15}}>{tips}</div>
               <Button type="primary" onClick={submit} style={styles.submitBtn}>开通服务</Button>
               <div style={{fontSize:12}}>收费模式:
@@ -186,7 +187,7 @@ function Context ({ guideId }) {
     default:
       views.push(
         <div style={{textAlign:'center',width:'100%'}}>
-          <Input.Password placeholder="请在这里输入新密码" style={{width:250}}/>
+          <Input.Password placeholder="请在这里输入新密码" style={{width:300}}/>
         </div>
       )
   }
@@ -215,14 +216,8 @@ function Circle ({ guideId }) {
 const styles = {
   container: {
     boxSizing: 'border-box',
-    height: '100%',
-    minHeight: 700,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     paddingTop: '9%',
-    paddingBottom: '7%'
+    paddingBottom: '7%',
   },
   firstCheckBox: {
     position: 'absolute',
@@ -233,15 +228,16 @@ const styles = {
     width: '100%',
     marginBottom: 10,
     marginTop: 10,
-    fontSize: 12
+    fontSize: 12,
+    height: 30
   },
   first: {
     width: '65%',
-    borderTopLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    borderTopLeftRadius: 50,
+    borderBottomRightRadius: 50,
     borderWidth: 1,
     boxShadow: '0px 12px 48px 16px rgba(44,103,255,0.03),0px 9px 28px 0px rgba(44,103,255,0.05),0px 6px 16px -8px rgba(44,103,255,0.08)',
-    borderColor: 'rgba(44,103,255,1)',
+    borderColor: '#2c67ff',
     borderStyle: 'solid',
     paddingTop: 25,
     paddingBottom: 25,
@@ -252,11 +248,11 @@ const styles = {
   },
   second: {
     width: '80%',
-    borderTopRightRadius: 30,
-    borderBottomLeftRadius: 30,
+    borderTopRightRadius: 50,
+    borderBottomLeftRadius: 50,
     borderWidth: 1,
     boxShadow: '0px 12px 48px 16px rgba(44,103,255,0.03),0px 9px 28px 0px rgba(44,103,255,0.05),0px 6px 16px -8px rgba(44,103,255,0.08)',
-    borderColor: 'rgba(44,103,255,1)',
+    borderColor: '#2c67ff',
     borderStyle: 'solid',
     paddingTop: 25,
     paddingBottom: 25,
@@ -284,8 +280,8 @@ const styles = {
   secondItem: {
     boxSizing: 'border-box',
     width: '33.333%',
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -304,7 +300,8 @@ const styles = {
   },
   btn: {
     height: 30,
-    width: 250
+    width: 250,
+    fontSize: 12
   },
   minText: {
     color: '#6F717E',

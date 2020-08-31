@@ -1,0 +1,20 @@
+.ant-upload-picture-card-wrapper {
+  width: auto;
+}
+
+.ant-layout-sider-children ul {
+  box-sizing: content-box;
+}
+
+.ant-table-small .ant-table-thead > tr > th {
+  background-color: #F1F5FF;
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ant-table.ant-table-small {
+  font-size: 12px;
+  color: #000;
+  font-weight: 400;
+}
