@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Space, Modal } from 'antd'
+import { Button, Popconfirm, Radio, Menu, Dropdown, Table, message, Input, Space, Modal } from 'antd'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
-import good9 from '../../icons/good/good9.png'
 import good6 from '../../icons/good/good6.png'
-import good7 from '../../icons/good/good7.png'
-import good23 from '../../icons/good/good23.png'
-import good24 from '../../icons/good/good24.png'
+import good9 from '../../icons/good/good9.png'
+import good27 from '../../icons/good/good27.png'
 
-function UserView () {
+function EditUserPriceView () {
   const [visible, setVisible] = useState(false)
   const [actionId, setActionId] = useState(2)
 
@@ -24,17 +22,15 @@ function UserView () {
   return (
     <div className="container">
       <div className="container" style={styles.container}>
-        <div style={styles.header}>
-          <div style={styles.headerL}>
-            <HeaderItem />
+          <div style={styles.header}>
+            <div style={styles.headerT}>
+              <HeaderItem />
+            </div>
+            <div style={styles.headerB}>
+              <img src={good27} alt="" style={{width:10,marginRight:5}}/>
+              <div>用户充值会产生流水记录，但是不会计入今日消费；今日消费只计算购买商品产生的流水总和。</div>
+             </div>
           </div>
-          <Button icon={
-            <img src={good7} alt="" style={{width:10,marginRight:5,marginBottom:1}} />
-          }
-          type = "primary"
-          size = "small"
-          style = { { fontSize: 12 } } > 添加用户 < /Button>
-        </div>
         <RTable setVisible={setVisible} />
       </div>
       <Modal
@@ -131,6 +127,19 @@ function RTable ({ setVisible }) {
       title: '下单限制',
       align: 'center',
       dataIndex: 'name',
+      render: name => {
+        return (
+          <Popconfirm
+            title="Are you sure delete this task?"
+            onConfirm={()=>{}}
+            onCancel={()=>{}}
+            okText="Yes"
+            cancelText="No"
+          >
+            <a href="#">Delete</a>
+          </Popconfirm>
+        )
+      }
   },
     {
       title: '状态',
@@ -150,7 +159,7 @@ function RTable ({ setVisible }) {
       key: "action",
       render: (text, record) => (
         <Space size="small">
-          <a href="/main/editUserPrice">编辑商品</a>
+          <a href="/main/editCommunityGood">编辑商品</a>
         </Space>
       )
   },
@@ -283,20 +292,23 @@ function RTable ({ setVisible }) {
         display:'flex',
         alignItems:'center',
         justifyContent:'space-between',
-        height:'10%',
+        height:'8%',
         flexWrap:'nowrap',
-        borderBottomWidth:1,
-        borderBottomStyle:'solid',
-        borderBottomColor:'rgba(0, 0, 0, 0.09)',
         marginLeft:'2%',
         marginRight:'2%',
         width:'96%',
       }}>
         <div>
-          <Input placeholder="请输入用户名" size="small" style={{width:120,fontSize:12}}/>
+          <Input placeholder="请输入商品ID" size="small" style={{width:120,fontSize:12,marginRight:20}}/>
+          <Input placeholder="请输入商品名称" size="small" style={{width:120,fontSize:12}}/>
+          <Dropdown overlay={menu}>
+            <Button size="small" style={styles.dropdown}>
+              请选择业务类型 <DownOutlined />
+            </Button>
+          </Dropdown>
           <Dropdown overlay={menu} style={styles.dropdown}>
             <Button style={styles.dropdown} size="small">
-              请选择用户状态 <DownOutlined />
+              请选择商品类型 <DownOutlined />
             </Button>
           </Dropdown>
         </div>
@@ -307,84 +319,42 @@ function RTable ({ setVisible }) {
           }
           type = "primary"
           size = "small"
-            style = { { fontSize: 12,height:20 } } > 搜索用户 < /Button>
+            style = { { fontSize: 12,height:20 } } > 搜索商品 < /Button>
         </div>
       </div>
-      <div style={{
-        display:'flex',
-        alignItems:'center',
-        height:'10%',
-        flexWrap:'nowrap',
-        width:'100%',
-      }}>
-        <Dropdown overlay={menu}>
-          <Button size="small" style={{
-            marginLeft: 20,
-            height: 20,
-            fontSize: 12
-          }}>批量操作<DownOutlined />
-          </Button>
-        </Dropdown>
-        <Button style={{marginLeft:20,height:20,fontSize:12}} onClick={()=>setVisible(true)} size="small">执行操作</Button>
-      </div>
-    <Table columns={columns} rowSelection={{
-      type: selectionType,
-      ...rowSelection
-    }} dataSource={data} rowClassName={(record,index)=>{
-      return "f1f5ff"
-      }} size="small" onChange={onChange} />
+      <Table columns={columns} rowSelection={{
+        type: selectionType,
+        ...rowSelection
+      }} dataSource={data} rowClassName={(record,index)=>{
+        return "f1f5ff"
+        }} size="small" onChange={onChange} />
     </div>
   )
 }
 
 function HeaderItem () {
-  const views = [];
-  const data = [
-    {
-      label: '用户总数',
-      number: 10100,
-      icon: good23,
-      id: 333,
-    },
-    {
-      label: '今日新增',
-      number: 10100,
-      icon: good24,
-      id: 444,
-    },
-  ]
+  const [value, setValue] = useState()
 
-  data.forEach((item, index) => {
-    const { label, number, icon, id } = item;
-    views.push(
-      <div style={{
-        boxSizing:'border-box',
-        display:'flex',
-        alignItems:'center',
-        paddingLeft:index?15:0,
-        height:'100%',
-        }} key={id}>
-        <img src={icon} alt="" style={{height:'80%'}} />
-        <div style={{
-          boxSizing:'border-box',
-          display: 'flex',
-          flexDirection:'column',
-          alignItems:'flex-start',
-          justifyContent:'center',
-          paddingRight:35,
-          borderRightColor:'rgba(214, 215, 219, 0.55)',
-          borderRightWidth:1,
-          height:'40%',
-          borderRightStyle:'solid',
-        }}>
-          <div style={{color:'#000',fontSize:20,fontWeight:800}}>{number}</div>
-          <div style={{fontSize:12,color:'#6F717E'}}>{label}</div>
-        </div>
+  function onChange () {
+
+  }
+
+  return (
+    <div style={{height:'100%',width:'100%',display:'flex',flexDirection:'column',justifyContent:'space-around'}}>
+      <div style={{display:'flex',alignItems:'flex-end'}}>
+        <div style={{fontSize:18,fontWeight:500}}>修改用户密价</div>
+        <div style={{color:'#6F717E',fontSize:12,marginLeft:10,marginRight:5}}>当前用户:</div>
+        <div style={{color:'#2C68FF',fontSize:12}}>2346237462374</div>
       </div>
-    )
-  })
-
-  return views
+      <div style={{display:'flex',alignItems:'center'}}>
+        <div style={{color:'#34374A',marginRight:20}}>价格类型</div>
+        <Radio.Group onChange={onChange} value={value}>
+          <Radio value={1} style={{fontSize:12}}>已上架</Radio>
+          <Radio value={2} style={{fontSize:12}}>已下架</Radio>
+        </Radio.Group>
+      </div>
+    </div>
+  )
 }
 
 const styles = {
@@ -401,27 +371,39 @@ const styles = {
   },
   main: {
     width: '100%',
-    height: '86%',
+    height: '77%',
     background: '#fff',
     borderRadius: 2
   },
+  headerB: {
+    height: '25%',
+    borderRadius: 2,
+    width: '96%',
+    color: '#FF8D30',
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: '2%',
+    marginRight: '2%',
+    background: '#FFFCEB',
+    fontSize: 12,
+  },
+  headerT: {
+    height: '70%',
+    width: '100%',
+    display: 'flex',
+    paddingLeft: '1%',
+    paddingRight: '2%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   header: {
-    height: '10%',
+    height: '20%',
     width: '100%',
     background: '#fff',
     display: 'flex',
+    flexDirection: 'column',
     borderRadius: 2,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingLeft: '1%',
-    paddingRight: '2%'
   },
-  headerL: {
-    display: 'flex',
-    alignItems: 'center',
-    height: '100%',
-    width: '80%',
-  }
 }
 
-export default UserView
+export default EditUserPriceView
