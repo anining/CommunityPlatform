@@ -16,6 +16,8 @@ import ChildWebListView from '../views/childWebViews/ChildWebListView'
 import ChildWebSettingView from '../views/childWebViews/ChildWebSettingView'
 import CardGoodView from '../views/cardBusinessViews/CardGoodView'
 import EditCardGoodView from '../views/cardBusinessViews/EditCardGoodView'
+import CardManageView from '../views/cardBusinessViews/CardManageView'
+import EditCardManageView from '../views/cardBusinessViews/EditCardManageView'
 
 function ContentComponent () {
 
@@ -59,6 +61,12 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/editCardGood">
           <EditCardGoodView />
+        </Route>
+        <Route exact path="/main/cardManage">
+          <CardManageView />
+        </Route>
+        <Route exact path="/main/editCardManage">
+          <EditCardManageView />
         </Route>
         {/* <Route exact path="/main/statistics"> */}
         {/*   <StatisticsView /> */}
