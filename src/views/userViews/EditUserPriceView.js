@@ -340,18 +340,27 @@ function HeaderItem () {
   }
 
   return (
-    <div style={{height:'100%',width:'100%',display:'flex',flexDirection:'column',justifyContent:'space-around'}}>
-      <div style={{display:'flex',alignItems:'flex-end'}}>
-        <div style={{fontSize:18,fontWeight:500}}>修改用户密价</div>
-        <div style={{color:'#6F717E',fontSize:12,marginLeft:10,marginRight:5}}>当前用户:</div>
-        <div style={{color:'#2C68FF',fontSize:12}}>2346237462374</div>
+    <div style={{height:'100%',width:'100%',display:'flex',justifyContent:'space-between'}}>
+      <div style={{height:'100%',display:'flex',flexDirection:'column',justifyContent:'space-around'}}>
+        <div style={{display:'flex',alignItems:'flex-end'}}>
+          <div style={{fontSize:18,fontWeight:500}}>修改用户密价</div>
+          <div style={{color:'#6F717E',fontSize:12,marginLeft:10,marginRight:5}}>当前用户:</div>
+          <div style={{color:'#2C68FF',fontSize:12}}>2346237462374</div>
+        </div>
+        <div style={{display:'flex',alignItems:'center'}}>
+          <div style={{color:'#34374A',marginRight:20}}>价格类型</div>
+          <Radio.Group onChange={onChange} value={value}>
+            <Radio value={1} style={{fontSize:12}}>已上架</Radio>
+            <Radio value={2} style={{fontSize:12}}>已下架</Radio>
+          </Radio.Group>
+        </div>
       </div>
-      <div style={{display:'flex',alignItems:'center'}}>
-        <div style={{color:'#34374A',marginRight:20}}>价格类型</div>
-        <Radio.Group onChange={onChange} value={value}>
-          <Radio value={1} style={{fontSize:12}}>已上架</Radio>
-          <Radio value={2} style={{fontSize:12}}>已下架</Radio>
-        </Radio.Group>
+      <div style={{height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+        <div>
+          <Button size="small" style={{marginRight:20,fontSize:12,width:70}}>放弃</Button>
+          <Button size="small" style={{fontSize:12,width:70}} type="primary">保存</Button>
+        </div>
+        <div style={{color:'#979BA3',fontSize:12,marginTop:5}}>上次保存： 2020.01.15 15:25:04</div>
       </div>
     </div>
   )
