@@ -66,10 +66,10 @@ function SiderComponent ({ collapsed }) {
         {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
         {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
         {/* </Menu.SubMenu> */}
-        {/* <Menu.SubMenu key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录"> */}
-        {/*   <Menu.Item style={{fontSize:12}} key="communityOrder">社区订单</Menu.Item> */}
-        {/*   <Menu.Item style={{fontSize:12}} key="cardOrder">卡密订单</Menu.Item> */}
-        {/* </Menu.SubMenu> */}
+        <Menu.SubMenu key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录">
+          <Menu.Item style={{fontSize:12}} key="communityOrder">社区订单</Menu.Item>
+          {/* <Menu.Item style={{fontSize:12}} key="cardOrder">卡密订单</Menu.Item> */}
+        </Menu.SubMenu>
         {/* <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}> */}
         {/*   资金流水 */}
         {/* </Menu.Item> */}

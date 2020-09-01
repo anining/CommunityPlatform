@@ -88,9 +88,9 @@ function ContentComponent () {
         {/* <Route exact path="/main/services"> */}
         {/*   <ServicesView /> */}
         {/* </Route> */}
-        {/* <Route exact path="/main/communityOrder"> */}
-        {/*   <CommunityOrderView /> */}
-        {/* </Route> */}
+        <Route exact path="/main/communityOrder">
+          <CommunityOrderView />
+        </Route>
         {/* <Route path="/main/cardOrder"> */}
         {/*   <CardOrderView /> */}
         {/* </Route> */}
