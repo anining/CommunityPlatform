@@ -70,9 +70,9 @@ function SiderComponent ({ collapsed }) {
           <Menu.Item style={{fontSize:12}} key="communityOrder">社区订单</Menu.Item>
           <Menu.Item style={{fontSize:12}} key="cardOrder">卡密订单</Menu.Item>
         </Menu.SubMenu>
-        {/* <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}> */}
-        {/*   资金流水 */}
-        {/* </Menu.Item> */}
+        <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}>
+          资金流水
+        </Menu.Item>
         {/* <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}> */}
         {/*   用户管理 */}
         {/* </Menu.Item> */}

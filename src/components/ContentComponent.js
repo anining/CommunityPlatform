@@ -94,9 +94,9 @@ function ContentComponent () {
         <Route path="/main/cardOrder">
           <CardOrderView />
         </Route>
-        {/* <Route path="/main/capitalFlow"> */}
-        {/*   <CapitalFlowView /> */}
-        {/* </Route> */}
+        <Route path="/main/capitalFlow">
+          <CapitalFlowView />
+        </Route>
         {/* <Route path="/main/user"> */}
         {/*   <UserView /> */}
         {/* </Route> */}
