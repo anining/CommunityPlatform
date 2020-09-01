@@ -77,7 +77,7 @@ function SiderComponent ({ collapsed }) {
           用户管理
         </Menu.Item>
         <Menu.SubMenu key="childWeb" icon={<Icon keys="childWeb" selectedKeys={selectedKeys} />} title="分站管理">
-          {/* <Menu.Item key="childWebList" style={{fontSize:12}}>分站列表</Menu.Item> */}
+          <Menu.Item key="childWebList" style={{fontSize:12}}>分站列表</Menu.Item>
           <Menu.Item key="childWebSetting" style={{fontSize:12}}>分站设置</Menu.Item>
         </Menu.SubMenu>
         {/* <Menu.SubMenu key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置"> */}
