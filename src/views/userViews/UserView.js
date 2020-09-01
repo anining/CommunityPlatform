@@ -6,6 +6,7 @@ import good6 from '../../icons/good/good6.png'
 import good7 from '../../icons/good/good7.png'
 import good23 from '../../icons/good/good23.png'
 import good24 from '../../icons/good/good24.png'
+import { h } from '../../utils/history'
 
 function UserView () {
   const [visible, setVisible] = useState(false)
@@ -33,6 +34,10 @@ function UserView () {
           }
           type = "primary"
           size = "small"
+            onClick={()=>{
+              const history = h.get();
+              history.push(`/main/addUser`)
+            }}
           style = { { fontSize: 12 } } > 添加用户 < /Button>
         </div>
         <RTable setVisible={setVisible} />

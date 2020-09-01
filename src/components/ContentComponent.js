@@ -21,6 +21,7 @@ import EditCardManageView from '../views/cardBusinessViews/EditCardManageView'
 import CardCategoryView from '../views/cardBusinessViews/CardCategoryView'
 import EditCardCategoryView from '../views/cardBusinessViews/EditCardCategoryView'
 import EditUserPriceView from '../views/userViews/EditUserPriceView'
+import AddUserView from '../views/userViews/AddUserView'
 
 function ContentComponent () {
 
@@ -100,6 +101,9 @@ function ContentComponent () {
         </Route>
         <Route path="/main/user">
           <UserView />
+        </Route>
+        <Route path="/main/addUser">
+          <AddUserView />
         </Route>
         <Route path="/main/editUserPrice">
           <EditUserPriceView />
