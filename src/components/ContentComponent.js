@@ -18,6 +18,8 @@ import CardGoodView from '../views/cardBusinessViews/CardGoodView'
 import EditCardGoodView from '../views/cardBusinessViews/EditCardGoodView'
 import CardManageView from '../views/cardBusinessViews/CardManageView'
 import EditCardManageView from '../views/cardBusinessViews/EditCardManageView'
+import CardCategoryView from '../views/cardBusinessViews/CardCategoryView'
+import EditCardCategoryView from '../views/cardBusinessViews/EditCardCategoryView'
 
 function ContentComponent () {
 
@@ -67,6 +69,12 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/editCardManage">
           <EditCardManageView />
+        </Route>
+        <Route exact path="/main/cardCategory">
+          <CardCategoryView />
+        </Route>
+        <Route exact path="/main/editCardCategory">
+          <EditCardCategoryView />
         </Route>
         {/* <Route exact path="/main/statistics"> */}
         {/*   <StatisticsView /> */}
