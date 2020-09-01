@@ -153,7 +153,7 @@ function RTable ({ setVisible }) {
       key: "action",
       render: (text, record) => (
         <Space size="small">
-          <a href="/main/editCommunityGood">编辑商品</a>
+          <a href="/main/editCardGood">编辑商品</a>
         </Space>
       )
   },

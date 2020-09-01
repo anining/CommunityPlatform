@@ -15,6 +15,7 @@ import EditOrderModelView from '../views/communityBusinessViews/EditOrderModelVi
 import ChildWebListView from '../views/childWebViews/ChildWebListView'
 import ChildWebSettingView from '../views/childWebViews/ChildWebSettingView'
 import CardGoodView from '../views/cardBusinessViews/CardGoodView'
+import EditCardGoodView from '../views/cardBusinessViews/EditCardGoodView'
 
 function ContentComponent () {
 
@@ -55,6 +56,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/cardGood">
           <CardGoodView />
+        </Route>
+        <Route exact path="/main/editCardGood">
+          <EditCardGoodView />
         </Route>
         {/* <Route exact path="/main/statistics"> */}
         {/*   <StatisticsView /> */}
