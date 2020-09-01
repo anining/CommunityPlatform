@@ -9,6 +9,12 @@ import good6 from '../../icons/good/good6.png'
 import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
 import good10 from '../../icons/good/good10.png'
+import good11 from '../../icons/good/good11.png'
+import good12 from '../../icons/good/good12.png'
+import good13 from '../../icons/good/good13.png'
+import good14 from '../../icons/good/good14.png'
+import good15 from '../../icons/good/good15.png'
+import good16 from '../../icons/good/good16.png'
 
 function CardManageView () {
   const [visible, setVisible] = useState(false)
@@ -153,7 +159,7 @@ function RTable ({ setVisible }) {
       key: "action",
       render: (text, record) => (
         <Space size="small">
-          <a href="/main/editCardGood">编辑商品</a>
+          <a href="/main/editCardManage">编辑商品</a>
         </Space>
       )
   },
@@ -359,37 +365,37 @@ function HeaderItem () {
     {
       label: '卡密总数',
       number: 10100,
-      icon: good3,
+      icon: good16,
       id: 111,
     },
     {
       label: '已售出',
       number: 10100,
-      icon: good1,
+      icon: good15,
       id: 222,
     },
     {
       label: '未售出',
       number: 10100,
-      icon: good10,
+      icon: good14,
       id: 666,
     },
     {
       label: '常规卡',
       number: 10100,
-      icon: good10,
+      icon: good12,
       id: 555,
     },
     {
       label: '重复卡',
       number: 10100,
-      icon: good2,
+      icon: good11,
       id: 333,
     },
     {
       label: '循环卡',
       number: 10100,
-      icon: good4,
+      icon: good13,
       id: 444,
     },
   ]
