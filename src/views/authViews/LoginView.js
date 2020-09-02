@@ -15,7 +15,7 @@ function LoginView () {
 
   function submit () {
     const history = h.get()
-    history.push('/guide')
+    history.push('/guide1')
   }
 
   return (

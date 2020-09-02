@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
 import LoginView from '../views/authViews/LoginView'
-import GuideView from '../views/authViews/GuideView'
+import Guide1View from '../views/authViews/Guide1View'
+import Guide2View from '../views/authViews/Guide2View'
+import Guide3View from '../views/authViews/Guide3View'
+import Guide4View from '../views/authViews/Guide4View'
 import MainComponent from '../components/MainComponent'
 import { proxyRouter } from "../utils/history"
 
@@ -17,8 +20,17 @@ function Router () {
       <Route path="/main">
         <MainComponent />
       </Route>
-      <Route path="/guide">
-        <GuideView />
+      <Route path="/guide1">
+        <Guide1View />
+      </Route>
+      <Route path="/guide2">
+        <Guide2View />
+      </Route>
+      <Route path="/guide3">
+        <Guide3View />
+      </Route>
+      <Route path="/guide4">
+        <Guide4View />
       </Route>
       <Route path="/login">
         <LoginView />
