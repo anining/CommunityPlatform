@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Menu, Dropdown, Table, message, Input, Space, Modal } from 'antd'
+import ccss from './comunity.module.css'
 import good1 from '../../icons/good/good1.png'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import good2 from '../../icons/good/good2.png'
@@ -281,7 +282,7 @@ function RTable ({ setVisible }) {
 
   return (
     <div style={styles.main}>
-      <div style={{
+      <div className={ccss.bgRed} style={{
         display:'flex',
         alignItems:'center',
         justifyContent:'space-between',

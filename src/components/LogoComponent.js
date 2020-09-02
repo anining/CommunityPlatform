@@ -12,13 +12,13 @@ function LogoComponent () {
 const styles = {
   logoView: {
     boxSizing: 'border-box',
-    paddingTop: '10%',
-    height: 100,
+    paddingTop: 12,
+    height: 104,
   },
   logo: {
-    width: '88%',
-    marginLeft: '6%',
-    height: '60%',
+    width: 168,
+    marginLeft: 16,
+    height: 62,
     background: "#2C67FF"
   }
 }

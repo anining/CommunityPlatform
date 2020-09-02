@@ -1,0 +1,156 @@
+.bg {
+  height: 100%;
+  width: 100%;
+  background-image: url(../icons//auth/auth1.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+
+.topView {
+  width: 62.604%;
+  max-width: 1080px;
+  padding-top: 37.213%;
+  background-color: #fff;
+  border-radius: 32px;
+  position: relative;
+  display: flex;
+  margin-top: 7.187%;
+}
+
+.bottomView {
+  width: 100%;
+  margin-top: 2.135%;
+  margin-bottom: 1.51%;
+  display: flex;
+  color: #fff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 58.771%;
+}
+
+.leftView {
+  position: absolute;
+  width: 50%;
+  height: 16.100%;
+  margin-top: 5.989%;
+  top: 0;
+  left: 0;
+  color: #2c67ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tipsContent {
+  width: 100%;
+  padding-left: 9.816%;
+  padding-right: 9.816%;
+  font-size: 1.428rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tipsTitle {
+  font-weight: 800;
+  font-size: 3.571rem;
+}
+
+.rightView {
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  right: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+}
+
+.footerView {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.item {
+  margin-left: 2.604%;
+  margin-right: 2.604%;
+}
+
+.footer {
+  font-size: 0.857em;
+  padding-top: 0.925%;
+}
+
+.inputTitle {
+  font-size: 2.428rem;
+  color: #2C68FF;
+  font-weight: 600;
+}
+
+.inputView {
+  width: 83.194%;
+  height: 80.407%;
+  background-color: #fff;
+  box-shadow: 0 0 11px 0 rgba(42, 92, 220, 0.1);
+  border-radius: 4px;
+  padding-top: 8.176%;
+  padding-bottom: 12.830%;
+  padding-left: 15%;
+  padding-right: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.btn {
+  width: 100%;
+  height: 11.207%;
+  line-height: 11.207%;
+  text-align: center;
+  font-size: 1.428rem;
+}
+
+.inputText {
+  color: #080808;
+  font-size: 1.142rem;
+}
+
+.inputItem {
+  width: 100%;
+  height: 18.55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 12.694%;
+}
+
+.input {
+  width: 100%;
+  color: #9B9B9B;
+  /* background-color: #F7F7F7; */
+  height: 55.576%;
+}
+
+.inputImg {
+  width: 14px;
+}
+
+.checkbox {
+  font-size: 0.857rem;
+  color: #2C67FF;
+}

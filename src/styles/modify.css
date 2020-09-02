@@ -1,20 +1,28 @@
-.ant-upload-picture-card-wrapper {
-  width: auto;
+#root .ant-upload-picture-card-wrapper {
+  /* width: auto; */
 }
 
-.ant-layout-sider-children ul {
-  box-sizing: content-box;
+#root .ant-layout-sider-children ul {
+  /* box-sizing: content-box; */
 }
 
-.ant-table-small .ant-table-thead > tr > th {
-  background-color: #F1F5FF;
-  color: #000;
-  font-size: 14px;
-  font-weight: 500;
+#root .ant-table-small .ant-table-thead > tr > th {
+  /* background-color: #F1F5FF; */
+  /* color: #000; */
+  /* font-size: 14px; */
+  /* font-weight: 500; */
 }
 
-.ant-table.ant-table-small {
-  font-size: 12px;
-  color: #000;
-  font-weight: 400;
+#root .ant-table.ant-table-small {
+  /* font-size: 12px; */
+  /* color: #000; */
+  /* font-weight: 400; */
+}
+
+#root .ant-dropdown-trigger span {
+  /* color: #979BA3; */
+}
+
+#root .ant-dropdown-open span {
+  /* color: #2C67FF; */
 }
