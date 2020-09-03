@@ -3,14 +3,17 @@
 }
 
 #root .ant-layout-sider-children ul {
-  /* box-sizing: content-box; */
+  box-sizing: content-box;
+}
+
+#root .ant-table {
+  color: #000;
 }
 
 #root .ant-table-small .ant-table-thead > tr > th {
-  /* background-color: #F1F5FF; */
-  /* color: #000; */
-  /* font-size: 14px; */
-  /* font-weight: 500; */
+  background-color: #F1F5FF;
+  color: #000;
+  font-weight: 500;
 }
 
 #root .ant-table.ant-table-small {
@@ -25,4 +28,9 @@
 
 #root .ant-dropdown-open span {
   /* color: #2C67FF; */
+}
+
+.ant-dropdown .ant-dropdown-menu-item :hover, #root .ant-dropdown .ant-dropdown-menu-submenu-title :hover {
+  background-color: #F0F5FF;
+  color: #2C68FF;
 }

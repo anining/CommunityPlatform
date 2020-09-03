@@ -9,7 +9,7 @@ import MainComponent from '../components/MainComponent'
 import { proxyRouter } from "../utils/history"
 
 function Router () {
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(true)
   proxyRouter(useHistory(), 'login')
 
   return (
