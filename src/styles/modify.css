@@ -1,5 +1,10 @@
 #root .ant-upload-picture-card-wrapper {
-  /* width: auto; */
+  width: auto;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+  background: #F0F4FF;
+  border-color: #6B95FF;
 }
 
 #root .ant-layout-sider-children ul {

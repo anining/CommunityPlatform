@@ -62,6 +62,7 @@ function SiderComponent ({ collapsed }) {
         </Menu.SubMenu>
         <Menu.SubMenu key="services" icon={<Icon keys="services" selectedKeys={selectedKeys} />} title="增值服务">
           <Menu.Item key="docking">对接</Menu.Item>
+          <Menu.Item key="store">供货商</Menu.Item>
           {/* <Menu.Item key="1">Option 1</Menu.Item> */}
           {/* <Menu.Item key="2">Option 2</Menu.Item> */}
           {/* <Menu.Item key="3">Option 3</Menu.Item> */}

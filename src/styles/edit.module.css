@@ -1,0 +1,184 @@
+.container {
+  min-height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 62px;
+  width: 100%;
+  background-color: #fff;
+  padding-left: 1.435%;
+  padding-right: 1.435%;
+  display: flex;
+  align-items: center;
+  color: #979BA3;
+}
+
+.headerImg {
+  width: 0.862%;
+  margin-right: 5;
+}
+
+.header span {
+  color: #2c68ff;
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  background-color: #fff;
+  margin-top: 24px;
+  padding-left: 48px;
+  padding-right: 24px;
+  padding-top: 24px;
+  padding-bottom: 32px;
+}
+
+.headerT {
+  height: 50px;
+  width: 100%;
+  background-color: #F7F7F7;
+  display: flex;
+  align-items: center;
+  border-radius: 2px;
+  font-size: 1.785rem;
+  color: #34374A;
+  font-weight: 500;
+  padding: 0 37px;
+  position: relative;
+}
+
+.circle {
+  position: absolute;
+  top: 11px;
+  left: 35px;
+  height: 14px;
+  width: 14px;
+  background: linear-gradient(142deg, #9FF7D8 0%, #31F191 100%);
+  border-radius: 14px;
+}
+
+.tips {
+  color: #FF5730;
+  font-size: 0.857rem;
+  margin: 32px 0 8px 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.itemName {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 3.75%;
+  width: 70px;
+}
+
+.itemName span {
+  color: #FF5730;
+}
+
+.itemText {
+  color: #34374A;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.itemInput {
+  width: 29.25%;
+  height: 40px;
+}
+
+.itemBtn {
+  margin-left: 30px;
+  height: 38px;
+  width: 100px;
+  border-radius: 2px;
+}
+
+.uploadText {
+  color: #4177FE;
+}
+
+.uploadImg {
+  width: 17px;
+  height: 17px;
+  margin-bottom: 13px;
+}
+
+.uploadTips {
+  color: #FF5730;
+  align-self: flex-end;
+  margin-left: 6px;
+  margin-bottom: 8px;
+}
+
+.hiddenText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemDropdown {
+  height: 40px;
+  width: 29.25%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(0, 0, 0, 0.25);
+}
+
+.itemName .white {
+  color: #fff;
+}
+
+.tableView {
+  width: 468px;
+  height: 40px;
+}
+
+.viewTable {
+  height: 40px;
+  width: 88px;
+  margin-right: 18px;
+  background: #F0F4FF;
+  color: #2C68FF;
+  border-radius: 2px;
+  border: 1px solid #6B95FF;
+}
+
+.itemTips {
+  margin-top: 16px;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 0.857%;
+  display: flex;
+  align-items: center;
+}
+
+.itemGrop {
+  width: 29.25%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.itemRadio {
+  color: #979BA3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 0;
+}
+
+.itemRadio span {
+  padding-right: 0;
+}

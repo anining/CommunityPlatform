@@ -1,10 +1,35 @@
 import React from 'react'
+import { Menu, Dropdown, Button } from 'antd'
+import c from '../styles/header.module.css'
 import { Layout } from 'antd'
+import header1 from '../icons/header/header1.png'
+// import header2 from '../icons/header/header2.png'
+import header3 from '../icons/header/header3.png'
+import header4 from '../icons/header/header4.png'
 
 function HeaderComponent ({ collapsed, toggle }) {
 
+  const menu = (
+    <Menu>
+      <Menu.Item style={{display:"flex",alignItems:'center',width:164,height:50}}>
+        <img src={header4} alt="" style={{width:14,marginRight:26}}/>
+        <div>退出登录</div>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
-    <Layout.Header style={{ padding: 0,height:60,background:"#fff",position:'fixed',zIndex:1,width:'100%' }}>
+    <Layout.Header className={c.container}>
+      <div style={{marginRight:24}}>帮助中心</div>
+      <div>开放平台</div>
+      {/* <img src={header2} alt="" style={{width:11.99,marginLeft:34,marginRight:26}}/> */}
+      <Dropdown overlay={menu}>
+        <Button className={c.btn}>
+          <img src={header1} alt="" className={c.avatar}/>
+          <div>用户名</div>
+          <img src={header3} alt="" className={c.down}/>
+        </Button>
+      </Dropdown>
     </Layout.Header>
   )
 }

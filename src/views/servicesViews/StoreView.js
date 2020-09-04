@@ -1,16 +1,13 @@
 import React, { useState } from 'react'
 import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, Pagination } from 'antd'
-import good1 from '../../icons/good/good1.png'
 import c from '../../styles/view.module.css'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
-import { h } from '../../utils/history'
-import good2 from '../../icons/good/good2.png'
-import good3 from '../../icons/good/good3.png'
-import good4 from '../../icons/good/good4.png'
+import good38 from '../../icons/good/good38.png'
+import good39 from '../../icons/good/good39.png'
 import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
 
-function CommunityGoodView () {
+function StoreView () {
   const [visible, setVisible] = useState(false)
 
   return (
@@ -25,7 +22,7 @@ function CommunityGoodView () {
           }
           type = "primary"
           size = "small"
-          className = {c.headerAddBtn}>添加卡密</Button>
+          className = {c.headerAddBtn}>新增</Button>
         </div>
         <RTable setVisible={setVisible} />
       </div>
@@ -68,110 +65,67 @@ function RTable ({ setVisible }) {
 
   const obj = [
     {
-      color: "#2C68FF",
-      text: '已上架',
+      text: '暂停',
+      color: '#FF8D30',
     },
     {
-      color: "#FF4D4F",
-      text: '已下架',
-    },
-    {
-      color: "#FF8D30",
-      text: '已关闭订单',
+      text: '正常',
+      color: '#000'
     }
   ]
   const columns = [
     {
-      title: 'id',
+      title: '供货商ID',
       dataIndex: 'id',
       align: 'center',
   },
     {
-      title: '商品名称',
+      title: '供货商名称',
       dataIndex: 'name',
       align: 'center',
   },
     {
-      title: '商品分类',
+      title: '供货商账户',
       align: 'center',
-      dataIndex: 'category',
+      dataIndex: 'number',
   },
     {
-      title: '下单模型',
-      dataIndex: 'model',
+      title: '总收益',
+      dataIndex: 'price',
       align: 'center',
   },
     {
-      title: '进价',
+      title: '待结算收益',
       dataIndex: 'in_price',
       align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          console.log(a, b)
-        },
-        multiple: 1,
-      }
-  },
-    {
-      title: '售价',
-      dataIndex: 'out_price',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          console.log(a, b)
-        },
-        multiple: 1,
-      }
-  },
-    {
-      title: '密价',
-      align: 'center',
-      dataIndex: 'price',
-      sorter: {
-        compare: (a, b) => {
-          console.log(a, b)
-        },
-        multiple: 1,
-      }
-  },
-    {
-      title: '单位',
-      dataIndex: 'unit',
-      align: 'center',
-  },
-    {
-      title: '下单限制',
-      align: 'center',
-      dataIndex: 'text',
-      render: (text, record, index) => {
-        return (
-          <div style={{color:'#595959'}}>
-            <div>最低数量：100   重复下单：<span style={{color:"#52C41A"}}>开启</span></div>
-            <div>最高数量：100   重复下单：<span style={{color:"#C8C8C8"}}>关闭</span></div>
-          </div>
-        )
-      }
   },
     {
       title: '状态',
-      align: 'center',
       dataIndex: 'status',
+      align: 'center',
       render: (text, record, index) => {
-        const { text: t, color } = obj[text]
+        const { text: t, color } = obj[text];
         return <div style={{color}}>{t}</div>
       }
+  },
+    {
+      title: '供货商商品数',
+      dataIndex: 'num',
+      align: 'center',
+  },
+    {
+      title: '对接时间',
+      align: 'center',
+      dataIndex: 'time',
   },
     {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
         <Space size="small" style={{color:'#2C68FF'}}>
-          <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
-            const history = h.get()
-            history.push("/main/editCommunityGood")
-          }}>编辑商品</div>
+          <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">修改</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">调价历史</div>
+          <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">结算</div>
         </Space>
       )
   },
@@ -180,40 +134,24 @@ function RTable ({ setVisible }) {
   const data = [
     {
       key: 1240,
-      name: '哔哩哔哩关注',
-      category: '哔哩哔哩',
-      model: '（1815）自定义模型',
-      in_price: 0.05,
-      out_price: 0.05,
-      price: 0.05,
-      unit: '个',
-      text: '最低数量：10',
-      status: 1
+      name: 'xx',
+      number: '13242342343',
+      price: '12,444',
+      in_price: '12,555',
+      status: 0,
+      num: 10,
+      time: '2017-10-31 23:12:00',
     },
     {
-      key: 1241,
-      name: '哔哩哔哩关注',
-      category: '哔哩哔哩',
-      model: '（1815）自定义模型',
-      in_price: 0.05,
-      out_price: 0.05,
-      price: 0.05,
-      unit: '个',
-      text: '最低数量：10',
-      status: 2
+      key: 1240,
+      name: 'xx',
+      number: '13242342343',
+      price: '12,444',
+      in_price: '12,555',
+      status: 1,
+      num: 10,
+      time: '2017-10-31 23:12:00',
     },
-    {
-      key: 1242,
-      name: '哔哩哔哩关注',
-      category: '哔哩哔哩',
-      model: '（1815）自定义模型',
-      in_price: 0.05,
-      out_price: 0.05,
-      price: 0.05,
-      unit: '个',
-      text: '最低数量：10',
-      status: 0
-    }
   ];
 
   // function onChange (pagination, filters, sorter, extra) {
@@ -222,16 +160,14 @@ function RTable ({ setVisible }) {
 
   for (let i = 0; i < 100; i++) {
     data.push({
-      key: 1242,
-      name: '哔哩哔哩关注',
-      category: '哔哩哔哩',
-      model: '（1815）自定义模型',
-      in_price: 0.05,
-      out_price: 0.05,
-      price: 0.05,
-      unit: '个',
-      text: '最低数量：10',
-      status: 0
+      key: 1240,
+      name: 'xx',
+      number: '13242342343',
+      price: '12,444',
+      in_price: '12,555',
+      status: 1,
+      num: 10,
+      time: '2017-10-31 23:12:00',
     })
   }
 
@@ -269,40 +205,8 @@ function RTable ({ setVisible }) {
     <div className={c.main}>
         <div className={c.searchView}>
           <div className={c.search}>
-            <div className={c.searchL}>
-              <Input placeholder="请输入商品编号" size="small" className={c.searchInput}/>
-              <Dropdown overlay={menu}>
-                <Button size="small" className={c.dropdownBtn}>
-                  <div className={c.hiddenText}>
-                    请选择商品分类
-                  </div>
-                  <DownOutlined />
-                </Button>
-              </Dropdown>
-              <Dropdown overlay={menu}>
-                <Button size="small" className={c.dropdownBtn}>
-                  <div className={c.hiddenText}>
-                    请选择商品状态
-                  </div>
-                  <DownOutlined />
-                </Button>
-              </Dropdown>
-              <Dropdown overlay={menu}>
-                <Button size="small" className={c.dropdownBtn}>
-                  <div className={c.hiddenText}>
-                    请选择用户权限
-                  </div>
-                  <DownOutlined />
-                </Button>
-              </Dropdown>
-              <Dropdown overlay={menu}>
-                <Button size="small" className={c.dropdownBtn}>
-                  <div className={c.hiddenText}>
-                    请选择供货商
-                  </div>
-                  <DownOutlined />
-                </Button>
-              </Dropdown>
+            <div className={c.searchL} style={{width:'11.453%'}}>
+              <Input placeholder="请输入名称" size="small" className={c.searchInput} style={{width:'100%'}}/>
             </div>
             <div className={c.searchR}>
               <Button size="small" className={c.resetBtn}>重置</Button>
@@ -311,7 +215,7 @@ function RTable ({ setVisible }) {
               }
               type = "primary"
               size = "small"
-              className={c.searchBtn}>搜索商品</Button>
+              className={c.searchBtn}>搜索</Button>
             </div>
           </div>
       </div>
@@ -343,28 +247,16 @@ function HeaderItem () {
   const views = [];
   const data = [
     {
-      label: '商品总数',
+      label: '供货商',
       number: '10,100',
-      icon: good3,
+      icon: good38,
       id: 111,
     },
     {
-      label: '已上架数',
+      label: '供货商品数',
       number: '10,111',
-      icon: good1,
+      icon: good39,
       id: 222,
-    },
-    {
-      label: '已下架数',
-      number: '10,111',
-      icon: good2,
-      id: 333,
-    },
-    {
-      label: '关闭下单',
-      number: '10,111',
-      icon: good4,
-      id: 444,
     },
   ]
 
@@ -384,4 +276,4 @@ function HeaderItem () {
   return views
 }
 
-export default CommunityGoodView
+export default StoreView
