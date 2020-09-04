@@ -1,24 +1,28 @@
 import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, DatePicker } from 'antd'
+import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, Pagination } from 'antd'
 import c from '../../styles/view.module.css'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
-import good19 from '../../icons/good/good19.png'
-import good20 from '../../icons/good/good20.png'
+import good36 from '../../icons/good/good36.png'
+import good37 from '../../icons/good/good37.png'
+import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
-import good32 from '../../icons/good/good32.png'
-import good34 from '../../icons/good/good34.png'
-import good35 from '../../icons/good/good35.png'
 
-function CardOrderView () {
+function DockingView () {
   const [visible, setVisible] = useState(false)
 
   return (
     <div className="container">
       <div className={c.container}>
         <div className={c.header}>
-          <div className={c.headerL} style={{width:'87.684%'}}>
+          <div className={c.headerL}>
             <HeaderItem />
           </div>
+          <Button icon={
+            <img src={good7} alt="" style={{width:16,marginRight:6}} />
+          }
+          type = "primary"
+          size = "small"
+          className = {c.headerAddBtn}>新增</Button>
         </div>
         <RTable setVisible={setVisible} />
       </div>
@@ -59,81 +63,47 @@ function CardOrderView () {
 function RTable ({ setVisible }) {
   const [selectionType, setSelectionType] = useState('checkbox');
 
-  const obj = [
-    {
-      color: "#2C68FF",
-      text: '待发货',
-      icon: good32,
-    },
-    {
-      color: "#52C41A",
-      text: '已完成',
-      icon: good34,
-    },
-    {
-      color: "#FF8D30",
-      text: '异常',
-      icon: good35,
-    },
-  ]
   const columns = [
     {
-      title: '订单编号',
+      title: '对接ID',
       dataIndex: 'id',
       align: 'center',
   },
     {
-      title: '商品信息',
-      dataIndex: 'text',
+      title: '名称',
+      dataIndex: 'name',
       align: 'center',
   },
     {
-      title: '预留方式',
-      dataIndex: 'msg',
+      title: '对接平台',
       align: 'center',
-      render: (text, record, index) => {
-        const { type, number } = text;
-        return (
-          <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-            <img src={obj[type].icon} alt="" style={{width:20,marginRight:12}}/>
-            <div>{number}</div>
-          </div>
-        )
-      }
+      dataIndex: 'platform',
   },
     {
-      title: '商品分类',
+      title: '对接域名',
+      dataIndex: 'uri',
       align: 'center',
-      dataIndex: 'category',
   },
     {
-      title: '对应卡密',
+      title: '对接商品',
+      dataIndex: 'good',
+      align: 'center',
+  },
+    {
+      title: '使用账户',
       dataIndex: 'number',
       align: 'center',
   },
     {
-      title: '供货商',
-      dataIndex: 'store',
+      title: '对接时间',
       align: 'center',
-  },
-    {
-      title: '订单状态',
-      align: 'center',
-      dataIndex: 'status',
-      render: (text, record, index) => {
-        const { text: t, color } = obj[text]
-        return <div style={{color}}>{t}</div>
-      }
+      dataIndex: 'time',
   },
     {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <Space size="small" style={{color:'#2C68FF'}}>
-          <div>修改状态</div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div>退款</div>
-        </Space>
+        <div style={{color:'#2C68FF',textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">修改</div>
       )
   },
 ];
@@ -141,42 +111,12 @@ function RTable ({ setVisible }) {
   const data = [
     {
       key: 1240,
-      id: 1,
-      msg: {
-        type: 0,
-        number: 127587,
-      },
-      text: '饿昏了么联名卡',
-      category: '饿昏了么',
-      number: '2333',
-      store: '-',
-      status: 0,
-    },
-    {
-      key: 1240,
-      id: 1,
-      msg: {
-        type: 1,
-        number: 127587,
-      },
-      text: '饿昏了么联名卡',
-      category: '饿昏了么',
-      number: '2333',
-      store: '-',
-      status: 1,
-    },
-    {
-      key: 1240,
-      id: 1,
-      msg: {
-        type: 2,
-        number: 127587,
-      },
-      text: '饿昏了么联名卡',
-      category: '饿昏了么',
-      number: '2333',
-      store: '-',
-      status: 2,
+      name: 'xx社区',
+      platform: '亿乐',
+      uri: 'xxx.com',
+      good: 0.05,
+      number: '13442347238734',
+      time: '2017-10-31 23:12:00',
     },
   ];
 
@@ -187,16 +127,12 @@ function RTable ({ setVisible }) {
   for (let i = 0; i < 100; i++) {
     data.push({
       key: 1240,
-      id: 1,
-      msg: {
-        type: 1,
-        number: 127587,
-      },
-      text: '饿昏了么联名卡',
-      category: '饿昏了么',
-      number: '2333',
-      store: '-',
-      status: 0,
+      name: 'xx社区',
+      platform: '亿乐',
+      uri: 'xxx.com',
+      good: 0.05,
+      number: '13442347238734',
+      time: '2017-10-31 23:12:00',
     })
   }
 
@@ -232,24 +168,14 @@ function RTable ({ setVisible }) {
 
   return (
     <div className={c.main}>
-      <div className={c.searchView} style={{height:72}}>
-        <div className={c.search} style={{borderBottomWidth:0}}>
-            <div className={c.searchL}>
-              <Input placeholder="请输入订单编号" size="small" className={c.searchInput}/>
-              <Input placeholder="请输入商品名称" size="small" className={c.searchInput}/>
-              <Input placeholder="请输入预留方式" size="small" className={c.searchInput}/>
+        <div className={c.searchView}>
+          <div className={c.search}>
+            <div className={c.searchL} style={{width:'25.369%'}}>
+              <Input placeholder="请输入名称" size="small" className={c.searchInput} style={{width:'45.145%'}}/>
               <Dropdown overlay={menu}>
-                <Button size="small" className={c.dropdownBtn}>
+                <Button size="small" className={c.dropdownBtn} style={{width:'45.145%'}}>
                   <div className={c.hiddenText}>
-                    请选择商品分类
-                  </div>
-                  <DownOutlined />
-                </Button>
-              </Dropdown>
-              <Dropdown overlay={menu}>
-                <Button size="small" className={c.dropdownBtn}>
-                  <div className={c.hiddenText}>
-                    请选择订单状态
+                    请选择对接平台
                   </div>
                   <DownOutlined />
                 </Button>
@@ -262,26 +188,11 @@ function RTable ({ setVisible }) {
               }
               type = "primary"
               size = "small"
-              className={c.searchBtn}>搜索订单</Button>
+              className={c.searchBtn}>搜索</Button>
             </div>
           </div>
       </div>
-      <div className={c.searchView} style={{height:52}}>
-        <div className={c.search} style={{alignItems:'flex-start'}}>
-          <div className={c.searchL} style={{width:'35.344%'}}>
-            <Dropdown overlay={menu}>
-              <Button size="small" className={c.dropdownBtn} style={{width:'32.404%'}}>
-                <div className={c.hiddenText}>
-                  请选供货商
-                </div>
-                <DownOutlined />
-              </Button>
-            </Dropdown>
-            <DatePicker.RangePicker style={{width:'60.627%',height:32}}/>
-            </div>
-          </div>
-      </div>
-      <div className={c.actionView} style={{height:72}}>
+      <div className={c.actionView}>
         <Dropdown overlay={menu}>
           <Button size="small" className={c.actionBtn}>
             <div className={c.hiddenText}>
@@ -309,16 +220,16 @@ function HeaderItem () {
   const views = [];
   const data = [
     {
-      label: '订单总数',
+      label: '已对接',
       number: '10,100',
-      icon: good19,
+      icon: good36,
       id: 111,
     },
     {
-      label: '异常订单',
-      number: '1',
-      icon: good20,
-      id: 555,
+      label: '总对接商品',
+      number: '10,111',
+      icon: good37,
+      id: 222,
     },
   ]
 
@@ -338,4 +249,4 @@ function HeaderItem () {
   return views
 }
 
-export default CardOrderView
+export default DockingView

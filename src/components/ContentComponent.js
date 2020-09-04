@@ -22,6 +22,7 @@ import CardCategoryView from '../views/cardBusinessViews/CardCategoryView'
 import EditCardCategoryView from '../views/cardBusinessViews/EditCardCategoryView'
 import EditUserPriceView from '../views/userViews/EditUserPriceView'
 import AddUserView from '../views/userViews/AddUserView'
+import DockingView from '../views/servicesViews/DockingView'
 
 function ContentComponent () {
 
@@ -77,6 +78,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/editCardCategory">
           <EditCardCategoryView />
+        </Route>
+        <Route exact path="/main/docking">
+          <DockingView />
         </Route>
         {/* <Route exact path="/main/statistics"> */}
         {/*   <StatisticsView /> */}

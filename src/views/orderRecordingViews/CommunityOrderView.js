@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, Pagination } from 'antd'
-import good1 from '../../icons/good/good1.png'
+import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
-import good2 from '../../icons/good/good2.png'
-import good3 from '../../icons/good/good3.png'
-import good4 from '../../icons/good/good4.png'
-import good10 from '../../icons/good/good10.png'
-import good7 from '../../icons/good/good7.png'
+import good17 from '../../icons/good/good17.png'
+import good18 from '../../icons/good/good18.png'
+import good19 from '../../icons/good/good19.png'
+import good20 from '../../icons/good/good20.png'
+import good21 from '../../icons/good/good21.png'
 import good9 from '../../icons/good/good9.png'
 
 function CommunityOrderView () {
@@ -20,12 +19,6 @@ function CommunityOrderView () {
           <div className={c.headerL} style={{width:'87.684%'}}>
             <HeaderItem />
           </div>
-          <Button icon={
-            <img src={good7} alt="" style={{width:16,marginRight:6}} />
-          }
-          type = "primary"
-          size = "small"
-          className = {c.headerAddBtn}>添加卡密</Button>
         </div>
         <RTable setVisible={setVisible} />
       </div>
@@ -68,101 +61,82 @@ function RTable ({ setVisible }) {
 
   const obj = [
     {
-      color: "#2C68FF",
-      text: '正常',
+      color: "#FF8D30",
+      text: '待处理',
     },
     {
-      color: "#979BA3",
-      text: '空',
+      color: "#2C68FF",
+      text: '进行中',
+    },
+    {
+      color: "#52C41A",
+      text: '已完成',
     },
     {
       color: "#FF8D30",
-      text: '库存预警',
-    }
-  ]
-  const obj2 = [
-    {
-      color: "#2C68FF",
-      text: '已上架',
+      text: '异常',
     },
     {
-      color: "#FF4D4F",
-      text: '关闭订单',
-    },
-    {
-      color: "#FF8D30",
-      text: '已下架',
+      color: "#FF5730",
+      text: '申请退款',
     }
   ]
   const columns = [
     {
-      title: '商品编号',
+      title: '订单编号',
       dataIndex: 'id',
       align: 'center',
   },
     {
-      title: '商品名称',
-      dataIndex: 'name',
-      align: 'center',
-  },
-    {
-      title: '商品类别',
-      align: 'center',
-      dataIndex: 'category',
-  },
-    {
-      title: '卡密类型',
-      dataIndex: 'card_category',
-      align: 'center',
-  },
-    {
-      title: '进价',
-      dataIndex: 'in_price',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          console.log(a, b)
-        },
-        multiple: 1,
-      }
-  },
-    {
-      title: '售价',
-      dataIndex: 'out_price',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          console.log(a, b)
-        },
-        multiple: 2,
-      }
-  },
-    {
-      title: '密价',
-      align: 'center',
-      dataIndex: 'price',
-      sorter: {
-        compare: (a, b) => {
-          console.log(a, b)
-        },
-        multiple: 3,
-      }
-  },
-    {
-      title: '卡密详情',
+      title: '下单信息',
       dataIndex: 'msg',
       align: 'center',
-      render: (text, record, index) => (
-        <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">共 {text} 条</div>
-      )
+      render: (text, record, index) => {
+        const { uri, number, password } = text;
+        return (
+          <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+            <div>
+              <div>主页链接 :{uri}</div>
+              <div style={{display:'flex'}}>
+                <div style={{marginRight:30}}>账号: {number}</div>
+                <div>密码: {password}</div>
+              </div>
+            </div>
+          </div>
+        )
+      }
   },
     {
-      title: '库存',
-      dataIndex: 'num',
+      title: '扩展信息',
+      align: 'center',
+      dataIndex: 'text',
+      render: (text, record, index) => {
+        const { begin_num, num } = text;
+        return (
+          <div>
+            <div>初始量 :{begin_num}</div>
+            <div>当前量: {num}</div>
+          </div>
+        )
+      }
+  },
+    {
+      title: '下单数量',
+      dataIndex: 'number',
       align: 'center',
   },
     {
-      title: '库存状态',
+      title: '订单金额',
+      dataIndex: 'price',
+      align: 'center',
+  },
+    {
+      title: '下单时间',
+      dataIndex: 'time',
+      align: 'center',
+  },
+    {
+      title: '订单状态',
       align: 'center',
       dataIndex: 'status',
       render: (text, record, index) => {
@@ -171,19 +145,21 @@ function RTable ({ setVisible }) {
       }
   },
     {
-      title: '商品状态',
-      align: 'center',
-      dataIndex: 'status',
-      render: (text, record, index) => {
-        const { text: t, color } = obj2[text]
-        return <div style={{color}}>{t}</div>
-      }
-  },
-    {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">修改</div>
+        <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+          <Space size="small" style={{color:'#2C68FF'}}>
+            <div>补单</div>
+            <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+            <div>退单</div>
+          </Space>
+          <Space size="small" style={{color:'#2C68FF'}}>
+            <div>订单历程</div>
+            <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+            <div>修改状态</div>
+          </Space>
+        </div>
       )
   },
 ];
@@ -192,44 +168,87 @@ function RTable ({ setVisible }) {
     {
       key: 1240,
       id: 1,
-      name: '饿昏了么联名卡',
-      category: '饿昏了么',
-      card_category: '循环卡',
-      in_price: 0.05,
-      out_price: 0.05,
-      price: 0.05,
-      msg: 100,
-      num: 100,
-      num_status: 0,
-      status: 1
+      msg: {
+        uri: "https://www.baidu.com/s/324654",
+        number: 127587,
+        password: "57657575",
+      },
+      text: {
+        begin_num: '1,456',
+        num: '1,456',
+      },
+      number: '1,2333',
+      price: '1,2333',
+      time: '2020-10-31  23:12:00',
+      status: 0,
     },
     {
       key: 1240,
       id: 1,
-      name: '饿昏了么联名卡',
-      category: '饿昏了么',
-      card_category: '循环卡',
-      in_price: 0.05,
-      out_price: 0.05,
-      price: 0.05,
-      msg: 100,
-      num: 100,
-      num_status: 1,
-      status: 0
+      msg: {
+        uri: "https://www.baidu.com/s/324654",
+        number: 127587,
+        password: "57657575",
+      },
+      text: {
+        begin_num: '1,456',
+        num: '1,456',
+      },
+      number: '1,2333',
+      price: '1,2333',
+      time: '2020-10-31  23:12:00',
+      status: 1,
     },
     {
       key: 1240,
       id: 1,
-      name: '饿昏了么联名卡',
-      category: '饿昏了么',
-      card_category: '循环卡',
-      in_price: 0.05,
-      out_price: 0.05,
-      price: 0.05,
-      msg: 100,
-      num: 100,
-      num_status: 2,
-      status: 2
+      msg: {
+        uri: "https://www.baidu.com/s/324654",
+        number: 127587,
+        password: "57657575",
+      },
+      text: {
+        begin_num: '1,456',
+        num: '1,456',
+      },
+      number: '1,2333',
+      price: '1,2333',
+      time: '2020-10-31  23:12:00',
+      status: 2,
+    },
+    {
+      key: 1240,
+      id: 1,
+      msg: {
+        uri: "https://www.baidu.com/s/324654",
+        number: 127587,
+        password: "57657575",
+      },
+      text: {
+        begin_num: '1,456',
+        num: '1,456',
+      },
+      number: '1,2333',
+      price: '1,2333',
+      time: '2020-10-31  23:12:00',
+      status: 3,
+    },
+    {
+      key: 1240,
+      id: 1,
+      msg: {
+        uri: "https://www.baidu.com/s/324654",
+        number: 127587,
+        password: "57657575",
+      },
+      text: {
+        begin_num: '1,456',
+        num: '1,456',
+      },
+      number: '1,2333',
+      price: '1,2333',
+      time: '2020-10-31  23:12:00',
+      status: 4,
     },
   ];
 
@@ -241,16 +260,19 @@ function RTable ({ setVisible }) {
     data.push({
       key: 1240,
       id: 1,
-      name: '饿昏了么联名卡',
-      category: '饿昏了么',
-      card_category: '循环卡',
-      in_price: 0.05,
-      out_price: 0.05,
-      price: 0.05,
-      msg: 100,
-      num: 100,
-      num_status: 2,
-      status: 2
+      msg: {
+        uri: "https://www.baidu.com/s/324654",
+        number: 127587,
+        password: "57657575",
+      },
+      text: {
+        begin_num: '1,456',
+        num: '1,456',
+      },
+      number: '1,2333',
+      price: '1,2333',
+      time: '2020-10-31  23:12:00',
+      status: 0,
     })
   }
 
@@ -286,14 +308,16 @@ function RTable ({ setVisible }) {
 
   return (
     <div className={c.main}>
-        <div className={c.searchView}>
-          <div className={c.search}>
+      <div className={c.searchView} style={{height:72}}>
+        <div className={c.search} style={{borderBottomWidth:0}}>
             <div className={c.searchL}>
-              <Input placeholder="请输入商品编号" size="small" className={c.searchInput}/>
+              <Input placeholder="请输入订单编号" size="small" className={c.searchInput}/>
+              <Input placeholder="请输入商品名称" size="small" className={c.searchInput}/>
+              <Input placeholder="请输入下单账号" size="small" className={c.searchInput}/>
               <Dropdown overlay={menu}>
                 <Button size="small" className={c.dropdownBtn}>
                   <div className={c.hiddenText}>
-                    请选择商品名称
+                    请选择商品分类
                   </div>
                   <DownOutlined />
                 </Button>
@@ -301,23 +325,7 @@ function RTable ({ setVisible }) {
               <Dropdown overlay={menu}>
                 <Button size="small" className={c.dropdownBtn}>
                   <div className={c.hiddenText}>
-                    请选择商品状态
-                  </div>
-                  <DownOutlined />
-                </Button>
-              </Dropdown>
-              <Dropdown overlay={menu}>
-                <Button size="small" className={c.dropdownBtn}>
-                  <div className={c.hiddenText}>
-                    请选择卡密类型
-                  </div>
-                  <DownOutlined />
-                </Button>
-              </Dropdown>
-              <Dropdown overlay={menu}>
-                <Button size="small" className={c.dropdownBtn}>
-                  <div className={c.hiddenText}>
-                    请选择供货商
+                    请选择订单状态
                   </div>
                   <DownOutlined />
                 </Button>
@@ -330,11 +338,26 @@ function RTable ({ setVisible }) {
               }
               type = "primary"
               size = "small"
-              className={c.searchBtn}>搜索商品</Button>
+              className={c.searchBtn}>搜索订单</Button>
             </div>
           </div>
       </div>
-      <div className={c.actionView}>
+      <div className={c.searchView} style={{height:52}}>
+        <div className={c.search} style={{alignItems:'flex-start'}}>
+          <div className={c.searchL} style={{width:'35.344%'}}>
+            <Dropdown overlay={menu}>
+              <Button size="small" className={c.dropdownBtn} style={{width:'32.404%'}}>
+                <div className={c.hiddenText}>
+                  请选择商品名称
+                </div>
+                <DownOutlined />
+              </Button>
+            </Dropdown>
+            <DatePicker.RangePicker style={{width:'60.627%',height:32}}/>
+            </div>
+          </div>
+      </div>
+      <div className={c.actionView} style={{height:72}}>
         <Dropdown overlay={menu}>
           <Button size="small" className={c.actionBtn}>
             <div className={c.hiddenText}>
@@ -362,33 +385,33 @@ function HeaderItem () {
   const views = [];
   const data = [
     {
-      label: '商品总数',
+      label: '订单总数',
       number: '10,100',
-      icon: good3,
+      icon: good19,
       id: 111,
     },
     {
-      label: '已上架数',
+      label: '待处理订单',
       number: '10,111',
-      icon: good1,
+      icon: good21,
       id: 222,
     },
     {
-      label: '已下架数',
+      label: '申请退款',
       number: '10,111',
-      icon: good2,
+      icon: good17,
       id: 333,
     },
     {
-      label: '关闭下单',
+      label: '申请补单',
       number: '10,111',
-      icon: good4,
+      icon: good18,
       id: 444,
     },
     {
-      label: '库存预警',
+      label: '异常订单',
       number: '1',
-      icon: good10,
+      icon: good20,
       id: 555,
     },
   ]
