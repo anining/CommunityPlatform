@@ -1,0 +1,75 @@
+.title {
+  color: #34374A;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.switchView {
+  display: flex;
+  align-items: center;
+}
+
+.switch {
+  width: 44px;
+  height: 22px;
+  margin-right: 14px;
+}
+
+.switchText {
+  font-size: 0.857rem;
+  color: #2C68FF;
+}
+
+.priceView {
+  display: flex;
+  align-items: center;
+}
+
+.priceViewL {
+  display: flex;
+  align-items: center;
+}
+
+.priceViewR {
+  display: flex;
+  align-items: center;
+}
+
+.priceViewLL {
+  width: 81px;
+  height: 40px;
+  background: #2877F7;
+  border-radius: 4px 0px 0px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.priceViewRR {
+  width: 81px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FDB414;
+  border-radius: 4px 0px 0px 4px;
+  color: #fff;
+}
+
+.priceViewLI {
+  width: 144px;
+  height: 40px;
+  border-left: none;
+  margin-right: 38px;
+}
+
+.priceViewRI {
+  width: 144px;
+  height: 40px;
+  border-left: none;
+}
+
+.checkbox {
+  margin-right: 40px;
+}

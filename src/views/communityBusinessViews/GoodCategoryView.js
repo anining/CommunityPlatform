@@ -3,46 +3,55 @@ import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, Pagination
 import c from '../../styles/view.module.css'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import good7 from '../../icons/good/good7.png'
+import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
+import { h } from '../../utils/history'
+import { styles } from '../../styles/modal'
 
 function GoodCategoryView () {
   const [visible, setVisible] = useState(false)
+  const [actionId, setActionId] = useState(2)
+
+  function handleOk () {
+
+  }
+
+  function handleCancel () {
+
+  }
 
   return (
     <div className="container">
       <div className={c.container}>
         <RTable setVisible={setVisible} />
       </div>
-      {/* <Modal */}
-      {/*   visible={visible} */}
-      {/*   onOk={handleOk} */}
-      {/*   footer={null} */}
-      {/*   onCancel={handleCancel} */}
-      {/* > */}
-      {/*   <div className={{ */}
-      {/*     display:'flex', */}
-      {/*     flexDirection:'column', */}
-      {/*     alignItems:'center', */}
-      {/*     padding:25, */}
-      {/*     }}> */}
-      {/*     <img src={good6} alt="" style={{width:90}} /> */}
-      {/*     <h4 style={{marginBottom:25,marginTop:25}}>{actionId===1?"确定要删除此支付账户吗？":"确定要删除这个分类吗？"}</h4> */}
-      {/*     {(()=>{ */}
-      {/*     if(actionId===1){ */}
-      {/*       return <p>分类<span style={{color:"#2C68FF"}}>哔哩哔哩</span> 一共包含了 15 个商品，包含商品的分类不允许被删除，请更改关联商品的分类之后重试。</p> */}
-      {/*     } */}
-      {/*       return <p>删除的分类不可被找回，请确认。</p> */}
-      {/*     })()} */}
-      {/*     <div style={{display:'flex',justifyContent:'space-around',marginTop:25,alignItems:'center',width:'100%'}}> */}
-      {/*       <Button key="back" style={{width:150}}> */}
-      {/*         取消 */}
-      {/*       </Button> */}
-      {/*       <Button key="submit"style={{width:150}} type="primary" onClick={handleOk}> */}
-      {/*         确定 */}
-      {/*       </Button> */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* </Modal> */}
+      <Modal
+        visible={visible}
+        onOk={handleOk}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <div style={styles.modal}>
+          <img src={good6} alt="" style={styles.icon} />
+          <div style={styles.label}>
+            {actionId===1?"确定要删除此支付账户吗？":"确定要删除这个分类吗？"}
+          </div>
+          {(()=>{
+          if(actionId===1){
+            return <p style={styles.p}>分类<span style={{color:"#2C68FF"}}> 哔哩哔哩 </span>一共包含了 15 个商品，包含商品的分类不允许被删除，请更改关联商品的分类之后重试。</p>
+          }
+            return <p style={styles.p}>删除的分类不可被找回，请确认。</p>
+          })()}
+          <div style={styles.btnView}>
+            <Button key="back" style={styles.btnCancle}>
+              取消
+            </Button>
+            <Button key="submit" type="primary" onClick={handleOk} style={styles.btnOk}>
+              确定
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }
@@ -81,7 +90,10 @@ function RTable ({ setVisible }) {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} href="/main/editCommunityGood">编辑分类</div>
+        <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>{
+            const history = h.get()
+            history.push("/main/editGoodCategory")
+        }}>编辑分类</div>
       )
   },
 ];

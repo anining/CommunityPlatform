@@ -9,6 +9,7 @@ import good4 from '../../icons/good/good4.png'
 import good10 from '../../icons/good/good10.png'
 import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
+import { h } from '../../utils/history'
 
 function CardGoodView () {
   const [visible, setVisible] = useState(false)
@@ -183,7 +184,10 @@ function RTable ({ setVisible }) {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">修改</div>
+        <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} onClick={()=>{
+          const history = h.get()
+          history.push("/main/editCardGood")
+        }}>修改</div>
       )
   },
 ];

@@ -78,10 +78,10 @@ function SiderComponent ({ collapsed }) {
         {/* <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}> */}
         {/*   用户管理 */}
         {/* </Menu.Item> */}
-        {/* <Menu.SubMenu key="childWeb" icon={<Icon keys="childWeb" selectedKeys={selectedKeys} />} title="分站管理"> */}
-        {/*   <Menu.Item key="childWebList">分站列表</Menu.Item> */}
-        {/*   <Menu.Item key="childWebSetting">分站设置</Menu.Item> */}
-        {/* </Menu.SubMenu> */}
+        <Menu.SubMenu key="childWeb" icon={<Icon keys="childWeb" selectedKeys={selectedKeys} />} title="分站管理">
+          {/* <Menu.Item key="childWebList">分站列表</Menu.Item> */}
+          <Menu.Item key="childWebSetting">分站设置</Menu.Item>
+        </Menu.SubMenu>
         {/* <Menu.SubMenu key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置"> */}
         {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
         {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
