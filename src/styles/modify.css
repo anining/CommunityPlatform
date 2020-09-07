@@ -39,3 +39,7 @@
   background-color: #F0F5FF;
   color: #2C68FF;
 }
+
+.ql-toolbar.ql-snow {
+  overflow-x: auto;
+}
