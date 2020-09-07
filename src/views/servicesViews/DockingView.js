@@ -6,6 +6,7 @@ import good36 from '../../icons/good/good36.png'
 import good37 from '../../icons/good/good37.png'
 import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
+import { h } from '../../utils/history'
 
 function DockingView () {
   const [visible, setVisible] = useState(false)
@@ -103,7 +104,10 @@ function RTable ({ setVisible }) {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <div style={{color:'#2C68FF',textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">修改</div>
+        <div style={{color:'#2C68FF',textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
+              const history = h.get()
+              history.push("/main/editDocking")
+        }}>修改</div>
       )
   },
 ];
