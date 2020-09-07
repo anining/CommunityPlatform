@@ -1,0 +1,124 @@
+.main {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item {
+  width: 600px;
+  height: 322px;
+  margin-left: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 12px 48px 16px rgba(44, 103, 255, 0.03), 0px 9px 22px 0px rgba(44, 103, 255, 0.05), 0px 6px 16px -8px rgba(44, 103, 255, 0.08);
+  border-radius: 2px;
+  margin-top: 32px;
+}
+
+.itemImg {
+  width: 45px;
+}
+
+.btn {
+  width: 180px;
+  height: 32px;
+  background-color: #2C67FF;
+}
+
+.itemLabel {
+  color: #34374A;
+  font-size: 1.428rem;
+  font-weight: 500;
+  margin-top: 39px;
+}
+
+.tips {
+  color: #6F717E;
+  font-size: 1.071rem;
+  margin: 14px 0 10px 0;
+}
+
+.price {
+  font-weight: 500;
+  color: #34374A;
+}
+
+.price span {
+  font-size: 2.928rem;
+}
+
+.replaceBtn {
+  width: 140px;
+  height: 32px;
+  background: #2C68FF;
+}
+
+.payLabel {
+  width: 100%;
+  text-align: left;
+  color: #000;
+}
+
+.payTypeView {
+  width: 222px;
+  height: 64px;
+  border-radius: 2px;
+  border: 2px solid #4076FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payTypeView img {
+  width: 30px;
+  margin: 0 10px 0 22px;
+}
+
+.selectT {
+  height: 18px;
+  width: 18px;
+  border-radius: 9px;
+  border: 5px solid #4076FF;
+}
+
+.selectF {
+  width: 18px;
+  height: 18px;
+  background: #EBECED;
+  border-radius: 9px;
+}
+
+.qrCode {
+  width: 180px;
+  height: 180px;
+  background: #D8D8D8;
+  margin-top: 50px;
+  margin-bottom: 16px;
+}
+
+.payTips {
+  color: #979BA3;
+  font-size: 0.857rem;
+  margin-bottom: 41px;
+  display: flex;
+}
+
+.payBtn {
+  width: 150px;
+  height: 32px;
+  background: #2C68FF;
+  font-weight: 500;
+  border-radius: 2px;
+}
+
+.payBtnF {
+  width: 150px;
+  height: 32px;
+  border-radius: 2px;
+  border: 1px solid #2C68FF;
+  color: #2C68FF;
+  font-weight: 500;
+  margin-right: 56px;
+}

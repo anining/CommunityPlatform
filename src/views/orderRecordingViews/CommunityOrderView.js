@@ -131,11 +131,6 @@ function RTable ({ setVisible }) {
       align: 'center',
   },
     {
-      title: '下单时间',
-      dataIndex: 'time',
-      align: 'center',
-  },
-    {
       title: '订单状态',
       align: 'center',
       dataIndex: 'status',
@@ -145,21 +140,26 @@ function RTable ({ setVisible }) {
       }
   },
     {
+      title: '下单时间',
+      dataIndex: 'time',
+      align: 'center',
+  },
+    {
+      title: '订单历程',
+      align: 'center',
+      render: (text, record, index) => (
+        <div style={{color:'#2C68FF',textDecoration:'underline',textDecorationColor:'#2C68FF'}}>点击查看</div>
+      )
+  },
+    {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-          <Space size="small" style={{color:'#2C68FF'}}>
-            <div>补单</div>
-            <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-            <div>退单</div>
-          </Space>
-          <Space size="small" style={{color:'#2C68FF'}}>
-            <div>订单历程</div>
-            <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-            <div>修改状态</div>
-          </Space>
-        </div>
+        <Space size="small" style={{color:'#2C68FF'}}>
+          <div style={{color:'#FF4D4F',textDecoration:'#FF4D4F underline'}}>退款</div>
+          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div style={{color:'#2C68FF',textDecoration:'#2C68FF underline'}}>添加备注</div>
+        </Space>
       )
   },
 ];

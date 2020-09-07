@@ -4,6 +4,7 @@ import c from '../../styles/view.module.css'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import good7 from '../../icons/good/good7.png'
 import good31 from '../../icons/good/good31.png'
+import { h } from '../../utils/history'
 
 function CardCategoryView () {
   const [visible, setVisible] = useState(false)
@@ -81,7 +82,10 @@ function RTable ({ setVisible }) {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} href="/main/editCommunityGood">编辑分类</div>
+        <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>{
+          const history = h.get()
+          history.push("/main/editCardCategory")
+        }}>编辑分类</div>
       )
   },
 ];
