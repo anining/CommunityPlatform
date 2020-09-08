@@ -162,3 +162,27 @@
   justify-content: space-between;
   flex-wrap: nowrap;
 }
+
+.headerTips {
+  width: 100%;
+  padding: 0 24px;
+  height: 55px;
+  flex-shrink: 0;
+  background-color: #fff;
+}
+
+.headerText {
+  width: 100%;
+  height: 40px;
+  background: #FFFCEB;
+  border-radius: 2px;
+  color: #FF8D30;
+  display: flex;
+  align-items: center;
+}
+
+.tipsImg {
+  width: 14px;
+  margin-right: 8px;
+  margin-left: 17px;
+}

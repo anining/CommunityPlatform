@@ -69,12 +69,12 @@ function SiderComponent ({ collapsed }) {
           <Menu.Item key="communityOrder">社区订单</Menu.Item>
           <Menu.Item key="cardOrder">卡密订单</Menu.Item>
         </Menu.SubMenu>
-        {/* <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}> */}
-        {/*   资金流水 */}
-        {/* </Menu.Item> */}
-        {/* <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}> */}
-        {/*   用户管理 */}
-        {/* </Menu.Item> */}
+        <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}>
+          资金流水
+        </Menu.Item>
+        <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}>
+          用户管理
+        </Menu.Item>
         <Menu.SubMenu key="childWeb" icon={<Icon keys="childWeb" selectedKeys={selectedKeys} />} title="分站管理">
           {/* <Menu.Item key="childWebList">分站列表</Menu.Item> */}
           <Menu.Item key="childWebSetting">分站设置</Menu.Item>

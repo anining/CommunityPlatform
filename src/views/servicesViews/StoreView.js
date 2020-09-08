@@ -6,6 +6,7 @@ import good38 from '../../icons/good/good38.png'
 import good39 from '../../icons/good/good39.png'
 import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
+import { h } from '../../utils/history'
 
 function StoreView () {
   const [visible, setVisible] = useState(false)
@@ -123,7 +124,10 @@ function RTable ({ setVisible }) {
       align: 'center',
       render: (text, record, index) => (
         <Space size="small" style={{color:'#2C68FF'}}>
-          <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">修改</div>
+          <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
+            const history = h.get()
+            history.push("/main/editStore")
+          }}>修改</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
           <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">结算</div>
         </Space>

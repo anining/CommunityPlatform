@@ -25,7 +25,7 @@ import AddUserView from '../views/userViews/AddUserView'
 import DockingView from '../views/servicesViews/DockingView'
 import EditDockingView from '../views/servicesViews/EditDockingView'
 import StoreView from '../views/servicesViews/StoreView'
-// import EditStoreView from '../views/servicesViews/EditStoreView'
+import EditStoreView from '../views/servicesViews/EditStoreView'
 import SubServiceView from '../views/servicesViews/SubServiceView'
 
 function ContentComponent () {
@@ -93,7 +93,7 @@ function ContentComponent () {
           <StoreView />
         </Route>
         <Route exact path="/main/editStore">
-          {/* <EditStoreView /> */}
+          <EditStoreView />
         </Route>
         <Route exact path="/main/subService">
           <SubServiceView />
