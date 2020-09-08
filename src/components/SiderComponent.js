@@ -76,15 +76,23 @@ function SiderComponent ({ collapsed }) {
           用户管理
         </Menu.Item>
         <Menu.SubMenu key="childWeb" icon={<Icon keys="childWeb" selectedKeys={selectedKeys} />} title="分站管理">
-          {/* <Menu.Item key="childWebList">分站列表</Menu.Item> */}
-          <Menu.Item key="childWebSetting">分站设置</Menu.Item>
+          <Menu.Item key="childWebList">分站列表</Menu.Item>
         </Menu.SubMenu>
-        {/* <Menu.SubMenu key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置"> */}
-        {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
-        {/* </Menu.SubMenu> */}
+        <Menu.SubMenu key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置">
+          <Menu.Item key="storeSetting">店铺设置</Menu.Item>
+          <Menu.Item key="rebot">加款机器人</Menu.Item>
+          <Menu.Item key="images">图床配置</Menu.Item>
+          <Menu.Item key="peopleService">客服配置</Menu.Item>
+          <Menu.Item key="notice">发布公告</Menu.Item>
+          <Menu.Item key="admin">系统管理员</Menu.Item>
+          <Menu.Item key="password">修改密码</Menu.Item>
+          <Menu.Item key="logger">登录日志</Menu.Item>
+          <Menu.Item key="about">系统信息</Menu.Item>
+          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
+          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
+          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
+          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
+        </Menu.SubMenu>
         {/* <Menu.SubMenu key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置"> */}
         {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
         {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}

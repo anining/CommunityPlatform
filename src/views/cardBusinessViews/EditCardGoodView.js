@@ -258,6 +258,13 @@ function EditCardGoodView () {
           <div className={c.itemName} />
           <div>数值越大，排序越靠前；数值相同，商品编号越大，排序越靠前</div>
         </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>备注</div>
+          </div>
+          <ReactQuill className={c.quill} theme="snow" value={quillValue} onChange={setQuillValue}/>
+        </div>
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
           </div>

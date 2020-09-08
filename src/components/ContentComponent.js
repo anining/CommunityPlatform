@@ -13,7 +13,9 @@ import EditCommunityGoodView from '../views/communityBusinessViews/EditCommunity
 import OrderModelView from '../views/communityBusinessViews/OrderModelView'
 import EditOrderModelView from '../views/communityBusinessViews/EditOrderModelView'
 import ChildWebListView from '../views/childWebViews/ChildWebListView'
+import EditChildWebView from '../views/childWebViews/EditChildWebView'
 import ChildWebSettingView from '../views/childWebViews/ChildWebSettingView'
+import StoreSettingView from '../views/childWebViews/StoreSettingView'
 import CardGoodView from '../views/cardBusinessViews/CardGoodView'
 import EditCardGoodView from '../views/cardBusinessViews/EditCardGoodView'
 import CardManageView from '../views/cardBusinessViews/CardManageView'
@@ -27,6 +29,16 @@ import EditDockingView from '../views/servicesViews/EditDockingView'
 import StoreView from '../views/servicesViews/StoreView'
 import EditStoreView from '../views/servicesViews/EditStoreView'
 import SubServiceView from '../views/servicesViews/SubServiceView'
+import MoneyRebotView from "../views/webSettingViews/MoneyRebotView"
+import ImagesView from "../views/webSettingViews/ImagesView"
+import PeopleServiceView from "../views/webSettingViews/PeopleServiceView"
+import NoticeView from "../views/webSettingViews/NoticeView"
+import AddNoticeView from "../views/webSettingViews/AddNoticeView"
+import AdminView from "../views/webSettingViews/AdminView"
+import AddAdminView from "../views/webSettingViews/AddAdminView"
+import PassWordView from "../views/webSettingViews/PassWordView"
+import LoggerView from "../views/webSettingViews/LoggerView"
+import AboutView from "../views/webSettingViews/AboutView"
 
 function ContentComponent () {
 
@@ -62,6 +74,9 @@ function ContentComponent () {
         <Route exact path="/main/childWebList">
           <ChildWebListView />
         </Route>
+        <Route exact path="/main/editChildWeb">
+          <EditChildWebView />
+        </Route>
         <Route exact path="/main/childWebSetting">
           <ChildWebSettingView />
         </Route>
@@ -92,24 +107,45 @@ function ContentComponent () {
         <Route exact path="/main/store">
           <StoreView />
         </Route>
+        <Route exact path="/main/storeSetting">
+          <StoreSettingView />
+        </Route>
+        <Route exact path="/main/rebot">
+          <MoneyRebotView />
+        </Route>
+        <Route exact path="/main/images">
+          <ImagesView />
+        </Route>
+        <Route exact path="/main/peopleService">
+          <PeopleServiceView />
+        </Route>
+        <Route exact path="/main/notice">
+          <NoticeView />
+        </Route>
+        <Route exact path="/main/addNotice">
+          <AddNoticeView />
+        </Route>
+        <Route exact path="/main/admin">
+          <AdminView />
+        </Route>
+        <Route exact path="/main/addAdmin">
+          <AddAdminView />
+        </Route>
+        <Route exact path="/main/password">
+          <PassWordView />
+        </Route>
+        <Route exact path="/main/logger">
+          <LoggerView />
+        </Route>
+        <Route exact path="/main/about">
+          <AboutView />
+        </Route>
         <Route exact path="/main/editStore">
           <EditStoreView />
         </Route>
         <Route exact path="/main/subService">
           <SubServiceView />
         </Route>
-        {/* <Route exact path="/main/statistics"> */}
-        {/*   <StatisticsView /> */}
-        {/* </Route> */}
-        {/* <Route exact path="/main/communityBusiness"> */}
-        {/*   <CommunityBusinessView /> */}
-        {/* </Route> */}
-        {/* <Route exact path="/main/cardBusiness"> */}
-        {/*   <CardBusinessView /> */}
-        {/* </Route> */}
-        {/* <Route exact path="/main/services"> */}
-        {/*   <ServicesView /> */}
-        {/* </Route> */}
         <Route exact path="/main/communityOrder">
           <CommunityOrderView />
         </Route>

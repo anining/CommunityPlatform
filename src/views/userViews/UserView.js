@@ -23,6 +23,10 @@ function UserView () {
           }
           type = "primary"
           size = "small"
+          onClick={()=>{
+            const history = h.get()
+            history.push("/main/addUser")
+          }}
           className = {c.headerAddBtn}>添加用户</Button>
         </div>
         <RTable setVisible={setVisible} />
@@ -142,7 +146,10 @@ function RTable ({ setVisible }) {
             history.push("/main/editCommunityGood")
           }}>修改余额</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">修改密价</div>
+          <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
+            const history = h.get()
+            history.push("/main/editUserPrice")
+          }}>修改密价</div>
         </Space>
       )
   },

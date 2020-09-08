@@ -1,68 +1,124 @@
 import React, { useState } from 'react'
-import { Button, Popconfirm, Radio, Menu, Dropdown, Table, message, Input, Space, Modal } from 'antd'
+import { Button, Menu, Dropdown, Table, message, Input, Radio, Modal, Pagination } from 'antd'
+import good1 from '../../icons/good/good1.png'
+import c from '../../styles/view.module.css'
+import ce from '../../styles/edit.module.css'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
-import good6 from '../../icons/good/good6.png'
-import good9 from '../../icons/good/good9.png'
+import good5 from '../../icons/good/good5.png'
+import good2 from '../../icons/good/good2.png'
+import good3 from '../../icons/good/good3.png'
+import good4 from '../../icons/good/good4.png'
 import good27 from '../../icons/good/good27.png'
+import good9 from '../../icons/good/good9.png'
 
 function EditUserPriceView () {
   const [visible, setVisible] = useState(false)
-  const [actionId, setActionId] = useState(2)
+  const [value, setValue] = useState()
 
-  function handleOk (e) {
-    console.log(e);
-    setVisible(false)
-  };
-
-  function handleCancel (e) {
-    console.log(e);
-    setVisible(false)
-  };
+  function onChange (e) {
+    setValue(e.target.value)
+  }
 
   return (
     <div className="container">
-      <div className="container" style={styles.container}>
-          <div style={styles.header}>
-            <div style={styles.headerT}>
-              <HeaderItem />
-            </div>
-            <div style={styles.headerB}>
-              <img src={good27} alt="" style={{width:10,marginRight:5}}/>
-              <div>用户充值会产生流水记录，但是不会计入今日消费；今日消费只计算购买商品产生的流水总和。</div>
-             </div>
-          </div>
-        <RTable setVisible={setVisible} />
-      </div>
-      <Modal
-        visible={visible}
-        onOk={handleOk}
-        footer={null}
-        onCancel={handleCancel}
-      >
-        <div style={{
-          display:'flex',
-          flexDirection:'column',
-          alignItems:'center',
-          padding:25,
+      <div className={c.container}>
+        <div className={ce.header} style={{flexShrink:0}}>
+          <img src={good5} alt="" className={ce.headerImg}/>
+          <div>首页 / 用户管理 / <span>修改用户密价</span></div>
+        </div>
+        <div className={c.header} style={{marginTop:24}}>
+          <div className={c.headerL} style={{
+            width:'auto',
+            flexDirection:'column',
+            alignItems:'flex-start',
+            justifyContent:'space-around'
           }}>
-          <img src={good6} alt="" style={{width:90}} />
-          <h4 style={{marginBottom:25,marginTop:25}}>{actionId===1?"确定要删除此支付账户吗？":"确定要删除这个分类吗？"}</h4>
-          {(()=>{
-          if(actionId===1){
-            return <p>分类<span style={{color:"#2C68FF"}}>哔哩哔哩</span> 一共包含了 15 个商品，包含商品的分类不允许被删除，请更改关联商品的分类之后重试。</p>
-          }
-            return <p>删除的分类不可被找回，请确认。</p>
-          })()}
-          <div style={{display:'flex',justifyContent:'space-around',marginTop:25,alignItems:'center',width:'100%'}}>
-            <Button key="back" style={{width:150}}>
-              取消
-            </Button>
-            <Button key="submit"style={{width:150}} type="primary" onClick={handleOk}>
-              确定
-            </Button>
+            <div style={{display:'flex',alignItems:'flex-end'}}>
+              <div style={{
+                color:'#34374A',
+                fontSize:'2rem',
+                fontWeight:500
+              }}>修改用户密价</div>
+              <div style={{color:'#6F717E',fontWeight:500,marginLeft:14}}>当前用户：<span style={{color:'#2C68FF'}}>12345678907</span></div>
+            </div>
+            <div style={{
+              display:'flex',
+              alignItems:'center',
+            }}>
+              <div style={{
+                color:'#34374A',
+                fontWeight:500
+              }}>价格类型</div>
+              <Radio.Group onChange={onChange} value={value}>
+                <Radio value={1} style={{marginLeft:33,marginRight:70}}>单价</Radio>
+                <Radio value={2}>密价</Radio>
+              </Radio.Group>
+            </div>
+          </div>
+          <div style={{
+            display:'flex',
+            flexDirection:'column',
+            alignItems:'center'
+          }}>
+            <div style={{marginBottom:11}}>
+              <Button size="small" style={{
+                width:131,
+                height:40,
+                color:'#979BA3',
+                fontSize:'1.142rem',
+                marginRight:32
+              }}>放弃</Button>
+              <Button size="small" type="primary" style={{
+                width:131,
+                height:40,
+                background:'#2C68FF',
+                fontSize:'1.142rem'
+              }}>保存</Button>
+            </div>
+            <div style={{
+              color:'#979BA3',
+              fontSize:'0.857rem'
+            }}>上次保存： 2020.01.15 15:25:04</div>
           </div>
         </div>
-      </Modal>
+        <div className={c.headerTips}>
+          <div className={c.headerText}>
+            <img src={good27} alt="" className={c.tipsImg}/>
+            <div>当用户密价填写时，系统会优先使用用户密价。</div>
+          </div>
+        </div>
+        <RTable setVisible={setVisible} />
+      </div>
+      {/* <Modal */}
+      {/*   visible={visible} */}
+      {/*   onOk={handleOk} */}
+      {/*   footer={null} */}
+      {/*   onCancel={handleCancel} */}
+      {/* > */}
+      {/*   <div className={{ */}
+      {/*     display:'flex', */}
+      {/*     flexDirection:'column', */}
+      {/*     alignItems:'center', */}
+      {/*     padding:25, */}
+      {/*     }}> */}
+      {/*     <img src={good6} alt="" style={{width:90}} /> */}
+      {/*     <h4 style={{marginBottom:25,marginTop:25}}>{actionId===1?"确定要删除此支付账户吗？":"确定要删除这个分类吗？"}</h4> */}
+      {/*     {(()=>{ */}
+      {/*     if(actionId===1){ */}
+      {/*       return <p>分类<span style={{color:"#2C68FF"}}>哔哩哔哩</span> 一共包含了 15 个商品，包含商品的分类不允许被删除，请更改关联商品的分类之后重试。</p> */}
+      {/*     } */}
+      {/*       return <p>删除的分类不可被找回，请确认。</p> */}
+      {/*     })()} */}
+      {/*     <div style={{display:'flex',justifyContent:'space-around',marginTop:25,alignItems:'center',width:'100%'}}> */}
+      {/*       <Button key="back" style={{width:150}}> */}
+      {/*         取消 */}
+      {/*       </Button> */}
+      {/*       <Button key="submit"style={{width:150}} type="primary" onClick={handleOk}> */}
+      {/*         确定 */}
+      {/*       </Button> */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/* </Modal> */}
     </div>
   )
 }
@@ -72,188 +128,86 @@ function RTable ({ setVisible }) {
 
   const columns = [
     {
-      title: 'id',
-      dataIndex: 'name',
+      title: '商品ID',
+      dataIndex: 'id',
       align: 'center',
   },
     {
       title: '商品名称',
-      dataIndex: 'chinese',
+      dataIndex: 'name',
       align: 'center',
-      sorter: {
-        compare: (a, b) => a.chinese - b.chinese,
-        multiple: 3,
-      },
   },
     {
       title: '商品分类',
       align: 'center',
-      dataIndex: 'math',
-      sorter: {
-        compare: (a, b) => a.math - b.math,
-        multiple: 2,
-      },
+      dataIndex: 'category',
   },
     {
-      title: '下单模型',
-      dataIndex: 'english',
+      title: '业务类型',
+      dataIndex: 'type',
       align: 'center',
-      sorter: {
-        compare: (a, b) => a.english - b.english,
-        multiple: 1,
-      },
   },
     {
       title: '进价',
-      dataIndex: 'name',
+      dataIndex: 'in_price',
       align: 'center',
+      render: (text, record, index) => {
+        return <div style={{color:'#FF8D30'}}>{text}</div>
+      }
   },
     {
-      title: '售价',
-      dataIndex: 'name',
+      title: '单价',
+      dataIndex: 'a_price',
       align: 'center',
   },
     {
       title: '密价',
       align: 'center',
-      dataIndex: 'name',
-  },
-    {
-      title: '单位',
-      dataIndex: 'name',
-      align: 'center',
-  },
-    {
-      title: '下单限制',
-      align: 'center',
-      dataIndex: 'name',
-      render: name => {
-        return (
-          <Popconfirm
-            title="Are you sure delete this task?"
-            onConfirm={()=>{}}
-            onCancel={()=>{}}
-            okText="Yes"
-            cancelText="No"
-          >
-            <a href="#">Delete</a>
-          </Popconfirm>
-        )
+      dataIndex: 'price',
+      render: (text, record, index) => {
+        return <div style={{color:'#4177FE'}}>{text}</div>
       }
   },
     {
-      title: '状态',
+      title: '用户密价',
       align: 'center',
-      dataIndex: 'name',
-      render: name => {
-        return (
-          <>
-            <div>重复下单: <span style={{color:"green"}}>开启</span></div> <
-          div > 批量下单: 关闭 < /div> < / >
-        )
+      dataIndex: 'user_price',
+      render: (text, record, index) => {
+        return <div style={{color:'#4177FE'}}>{text}</div>
       }
-  },
-    {
-      title: '操作',
-      align: 'center',
-      key: "action",
-      render: (text, record) => (
-        <Space size="small">
-          <a href="/main/editCommunityGood">编辑商品</a>
-        </Space>
-      )
-  },
+  }
 ];
 
   const data = [
     {
-      key: '1',
-      name: 'rown',
-      chinese: 98,
-      math: 60,
-      english: 70,
-  },
-    {
-      key: '2',
-      name: 'Jim Green',
-      chinese: 98,
-      math: 66,
-      english: 89,
-  },
-    {
-      key: '3',
-      name: 'Joe Black',
-      chinese: 98,
-      math: 90,
-      english: 70,
-  },
-    {
-      key: '4',
-      name: 'Jim Red',
-      chinese: 88,
-      math: 99,
-      english: 89,
-  },
-    {
-      key: '3',
-      name: 'Joe Black',
-      chinese: 98,
-      math: 90,
-      english: 70,
-  },
-    {
-      key: '4',
-      name: 'Jim Red',
-      chinese: 88,
-      math: 99,
-      english: 89,
-  },
-    {
-      key: '3',
-      name: 'Joe Black',
-      chinese: 98,
-      math: 90,
-      english: 70,
-  },
-    {
-      key: '4',
-      name: 'Jim Red',
-      chinese: 88,
-      math: 99,
-      english: 89,
-  },
-    {
-      key: '3',
-      name: 'Joe Black',
-      chinese: 98,
-      math: 90,
-      english: 70,
-  },
-    {
-      key: '4',
-      name: 'Jim Red',
-      chinese: 88,
-      math: 99,
-      english: 89,
-  },
-    {
-      key: '3',
-      name: 'Joe Black',
-      chinese: 98,
-      math: 90,
-      english: 70,
-  },
-    {
-      key: '4',
-      name: 'Jim Red',
-      chinese: 88,
-      math: 99,
-      english: 89,
-  },
-];
+      key: 1240,
+      id: '1233',
+      name: '哔哩哔哩关注',
+      category: '哔哩哔哩',
+      type: '哔哩哔哩',
+      in_price: 0.05,
+      a_price: 0.05,
+      price: 0.05,
+      user_price: 0.05,
+    },
+  ];
 
-  function onChange (pagination, filters, sorter, extra) {
-    console.log('params', pagination, filters, sorter, extra);
+  // function onChange (pagination, filters, sorter, extra) {
+  //   console.log('params', pagination, filters, sorter, extra);
+  // }
+
+  for (let i = 0; i < 100; i++) {
+    data.push({
+      key: 1240,
+      id: '1233',
+      name: '哔哩哔哩关注',
+      category: '哔哩哔哩',
+      type: '哔哩哔哩',
+      in_price: 0.05,
+      a_price: 0.05,
+      price: 0.05,
+      user_price: 0.05,
+    })
   }
 
   const rowSelection = {
@@ -261,9 +215,9 @@ function RTable ({ setVisible }) {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     getCheckboxProps: record => ({
-      disabled: record.name === 'Disabled User',
+      // disabled: record.name === 'Disabled User',
       // Column configuration not to be checked
-      name: record.name,
+      // name: record.name,
     }),
   };
 
@@ -274,145 +228,109 @@ function RTable ({ setVisible }) {
 
   const menu = (
     <Menu onClick={handleMenuClick}>
-    <Menu.Item key="1" icon={<UserOutlined />}>
-      1st menu item
-    </Menu.Item>
-    <Menu.Item key="2" icon={<UserOutlined />}>
-      2nd menu item
-    </Menu.Item>
-    <Menu.Item key="3" icon={<UserOutlined />}>
-      3rd menu item
-    </Menu.Item>
-  </Menu>
+      <Menu.Item key="1">
+        1st menu item
+      </Menu.Item>
+      <Menu.Item key="2">
+        2nd menu item
+      </Menu.Item>
+      <Menu.Item key="3">
+        3rd menu item
+      </Menu.Item>
+    </Menu>
   );
 
   return (
-    <div style={styles.main}>
-      <div style={{
-        display:'flex',
-        alignItems:'center',
-        justifyContent:'space-between',
-        height:'8%',
-        flexWrap:'nowrap',
-        marginLeft:'2%',
-        marginRight:'2%',
-        width:'96%',
-      }}>
-        <div>
-          <Input placeholder="请输入商品ID" size="small" style={{width:120,fontSize:12,marginRight:20}}/>
-          <Input placeholder="请输入商品名称" size="small" style={{width:120,fontSize:12}}/>
-          <Dropdown overlay={menu}>
-            <Button size="small" style={styles.dropdown}>
-              请选择业务类型 <DownOutlined />
-            </Button>
-          </Dropdown>
-          <Dropdown overlay={menu} style={styles.dropdown}>
-            <Button style={styles.dropdown} size="small">
-              请选择商品类型 <DownOutlined />
-            </Button>
-          </Dropdown>
-        </div>
-        <div>
-          <Button size="small" style={{color:'#979BA3',marginRight:15,fontSize:12,height:20}}>重置</Button>
-          <Button icon={
-            <img src={good9} alt="" style={{width:10,marginRight:5,marginBottom:1}} />
-          }
-          type = "primary"
-          size = "small"
-            style = { { fontSize: 12,height:20 } } > 搜索商品 < /Button>
-        </div>
+    <div className={c.main} style={{marginBottom:24}}>
+        <div className={c.searchView}>
+          <div className={c.search} style={{borderBottom:'none'}}>
+            <div className={c.searchL} style={{width:'56.157%'}}>
+              <Input placeholder="请输入商品ID" size="small" className={c.searchInput} style={{width:'23.026%'}}/>
+              <Input placeholder="请输入商品名称" size="small" className={c.searchInput} style={{width:'23.026%'}}/>
+              <Dropdown overlay={menu}>
+                <Button size="small" className={c.dropdownBtn} style={{width:'20.394%'}}>
+                  <div className={c.hiddenText}>
+                    请选择业务类型
+                  </div>
+                  <DownOutlined />
+                </Button>
+              </Dropdown>
+              <Dropdown overlay={menu}>
+                <Button size="small" className={c.dropdownBtn} style={{width:'20.394%'}}>
+                  <div className={c.hiddenText}>
+                    请选择商品类型
+                  </div>
+                  <DownOutlined />
+                </Button>
+              </Dropdown>
+            </div>
+            <div className={c.searchR}>
+              <Button size="small" className={c.resetBtn}>重置</Button>
+              <Button icon={
+                <img src={good9} alt="" style={{width:14,marginRight:6}} />
+              }
+              type = "primary"
+              size = "small"
+              className={c.searchBtn}>搜索商品</Button>
+            </div>
+          </div>
       </div>
       <Table columns={columns} rowSelection={{
         type: selectionType,
         ...rowSelection
       }} dataSource={data} rowClassName={(record,index)=>{
-        return "f1f5ff"
-        }} size="small" onChange={onChange} />
+        if (index % 2) {
+          return "f1f5ff"
+        }
+      }} size="small" pagination={{showQuickJumper:true}}
+      />
     </div>
   )
 }
 
 function HeaderItem () {
-  const [value, setValue] = useState()
+  const views = [];
+  const data = [
+    {
+      label: '商品总数',
+      number: '10,100',
+      icon: good3,
+      id: 111,
+    },
+    {
+      label: '已上架数',
+      number: '10,111',
+      icon: good1,
+      id: 222,
+    },
+    {
+      label: '已下架数',
+      number: '10,111',
+      icon: good2,
+      id: 333,
+    },
+    {
+      label: '关闭下单',
+      number: '10,111',
+      icon: good4,
+      id: 444,
+    },
+  ]
 
-  function onChange () {
-
-  }
-
-  return (
-    <div style={{height:'100%',width:'100%',display:'flex',justifyContent:'space-between'}}>
-      <div style={{height:'100%',display:'flex',flexDirection:'column',justifyContent:'space-around'}}>
-        <div style={{display:'flex',alignItems:'flex-end'}}>
-          <div style={{fontSize:18,fontWeight:500}}>修改用户密价</div>
-          <div style={{color:'#6F717E',fontSize:12,marginLeft:10,marginRight:5}}>当前用户:</div>
-          <div style={{color:'#2C68FF',fontSize:12}}>2346237462374</div>
-        </div>
-        <div style={{display:'flex',alignItems:'center'}}>
-          <div style={{color:'#34374A',marginRight:20}}>价格类型</div>
-          <Radio.Group onChange={onChange} value={value}>
-            <Radio value={1} style={{fontSize:12}}>已上架</Radio>
-            <Radio value={2} style={{fontSize:12}}>已下架</Radio>
-          </Radio.Group>
+  data.forEach((item, index) => {
+    const { label, number, icon, id } = item;
+    views.push(
+      <div className={c.headerItem} key={id}>
+        <img src={icon} alt="" className={c.headerItemImg} />
+        <div className={c.headerIR} style={{borderRightWidth:index<data.length-1?1:0}}>
+          <div className={c.headerNumber}>{number}</div>
+          <div className={c.headerLabel}>{label}</div>
         </div>
       </div>
-      <div style={{height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
-        <div>
-          <Button size="small" style={{marginRight:20,fontSize:12,width:70}}>放弃</Button>
-          <Button size="small" style={{fontSize:12,width:70}} type="primary">保存</Button>
-        </div>
-        <div style={{color:'#979BA3',fontSize:12,marginTop:5}}>上次保存： 2020.01.15 15:25:04</div>
-      </div>
-    </div>
-  )
-}
+    )
+  })
 
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  dropdown: {
-    marginLeft: 20,
-    width: 120,
-    height: 20,
-    fontSize: 12
-  },
-  main: {
-    width: '100%',
-    height: '77%',
-    background: '#fff',
-    borderRadius: 2
-  },
-  headerB: {
-    height: '25%',
-    borderRadius: 2,
-    width: '96%',
-    color: '#FF8D30',
-    display: 'flex',
-    alignItems: 'center',
-    marginLeft: '2%',
-    marginRight: '2%',
-    background: '#FFFCEB',
-    fontSize: 12,
-  },
-  headerT: {
-    height: '70%',
-    width: '100%',
-    display: 'flex',
-    paddingLeft: '1%',
-    paddingRight: '2%',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  header: {
-    height: '20%',
-    width: '100%',
-    background: '#fff',
-    display: 'flex',
-    flexDirection: 'column',
-    borderRadius: 2,
-  },
+  return views
 }
 
 export default EditUserPriceView

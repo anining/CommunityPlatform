@@ -8,9 +8,12 @@ import good9 from '../../icons/good/good9.png'
 import good32 from '../../icons/good/good32.png'
 import good34 from '../../icons/good/good34.png'
 import good35 from '../../icons/good/good35.png'
+import ErrorComponent from "../../components/ErrorComponent";
 
 function CardOrderView () {
   const [visible, setVisible] = useState(false)
+
+  return <ErrorComponent />
 
   return (
     <div className="container">

@@ -320,3 +320,21 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.itemRTV {
+  height: 80px;
+  border-bottom: 1px solid #E9E9E9;
+  width: 62.684%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.aboutBtn {
+  width: 100px;
+  height: 38px;
+  background: #2C68FF;
+  border-radius: 2px;
+  border: 1px solid #4177FE;
+}

@@ -43,3 +43,14 @@
 .ql-toolbar.ql-snow {
   overflow-x: auto;
 }
+
+.ant-transfer-list {
+  height: 328px;
+  width: 44.206%;
+}
+
+.ant-transfer-operation {
+  width: 10.944%;
+  margin: 0;
+  margin-left: 3px;
+}
