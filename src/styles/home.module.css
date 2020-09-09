@@ -1,0 +1,238 @@
+.main {
+  height: 100%;
+  width: 100%;
+}
+
+.header {
+  width: 100%;
+  height: 140px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.headerBtn {
+  width: 122px;
+  height: 40px;
+  font-size: 1.142rem;
+  background: #2C68FF;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.headerL {
+  margin-right: 9.27%;
+  z-index: 1;
+}
+
+.headerLTips {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.headerLPath {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 1.571rem;
+  margin-top: 10px;
+  /* margin-right: 93.373%; */
+}
+
+.headerLTime {
+  color: #34374A;
+}
+
+.headerUN {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  font-size: 1.428rem;
+  position: relative;
+}
+
+.headerUT {
+  color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.headerUT span {
+  color: #2C68FF;
+}
+
+.headerUNTips {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  top:-15px;
+  right: -45px;
+  width: 52px;
+  height: 21px;
+  background: #2C68FF;
+  border-radius: 100px 100px 100px 0px;
+  color: #fff;
+  font-size: 0.857rem;
+  font-weight: 400;
+}
+
+.line {
+  width: 1px;
+  height: 40px;
+  background: #E9E9E9;
+  margin: 0 7.416% 0 6.399%;
+}
+
+.dataView {
+  height: 477px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.dataViewR {
+  height: 100%;
+  background-color: #fff;
+  width: 32.954%;
+}
+
+.avatar {
+  width: 72px;
+  margin: 0 24px;
+}
+
+.headerBg {
+  position: absolute;
+  height: 120px;
+  right: 0;
+  bottom: 0
+}
+
+.dataViewR {
+  padding: 0 7.117% 39px 2.87%;
+}
+
+.dataViewRTitle {
+  color: #34374A;
+  font-size: 1.285rem;
+  margin: 32px 0;
+  font-weight: 500;
+}
+
+.dataViewRMain {
+  width: 100%;
+  height: 348px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dataItem {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.dataItem img {
+  width: 31.25%;
+  margin-right: 8.333%;
+}
+
+.dataItemNum {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 2.142rem;
+}
+
+.dataItemLabel {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.itemView {
+  height: 17.241%;
+  width: 100%;
+  display: flex;
+}
+
+.orderView {
+  height: 477px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.orderViewL {
+  height: 100%;
+  background-color: #fff;
+  width: 65.61%;
+  padding: 0 3.349% 0 1.973%;
+}
+
+.orderViewR {
+  height: 100%;
+  background-color: #fff;
+  width: 32.954%;
+  padding: 32px 1.435% 38px 2.87%;
+}
+
+.orderViewRHeader {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #2C68FF;
+}
+
+.orderViewRT {
+  color: #34374A;
+  font-size: 1.285rem;
+}
+
+.time {
+  width: 100%;
+  padding-top: 4px;
+  height: 362px;
+  overflow-y: auto;
+}
+
+.orderViewLTitle {
+  color: #34374A;
+  font-size: 1.285rem;
+  font-weight: 500;
+  margin-right: 7.897%;
+}
+
+.orderViewLT {
+  height: 85px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.tableView {
+  width: 100%;
+  padding: 0 13px 0 35px;
+  margin-top: 24px;
+  background-color: #fff;
+  margin-bottom: 56px;
+}
+
+.tableHeader {
+  height: 73px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tableTitle {
+  font-weight: 500;
+  color: #34374A;
+  font-size: 1.285rem;
+}
+
+.tableTips {
+  color: #2C68FF;
+}

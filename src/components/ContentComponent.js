@@ -39,6 +39,7 @@ import AddAdminView from "../views/webSettingViews/AddAdminView"
 import PassWordView from "../views/webSettingViews/PassWordView"
 import LoggerView from "../views/webSettingViews/LoggerView"
 import AboutView from "../views/webSettingViews/AboutView"
+import BusinessSettingView from "../views/webSettingViews/BusinessSettingView"
 
 function ContentComponent () {
 
@@ -139,6 +140,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/about">
           <AboutView />
+        </Route>
+        <Route exact path="/main/businessSetting">
+          <BusinessSettingView />
         </Route>
         <Route exact path="/main/editStore">
           <EditStoreView />

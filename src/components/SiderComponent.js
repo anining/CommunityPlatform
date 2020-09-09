@@ -88,10 +88,7 @@ function SiderComponent ({ collapsed }) {
           <Menu.Item key="password">修改密码</Menu.Item>
           <Menu.Item key="logger">登录日志</Menu.Item>
           <Menu.Item key="about">系统信息</Menu.Item>
-          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
-          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
-          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
-          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
+          <Menu.Item key="businessSetting">业务配置</Menu.Item>
         </Menu.SubMenu>
         {/* <Menu.SubMenu key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置"> */}
         {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
