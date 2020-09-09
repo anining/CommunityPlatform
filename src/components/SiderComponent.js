@@ -38,15 +38,15 @@ function SiderComponent ({ collapsed }) {
     <Layout.Sider theme="light" trigger={null} collapsible={true} collapsed={collapsed} width={200}>
       <LogoComponent />
       <Menu theme="light" mode="inline" selectedKeys={selectedKeys} onClick={menuItemClick}>
-        {/* <Menu.Item key="home" icon={<Icon keys="home" selectedKeys={selectedKeys}/>}> */}
-        {/*   用户首页 */}
-        {/* </Menu.Item> */}
-        {/* <Menu.SubMenu key="statistics" icon={<Icon keys="statistics" selectedKeys={selectedKeys} />} title="数据统计"> */}
-        {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
-        {/* </Menu.SubMenu> */}
+        <Menu.Item key="home" icon={<Icon keys="home" selectedKeys={selectedKeys}/>}>
+          用户首页
+        </Menu.Item>
+        <Menu.SubMenu key="statistics" icon={<Icon keys="statistics" selectedKeys={selectedKeys} />} title="数据统计">
+          <Menu.Item key="dataStatistics">数据统计</Menu.Item>
+          <Menu.Item key="moneyStatistics">资金统计</Menu.Item>
+          <Menu.Item key="userStatistics">用户统计</Menu.Item>
+          <Menu.Item key="webStatistics">网站访问统计</Menu.Item>
+        </Menu.SubMenu>
         <Menu.SubMenu key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务">
           <Menu.Item key="communityGood">社区商品</Menu.Item>
           <Menu.Item key="goodCategory">商品分类</Menu.Item>
@@ -56,9 +56,6 @@ function SiderComponent ({ collapsed }) {
           <Menu.Item key="cardGood">卡密商品</Menu.Item>
           <Menu.Item key="cardManage">卡密管理</Menu.Item>
           <Menu.Item key="cardCategory">卡密分类</Menu.Item>
-          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
-          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
-          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
         </Menu.SubMenu>
         <Menu.SubMenu key="services" icon={<Icon keys="services" selectedKeys={selectedKeys} />} title="增值服务">
           <Menu.Item key="docking">对接</Menu.Item>
@@ -90,12 +87,12 @@ function SiderComponent ({ collapsed }) {
           <Menu.Item key="about">系统信息</Menu.Item>
           <Menu.Item key="businessSetting">业务配置</Menu.Item>
         </Menu.SubMenu>
-        {/* <Menu.SubMenu key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置"> */}
-        {/*   {/1* <Menu.Item key="1">Option 1</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="2">Option 2</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="3">Option 3</Menu.Item> *1/} */}
-        {/*   {/1* <Menu.Item key="4">Option 4</Menu.Item> *1/} */}
-        {/* </Menu.SubMenu> */}
+        <Menu.SubMenu key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置">
+          {/* <Menu.Item key="1">Option 1</Menu.Item> */}
+          {/* <Menu.Item key="2">Option 2</Menu.Item> */}
+          {/* <Menu.Item key="3">Option 3</Menu.Item> */}
+          {/* <Menu.Item key="4">Option 4</Menu.Item> */}
+        </Menu.SubMenu>
       </Menu>
     </Layout.Sider>
   )

@@ -10,6 +10,7 @@ import home5 from '../../icons/home/home5.png'
 import home6 from '../../icons/home/home6.png'
 import home7 from '../../icons/home/home7.png'
 import home8 from '../../icons/home/home8.png'
+import { h } from '../../utils/history'
 
 function HomeView () {
   const [views, setViews] = useState([])
@@ -133,7 +134,10 @@ function HomeView () {
           <div className={c.headerLPath}>127.0.0.1/重庆市</div>
           <div className={c.headerLTime}>2020.01.15 15:15:23</div>
         </div>
-        <Button size="small" type="primary" className={c.headerBtn}>主页看板设置</Button>
+        <Button size="small" type="primary" className={c.headerBtn} onClick={()=>{
+            const history = h.get()
+            history.push("/main/dataSetting")
+        }}>主页看板设置</Button>
         <img src={home7} alt="" className={c.headerBg}/>
       </div>
       <div className={c.dataView}>

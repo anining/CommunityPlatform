@@ -40,6 +40,11 @@ import PassWordView from "../views/webSettingViews/PassWordView"
 import LoggerView from "../views/webSettingViews/LoggerView"
 import AboutView from "../views/webSettingViews/AboutView"
 import BusinessSettingView from "../views/webSettingViews/BusinessSettingView"
+import DataSettingView from "../views/webSettingViews/DataSettingView"
+import DataStatisticsView from "../views/statisticsViews/DataStatisticsView"
+import MoneyStatisticsView from "../views/statisticsViews/MoneyStatisticsView"
+import UserStatisticsView from "../views/statisticsViews/UserStatisticsView"
+import WebStatisticsView from "../views/statisticsViews/WebStatisticsView"
 
 function ContentComponent () {
 
@@ -144,8 +149,23 @@ function ContentComponent () {
         <Route exact path="/main/businessSetting">
           <BusinessSettingView />
         </Route>
+        <Route exact path="/main/dataSetting">
+          <DataSettingView />
+        </Route>
         <Route exact path="/main/editStore">
           <EditStoreView />
+        </Route>
+        <Route exact path="/main/dataStatistics">
+          <DataStatisticsView />
+        </Route>
+        <Route exact path="/main/moneyStatistics">
+          <MoneyStatisticsView />
+        </Route>
+        <Route exact path="/main/userStatistics">
+          <UserStatisticsView />
+        </Route>
+        <Route exact path="/main/webStatistics">
+          <WebStatisticsView />
         </Route>
         <Route exact path="/main/subService">
           <SubServiceView />
