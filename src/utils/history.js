@@ -5,10 +5,15 @@ class router {
     this.history = history;
     this.authRouterName = authRouterName;
     this.push = this.push.bind(this);
+    this.goBack = this.goBack.bind(this);
   }
 
-  push(name, params) {
-    this.history.push(name, params)
+  push(path, state) {
+    this.history.push(path, state)
+  }
+
+  goBack() {
+    this.history.goBack()
   }
 }
 

@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, Pagination } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Button, Menu, Dropdown, Table, message, Input } from 'antd'
 import c from '../../styles/view.module.css'
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import good7 from '../../icons/good/good7.png'
 import good31 from '../../icons/good/good31.png'
 import { h } from '../../utils/history'
+import { communityParamTemplates } from "../../utils/api";
 
 function OrderModelView () {
   const [visible, setVisible] = useState(false)
@@ -14,42 +15,43 @@ function OrderModelView () {
       <div className={c.container}>
         <RTable setVisible={setVisible} />
       </div>
-      {/* <Modal */}
-      {/*   visible={visible} */}
-      {/*   onOk={handleOk} */}
-      {/*   footer={null} */}
-      {/*   onCancel={handleCancel} */}
-      {/* > */}
-      {/*   <div className={{ */}
-      {/*     display:'flex', */}
-      {/*     flexDirection:'column', */}
-      {/*     alignItems:'center', */}
-      {/*     padding:25, */}
-      {/*     }}> */}
-      {/*     <img src={good6} alt="" style={{width:90}} /> */}
-      {/*     <h4 style={{marginBottom:25,marginTop:25}}>{actionId===1?"确定要删除此支付账户吗？":"确定要删除这个分类吗？"}</h4> */}
-      {/*     {(()=>{ */}
-      {/*     if(actionId===1){ */}
-      {/*       return <p>分类<span style={{color:"#2C68FF"}}>哔哩哔哩</span> 一共包含了 15 个商品，包含商品的分类不允许被删除，请更改关联商品的分类之后重试。</p> */}
-      {/*     } */}
-      {/*       return <p>删除的分类不可被找回，请确认。</p> */}
-      {/*     })()} */}
-      {/*     <div style={{display:'flex',justifyContent:'space-around',marginTop:25,alignItems:'center',width:'100%'}}> */}
-      {/*       <Button key="back" style={{width:150}}> */}
-      {/*         取消 */}
-      {/*       </Button> */}
-      {/*       <Button key="submit"style={{width:150}} type="primary" onClick={handleOk}> */}
-      {/*         确定 */}
-      {/*       </Button> */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* </Modal> */}
     </div>
   )
 }
 
 function RTable ({ setVisible }) {
   const [selectionType, setSelectionType] = useState('checkbox');
+  const [data, setData] = useState([])
+  const [current, setCurrent] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [total, setTotal] = useState(0)
+
+  useEffect(() => {
+    get(current)
+  }, [])
+
+  function get (current) {
+    communityParamTemplates("get", undefined, { page: current, size: pageSize }).then(r => {
+      if (!r.error) {
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
+  }
+
+  function format (arr) {
+    arr.forEach((item, index) => {
+      item.key = index
+      item.account = item.manager.account
+    })
+    return arr
+  }
+
+  function onChange (page, pageSize) {
+    setCurrent(page)
+    get(page)
+  }
 
   const columns = [
     {
@@ -87,32 +89,8 @@ function RTable ({ setVisible }) {
           history.push("/main/editOrderModel")
         }}>编辑模型</div>
       )
-  },
-];
-
-  const data = [
-    {
-      key: 1240,
-      id: 1,
-      name: '哔哩哔哩',
-      number: 45,
-      time: '2017-10-31  23:12:00',
     },
   ];
-
-  // function onChange (pagination, filters, sorter, extra) {
-  //   console.log('params', pagination, filters, sorter, extra);
-  // }
-
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: 1240,
-      id: 1,
-      name: '哔哩哔哩',
-      number: 45,
-      time: '2017-10-31  23:12:00',
-    })
-  }
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -167,6 +145,10 @@ function RTable ({ setVisible }) {
               }
               type = "primary"
               size = "small"
+                onClick={()=>{
+                  const history = h.get()
+                  history.push('/main/editOrderModel')
+                }}
               className={c.searchBtn}>新增模型</Button>
             </div>
           </div>
@@ -189,7 +171,15 @@ function RTable ({ setVisible }) {
         if (index % 2) {
           return "f1f5ff"
         }
-      }} size="small" pagination={{showQuickJumper:true}}
+      }} size="small" pagination={{
+          showQuickJumper:true,
+          current,
+          pageSize,
+          hideOnSinglePage:true,
+          showLessItems:true,
+          total,
+          onChange
+        }}
       />
     </div>
   )

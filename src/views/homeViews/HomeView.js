@@ -27,8 +27,8 @@ function HomeView () {
   }, [])
 
   const options = [
-    { label: '周数据', value: 'Apple' },
-    { label: '月数据', value: 'Orange' },
+    { label: '周数据', value: 'apple' },
+    { label: '月数据', value: 'orange' },
   ];
 
   function onChange3 (e) {

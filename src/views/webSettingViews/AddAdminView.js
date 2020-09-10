@@ -1,47 +1,55 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Menu, Transfer, Button, Switch, message, Radio, Checkbox } from 'antd'
+import { Input, Transfer, Button, message } from 'antd'
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
-
-const mockData = [];
-for (let i = 0; i < 20; i++) {
-  mockData.push({
-    key: i.toString(),
-    title: `content${i + 1}`,
-    description: `description of content${i + 1}`,
-    disabled: i % 3 < 1,
-  });
-}
+import { permissions, addManagers } from "../../utils/api";
+import { saveSuccess } from "../../utils/util";
 
 function AddAdminView () {
-  const oriTargetKeys = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
-  const [targetKeys, setTargetKeys] = useState(oriTargetKeys)
-  const [selectedKeys, setSelectedKeys] = useState([])
-  const [disabled, setDisabled] = useState(false)
+  const [number, setNumber] = useState() // 管理员账号
+  const [name, setName] = useState() // 管理员名称
+  const [purview, setPurview] = useState([]) // 权限列表
+  const [targetKeys, setTargetKeys] = useState([]) // 选中权限列表
+
+  function format (arr) {
+    const localArr = [];
+    arr.forEach((item, index) => {
+      localArr.push({
+        title: item,
+        key: index
+      })
+    })
+    return localArr
+  }
+
+  useEffect(() => {
+    permissions().then(r => {
+      const { error, data } = r;
+      !error && setPurview(format(data))
+    })
+  }, [])
 
   function save () {
-    message.success({
-      content: "保存成功",
+    if (!name || !number) {
+      message.warning("请完善信息")
+      return;
+    }
+    const localPurview = []
+    targetKeys.forEach(item => {
+      localPurview.push(purview[item].title)
+    })
+    addManagers(number, name, localPurview).then(r => {
+      setNumber(undefined)
+      setName(undefined)
+      setTargetKeys([]);
+      !r.error && message.success("保存成功")
+      saveSuccess()
     })
   }
 
-  function handleSelectChange (sourceSelectedKeys, targetSelectedKeys) {
-    setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys])
-    console.log('sourceSelectedKeys: ', sourceSelectedKeys);
-    console.log('targetSelectedKeys: ', targetSelectedKeys);
-  };
-
-  function handleScroll (direction, e) {
-    console.log('direction:', direction);
-    console.log('target:', e.target);
-  };
-
   function handleChange (nextTargetKeys, direction, moveKeys) {
     setTargetKeys(nextTargetKeys)
-    console.log('targetKeys: ', nextTargetKeys);
-    console.log('direction: ', direction);
-    console.log('moveKeys: ', moveKeys);
   };
 
   return (
@@ -60,7 +68,7 @@ function AddAdminView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>管理员账号</div>
           </div>
-          <Input placeholder="请填写管理员登录账号" className={c.itemInput}></Input>
+          <Input value={number} onChange={e=>setNumber(e.target.value)} placeholder="请填写管理员登录账号" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -71,7 +79,7 @@ function AddAdminView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>管理员名称</div>
           </div>
-          <Input placeholder="请填写管理员名称" className={c.itemInput}></Input>
+          <Input value={name} onChange={e=>setName(e.target.value)} placeholder="请填写管理员名称" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
@@ -79,19 +87,12 @@ function AddAdminView () {
             <div className={c.itemText}>管理员权限</div>
           </div>
           <Transfer
-            dataSource={mockData}
+            dataSource={purview}
             titles={['全部权限', '当前权限']}
             targetKeys={targetKeys}
-            selectedKeys={selectedKeys}
             onChange={handleChange}
-            onSelectChange={handleSelectChange}
-            onScroll={handleScroll}
             render={item => item.title}
-            disabled={disabled}
-            style={{
-              color:'#000',
-              width:'29.25%'
-            }}
+            style={{color:'#000',width:'29.25%'}}
             className="transfer-admin"
           />
         </div>

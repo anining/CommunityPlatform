@@ -46,6 +46,7 @@ function SiderComponent ({ collapsed }) {
           <Menu.Item key="moneyStatistics">资金统计</Menu.Item>
           <Menu.Item key="userStatistics">用户统计</Menu.Item>
           <Menu.Item key="webStatistics">网站访问统计</Menu.Item>
+          <Menu.Item key="goodStatistics">商品订单统计</Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务">
           <Menu.Item key="communityGood">社区商品</Menu.Item>

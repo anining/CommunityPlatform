@@ -1,22 +1,52 @@
-import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, DatePicker } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Button, Table, Input, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import good9 from '../../icons/good/good9.png'
+import { loginlogs } from "../../utils/api"
 
 function LoggerView () {
-  const [visible, setVisible] = useState(false)
 
   return (
     <div className="container">
       <div className={c.container}>
-        <RTable setVisible={setVisible} />
+        <RTable/>
       </div>
     </div>
   )
 }
 
-function RTable ({ setVisible }) {
-  const [selectionType, setSelectionType] = useState('checkbox');
+function RTable () {
+  const [data, setData] = useState([])
+  const [current, setCurrent] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [total, setTotal] = useState(0)
+
+  useEffect(() => {
+    get(current)
+  }, [])
+
+  function get (current) {
+    loginlogs(current, pageSize).then(r => {
+      if (!r.error) {
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
+  }
+
+  function format (arr) {
+    arr.forEach((item, index) => {
+      item.key = index
+      item.account = item.manager.account
+    })
+    return arr
+  }
+
+  function onChange (page, pageSize) {
+    setCurrent(page)
+    get(page)
+  }
 
   const obj = ["#FF4D4F", "#FF8D30", '#000'];
   const columns = [
@@ -27,7 +57,7 @@ function RTable ({ setVisible }) {
   },
     {
       title: '操作人账号',
-      dataIndex: 'number',
+      dataIndex: 'account',
       align: 'center',
   },
     {
@@ -35,68 +65,19 @@ function RTable ({ setVisible }) {
       dataIndex: 'text',
       align: 'center',
       render: (text, record, index) => {
-        const { status, t } = text;
-        return (
-          <div style={{color:obj[status]}}>{t}</div>
-        )
+        return 1
+        // const { status, t } = text;
+        // return (
+        //   <div style={{color:obj[status]}}>{t}</div>
+        // )
       }
   },
     {
       title: '登录时间',
-      dataIndex: 'time',
+      dataIndex: 'created_at',
       align: 'center',
-  },
-];
-
-  const data = [
-    {
-      key: 1240,
-      id: 1,
-      number: '234234234234',
-      text: {
-        status: 0,
-        t: '删除订单 (2548)',
-      },
-      time: '2020-10-31  23:12:00',
-    },
-    {
-      key: 1240,
-      id: 1,
-      number: '234234234234',
-      text: {
-        status: 1,
-        t: '删除订单 (2548)',
-      },
-      time: '2020-10-31  23:12:00',
-    },
-    {
-      key: 1240,
-      id: 1,
-      number: '234234234234',
-      text: {
-        status: 2,
-        t: '删除订单 (2548)',
-      },
-      time: '2020-10-31  23:12:00',
     },
   ];
-
-  // function onChange (pagination, filters, sorter, extra) {
-  //   console.log('params', pagination, filters, sorter, extra);
-  // }
-
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: 1240,
-      id: 1,
-      number: '234234234234',
-      text: {
-        status: 2,
-        t: '删除订单 (2548)',
-      },
-      time: '2020-10-31  23:12:00',
-    })
-  }
 
   return (
     <div className={c.main} style={{marginTop:0}}>
@@ -117,11 +98,15 @@ function RTable ({ setVisible }) {
             </div>
           </div>
       </div>
-      <Table columns={columns} dataSource={data} rowClassName={(record,index)=>{
-        if (index % 2) {
-          return "f1f5ff"
-        }
-      }} size="small" pagination={{showQuickJumper:true}}
+      <Table columns={columns} dataSource={data} size="small" pagination={{
+        showQuickJumper:true,
+        current,
+        pageSize,
+        hideOnSinglePage:true,
+        showLessItems:true,
+        total,
+        onChange
+        }}
       />
     </div>
   )

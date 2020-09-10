@@ -28,6 +28,11 @@
   margin-bottom: 24px;
 }
 
+.column {
+  height: 536px;
+  width: 100%;
+}
+
 .title {
   color: #34374A;
   font-size: 2rem;

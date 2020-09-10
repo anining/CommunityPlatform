@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, Pagination } from 'antd'
 import c from '../../styles/view.module.css'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
@@ -7,6 +7,7 @@ import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
 import { h } from '../../utils/history'
 import { styles } from '../../styles/modal'
+import { communityGoodsCategories } from '../../utils/api'
 
 function GoodCategoryView () {
   const [visible, setVisible] = useState(false)
@@ -58,6 +59,37 @@ function GoodCategoryView () {
 
 function RTable ({ setVisible }) {
   const [selectionType, setSelectionType] = useState('checkbox');
+  const [data, setData] = useState([])
+  const [current, setCurrent] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [total, setTotal] = useState(0)
+
+  useEffect(() => {
+    get(current)
+  }, [])
+
+  function get (current) {
+    communityGoodsCategories("get", undefined, { page: current, size: pageSize }).then(r => {
+      if (!r.error) {
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
+  }
+
+  function format (arr = []) {
+    arr.forEach((item, index) => {
+      item.key = index
+      // item.account = item.manager.account
+    })
+    return arr
+  }
+
+  function onChange (page, pageSize) {
+    setCurrent(page)
+    get(page)
+  }
 
   const columns = [
     {
@@ -79,11 +111,11 @@ function RTable ({ setVisible }) {
     {
       title: '包含商品数量',
       align: 'center',
-      dataIndex: 'number',
+      dataIndex: 'used_by',
   },
     {
       title: '创建时间',
-      dataIndex: 'time',
+      dataIndex: 'created_at',
       align: 'center',
   },
     {
@@ -92,35 +124,11 @@ function RTable ({ setVisible }) {
       render: (text, record, index) => (
         <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>{
             const history = h.get()
-            history.push("/main/editGoodCategory")
+            history.push("/main/editGoodCategory",{record})
         }}>编辑分类</div>
       )
   },
 ];
-
-  const data = [
-    {
-      key: 1240,
-      id: 1,
-      name: '哔哩哔哩',
-      number: 45,
-      time: '2017-10-31  23:12:00',
-    },
-  ];
-
-  // function onChange (pagination, filters, sorter, extra) {
-  //   console.log('params', pagination, filters, sorter, extra);
-  // }
-
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: 1240,
-      id: 1,
-      name: '哔哩哔哩',
-      number: 45,
-      time: '2017-10-31  23:12:00',
-    })
-  }
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -175,6 +183,10 @@ function RTable ({ setVisible }) {
               }
               type = "primary"
               size = "small"
+                onClick={()=>{
+                  const history = h.get()
+                  history.push("/main/editGoodCategory")
+                }}
               className={c.searchBtn}>新增分类</Button>
             </div>
           </div>
@@ -197,7 +209,15 @@ function RTable ({ setVisible }) {
         if (index % 2) {
           return "f1f5ff"
         }
-      }} size="small" pagination={{showQuickJumper:true}}
+      }} size="small" pagination={{
+          showQuickJumper:true,
+          current,
+          pageSize,
+          hideOnSinglePage:true,
+          showLessItems:true,
+          total,
+          onChange
+        }}
       />
     </div>
   )

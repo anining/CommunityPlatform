@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
 import LoginView from '../views/authViews/LoginView'
 import Guide1View from '../views/authViews/Guide1View'
@@ -7,15 +7,29 @@ import Guide3View from '../views/authViews/Guide3View'
 import Guide4View from '../views/authViews/Guide4View'
 import MainComponent from '../components/MainComponent'
 import { proxyRouter } from "../utils/history"
+import { storage } from '../utils/storage'
+import { setter, getter } from '../utils/store'
+import { h } from '../utils/history'
 
 function Router () {
-  const [loggedIn, setLoggedIn] = useState(true)
+  const localAuthorization = storage.getItem("authorization")
+  const { authorization } = getter(['authorization']);
+  !authorization.get() && localAuthorization && setter([["authorization", localAuthorization.replace(/\"/g, "")]])
   proxyRouter(useHistory(), 'login')
+  const history = h.get();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const authorization = storage.getItem("authorization");
+      !authorization && history.push('/login')
+    }, 1000);
+    return () => timer && clearInterval(timer)
+  }, [])
 
   return (
     <Switch>
       <Route exact path="/">
-        {loggedIn ? <Redirect to="/main" /> : <LoginView />}
+        {authorization.get() ? <Redirect to="/main" /> : <LoginView />}
       </Route>
       <Route path="/main">
         <MainComponent />
