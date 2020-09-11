@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Space } from 'antd'
+import { Button, Table, Space, Popconfirm } from 'antd'
 import c from '../../styles/view.module.css'
 import { h } from '../../utils/history'
 import { managers, managersPermissions } from '../../utils/api'
@@ -17,7 +17,11 @@ function AdminView () {
 }
 
 function RTable () {
-  const [data, setData] = useState([])
+  const [data, setData] = useState([
+    {
+      id: 1,
+    }
+  ])
   const [purview, setPurview] = useState([])
 
   useEffect(() => {
@@ -43,34 +47,60 @@ function RTable () {
   }
 
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      align: 'center',
+      {
+        title: 'ID',
+        dataIndex: 'id',
+        align: 'center',
   },
-    {
-      title: '管理员账号',
-      dataIndex: 'account',
-      align: 'center',
+      {
+        title: '管理员账号',
+        dataIndex: 'account',
+        align: 'center',
   },
-    {
-      title: '管理员名称',
-      dataIndex: 'nickname',
-      align: 'center',
+      {
+        title: '管理员名称',
+        dataIndex: 'nickname',
+        align: 'center',
   },
-    {
-      title: '管理员权限',
-      dataIndex: 'id',
-      render: (text, record, index) => (
-        <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>detail(text)}>查看详情</div>
-      )
-  },
+      {
+        title: '管理员权限',
+        dataIndex: 'id',
+        render: (text, record, index) => {
+          const views = []
+          const data = ["删除用户信息", '删除用户信息', '删除用户信息', '删除用户信息',"删除用户信息", '删除用户信息', '删除用户信息', '删除用户信息']
+          data.forEach((item, index) => {
+            views.push(
+              <div style={{...styles.item,...{
+              // borderRightWidth: (index !== 0 && (index + 1) % 3 === 0) || index === data.length - 1 ? 1 : 0,
+              // borderBottomWidth: index + 3 < data.length ? 0 : 1
+            }}} className={c.test} key={index}>{item}</div>
+            )
+          })
+          return (
+            <Popconfirm
+            icon={()=><img src="" alt="" style={{width:0,height:0}}/>
+          }
+          placement = "left"
+          title = {
+              () => {
+                return (
+                  <div style={styles.view}>
+                    <div style={styles.header}>操作权限</div>
+                    {views}
+                  </div>
+                )
+              }
+            } >
+            <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>detail(text)}>查看详情</div> <
+            /Popconfirm>
+        )
+      }
+    },
     {
       title: '创建时间',
       align: 'center',
       dataIndex: 'created_at',
-  },
-    {
+    }, {
       title: '操作',
       dataIndex: 'id',
       align: 'center',
@@ -92,10 +122,10 @@ function RTable () {
         </Space>
       )
     }
-  ];
+];
 
-  return (
-    <div className={c.main} style={{marginTop:0,marginBottom:0}}>
+return (
+  <div className={c.main} style={{marginTop:0,marginBottom:0}}>
       <div className={c.searchView}>
         <div className={c.search} style={{borderBottom:'none'}}>
           <div className={c.searchL}>
@@ -116,7 +146,38 @@ function RTable () {
       </div>
       <Table columns={columns} dataSource={data} size="small" pagination={{showQuickJumper:true}}/>
     </div>
-  )
+)
+}
+
+const styles = {
+  item: {
+    display: 'inline-block',
+    width: '33.33%',
+    height: 43,
+    boxSizing:'border-box',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#E9E9E9',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
+  },
+  view: {
+    width: 328,
+    flexWrap: 'wrap',
+    color: 'rgba(0, 0, 0, 0.65)',
+    fontSize: '0.857rem',
+  },
+  header: {
+    width: '100%',
+    height: 42,
+    background: '#FAFAFA',
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: 33
+  }
 }
 
 export default AdminView

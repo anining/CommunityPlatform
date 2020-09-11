@@ -23,6 +23,8 @@ import sider19 from '../icons/sider/sider19.png'
 import sider20 from '../icons/sider/sider20.png'
 import sider21 from '../icons/sider/sider21.png'
 import sider22 from '../icons/sider/sider22.png'
+import sider23 from '../icons/sider/sider23.png'
+import sider24 from '../icons/sider/sider24.png'
 import { h } from '../utils/history'
 
 function SiderComponent ({ collapsed }) {
@@ -63,7 +65,7 @@ function SiderComponent ({ collapsed }) {
           <Menu.Item key="store">供货商</Menu.Item>
           <Menu.Item key="subService">开通服务</Menu.Item>
         </Menu.SubMenu>
-        <Menu.Item key="table" icon={<Icon keys="home" selectedKeys={selectedKeys}/>}>
+        <Menu.Item key="table" icon={<Icon keys="table" selectedKeys={selectedKeys}/>}>
           标签管理
         </Menu.Item>
         <Menu.SubMenu key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录">
@@ -105,6 +107,7 @@ function SiderComponent ({ collapsed }) {
 function Icon ({ keys, selectedKeys = [] }) {
   const obj = {
     "home": [sider15, sider5],
+    "table": [sider23, sider24],
     "statistics": [sider18, sider14],
     "communityBusiness": [sider12, sider4],
     "cardBusiness": [sider2, sider6],

@@ -64,3 +64,11 @@
   color: #979BA3;
   text-align: center;
 }
+
+.ant-popover-message-title {
+  padding-left: 0;
+}
+
+.ant-popover-buttons {
+  display: none;
+}
