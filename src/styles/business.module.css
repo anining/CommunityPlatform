@@ -58,3 +58,160 @@
   top: 5.161%;
   right: 5.161%;
 }
+
+.bOIView {
+  width: 224px;
+  height: 104px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  border: 1px solid #E1E1E1;
+  margin-right: 33px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bTIView {
+  width: 481px;
+  height: 104px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  border: 1px solid #E1E1E1;
+  margin-right: 33px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bView {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.bDetail {
+  color: #2C68FF;
+  margin-bottom: 44px;
+  width: 100%;
+}
+
+.bLine {
+  width: 1px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.09);
+}
+
+.bTIViewL,.bTIViewR {
+  width: 45%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bIText {
+  justify-content: flex-start;
+  display: flex;
+  align-items: center;
+  margin-left: 31px;
+}
+
+.bLabel {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.bNum {
+  color: #34374A;
+  font-size: 2.142rem;
+  margin-left: 52px;
+}
+
+.bView img {
+  width: 13px;
+  margin-right: 7px;
+}
+
+.tItemView {
+  width: 866px;
+  border-bottom: 1px solid #CCCED6;
+  padding-top: 60px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.tInput {
+  width: 105px;
+  height: 32px;
+  margin-bottom: 32px;
+}
+
+.tagTitle {
+  height: 32px;
+  color: #FF8D30;
+}
+
+.tagChild {
+  height: 32px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 0 20px 32px 0;
+}
+
+.tItem {
+  width: 81.019%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tAddGroup {
+  width: 866px;
+  height: 32px;
+  margin: 40px 0 80px 0;
+  background: #FFFFFF;
+  border-radius: 2px;
+  border: 1px dashed #2C68FF;
+  color: #2C68FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tInputGroup {
+  width: 866px;
+  height: 32px;
+  margin: 40px 0 80px 0;
+}
+
+.tAddGroup img {
+  width: 12px;
+  margin-right: 11px;
+}
+
+.tAdd {
+  width: 105px;
+  height: 32px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  border: 1px dashed #2C68FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.tAdd img {
+  width: 8px;
+  margin-right: 14px;
+  color: #2C68FF;
+}

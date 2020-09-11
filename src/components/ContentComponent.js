@@ -46,6 +46,7 @@ import MoneyStatisticsView from "../views/statisticsViews/MoneyStatisticsView"
 import UserStatisticsView from "../views/statisticsViews/UserStatisticsView"
 import WebStatisticsView from "../views/statisticsViews/WebStatisticsView"
 import GoodStatisticsView from "../views/statisticsViews/GoodStatisticsView"
+import TableView from "../views/tableViews/TableView"
 
 function ContentComponent () {
 
@@ -122,6 +123,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/images">
           <ImagesView />
+        </Route>
+        <Route exact path="/main/table">
+          <TableView />
         </Route>
         <Route exact path="/main/peopleService">
           <PeopleServiceView />

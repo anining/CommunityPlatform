@@ -1,54 +1,215 @@
-import React, { useState } from 'react'
-import { Button, Checkbox } from 'antd'
+import React from 'react'
 import c from '../../styles/edit.module.css'
 import cs from '../../styles/business.module.css'
-import guide1 from '../../icons/guide/guide1.png'
-import guide2 from '../../icons/guide/guide2.png'
-import guide3 from '../../icons/guide/guide3.png'
+import statistics1 from '../../icons/edit/edit1.png'
 
 function DataStatisticsView () {
-  const [checkes, setChecks] = useState([])
-
-  function onChange (e, value) {
-    if (e.target.checked) {
-      setChecks([...checkes, ...[value]])
-    } else {
-      setChecks([...checkes].filter(item => item !== value))
+  const views = []
+  const data = [
+    {
+      title: '资金统计',
+      child: [
+        [
+          {
+            label: '总销售额',
+            num: '123,456',
+            icon: statistics1
+          },
+          {
+            label: '今日销售额',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+        [
+          {
+            label: '总毛利',
+            num: '123,456',
+            icon: statistics1
+          },
+          {
+            label: '今日毛利',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+        [
+          {
+            label: '今日充值金额',
+            num: '123,456',
+            icon: statistics1
+          },
+          {
+            label: '今日充值笔数',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+        [
+          {
+            label: '今日退款金额',
+            num: '123,456',
+            icon: statistics1
+          },
+          {
+            label: '今日退款笔数',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+      ]
+    },
+    {
+      title: '商品订单统计',
+      child: [
+        [
+          {
+            label: '订单总数',
+            num: '123,456',
+            icon: statistics1
+          },
+          {
+            label: '今日订单',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+        [
+          {
+            label: '待处理订单',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+        [
+          {
+            label: '申请退款',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+        [
+          {
+            label: '申请补单',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+        [
+          {
+            label: '异常订单',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+      ]
+    },
+    {
+      title: '用户统计',
+      child: [
+        [
+          {
+            label: '用户总数',
+            num: '123,456',
+            icon: statistics1
+          },
+          {
+            label: '今日新增',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+        [
+          {
+            label: '付费转化率',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+      ]
+    },
+    {
+      title: '网站访问统计',
+      child: [
+        [
+          {
+            label: '今日主页PV',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+        [
+          {
+            label: '今日主页UV',
+            num: '123,456',
+            icon: statistics1
+          },
+        ],
+      ]
     }
-  }
+  ]
+
+  data.forEach((item, index) => {
+    const { title, child } = item
+    views.push(
+      <div className={c.headerT} key={index} style={{marginBottom:24}}>
+        <div style={{zIndex:1}}>{title}</div>
+        <div className={c.circle} />
+      </div>
+    )
+    const items = []
+    child.forEach((it, i) => {
+      if (it.length === 1) {
+        const { label, num, icon } = it[0]
+        items.push(
+          <div className={cs.bOIView}>
+            <div className={cs.bIText}>
+              <img src={icon} alt="" />
+              <div className={cs.bLabel}>{label}</div>
+            </div>
+            <div className={cs.bNum}>¥{num}</div>
+          </div>
+        )
+      } else {
+        const { label, num, icon } = it[0]
+        const { label: l, num: n, icon: ic } = it[1]
+        items.push(
+          <div className={cs.bTIView}>
+            <div className={cs.bTIViewL}>
+              <div className={cs.bIText}>
+                <img src={icon} alt="" />
+                <div className={cs.bLabel}>{label}</div>
+              </div>
+              <div className={cs.bNum}>¥{num}</div>
+            </div>
+            <div className={cs.bLine} />
+            <div className={cs.bTIViewR}>
+              <div className={cs.bIText}>
+                <img src={ic} alt="" />
+                <div className={cs.bLabel}>{l}</div>
+              </div>
+              <div className={cs.bNum}>¥{n}</div>
+            </div>
+          </div>
+        )
+      }
+    })
+    views.push(
+      <div key={Math.random()} className={cs.bView}>
+      {items}
+      <div className={cs.bDetail}>查看详情</div>
+      </div>
+    )
+  })
 
   return (
     <div className={c.container}>
       <div className={c.main} style={{
         marginTop:0,
-        paddingBottom:80,
+        marginBottom:24,
+        paddingBottom:0
       }}>
-        {/* <div className={c.headerT}> */}
-        {/*   <div style={{zIndex:1}}>业务配置</div> */}
-        {/*   <div className={c.circle} /> */}
-        {/* </div> */}
-        {/* <div className={cs.main}> */}
-        {/*   <div className={cs.title}>我们将会根据您的选择，为您定制您的管理系统。</div> */}
-        {/*   <div className={cs.center}> */}
-        {/*     <div className={cs.itemView} style={{borderColor:checkes.includes(1)?"#2C67FF":"#fff"}}> */}
-        {/*       <img src={guide1} alt="" /> */}
-        {/*       <div className={cs.label}>全部业务</div> */}
-        {/*       <Checkbox className={cs.checkbox} onChange={e=>onChange(e,1)} /> */}
-        {/*     </div> */}
-        {/*     <div className={cs.itemView} style={{borderColor:checkes.includes(2)?"#2C67FF":"#fff"}}> */}
-        {/*       <img src={guide3} alt="" /> */}
-        {/*       <div className={cs.label}>卡密业务</div> */}
-        {/*       <Checkbox className={cs.checkbox} onChange={e=>onChange(e,2)} /> */}
-        {/*     </div> */}
-        {/*     <div className={cs.itemView} style={{borderColor:checkes.includes(3)?"#2C67FF":"#fff"}}> */}
-        {/*       <img src={guide2} alt="" /> */}
-        {/*       <div className={cs.label}>社区业务</div> */}
-        {/*       <Checkbox className={cs.checkbox} onChange={e=>onChange(e,3)} /> */}
-        {/*     </div> */}
-        {/*   </div> */}
-        {/*   <div className={cs.tips}>业务类型调整会影响到您的系统管理员的权限，请在调整业务之后，对系统管理的权限进行重新分配。</div> */}
-        {/*   <Button size="small" type="primary" className={cs.btn}>保存</Button> */}
-        {/* </div> */}
+        {views}
       </div>
     </div>
   )

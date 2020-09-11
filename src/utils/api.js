@@ -1,6 +1,6 @@
 import { transformFetch } from './request'
 
-// 登录
+// 卖家登录
 export function login (account, password) {
   return transformFetch("POST", "/login", { account, password })
 }
@@ -49,7 +49,21 @@ export function communityGoodsCategories (type, cid, table, body) {
   }
 }
 
-// 获取社区商品分类
+// 社区商品
+export function communityGoods (type, gid, table, body) {
+  switch (type) {
+    // case "get":
+    //   return transformFetch("GET", "/community-goods-categories", table)
+    case "add":
+      return transformFetch("POST", "/community-goods", body);
+      // case "modify":
+      //   return transformFetch("PATCH", `/community-goods-categories/${gid}`, body);
+      // default:
+      //   return transformFetch("DELETE", `/community-goods-categories/${gid}`);
+  }
+}
+
+// 社区下单模型
 export function communityParamTemplates (type, pid, table, body) {
   switch (type) {
     case "get":
@@ -60,5 +74,27 @@ export function communityParamTemplates (type, pid, table, body) {
       return transformFetch("PATCH", `/community-param-templates/${pid}`, body)
     default:
       return transformFetch("DELETE", `/community-param-templates/${pid}`)
+  }
+}
+
+// 标签分组
+export function tagGroups (type, gid, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/tag-groups")
+    case "add":
+      return transformFetch("POST", "/tag-groups", body)
+    default:
+      return transformFetch("DELETE", `/tag-groups/${gid}`)
+  }
+}
+
+// 标签
+export function tags (type, tid, body) {
+  switch (type) {
+    case "add":
+      return transformFetch("POST", "/tags", body)
+    default:
+      return transformFetch("DELETE", `/tags/${tid}`)
   }
 }

@@ -23,7 +23,7 @@ function RTable ({ setVisible }) {
   const [selectionType, setSelectionType] = useState('checkbox');
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
+  const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
 
   useEffect(() => {
@@ -43,7 +43,6 @@ function RTable ({ setVisible }) {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      item.account = item.manager.account
     })
     return arr
   }
@@ -73,11 +72,11 @@ function RTable ({ setVisible }) {
     {
       title: '包含参数',
       align: 'center',
-      dataIndex: 'number',
+      dataIndex: 'used_by',
   },
     {
       title: '创建时间',
-      dataIndex: 'time',
+      dataIndex: 'created_at',
       align: 'center',
   },
     {
@@ -86,7 +85,7 @@ function RTable ({ setVisible }) {
       render: (text, record, index) => (
         <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>{
           const history = h.get()
-          history.push("/main/editOrderModel")
+          history.push("/main/editOrderModel",{record})
         }}>编辑模型</div>
       )
     },

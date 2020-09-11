@@ -9,6 +9,11 @@ import edit1 from '../../icons/edit/edit1.png'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
 function EditCommunityGoodView () {
+  const [name,setName] = useState()
+  const [status,setStatus] = useState()
+  const [pics,setPics] = useState()
+  // const 
+
   const [imageUrl, setImageUrl] = useState()
   const [loading, setLoading] = useState()
   const [value, setValue] = useState()

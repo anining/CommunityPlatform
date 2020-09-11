@@ -63,6 +63,9 @@ function SiderComponent ({ collapsed }) {
           <Menu.Item key="store">供货商</Menu.Item>
           <Menu.Item key="subService">开通服务</Menu.Item>
         </Menu.SubMenu>
+        <Menu.Item key="table" icon={<Icon keys="home" selectedKeys={selectedKeys}/>}>
+          标签管理
+        </Menu.Item>
         <Menu.SubMenu key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录">
           <Menu.Item key="communityOrder">社区订单</Menu.Item>
           <Menu.Item key="cardOrder">卡密订单</Menu.Item>

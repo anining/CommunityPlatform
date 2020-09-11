@@ -25,40 +25,14 @@ function CommunityGoodView () {
           }
           type = "primary"
           size = "small"
-          className = {c.headerAddBtn}>添加卡密</Button>
+            onClick={()=>{
+              const history = h.get()
+              history.push("/main/editCommunityGood")
+            }}
+          className = {c.headerAddBtn}>添加商品</Button>
         </div>
         <RTable setVisible={setVisible} />
       </div>
-      {/* <Modal */}
-      {/*   visible={visible} */}
-      {/*   onOk={handleOk} */}
-      {/*   footer={null} */}
-      {/*   onCancel={handleCancel} */}
-      {/* > */}
-      {/*   <div className={{ */}
-      {/*     display:'flex', */}
-      {/*     flexDirection:'column', */}
-      {/*     alignItems:'center', */}
-      {/*     padding:25, */}
-      {/*     }}> */}
-      {/*     <img src={good6} alt="" style={{width:90}} /> */}
-      {/*     <h4 style={{marginBottom:25,marginTop:25}}>{actionId===1?"确定要删除此支付账户吗？":"确定要删除这个分类吗？"}</h4> */}
-      {/*     {(()=>{ */}
-      {/*     if(actionId===1){ */}
-      {/*       return <p>分类<span style={{color:"#2C68FF"}}>哔哩哔哩</span> 一共包含了 15 个商品，包含商品的分类不允许被删除，请更改关联商品的分类之后重试。</p> */}
-      {/*     } */}
-      {/*       return <p>删除的分类不可被找回，请确认。</p> */}
-      {/*     })()} */}
-      {/*     <div style={{display:'flex',justifyContent:'space-around',marginTop:25,alignItems:'center',width:'100%'}}> */}
-      {/*       <Button key="back" style={{width:150}}> */}
-      {/*         取消 */}
-      {/*       </Button> */}
-      {/*       <Button key="submit"style={{width:150}} type="primary" onClick={handleOk}> */}
-      {/*         确定 */}
-      {/*       </Button> */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* </Modal> */}
     </div>
   )
 }
