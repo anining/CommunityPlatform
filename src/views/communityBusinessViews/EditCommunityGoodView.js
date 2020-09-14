@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Menu, Dropdown, Button, Upload, message, Radio, Checkbox } from 'antd'
+import { Input, Tooltip, Menu, Dropdown, Button, Upload, message, Radio, Checkbox } from 'antd'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
@@ -9,9 +9,9 @@ import edit1 from '../../icons/edit/edit1.png'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
 function EditCommunityGoodView () {
-  const [name,setName] = useState()
-  const [status,setStatus] = useState()
-  const [pics,setPics] = useState()
+  const [name, setName] = useState()
+  const [status, setStatus] = useState()
+  const [pics, setPics] = useState()
   // const 
 
   const [imageUrl, setImageUrl] = useState()
@@ -253,9 +253,15 @@ function EditCommunityGoodView () {
             <div className={c.itemText}>状态</div>
           </div>
           <Radio.Group onChange={onChange} value={value} className={c.itemGrop}>
-            <Radio value={1} className={c.itemRadio}>已上架</Radio>
-            <Radio value={2} className={c.itemRadio}>已下架</Radio>
-            <Radio value={3} className={c.itemRadio}>已上架但关闭下单</Radio>
+            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
+              <Radio value={1} className={c.itemRadio}>已上架</Radio>
+            </Tooltip>
+            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
+              <Radio value={2} className={c.itemRadio}>已下架</Radio>
+            </Tooltip>
+            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
+              <Radio value={3} className={c.itemRadio}>已上架但关闭下单</Radio>
+            </Tooltip>
           </Radio.Group>
         </div>
         <div className={c.item}>

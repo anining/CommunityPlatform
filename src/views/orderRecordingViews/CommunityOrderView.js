@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, DatePicker } from 'antd'
+import { Button,Timeline, Menu, Dropdown, Table, message, Input, Space, Popconfirm, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import good17 from '../../icons/good/good17.png'
 import good18 from '../../icons/good/good18.png'
+import good40 from '../../icons/good/good40.png'
 import good19 from '../../icons/good/good19.png'
 import good20 from '../../icons/good/good20.png'
 import good21 from '../../icons/good/good21.png'
+import good41 from '../../icons/good/good41.png'
 import good9 from '../../icons/good/good9.png'
 
 function CommunityOrderView () {
-  const [visible, setVisible] = useState(false)
 
   return (
     <div className="container">
@@ -20,44 +21,43 @@ function CommunityOrderView () {
             <HeaderItem />
           </div>
         </div>
-        <RTable setVisible={setVisible} />
+        <RTable />
       </div>
-      {/* <Modal */}
-      {/*   visible={visible} */}
-      {/*   onOk={handleOk} */}
-      {/*   footer={null} */}
-      {/*   onCancel={handleCancel} */}
-      {/* > */}
-      {/*   <div className={{ */}
-      {/*     display:'flex', */}
-      {/*     flexDirection:'column', */}
-      {/*     alignItems:'center', */}
-      {/*     padding:25, */}
-      {/*     }}> */}
-      {/*     <img src={good6} alt="" style={{width:90}} /> */}
-      {/*     <h4 style={{marginBottom:25,marginTop:25}}>{actionId===1?"确定要删除此支付账户吗？":"确定要删除这个分类吗？"}</h4> */}
-      {/*     {(()=>{ */}
-      {/*     if(actionId===1){ */}
-      {/*       return <p>分类<span style={{color:"#2C68FF"}}>哔哩哔哩</span> 一共包含了 15 个商品，包含商品的分类不允许被删除，请更改关联商品的分类之后重试。</p> */}
-      {/*     } */}
-      {/*       return <p>删除的分类不可被找回，请确认。</p> */}
-      {/*     })()} */}
-      {/*     <div style={{display:'flex',justifyContent:'space-around',marginTop:25,alignItems:'center',width:'100%'}}> */}
-      {/*       <Button key="back" style={{width:150}}> */}
-      {/*         取消 */}
-      {/*       </Button> */}
-      {/*       <Button key="submit"style={{width:150}} type="primary" onClick={handleOk}> */}
-      {/*         确定 */}
-      {/*       </Button> */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* </Modal> */}
     </div>
   )
 }
 
-function RTable ({ setVisible }) {
+function RTable () {
   const [selectionType, setSelectionType] = useState('checkbox');
+  const [visible, setVisible] = useState([])
+
+  function detail (id,index) {
+    const localVisible = []
+    data.forEach((item,i)=>{
+      if(index===i) {
+        localVisible.push(true)
+      }else{
+        localVisible.push(false)
+      }
+    })
+    // localVisible[index] = true
+    setVisible(localVisible)
+    // managersPermissions(id).then(r => {
+    //   const { error, data } = r;
+    //   !error && setPurview(data)
+    //   setVisible(true)
+    //   console.log(data)
+    // })
+  }
+
+  function close () {
+    const localVisible = []
+    data.forEach((item,i)=>{
+      localVisible.push(false)
+    })
+    // localVisible[index] = true
+    setVisible(localVisible)
+  }
 
   const obj = [
     {
@@ -148,7 +148,33 @@ function RTable ({ setVisible }) {
       title: '订单历程',
       align: 'center',
       render: (text, record, index) => (
-        <div style={{color:'#2C68FF',textDecoration:'underline',textDecorationColor:'#2C68FF'}}>点击查看</div>
+            <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
+          }
+          visible = { visible[index] }
+          placement = "left"
+          title = {
+              () => {
+                return (
+                  <div style={styles.view}>
+                    <div style={styles.close} onClick={close}>
+                      <img src={good40} style={styles.closeImg} alt="" />
+                    </div>
+                    <Timeline>
+                      <Timeline.Item color="#1890FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
+                      <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
+                      <Timeline.Item color="#1890FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
+                      <Timeline.Item color="#1890FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
+                      <Timeline.Item color="#1890FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
+                      <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
+                      <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
+                      <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
+                    </Timeline>
+                  </div>
+                )
+              }
+            } >
+              <div style={{color:'#2C68FF',textDecoration:'underline',textDecorationColor:'#2C68FF'}} onClick={()=>detail(text,index)}>点击查看</div>
+            </Popconfirm>
       )
   },
     {
@@ -156,9 +182,52 @@ function RTable ({ setVisible }) {
       align: 'center',
       render: (text, record, index) => (
         <Space size="small" style={{color:'#2C68FF'}}>
-          <div style={{color:'#FF4D4F',textDecoration:'#FF4D4F underline'}}>退款</div>
+            <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
+              }
+              placement = "left"
+              title = {
+                  () => {
+                    return (
+                      <div style={styles.view}>
+                        <div style={styles.header}>
+                          <img src={good41} alt="" style={styles.icon}/>
+                          <div>请输入需要退款的数量</div>
+                        </div>
+                        <Input style={styles.input} placeholder="请在这里输入退款数量"/>
+                        <div style={styles.tips}>全部退款</div>
+                        <div style={styles.footer}>
+                          <Button size="small" style={styles.cancelBtn}>取消</Button>
+                          <Button size="small" type="primary" style={styles.okBtn}>确定</Button>
+                        </div>
+                      </div>
+                    )
+                  }
+                } >
+              <div style={{color:'#FF4D4F',textDecoration:'#FF4D4F underline'}}>退款</div>
+            </Popconfirm>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div style={{color:'#2C68FF',textDecoration:'#2C68FF underline'}}>添加备注</div>
+            <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
+              }
+              placement = "left"
+              title = {
+                  () => {
+                    return (
+                      <div style={styles.view}>
+                        <div style={styles.header}>
+                          <img src={good41} alt="" style={styles.icon}/>
+                          <div>请为此订单输入备注信息</div>
+                        </div>
+                        <Input style={styles.input} placeholder="请在这里输入备注信息"/>
+                        <div style={styles.footer}>
+                          <Button size="small" style={styles.cancelBtn}>取消</Button>
+                          <Button size="small" type="primary" style={styles.okBtn}>确定</Button>
+                        </div>
+                      </div>
+                    )
+                  }
+                } >
+              <div style={{color:'#2C68FF',textDecoration:'#2C68FF underline'}}>添加备注</div>
+            </Popconfirm>
         </Space>
       )
   },
@@ -430,6 +499,27 @@ function HeaderItem () {
   })
 
   return views
+}
+
+const styles = {
+  item: {
+    width:'100%',
+  },
+  view: {
+    width: 328,
+    display: 'flex',
+    flexDirection:'column',
+  },
+  close: {
+    width: '100%',
+    height: 32,
+    display: 'flex',
+    alignItems: "flex-start",
+    justifyContent: "flex-end",
+  },
+  closeImg: {
+    width: 13
+  }
 }
 
 export default CommunityOrderView

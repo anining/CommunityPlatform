@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Menu, Dropdown, Button, Upload, message, Radio, Checkbox } from 'antd'
+import { Input, Tooltip, Button, Radio, } from 'antd'
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
 
@@ -48,8 +48,12 @@ function AddUserView () {
             <div className={c.itemText}>状态</div>
           </div>
           <Radio.Group onChange={onChange} value={value} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-            <Radio value={2} className={c.itemRadio} style={{width:'33.333%'}}>正常</Radio>
-            <Radio value={3} className={c.itemRadio} style={{width:'33.333%'}}>封禁</Radio>
+            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="被封禁的用户无法登录系统，也无法下单。">
+              <Radio value={2} className={c.itemRadio} style={{width:'33.333%'}}>正常</Radio>
+            </Tooltip>
+            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" trigger="click" title="被封禁的用户无法登录系统，也无法下单。">
+              <Radio value={3} className={c.itemRadio} style={{width:'33.333%'}}>封禁</Radio>
+            </Tooltip>
           </Radio.Group>
         </div>
         <div className={c.item} style={{marginTop:68}}>
