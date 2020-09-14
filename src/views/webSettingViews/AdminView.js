@@ -4,6 +4,7 @@ import c from '../../styles/view.module.css'
 import { h } from '../../utils/history'
 import { managers, managersPermissions } from '../../utils/api'
 import good7 from '../../icons/good/good7.png'
+import home9 from '../../icons/home/home9.png'
 import good40 from '../../icons/good/good40.png'
 
 function AdminView () {
@@ -18,52 +19,7 @@ function AdminView () {
 }
 
 function RTable () {
-  const [data, setData] = useState([
-    {
-      id: 1,
-      key: 1,
-    },
-    {
-      id: 2,
-      key: 2
-    },
-    {
-      id: 3,
-      key: 3,
-    },
-    {
-      id: 4,
-      key: 4
-    },
-    {
-      id: 5,
-      key: 5,
-    },
-    {
-      id: 6,
-      key: 6
-    },
-    {
-      id: 7,
-      key: 7,
-    },
-    {
-      id: 8,
-      key: 8
-    },
-    {
-      id: 9,
-      key: 9,
-    },
-    {
-      id: 10,
-      key: 10
-    },
-    {
-      id: 11,
-      key: 11,
-    },
-  ])
+  const [data, setData] = useState([])
   const [purview, setPurview] = useState([])
   const [visible, setVisible] = useState([])
 
@@ -75,26 +31,29 @@ function RTable () {
   }, [])
 
   function detail (id, index) {
-    const localVisible = []
-    data.forEach((item, i) => {
-      if (index === i) {
-        localVisible.push(true)
-      } else {
-        localVisible.push(false)
+    managersPermissions(id).then(r => {
+      const { error, data: d } = r;
+      if (!error) {
+        setPurview(d)
+        const localVisible = []
+        data.forEach((item, i) => {
+          if (index === i) {
+            localVisible.push(true)
+          } else {
+            localVisible.push(false)
+          }
+        })
+        setVisible(localVisible)
       }
     })
-    // localVisible[index] = true
-    setVisible(localVisible)
-    // managersPermissions(id).then(r => {
-    //   const { error, data } = r;
-    //   !error && setPurview(data)
-    //   setVisible(true)
-    //   console.log(data)
-    // })
   }
 
   function close () {
-    setVisible([])
+    const localVisible = []
+    data.forEach((item, i) => {
+      localVisible.push(false)
+    })
+    setVisible(localVisible)
   }
 
   function format (arr) {
@@ -125,8 +84,7 @@ function RTable () {
         dataIndex: 'id',
         render: (text, record, index) => {
           const views = []
-          const data = ["删除用户信息", '删除用户信息', '删除用户信息', '删除用户信息', "删除用户信息", '删除用户信息', '删除用户信息', '删除用户信息']
-          data.forEach((item, index) => {
+          purview.forEach((item, index) => {
             views.push(
               <div style={{...styles.item,...{
                 borderLeftWidth: index % 3 === 0 ? 1 : 0,
@@ -134,8 +92,14 @@ function RTable () {
             }}} key={index}>{item}</div>
             )
           })
+          views.length === 0 && views.push(
+            <div style={styles.nullView}>
+              <img src={home9} alt="" style={styles.nullImg}/>
+            </div>
+          )
           return (
-            <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
+            <Popconfirm
+              icon={()=><img src="" alt="" style={{width:0,height:0}}/>
           }
           visible = { visible[index] }
           placement = "left"
@@ -143,16 +107,16 @@ function RTable () {
               () => {
                 return (
                   <div style={styles.view}>
-                        <div style={styles.close} onClick={close}>
-                          <img src={good40} style={styles.closeImg} alt="" />
-                        </div>
-                        <div style={styles.header}>操作权限</div>
-                        {views}
-                      </div>
+                    <div style={styles.close} onClick={close}>
+                      <img src={good40} style={styles.closeImg} alt="" />
+                    </div>
+                    <div style={styles.header}>操作权限</div>
+                    {views}
+                  </div>
                 )
               }
             } >
-            <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>detail(text,index)}>查看详情</div> <
+            <div style={{cursor:'pointer',textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>detail(text,index)}>查看详情</div> <
             /Popconfirm>
         )
       }
@@ -167,17 +131,17 @@ function RTable () {
       align: 'center',
       render: (text, record, index) => (
         <Space size="small" style={{color:'#2C68FF'}}>
-          <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
+          <div style={{textDecoration:"underline",cursor:'pointer',textDecorationColor:'#2C68FF'}} onClick={()=>{
             const history = h.get()
             history.push("/main/AddAdminView")
           }}>修改</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
+          <div style={{textDecoration:"underline",cursor:'pointer',textDecorationColor:'#2C68FF'}} onClick={()=>{
             const history = h.get()
             history.push("/main/password", { manager_id: text })
           }}>重置密码</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div style={{textDecoration:"underline",textDecorationColor:'#FF4D4F',color:'#FF4D4F'}} onClick={()=>{
+          <div style={{textDecoration:"underline",cursor:'pointer',textDecorationColor:'#FF4D4F',color:'#FF4D4F'}} onClick={()=>{
 
           }}>删除</div>
         </Space>
@@ -205,7 +169,7 @@ return (
           </div>
         </div>
       </div>
-      <Table columns={columns} dataSource={data} size="small" pagination={{showQuickJumper:true}}/>
+      <Table columns={columns} dataSource={data} size="small" pagination={false}/>
     </div>
 )
 }
@@ -245,6 +209,16 @@ const styles = {
   },
   closeImg: {
     width: 13
+  },
+  nullView: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  nullImg: {
+    width: 50,
+    marginTop: 15
   }
 }
 

@@ -2,7 +2,7 @@ import { h } from './history'
 import { message } from "antd"
 import { JUMP_DELAY } from './config'
 
-function saveSuccess (jump, path, state) {
+function saveSuccess (jump = true, path, state) {
   const history = h.get()
   message.success("操作成功")
   if (jump) {

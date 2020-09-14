@@ -43,8 +43,7 @@ function AddAdminView () {
       setNumber(undefined)
       setName(undefined)
       setTargetKeys([]);
-      !r.error && message.success("保存成功")
-      saveSuccess()
+      !r.error && saveSuccess()
     })
   }
 

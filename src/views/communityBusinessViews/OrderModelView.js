@@ -83,7 +83,7 @@ function RTable ({ setVisible }) {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>{
+        <div style={{cursor:'pointer',textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>{
           const history = h.get()
           history.push("/main/editOrderModel",{record})
         }}>编辑模型</div>

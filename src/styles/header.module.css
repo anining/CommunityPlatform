@@ -29,3 +29,11 @@
   margin-left: 8px;
   width: 16px;
 }
+
+.logoutBtn {
+  border: none;
+}
+
+.item:hover {
+  background-color: #EEF4FE;
+}

@@ -12,11 +12,11 @@ import { setter, getter } from '../utils/store'
 import { h } from '../utils/history'
 
 function Router () {
+  proxyRouter(useHistory(), '/login')
   const localAuthorization = storage.getItem("authorization")
   const { authorization } = getter(['authorization']);
   const history = h.get();
   !authorization.get() && localAuthorization && setter([["authorization", localAuthorization.replace(/\"/g, "")]])
-  proxyRouter(useHistory(), '/login')
 
   useEffect(() => {
     const timer = setInterval(() => {

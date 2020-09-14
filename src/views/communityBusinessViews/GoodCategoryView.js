@@ -61,7 +61,7 @@ function RTable ({ setVisible }) {
   const [selectionType, setSelectionType] = useState('checkbox');
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
+  const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
 
   useEffect(() => {
@@ -122,7 +122,7 @@ function RTable ({ setVisible }) {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>{
+        <div style={{cursor:'pointer',textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>{
             const history = h.get()
             history.push("/main/editGoodCategory",{record})
         }}>编辑分类</div>
@@ -213,7 +213,7 @@ function RTable ({ setVisible }) {
           showQuickJumper:true,
           current,
           pageSize,
-          hideOnSinglePage:true,
+          hideOnSinglePage:false,
           showLessItems:true,
           total,
           onChange

@@ -12,7 +12,6 @@ function EditCommunityGoodView () {
   const [name, setName] = useState()
   const [status, setStatus] = useState()
   const [pics, setPics] = useState()
-  // const 
 
   const [imageUrl, setImageUrl] = useState()
   const [loading, setLoading] = useState()

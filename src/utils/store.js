@@ -34,10 +34,7 @@ function getter (items = []) {
 
 function clear () {
   storage.clear();
-  setter([
-        // ['user', DEFAULT_USER],
-        ['authorization', null], true
-    ]);
+  setter([['authorization', null]], false);
 }
 
 export { store, setter, getter, clear };

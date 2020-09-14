@@ -5,14 +5,19 @@ export function login (account, password) {
   return transformFetch("POST", "/login", { account, password })
 }
 
-// 管理员列表
-export function managers () {
-  return transformFetch("GET", "/managers")
+// 修改密码
+export function password (old_password, new_password) {
+  return transformFetch("PUT", "/password", { old_password, new_password })
 }
 
 // 权限列表
 export function permissions () {
   return transformFetch("GET", "/permissions")
+}
+
+// 管理员列表
+export function managers () {
+  return transformFetch("GET", "/managers")
 }
 
 // 管理员权限列表
@@ -23,11 +28,6 @@ export function managersPermissions (manager_id) {
 // 新增管理员
 export function addManagers (account, nickname, permissions) {
   return transformFetch("POST", "/managers", { account, nickname, permissions })
-}
-
-// 修改密码
-export function password (old_password, new_password) {
-  return transformFetch("PUT", "/password", { old_password, new_password })
 }
 
 // 获取登录日志

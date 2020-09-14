@@ -5,12 +5,17 @@ import { Layout } from 'antd'
 import header1 from '../icons/header/header1.png'
 import header3 from '../icons/header/header3.png'
 import header4 from '../icons/header/header4.png'
+import { clear } from '../utils/store'
 
 function HeaderComponent ({ collapsed, toggle }) {
 
+  function logout () {
+    clear()
+  }
+
   const menu = (
     <Menu>
-      <Menu.Item style={{display:"flex",alignItems:'center',width:164,height:50}}>
+      <Menu.Item className={c.item} onClick={logout} style={{display:"flex",alignItems:'center',width:164,height:50}}>
         <img src={header4} alt="" style={{width:14,marginRight:26}}/>
         <div>退出登录</div>
       </Menu.Item>

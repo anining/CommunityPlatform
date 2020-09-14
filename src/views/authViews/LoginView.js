@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import c from '../../styles/login.module.css'
-import { Input, message, Checkbox, Button } from 'antd';
+import { Input, message, Button } from 'antd';
 import auth2 from '../../icons/auth/auth2.png'
 import auth3 from '../../icons/auth/auth3.png'
 import auth4 from '../../icons/auth/auth4.png'
@@ -9,16 +9,12 @@ import { login } from '../../utils/api'
 import { setter } from '../../utils/store'
 
 function LoginView () {
-  const [checked, setChecked] = useState(false)
   const [account, setAccount] = useState()
   const [password, setPassword] = useState()
 
   function onChange (e, key) {
-    const { value, checked } = e.target;
+    const { value } = e.target;
     switch (key) {
-      case 0:
-        setChecked(checked);
-        break;
       case 1:
         setAccount(value);
         break;
@@ -35,7 +31,6 @@ function LoginView () {
     login(account, password).then(r => {
       setAccount(undefined)
       setPassword(undefined)
-      setChecked(false)
       const { error, data } = r;
       if (!error) {
         const { access_token, disclaimer_agreed, role } = data;
@@ -73,7 +68,7 @@ function LoginView () {
                 <Input size="small" onPressEnter={submit} type="password" onChange={e=>onChange(e,2)} value={password} className={c.input}  placeholder="请输入登录密码" prefix={
                   <img src={ auth4 } alt="" className={c.inputImg}/>
                   } style={{height:'40.15%'}}/>
-                <Checkbox onChange={e=>onChange(e,0)} checked={checked} className={c.checkbox}>自动登录</Checkbox>
+                <div style={{opacity:0}}>login</div>
               </div>
               <Button type="primary" onClick={submit} className={c.btn}>登录</Button>
             </div>

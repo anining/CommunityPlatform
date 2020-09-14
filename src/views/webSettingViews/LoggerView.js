@@ -18,7 +18,7 @@ function LoggerView () {
 function RTable () {
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
+  const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
 
   useEffect(() => {
