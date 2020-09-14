@@ -222,11 +222,7 @@ function DataStatisticsView () {
 
   return (
     <div className={c.container}>
-      <div className={c.main} style={{
-        marginTop:0,
-        marginBottom:24,
-        paddingBottom:0
-      }}>
+      <div className={c.main}>
         {views}
       </div>
     </div>

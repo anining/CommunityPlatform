@@ -7,15 +7,11 @@ import ContentComponent from './ContentComponent'
 function MainComponent () {
   const [collapsed, setCollapsed] = useState(false)
 
-  function toggle () {
-    setCollapsed(!collapsed)
-  };
-
   return (
-    <Layout style={{height:'100%'}}>
-      <SiderComponent collapsed={collapsed} />
-      <Layout className="site-layout">
-        <HeaderComponent collapsed={collapsed} toggle={toggle}/>
+    <Layout className='layoutView'>
+      <SiderComponent collapsed={collapsed} toggle={()=>setCollapsed(!collapsed)} />
+      <Layout>
+        <HeaderComponent collapsed={collapsed}/>
         <ContentComponent />
       </Layout>
     </Layout>

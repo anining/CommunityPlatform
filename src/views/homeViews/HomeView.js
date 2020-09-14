@@ -119,98 +119,98 @@ function HomeView () {
   }
 
   return (
-      <div className={c.main}>
-      <div className={c.header}>
-        <img src={home8} alt="" className={c.avatar}/>
-        <div className={c.headerU}>
-          <div className={c.headerUN}>
-            <div>欢迎您，想喝冰阔泺，祝您开心每一天！</div>
-            <div className={c.headerUNTips}>旗舰版</div>
+    <div className="container">
+        <div className={c.header}>
+          <img src={home8} alt="" className={c.avatar}/>
+          <div className={c.headerU}>
+            <div className={c.headerUN}>
+              <div>欢迎您，想喝冰阔泺，祝您开心每一天！</div>
+              <div className={c.headerUNTips}>旗舰版</div>
+            </div>
+            <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>2021.01.01 01:15:23</div>　<span>续费</span></div>
           </div>
-          <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>2021.01.01 01:15:23</div>　<span>续费</span></div>
+          <div className={c.line}/>
+          <div className={c.headerL}>
+            <div className={c.headerLTips}>上次登录信息</div>
+            <div className={c.headerLPath}>127.0.0.1/重庆市</div>
+            <div className={c.headerLTime}>2020.01.15 15:15:23</div>
+          </div>
+          <Button size="small" type="primary" className={c.headerBtn} onClick={()=>{
+              const history = h.get()
+              history.push("/main/dataSetting")
+          }}>主页看板设置</Button>
+          <img src={home7} alt="" className={c.headerBg}/>
         </div>
-        <div className={c.line}/>
-        <div className={c.headerL}>
-          <div className={c.headerLTips}>上次登录信息</div>
-          <div className={c.headerLPath}>127.0.0.1/重庆市</div>
-          <div className={c.headerLTime}>2020.01.15 15:15:23</div>
+        {/* <div className={c.nullView}> */}
+        {/*   <img src={home9} alt="" /> */}
+        {/*   <div>暂无数据</div> */}
+        {/*   <Button size="small" type="primary" className={c.nullBtn}>主页看板设置</Button> */}
+        {/* </div> */}
+        <div className={c.dataView}>
+          <div className={c.orderViewL}>
+            <div className={c.orderViewLT}>
+              <div className={c.orderViewLTitle}>充值/退款数据</div>
+              <Radio.Group
+                options={options}
+                onChange={onChange3}
+                value={value3}
+                optionType="button"
+              />
+            </div>
+            {views2}
+          </div>
+          <div className={c.dataViewR}>
+            <div className={c.dataViewRTitle}>数据统计</div>
+            <div className={c.dataViewRMain}>
+              <Rdata />
+            </div>
+          </div>
         </div>
-        <Button size="small" type="primary" className={c.headerBtn} onClick={()=>{
-            const history = h.get()
-            history.push("/main/dataSetting")
-        }}>主页看板设置</Button>
-        <img src={home7} alt="" className={c.headerBg}/>
-      </div>
-      <div className={c.nullView}>
-        <img src={home9} alt="" />
-        <div>暂无数据</div>
-        <Button size="small" type="primary" className={c.nullBtn}>主页看板设置</Button>
-      </div>
-      {/* <div className={c.dataView}> */}
-      {/*   <div className={c.orderViewL}> */}
-      {/*     <div className={c.orderViewLT}> */}
-      {/*       <div className={c.orderViewLTitle}>充值/退款数据</div> */}
-      {/*       <Radio.Group */}
-      {/*         options={options} */}
-      {/*         onChange={onChange3} */}
-      {/*         value={value3} */}
-      {/*         optionType="button" */}
-      {/*       /> */}
-      {/*     </div> */}
-      {/*     {views2} */}
-      {/*   </div> */}
-      {/*   <div className={c.dataViewR}> */}
-      {/*     <div className={c.dataViewRTitle}>数据统计</div> */}
-      {/*     <div className={c.dataViewRMain}> */}
-      {/*       <Rdata /> */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* </div> */}
-      {/* <div className={c.orderView}> */}
-      {/*   <div className={c.orderViewL}> */}
-      {/*     <div className={c.orderViewLT}> */}
-      {/*       <div className={c.orderViewLTitle}>商品订单数据</div> */}
-      {/*       <Radio.Group */}
-      {/*         options={options} */}
-      {/*         onChange={onChange3} */}
-      {/*         value={value3} */}
-      {/*         optionType="button" */}
-      {/*       /> */}
-      {/*     </div> */}
-      {/*     {views} */}
-      {/*     </div> */}
-      {/*   <div className={c.orderViewR}> */}
-      {/*     <div className={c.orderViewRHeader}> */}
-      {/*       <div className={c.orderViewRT}>最近动态</div> */}
-      {/*       <div>更多</div> */}
-      {/*     </div> */}
-      {/*     <div className={c.time}> */}
-      {/*       <Timeline> */}
-      {/*         <Timeline.Item color="#2C68FF">2020.01.15 15:20:05　删除 订单(2548)</Timeline.Item> */}
-      {/*         <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item> */}
-      {/*         <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item> */}
-      {/*         <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item> */}
-      {/*         <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item> */}
-      {/*         <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item> */}
-      {/*         <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item> */}
-      {/*         <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item> */}
-      {/*         <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item> */}
-      {/*       </Timeline> */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* </div> */}
-      {/* <div className={c.tableView}> */}
-      {/*   <div className={c.tableHeader}> */}
-      {/*     <div className={c.tableTitle}>商品概况</div> */}
-      {/*     <div className={c.tableTips}>查看全部</div> */}
-      {/*   </div> */}
-      {/*   <Table columns={columns} dataSource={data} rowClassName={(record,index)=>{ */}
-      {/*     if (index % 2) { */}
-      {/*       return "f1f5ff" */}
-      {/*     } */}
-      {/*   }} size="small" pagination={{showQuickJumper:true}} */}
-      {/*   /> */}
-      {/* </div> */}
+        <div className={c.orderView}>
+          <div className={c.orderViewL}>
+            <div className={c.orderViewLT}>
+              <div className={c.orderViewLTitle}>商品订单数据</div>
+              <Radio.Group
+                options={options}
+                onChange={onChange3}
+                value={value3}
+                optionType="button"
+              />
+            </div>
+            {views}
+            </div>
+          <div className={c.orderViewR}>
+            <div className={c.orderViewRHeader}>
+              <div className={c.orderViewRT}>最近动态</div>
+              <div>更多</div>
+            </div>
+            <div className={c.time}>
+              <Timeline>
+                <Timeline.Item color="#2C68FF">2020.01.15 15:20:05　删除 订单(2548)</Timeline.Item>
+                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
+                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
+                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
+                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
+                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
+                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
+                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
+                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
+              </Timeline>
+            </div>
+          </div>
+        </div>
+        <div className={c.tableView}>
+          <div className={c.tableHeader}>
+            <div className={c.tableTitle}>商品概况</div>
+            <div className={c.tableTips}>查看全部</div>
+          </div>
+          <Table columns={columns} dataSource={data} rowClassName={(record,index)=>{
+            if (index % 2) {
+              return "f1f5ff"
+            }
+          }} size="small" pagination={{showQuickJumper:true}}
+          />
+        </div>
     </div>
   )
 }

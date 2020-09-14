@@ -115,7 +115,7 @@ function RTable ({ setVisible }) {
   };
 
   return (
-    <div className={c.main} style={{marginTop:0,marginBottom:0}}>
+    <div className={c.main}>
         <div className={c.searchView}>
           <div className={c.search} style={{borderBottom:'none'}}>
             <div className={c.searchL}>

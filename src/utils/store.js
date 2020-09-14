@@ -1,7 +1,5 @@
 import * as U from 'karet.util';
 import { storage } from './storage';
-// import { DEFAULT_USER } from './data';
-// import { setGlobal } from '../global/global';
 
 const localStore = {
   // user: DEFAULT_USER,

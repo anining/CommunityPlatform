@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, Pagination } from 'antd'
 import c from '../../styles/view.module.css'
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
@@ -22,7 +22,7 @@ function GoodCategoryView () {
   }
 
   return (
-    <div className="container">
+    <div className="view">
       <div className={c.container}>
         <RTable setVisible={setVisible} />
       </div>

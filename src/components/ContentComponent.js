@@ -54,7 +54,6 @@ function ContentComponent () {
     <Layout.Content style={{
       marginLeft:24,
       marginRight:24,
-      marginBottom:24,
       marginTop:84,
     }}>
       <Switch>
@@ -196,12 +195,6 @@ function ContentComponent () {
         <Route path="/main/editUserPrice">
           <EditUserPriceView />
         </Route>
-        {/* <Route path="/main/webSetting"> */}
-        {/*   <WebSettingView /> */}
-        {/* </Route> */}
-        {/* <Route path="/main/systemSetting"> */}
-        {/*   <SystemSetting /> */}
-        {/* </Route> */}
         <Redirect to="/main/home" />
       </Switch>
     </Layout.Content>

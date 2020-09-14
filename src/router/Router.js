@@ -14,9 +14,9 @@ import { h } from '../utils/history'
 function Router () {
   const localAuthorization = storage.getItem("authorization")
   const { authorization } = getter(['authorization']);
-  !authorization.get() && localAuthorization && setter([["authorization", localAuthorization.replace(/\"/g, "")]])
-  proxyRouter(useHistory(), 'login')
   const history = h.get();
+  !authorization.get() && localAuthorization && setter([["authorization", localAuthorization.replace(/\"/g, "")]])
+  proxyRouter(useHistory(), '/login')
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -29,7 +29,7 @@ function Router () {
   return (
     <Switch>
       <Route exact path="/">
-        {authorization.get() ? <Redirect to="/main" /> : <LoginView />}
+        {authorization.get() ? <Redirect to="/main/home" /> : <LoginView />}
       </Route>
       <Route path="/main">
         <MainComponent />

@@ -3,22 +3,20 @@ import { message } from 'antd'
 import { getter } from '../utils/store'
 
 function parameterTransform (method, key, parameter) {
-  if (method === 'POST' || method === 'PUT' || method === "PATCH") {
+  if (method === 'DELETE' || method === 'POST' || method === 'PUT' || method === "PATCH") {
     return API_URL + key;
   }
   let parameterString = API_URL + key + '?';
   for (const param in parameter) {
-    // eslint-disable-next-line no-prototype-builtins
     if (parameter.hasOwnProperty(param)) {
       parameterString += param + '=' + parameter[param] + '&';
     }
   }
   return parameterString.slice(0, -1);
-};
+}
 
 async function transformFetch (method, url, data = {}) {
   try {
-    // const TIME_STAMP = Math.round(Date.now() / 1000).toString();
     const POST_DATA = JSON.stringify(data);
     let HEADER = {
       // 'x-uaid': UA_ID,
@@ -28,7 +26,7 @@ async function transformFetch (method, url, data = {}) {
     const { authorization } = getter(['authorization']);
     authorization.get() && (HEADER = Object.assign(HEADER, { authorization: authorization.get() }));
     const request = { method, headers: new Headers(HEADER) };
-    (method === 'POST' || method === 'PUT' || method === 'PATCH') && (request.body = POST_DATA);
+    (method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE') && (request.body = POST_DATA);
     return new Promise(async (resolve, reject) => {
       try {
         const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);

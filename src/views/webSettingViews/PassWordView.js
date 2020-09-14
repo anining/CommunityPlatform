@@ -31,7 +31,7 @@ function PassWordView () {
   }
 
   return (
-    <div className={c.container}>
+    <div className={c.container} style={{marginBottom:24}}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
         <div>首页 / 站点设置 / 修改密码 / <span>修改密码</span></div>

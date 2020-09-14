@@ -21,47 +21,47 @@ function RTable () {
   const [data, setData] = useState([
     {
       id: 1,
-      key:1,
+      key: 1,
     },
     {
       id: 2,
-      key:2
+      key: 2
     },
     {
       id: 3,
-      key:3,
+      key: 3,
     },
     {
       id: 4,
-      key:4
+      key: 4
     },
     {
       id: 5,
-      key:5,
+      key: 5,
     },
     {
       id: 6,
-      key:6
+      key: 6
     },
     {
       id: 7,
-      key:7,
+      key: 7,
     },
     {
       id: 8,
-      key:8
+      key: 8
     },
     {
       id: 9,
-      key:9,
+      key: 9,
     },
     {
       id: 10,
-      key:10
+      key: 10
     },
     {
       id: 11,
-      key:11,
+      key: 11,
     },
   ])
   const [purview, setPurview] = useState([])
@@ -74,12 +74,12 @@ function RTable () {
     })
   }, [])
 
-  function detail (id,index) {
+  function detail (id, index) {
     const localVisible = []
-    data.forEach((item,i)=>{
-      if(index===i) {
+    data.forEach((item, i) => {
+      if (index === i) {
         localVisible.push(true)
-      }else{
+      } else {
         localVisible.push(false)
       }
     })
@@ -186,7 +186,7 @@ function RTable () {
 ];
 
 return (
-  <div className={c.main} style={{marginTop:0,marginBottom:0}}>
+  <div className={c.main}>
       <div className={c.searchView}>
         <div className={c.search} style={{borderBottom:'none'}}>
           <div className={c.searchL}>

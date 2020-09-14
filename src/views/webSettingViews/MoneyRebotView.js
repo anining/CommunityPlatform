@@ -53,7 +53,7 @@ function MoneyRebotView () {
 
   return (
     <div className={c.container}>
-      <div className={c.main} style={{marginTop:0,marginBottom:0}}>
+      <div className={c.main}>
         <div className={c.headerT}>
           <div style={{zIndex:1}}>使用加款机器人</div>
           <div className={c.circle} />

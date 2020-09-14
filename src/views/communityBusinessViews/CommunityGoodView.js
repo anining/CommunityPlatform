@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, Pagination } from 'antd'
 import good1 from '../../icons/good/good1.png'
 import c from '../../styles/view.module.css'
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import { h } from '../../utils/history'
 import good2 from '../../icons/good/good2.png'
 import good3 from '../../icons/good/good3.png'
@@ -14,7 +14,7 @@ function CommunityGoodView () {
   const [visible, setVisible] = useState(false)
 
   return (
-    <div className="container">
+    <div className="view">
       <div className={c.container}>
         <div className={c.header}>
           <div className={c.headerL}>
