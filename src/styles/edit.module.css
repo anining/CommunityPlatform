@@ -140,14 +140,17 @@
 }
 
 .tableView {
-  width: 468px;
-  height: 40px;
+  width: 29.25%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .viewTable {
   height: 40px;
   width: 88px;
   margin-right: 18px;
+  margin-bottom: 28px;
   background: #F0F4FF;
   color: #2C68FF;
   border-radius: 2px;
@@ -245,11 +248,13 @@
 .quitBtn {
   color: #979BA3;
   font-size: 0.857rem;
+  cursor: pointer;
 }
 
 .saveBtn {
   color: #4177FE;
   font-size: 0.857rem;
+  cursor: pointer;
 }
 
 .quitBorder {

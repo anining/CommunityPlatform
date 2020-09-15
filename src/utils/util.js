@@ -17,4 +17,14 @@ function saveSuccess (jump = true, path, state) {
   }
 }
 
-export { saveSuccess }
+function push (path, state) {
+  const history = h.get()
+  history.push(path, state)
+}
+
+function goBack () {
+  const history = h.get()
+  history.goBack();
+}
+
+export { saveSuccess, goBack, push }

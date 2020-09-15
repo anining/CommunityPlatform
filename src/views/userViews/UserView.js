@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Menu, Dropdown, Table, message, Input, Space, Popconfirm } from 'antd'
 import c from '../../styles/view.module.css'
 import { DownOutlined } from '@ant-design/icons';
@@ -8,6 +8,7 @@ import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
 import { h } from '../../utils/history'
 import good41 from '../../icons/good/good41.png'
+import { users } from "../../utils/api";
 
 function UserView () {
   const [visible, setVisible] = useState(false)
@@ -38,17 +39,53 @@ function UserView () {
 
 function RTable ({ setVisible }) {
   const [selectionType, setSelectionType] = useState('checkbox');
+  const [data, setData] = useState([])
+  const [current, setCurrent] = useState(1)
+  const [pageSize] = useState(10)
+  const [total, setTotal] = useState(0)
+  const [account, setAccount] = useState()
+  const [status, setStatus] = useState("placeholder")
 
-  const obj = [
-    {
+  useEffect(() => {
+    get(current)
+  }, [])
+
+  function get (current) {
+    users(current, pageSize, account, status === "placeholder" ? undefined : status).then(r => {
+      if (!r.error) {
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
+  }
+
+  function format (arr) {
+    arr.forEach((item, index) => {
+      item.key = index
+    })
+    return arr
+  }
+
+  function onChange (page, pageSize) {
+    setCurrent(page)
+    get(page)
+  }
+
+  const obj = {
+    placeholder: {
+      color: '#2C68FF',
+      text: '请选择用户状态'
+    },
+    normal: {
       color: '#2C68FF',
       text: '正常',
     },
-    {
+    banned: {
       color: '#FF4D4F',
       text: '封禁',
     }
-  ]
+  }
   const columns = [
     {
       title: '用户ID',
@@ -57,13 +94,13 @@ function RTable ({ setVisible }) {
   },
     {
       title: '用户账号',
-      dataIndex: 'number',
+      dataIndex: 'account',
       align: 'center',
   },
     {
       title: '消费总额',
       align: 'center',
-      dataIndex: 'close',
+      dataIndex: 'consumed',
       sorter: {
         compare: (a, b) => {
           console.log(a, b)
@@ -84,13 +121,13 @@ function RTable ({ setVisible }) {
   },
     {
       title: '下单次数',
-      dataIndex: 'num',
+      dataIndex: 'ordered',
       align: 'center',
   },
     {
       title: '注册时间',
       align: 'center',
-      dataIndex: 'time',
+      dataIndex: 'created_at',
       sorter: {
         compare: (a, b) => {
           console.log(a, b)
@@ -140,52 +177,12 @@ function RTable ({ setVisible }) {
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
           <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
             const history = h.get()
-            history.push("/main/editUserPrice")
+            history.push("/main/editUserPrice",record)
           }}>修改密价</div>
         </Space>
       )
-  },
-];
-
-  const data = [
-    {
-      key: 1240,
-      id: '01',
-      number: '123355466',
-      close: '12.456',
-      balance: '123.12',
-      num: 789,
-      time: '2017-10-31 23:12:00',
-      status: 0
-    },
-    {
-      key: 1240,
-      id: '01',
-      number: '123355466',
-      close: '12.456',
-      balance: '123.12',
-      num: 789,
-      time: '2017-10-31 23:12:00',
-      status: 1
     },
   ];
-
-  // function onChange (pagination, filters, sorter, extra) {
-  //   console.log('params', pagination, filters, sorter, extra);
-  // }
-
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: 1240,
-      id: '01',
-      number: '123355466',
-      close: '12.456',
-      balance: '123.12',
-      num: 789,
-      time: '2017-10-31 23:12:00',
-      status: 0
-    })
-  }
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -203,16 +200,33 @@ function RTable ({ setVisible }) {
     console.log('click', e);
   }
 
+  function handleStatusClick (e) {
+    setStatus(e.key)
+  }
+
+  function reset () {
+    setAccount(undefined)
+    setStatus("placeholder")
+  }
+
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">
-        1st menu item
+      <Menu.Item key="normal">
+        正常
       </Menu.Item>
-      <Menu.Item key="2">
-        2nd menu item
+      <Menu.Item key="banned">
+        封禁
       </Menu.Item>
-      <Menu.Item key="3">
-        3rd menu item
+    </Menu>
+  );
+
+  const status_menu = (
+    <Menu onClick={handleStatusClick}>
+      <Menu.Item key="normal">
+        正常
+      </Menu.Item>
+      <Menu.Item key="banned">
+        封禁
       </Menu.Item>
     </Menu>
   );
@@ -222,24 +236,25 @@ function RTable ({ setVisible }) {
         <div className={c.searchView}>
           <div className={c.search}>
             <div className={c.searchL} style={{width:'25.369%'}}>
-              <Input placeholder="请输入用户名" size="small" className={c.searchInput} style={{width:'45.145%'}}/>
-              <Dropdown overlay={menu}>
+              <Input placeholder="请输入用户名" onChange={e=>setAccount(e.target.value)} value={account} size="small" className={c.searchInput} style={{width:'45.145%'}}/>
+              <Dropdown overlay={status_menu}>
                 <Button size="small" className={c.dropdownBtn} style={{width:'45.145%'}}>
                   <div className={c.hiddenText}>
-                    请选择用户状态
+                    {obj[status].text}
                   </div>
                   <DownOutlined />
                 </Button>
               </Dropdown>
             </div>
             <div className={c.searchR}>
-              <Button size="small" className={c.resetBtn}>重置</Button>
+              <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>
               <Button icon={
                 <img src={good9} alt="" style={{width:14,marginRight:6}} />
-              }
-              type = "primary"
-              size = "small"
-              className={c.searchBtn}>搜索用户</Button>
+                }
+                type = "primary"
+                onClick={()=>get(current)}
+                size = "small"
+                className={c.searchBtn}>搜索用户</Button>
             </div>
           </div>
       </div>
@@ -257,11 +272,15 @@ function RTable ({ setVisible }) {
       <Table columns={columns} rowSelection={{
         type: selectionType,
         ...rowSelection
-      }} dataSource={data} rowClassName={(record,index)=>{
-        if (index % 2) {
-          return "f1f5ff"
-        }
-      }} size="small" pagination={{showQuickJumper:true}}
+      }} dataSource={data} size="small" pagination={{
+          showQuickJumper:true,
+          current,
+          pageSize,
+          hideOnSinglePage: false,
+          showLessItems: true,
+          total,
+          onChange
+        }}
       />
     </div>
   )
@@ -308,7 +327,7 @@ const styles = {
     height: 32,
     width: "100%",
     marginTop: 29,
-    marginBottom:72
+    marginBottom: 72
   },
   header: {
     marginTop: 18,

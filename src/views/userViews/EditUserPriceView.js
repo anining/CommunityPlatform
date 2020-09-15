@@ -1,22 +1,31 @@
-import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Radio, Modal, Pagination } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Button, Menu, Dropdown, Table, message, Input, Radio } from 'antd'
 import good1 from '../../icons/good/good1.png'
 import c from '../../styles/view.module.css'
 import ce from '../../styles/edit.module.css'
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import good5 from '../../icons/good/good5.png'
 import good2 from '../../icons/good/good2.png'
 import good3 from '../../icons/good/good3.png'
 import good4 from '../../icons/good/good4.png'
 import good27 from '../../icons/good/good27.png'
 import good9 from '../../icons/good/good9.png'
+import { useHistory } from "react-router-dom"
+import { goBack } from "../../utils/util"
+import { communityDiscPrices } from "../../utils/api"
 
 function EditUserPriceView () {
+  const { state = {} } = useHistory().location || {}
+  const { account, id } = state
   const [visible, setVisible] = useState(false)
   const [value, setValue] = useState()
 
   function onChange (e) {
     setValue(e.target.value)
+  }
+
+  function save () {
+
   }
 
   return (
@@ -39,7 +48,7 @@ function EditUserPriceView () {
                 fontSize:'2rem',
                 fontWeight:500
               }}>修改用户密价</div>
-              <div style={{color:'#6F717E',fontWeight:500,marginLeft:14}}>当前用户：<span style={{color:'#2C68FF'}}>12345678907</span></div>
+              <div style={{color:'#6F717E',fontWeight:500,marginLeft:14}}>当前用户：<span style={{color:'#2C68FF'}}>{account}</span></div>
             </div>
             <div style={{
               display:'flex',
@@ -50,8 +59,8 @@ function EditUserPriceView () {
                 fontWeight:500
               }}>价格类型</div>
               <Radio.Group onChange={onChange} value={value}>
-                <Radio value={1} style={{marginLeft:33,marginRight:70}}>单价</Radio>
-                <Radio value={2}>密价</Radio>
+                {/* <Radio value={1} style={{marginLeft:33,marginRight:70}}>单价</Radio> */}
+                {/* <Radio value={2}>密价</Radio> */}
               </Radio.Group>
             </div>
           </div>
@@ -67,13 +76,13 @@ function EditUserPriceView () {
                 color:'#979BA3',
                 fontSize:'1.142rem',
                 marginRight:32
-              }}>放弃</Button>
+              }} onClick={goBack}>放弃</Button>
               <Button size="small" type="primary" style={{
                 width:131,
                 height:40,
                 background:'#2C68FF',
                 fontSize:'1.142rem'
-              }}>保存</Button>
+              }} onClick={save}>保存</Button>
             </div>
             <div style={{
               color:'#979BA3',
@@ -87,44 +96,47 @@ function EditUserPriceView () {
             <div>当用户密价填写时，系统会优先使用用户密价。</div>
           </div>
         </div>
-        <RTable setVisible={setVisible} />
+        <RTable setVisible={setVisible} id={id}/>
       </div>
-      {/* <Modal */}
-      {/*   visible={visible} */}
-      {/*   onOk={handleOk} */}
-      {/*   footer={null} */}
-      {/*   onCancel={handleCancel} */}
-      {/* > */}
-      {/*   <div className={{ */}
-      {/*     display:'flex', */}
-      {/*     flexDirection:'column', */}
-      {/*     alignItems:'center', */}
-      {/*     padding:25, */}
-      {/*     }}> */}
-      {/*     <img src={good6} alt="" style={{width:90}} /> */}
-      {/*     <h4 style={{marginBottom:25,marginTop:25}}>{actionId===1?"确定要删除此支付账户吗？":"确定要删除这个分类吗？"}</h4> */}
-      {/*     {(()=>{ */}
-      {/*     if(actionId===1){ */}
-      {/*       return <p>分类<span style={{color:"#2C68FF"}}>哔哩哔哩</span> 一共包含了 15 个商品，包含商品的分类不允许被删除，请更改关联商品的分类之后重试。</p> */}
-      {/*     } */}
-      {/*       return <p>删除的分类不可被找回，请确认。</p> */}
-      {/*     })()} */}
-      {/*     <div style={{display:'flex',justifyContent:'space-around',marginTop:25,alignItems:'center',width:'100%'}}> */}
-      {/*       <Button key="back" style={{width:150}}> */}
-      {/*         取消 */}
-      {/*       </Button> */}
-      {/*       <Button key="submit"style={{width:150}} type="primary" onClick={handleOk}> */}
-      {/*         确定 */}
-      {/*       </Button> */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* </Modal> */}
     </div>
   )
 }
 
-function RTable ({ setVisible }) {
+function RTable ({ setVisible, id }) {
   const [selectionType, setSelectionType] = useState('checkbox');
+  const [data, setData] = useState([])
+  const [current, setCurrent] = useState(1)
+  const [pageSize] = useState(10)
+  const [total, setTotal] = useState(0)
+  const [goods_id, setGoods_id] = useState()
+  const [goods_name, setGoods_name] = useState()
+
+  useEffect(() => {
+    get(current)
+  }, [])
+
+  function get (current) {
+    communityDiscPrices(current, pageSize, id, goods_id, goods_name).then(r => {
+      console.log(r)
+      if (!r.error) {
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
+  }
+
+  function format (arr) {
+    arr.forEach((item, index) => {
+      item.key = index
+    })
+    return arr
+  }
+
+  function onChange (page, pageSize) {
+    setCurrent(page)
+    get(page)
+  }
 
   const columns = [
     {
@@ -178,38 +190,6 @@ function RTable ({ setVisible }) {
   }
 ];
 
-  const data = [
-    {
-      key: 1240,
-      id: '1233',
-      name: '哔哩哔哩关注',
-      category: '哔哩哔哩',
-      type: '哔哩哔哩',
-      in_price: 0.05,
-      a_price: 0.05,
-      price: 0.05,
-      user_price: 0.05,
-    },
-  ];
-
-  // function onChange (pagination, filters, sorter, extra) {
-  //   console.log('params', pagination, filters, sorter, extra);
-  // }
-
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: 1240,
-      id: '1233',
-      name: '哔哩哔哩关注',
-      category: '哔哩哔哩',
-      type: '哔哩哔哩',
-      in_price: 0.05,
-      a_price: 0.05,
-      price: 0.05,
-      user_price: 0.05,
-    })
-  }
-
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -224,6 +204,11 @@ function RTable ({ setVisible }) {
   function handleMenuClick (e) {
     message.info('Click on menu item.');
     console.log('click', e);
+  }
+
+  function reset () {
+    setGoods_name(undefined)
+    setGoods_id(undefined)
   }
 
   const menu = (
@@ -245,31 +230,32 @@ function RTable ({ setVisible }) {
         <div className={c.searchView}>
           <div className={c.search} style={{borderBottom:'none'}}>
             <div className={c.searchL} style={{width:'56.157%'}}>
-              <Input placeholder="请输入商品ID" size="small" className={c.searchInput} style={{width:'23.026%'}}/>
-              <Input placeholder="请输入商品名称" size="small" className={c.searchInput} style={{width:'23.026%'}}/>
-              <Dropdown overlay={menu}>
-                <Button size="small" className={c.dropdownBtn} style={{width:'20.394%'}}>
-                  <div className={c.hiddenText}>
-                    请选择业务类型
-                  </div>
-                  <DownOutlined />
-                </Button>
-              </Dropdown>
-              <Dropdown overlay={menu}>
-                <Button size="small" className={c.dropdownBtn} style={{width:'20.394%'}}>
-                  <div className={c.hiddenText}>
-                    请选择商品类型
-                  </div>
-                  <DownOutlined />
-                </Button>
-              </Dropdown>
+              <Input placeholder="请输入商品ID" onChange={e=>setGoods_id(e.target.value)} value={goods_id} size="small" className={c.searchInput} style={{width:'23.026%'}}/>
+              <Input placeholder="请输入商品名称" onChange={e=>setGoods_name(e.target.value)} value={goods_name} size="small" className={c.searchInput} style={{width:'23.026%'}}/>
+              {/* <Dropdown overlay={menu}> */}
+              {/*   <Button size="small" className={c.dropdownBtn} style={{width:'20.394%'}}> */}
+              {/*     <div className={c.hiddenText}> */}
+              {/*       请选择业务类型 */}
+              {/*     </div> */}
+              {/*     <DownOutlined /> */}
+              {/*   </Button> */}
+              {/* </Dropdown> */}
+              {/* <Dropdown overlay={menu}> */}
+              {/*   <Button size="small" className={c.dropdownBtn} style={{width:'20.394%'}}> */}
+              {/*     <div className={c.hiddenText}> */}
+              {/*       请选择商品类型 */}
+              {/*     </div> */}
+              {/*     <DownOutlined /> */}
+              {/*   </Button> */}
+              {/* </Dropdown> */}
             </div>
             <div className={c.searchR}>
-              <Button size="small" className={c.resetBtn}>重置</Button>
+              <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>
               <Button icon={
                 <img src={good9} alt="" style={{width:14,marginRight:6}} />
               }
               type = "primary"
+                onClick={()=>get(current)}
               size = "small"
               className={c.searchBtn}>搜索商品</Button>
             </div>
@@ -282,7 +268,15 @@ function RTable ({ setVisible }) {
         if (index % 2) {
           return "f1f5ff"
         }
-      }} size="small" pagination={{showQuickJumper:true}}
+      }} size="small" pagination={{
+          showQuickJumper:true,
+          current,
+          pageSize,
+          hideOnSinglePage:false,
+          showLessItems:true,
+          total,
+          onChange
+        }}
       />
     </div>
   )

@@ -1,22 +1,88 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Tooltip, Menu, Dropdown, Button, Upload, message, Radio, Checkbox } from 'antd'
+import { Input, Tooltip, Button, Upload, message, Radio, Checkbox } from 'antd'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import edit1 from '../../icons/edit/edit1.png'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { goBack, saveSuccess, push } from "../../utils/util";
+import { communityGoods } from "../../utils/api";
+import { view } from "karet.util";
 
 function EditCommunityGoodView () {
   const [name, setName] = useState()
-  const [status, setStatus] = useState()
-  const [pics, setPics] = useState()
-
+  const [status, setStatus] = useState("available")
+  const [pics, setPics] = useState([])
+  const [community_goods_category_id, setCommunity_goods_category_id] = useState(1)
+  const [community_param_template_id, setCommunity_param_template_id] = useState(1)
+  const [tag_ids, setTag_ids] = useState([3])
+  const [tags, setTags] = useState([])
+  const [unit_price, setUnit_price] = useState()
+  const [refundable, setRefundable] = useState()
+  const [unit_cost, setUnit_cost] = useState()
+  const [disc_price, setDisc_price] = useState()
+  const [min_order_amount, setMin_order_amount] = useState()
+  const [max_order_amount, setMax_order_amount] = useState()
+  const [repeat_order, setRepeat_order] = useState()
+  const [batch_order, setBatch_order] = useState()
+  const [weight, setWeight] = useState()
+  const [introduction, setIntroduction] = useState("")
   const [imageUrl, setImageUrl] = useState()
-  const [loading, setLoading] = useState()
-  const [value, setValue] = useState()
-  const [quillValue, setQuillValue] = useState()
+
+  window.localClick = function (ids) {
+    setTags(ids)
+  }
+
+  function save (jump) {
+    if (!name || !status || !pics.length || !community_param_template_id || !community_goods_category_id || !unit_price || !unit_cost || !disc_price || !min_order_amount || !max_order_amount || !repeat_order || !batch_order || !weight || !introduction) {
+      message.warning("请完善信息")
+      return
+    }
+    communityGoods('add', undefined, undefined, {
+      provider_goods: {
+        provider_type: 'internal',
+        goods_id: 1
+      },
+      name,
+      status,
+      pics,
+      community_goods_category_id,
+      community_param_template_id,
+      tag_ids,
+      unit_price,
+      refundable,
+      unit_cost,
+      disc_price,
+      min_order_amount,
+      max_order_amount,
+      repeat_order,
+      batch_order,
+      weight,
+      introduction
+    }).then(r => {
+      setName(undefined)
+      setStatus("available")
+      setPics([])
+      setCommunity_param_template_id(undefined)
+      setCommunity_goods_category_id(undefined)
+      setTag_ids([])
+      setUnit_price(undefined)
+      setRefundable(undefined)
+      setUnit_cost(undefined)
+      setDisc_price(undefined)
+      setMax_order_amount(undefined)
+      setMin_order_amount(undefined)
+      setRepeat_order(undefined)
+      setBatch_order(undefined)
+      setWeight(undefined)
+      setIntroduction("");
+      !r.error && saveSuccess(jump)
+    })
+  }
+
+  function parsing () {
+    imageUrl && setPics([imageUrl])
+  }
 
   function getBase64 (img, callback) {
     const reader = new FileReader();
@@ -53,30 +119,6 @@ function EditCommunityGoodView () {
     return isJpgOrPng && isLt2M;
   }
 
-  function onChange (e) {
-    console.log('radio checked', e.target.value);
-    setValue(e.target.value)
-  }
-
-  function handleMenuClick (e) {
-    message.info('Click on menu item.');
-    console.log('click', e);
-  }
-
-  const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">
-        1st menu item
-      </Menu.Item>
-      <Menu.Item key="2">
-        2nd menu item
-      </Menu.Item>
-      <Menu.Item key="3">
-        3rd menu item
-      </Menu.Item>
-    </Menu>
-  );
-
   return (
     <div className={c.container}>
       <div className={c.header}>
@@ -94,15 +136,15 @@ function EditCommunityGoodView () {
             <span>*</span>
             <div className={c.itemText}>商品名称</div>
           </div>
-          <Input placeholder="请输入商品名称" className={c.itemInput}></Input>
+          <Input placeholder="请输入商品名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span style={{color:'#fff'}}>*</span>
             <div className={c.itemText}>商品图片</div>
           </div>
-          <Input placeholder="请填写图片链接或者上传图片" className={c.itemInput}></Input>
-          <Button type="primary" className={c.itemBtn}>解析图片</Button>
+          <Input onChange={e=>setImageUrl(e.target.value)} value={imageUrl} placeholder="请填写图片链接或者上传图片" className={c.itemInput}></Input>
+          <Button type="primary" className={c.itemBtn} onClick={parsing}>解析图片</Button>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
@@ -118,7 +160,7 @@ function EditCommunityGoodView () {
             beforeUpload={beforeUpload}
             onChange={handleChange}
           >
-            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: 100 }} /> :
+            {pics.length ? <img src={pics[0]} alt="avatar" style={{ width: 100 }} /> :
               <div>
                 <img src={edit1} alt="" className={c.uploadImg}/>
                 <div className={c.uploadText}>上传图片</div>
@@ -127,48 +169,46 @@ function EditCommunityGoodView () {
           </Upload>
           <div className={c.uploadTips}>商品图片最多存在1张</div>
         </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>商品分类</div>
-          </div>
-            <Dropdown overlay={menu}>
-              <Button size="small" className={c.itemDropdown}>
-                <div className={c.hiddenText}>
-                  请设置商品分类
-                </div>
-                <DownOutlined />
-              </Button>
-            </Dropdown>
-          <Button type="primary" className={c.itemBtn}>新增分类</Button>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>下单模型</div>
-          </div>
-            <Dropdown overlay={menu}>
-              <Button size="small" className={c.itemDropdown}>
-                <div className={c.hiddenText}>
-                  请设置下单模型
-                </div>
-                <DownOutlined />
-              </Button>
-            </Dropdown>
-          <Button type="primary" className={c.itemBtn}>新增模型</Button>
-        </div>
-        <div className={c.item}>
+        {/* <div className={c.item}> */}
+        {/*   <div className={c.itemName}> */}
+        {/*     <span>*</span> */}
+        {/*     <div className={c.itemText}>商品分类</div> */}
+        {/*   </div> */}
+        {/*     <Dropdown overlay={community_goods_category_menu}> */}
+        {/*       <Button size="small" className={c.itemDropdown}> */}
+        {/*         <div className={c.hiddenText}> */}
+        {/*           {/1* 请设置商品分类 *1/} */}
+        {/*         </div> */}
+        {/*         <DownOutlined /> */}
+        {/*       </Button> */}
+        {/*     </Dropdown> */}
+        {/*   <Button type="primary" className={c.itemBtn} onClick={()=>{ */}
+        {/*     push('/main/editGoodCategory') */}
+        {/*   }}>新增分类</Button> */}
+        {/* </div> */}
+        {/* <div className={c.item}> */}
+        {/*   <div className={c.itemName}> */}
+        {/*     <span>*</span> */}
+        {/*     <div className={c.itemText}>下单模型</div> */}
+        {/*   </div> */}
+        {/*     <Dropdown overlay={menu}> */}
+        {/*       <Button size="small" className={c.itemDropdown}> */}
+        {/*         <div className={c.hiddenText}> */}
+        {/*           请设置下单模型 */}
+        {/*         </div> */}
+        {/*         <DownOutlined /> */}
+        {/*       </Button> */}
+        {/*     </Dropdown> */}
+        {/*   <Button type="primary" className={c.itemBtn}>新增模型</Button> */}
+        {/* </div> */}
+        <div className={c.item} style={{alignItems:'flex-start'}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>商品标签</div>
           </div>
           <div className={c.tableView}>
-            <Button className={c.viewTable}>标签</Button>
-            <Button className={c.viewTable}>标签</Button>
-            <Button className={c.viewTable}>标签</Button>
-            <Button className={c.viewTable}>标签</Button>
+            <RTable tags={tags}/>
           </div>
-          <Button type="primary" className={c.itemBtn}>重新选择</Button>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -179,7 +219,7 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>进价</div>
           </div>
-          <Input placeholder="请输入商品进价" className={c.itemInput}></Input>
+          <Input onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -190,46 +230,46 @@ function EditCommunityGoodView () {
             <span>*</span>
             <div className={c.itemText}>单价</div>
           </div>
-          <Input placeholder="请输入商品销售单价" className={c.itemInput}></Input>
+          <Input onChange={e=>setUnit_price(e.target.value)} value={unit_price} placeholder="请输入商品销售单价" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>密价</div>
           </div>
-          <Input placeholder="请输入商品对接密价" className={c.itemInput}></Input>
+          <Input onChange={e=>setDisc_price(e.target.value)} value={disc_price} placeholder="请输入商品对接密价" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
           <div>如果不填写此项目，系统将会使用售价进行对接。</div>
         </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>单位</div>
-          </div>
-          <Input placeholder="请输入商品的计算单位" className={c.itemInput}></Input>
-        </div>
+        {/* <div className={c.item}> */}
+        {/*   <div className={c.itemName}> */}
+        {/*     <span>*</span> */}
+        {/*     <div className={c.itemText}>单位</div> */}
+        {/*   </div> */}
+        {/*   <Input placeholder="请输入商品的计算单位" className={c.itemInput}></Input> */}
+        {/* </div> */}
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>最低数量</div>
           </div>
-          <Input placeholder="该商品每一单最低多少起下，默认为1" className={c.itemInput}></Input>
+          <Input onChange={e=>setMin_order_amount(e.target.value)} value={min_order_amount} type="number" placeholder="该商品每一单最低多少起下，默认为0" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>最高数量</div>
           </div>
-          <Input placeholder="该商品每一单最高多下多少个，默认为100000" className={c.itemInput}></Input>
+          <Input placeholder="该商品每一单最高多下多少个，默认为0" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput} type="number"></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>重复下单</div>
           </div>
-          <Input placeholder="允许重复下单的数量" className={c.itemInput}></Input>
+          <Input type="number" onChange={e=>setRepeat_order(e.target.value)} value={repeat_order} placeholder="允许重复下单的数量" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -240,7 +280,7 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>批量下单</div>
           </div>
-          <Input placeholder="允许批量下单的数量" className={c.itemInput}></Input>
+          <Input type="number" onChange={e=>setBatch_order(e.target.value)} value={batch_order} placeholder="允许批量下单的数量" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -251,15 +291,9 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>状态</div>
           </div>
-          <Radio.Group onChange={onChange} value={value} className={c.itemGrop}>
+          <Radio.Group onChange={e=>setStatus(e.target.value)} value={status} className={c.itemGrop}>
             <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
-              <Radio value={1} className={c.itemRadio}>已上架</Radio>
-            </Tooltip>
-            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
-              <Radio value={2} className={c.itemRadio}>已下架</Radio>
-            </Tooltip>
-            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
-              <Radio value={3} className={c.itemRadio}>已上架但关闭下单</Radio>
+              <Radio value="available" className={c.itemRadio}>已上架</Radio>
             </Tooltip>
           </Radio.Group>
         </div>
@@ -268,7 +302,7 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>排序权重</div>
           </div>
-          <Input placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
+          <Input onChange={e=>setWeight(e.target.value)} value={weight} type="number" placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -280,8 +314,9 @@ function EditCommunityGoodView () {
             <div className={c.itemText}>用户权限</div>
           </div>
           <div className={c.itemCheckView}>
-            <Checkbox onChange={onChange} className={c.checkbox}>退单</Checkbox>
-            <Checkbox onChange={onChange} className={c.checkbox}>补单</Checkbox>
+            <Checkbox onChange={e=>{
+              setRefundable(e.target.checked)
+            }} checked={refundable} className={c.checkbox}>退单</Checkbox>
           </div>
         </div>
         <div className={c.item}>
@@ -289,23 +324,44 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>目标描述</div>
           </div>
-          <ReactQuill className={c.quill} theme="snow" value={quillValue} onChange={setQuillValue}/>
+          <ReactQuill className={c.quill} theme="snow" value={introduction} onChange={e=>setIntroduction(e)}/>
         </div>
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
-            <Button type="primary" className={c.submit}>保存</Button>
+            <Button type="primary" onClick={()=>save(true)} className={c.submit}>保存</Button>
             <div className={c.btnTipsView}>
-              <div className={c.quitBtn}>放弃编辑</div>
+              <div className={c.quitBtn} onClick={goBack}>放弃编辑</div>
               <div className={c.quitBorder}/>
-              <div className={c.saveBtn}>保存并新增</div>
+              <div className={c.saveBtn} onClick={()=>save(false)}>保存并新增</div>
             </div>
           </div>
         </div>
       </div>
     </div>
   )
+}
+
+function RTable ({ tags }) {
+  const views = []
+
+  tags.forEach((it, i) => {
+    views.push(
+      <Button key={i} className={c.viewTable}>标签</Button>
+    )
+  })
+
+  views.push(
+    <Button type="primary" style={{marginLeft:0}} className={c.itemBtn} onClick={()=>{
+         window.open("/main/select-table", "_blank", {
+           height: 500,
+           width: 900,
+         })
+      }}>重新选择</Button>
+  )
+
+  return views;
 }
 
 export default EditCommunityGoodView

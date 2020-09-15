@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, Pagination } from 'antd'
+import { Button, Menu, Dropdown, Table, message, Input, Space } from 'antd'
 import good1 from '../../icons/good/good1.png'
 import c from '../../styles/view.module.css'
 import { DownOutlined } from '@ant-design/icons';

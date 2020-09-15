@@ -98,3 +98,40 @@ export function tags (type, tid, body) {
       return transformFetch("DELETE", `/tags/${tid}`)
   }
 }
+
+// 获取用户列表
+export function users (page, size, account, status) {
+  let data = { page, size }
+  if (account) {
+    data = { ...data, ...{ account } }
+  }
+  if (status) {
+    data = { ...data, ...{ status } }
+  }
+  return transformFetch("GET", "/users", data)
+}
+
+// 添加用户
+export function addUsers (account, password, status) {
+  return transformFetch("POST", "/users", { account, password, status })
+}
+
+// 获取用户的社区商品密价列表
+export function communityDiscPrices (page, size, uid, goods_id, goods_name, goods_category_id) {
+  let data = { page, size }
+  if (goods_id) {
+    data = { ...data, ...{ goods_id } }
+  }
+  if (goods_name) {
+    data = { ...data, ...{ goods_name } }
+  }
+  if (goods_category_id) {
+    data = { ...data, ...{ goods_category_id } }
+  }
+  return transformFetch("GET", `/users/${uid}/community-disc-prices`, data)
+}
+
+// 添加用户的商品密价(社区/卡密)
+export function addDiscPrices (uid, goods_id, goods_type, disc_price) {
+  return transformFetch("POST", `/users/${uid}/disc-prices`, { goods_id, goods_type, disc_price })
+}

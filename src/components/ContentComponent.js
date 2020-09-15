@@ -47,6 +47,7 @@ import UserStatisticsView from "../views/statisticsViews/UserStatisticsView"
 import WebStatisticsView from "../views/statisticsViews/WebStatisticsView"
 import GoodStatisticsView from "../views/statisticsViews/GoodStatisticsView"
 import TableView from "../views/tableViews/TableView"
+import SelectTableView from "../views/tableViews/SelectTableView"
 
 function ContentComponent () {
 
@@ -125,6 +126,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/table">
           <TableView />
+        </Route>
+        <Route exact path="/main/select-table">
+          <SelectTableView />
         </Route>
         <Route exact path="/main/peopleService">
           <PeopleServiceView />

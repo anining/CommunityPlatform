@@ -5,7 +5,7 @@ import edit1 from '../../icons/edit/edit1.png'
 import { Button, Input, Tag } from 'antd'
 import { tagGroups, tags as tagsApi } from "../../utils/api"
 
-function TableView () {
+function SelectTableView () {
   const [inputGroupVisible, setInputGroupVisible] = useState(false)
   const [inputGroupValue, setInputGroupValue] = useState()
   const [tagsGroup, setTagsGroup] = useState([])
@@ -56,7 +56,7 @@ function TableView () {
         )}
         {!inputGroupVisible && (
           <Tag onClick={()=>{
-            setInputGroupVisible(true)
+            // setInputGroupVisible(true)
             // saveInputGroupRef.focus()
           }} className={cs.tAddGroup}>
             <img src={edit1} alt="" />
@@ -171,4 +171,4 @@ function RGroup ({ tagsGroup, setTagsGroup }) {
   return views
 }
 
-export default TableView
+export default SelectTableView

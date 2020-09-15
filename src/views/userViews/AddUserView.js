@@ -1,15 +1,30 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Tooltip, Button, Radio, } from 'antd'
+import { Input, Tooltip, Button, Radio, message, } from 'antd'
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
+import { goBack, saveSuccess } from "../../utils/util";
+import { addUsers } from "../../utils/api";
 
 function AddUserView () {
-  const [value, setValue] = useState()
+  const [value, setValue] = useState("normal")
+  const [account, setAccount] = useState()
+  const [password, setPassWord] = useState()
 
   function onChange (e) {
-    console.log('radio checked', e.target.value);
     setValue(e.target.value)
+  }
+
+  function save (jump) {
+    if (!account) {
+      message.warning("请完善信息")
+      return
+    }
+    addUsers(account, password, value).then(r => {
+      if (!r.error) {
+        saveSuccess(jump)
+      }
+    })
   }
 
   return (
@@ -29,7 +44,7 @@ function AddUserView () {
             <span>*</span>
             <div className={c.itemText}>用户账号</div>
           </div>
-          <Input placeholder="请输入用户账号" className={c.itemInput}></Input>
+          <Input onChange={e=>setAccount(e.target.value)} value={account} placeholder="请输入用户账号" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -38,9 +53,9 @@ function AddUserView () {
         <div className={c.item}>
           <div className={c.itemName}>
             <span style={{color:'#fff'}}>*</span>
-            <div className={c.itemText}>用户余额</div>
+            <div className={c.itemText}>用户密码</div>
           </div>
-          <Input placeholder="请输入用户余额" className={c.itemInput}></Input>
+          <Input placeholder="请输入用户密码" onChange={e=>setPassWord(e.target.value)} value={password} className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
@@ -49,10 +64,10 @@ function AddUserView () {
           </div>
           <Radio.Group onChange={onChange} value={value} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
             <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="被封禁的用户无法登录系统，也无法下单。">
-              <Radio value={2} className={c.itemRadio} style={{width:'33.333%'}}>正常</Radio>
+              <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>正常</Radio>
             </Tooltip>
-            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" trigger="click" title="被封禁的用户无法登录系统，也无法下单。">
-              <Radio value={3} className={c.itemRadio} style={{width:'33.333%'}}>封禁</Radio>
+            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="被封禁的用户无法登录系统，也无法下单。">
+              <Radio value="banned" className={c.itemRadio} style={{width:'33.333%'}}>封禁</Radio>
             </Tooltip>
           </Radio.Group>
         </div>
@@ -60,11 +75,11 @@ function AddUserView () {
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
-            <Button type="primary" className={c.submit}>保存</Button>
+            <Button type="primary" onClick={()=>save(true)} className={c.submit}>保存</Button>
             <div className={c.btnTipsView}>
-              <div className={c.quitBtn}>放弃编辑</div>
+              <div className={c.quitBtn} onClick={goBack}>放弃编辑</div>
               <div className={c.quitBorder}/>
-              <div className={c.saveBtn}>保存并新增</div>
+              <div className={c.saveBtn} onClick={()=>save(false)}>保存并新增</div>
             </div>
           </div>
         </div>

@@ -174,7 +174,7 @@ function RTable ({ setVisible }) {
           showQuickJumper:true,
           current,
           pageSize,
-          hideOnSinglePage:true,
+          hideOnSinglePage:false,
           showLessItems:true,
           total,
           onChange
