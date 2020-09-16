@@ -7,15 +7,16 @@ import good5 from '../../icons/good/good5.png'
 import edit1 from '../../icons/edit/edit1.png'
 import { goBack, saveSuccess, push } from "../../utils/util";
 import { communityGoods } from "../../utils/api";
-import { view } from "karet.util";
+
+let win
 
 function EditCommunityGoodView () {
   const [name, setName] = useState()
   const [status, setStatus] = useState("available")
   const [pics, setPics] = useState([])
-  const [community_goods_category_id, setCommunity_goods_category_id] = useState(1)
-  const [community_param_template_id, setCommunity_param_template_id] = useState(1)
-  const [tag_ids, setTag_ids] = useState([3])
+  const [community_goods_category_id, setCommunity_goods_category_id] = useState()
+  const [community_param_template_id, setCommunity_param_template_id] = useState()
+  const [tag_ids, setTag_ids] = useState()
   const [tags, setTags] = useState([])
   const [unit_price, setUnit_price] = useState()
   const [refundable, setRefundable] = useState()
@@ -29,8 +30,28 @@ function EditCommunityGoodView () {
   const [introduction, setIntroduction] = useState("")
   const [imageUrl, setImageUrl] = useState()
 
-  window.localClick = function (ids) {
-    setTags(ids)
+  window.localClick = function (type, ids) {
+    switch (type) {
+      case 'tables':
+        setTags(ids)
+        setTag_ids(ids.map(i => i.id))
+        break
+      case 'good_category_id':
+        setCommunity_goods_category_id(ids)
+        break
+      case 'order-model-id':
+        setCommunity_param_template_id(ids)
+        break
+      default:
+        ;
+
+    }
+    win && win.close()
+  }
+
+  window.localJump = function () {
+    push("/main/table")
+    win && win.close()
   }
 
   function save (jump) {
@@ -169,38 +190,36 @@ function EditCommunityGoodView () {
           </Upload>
           <div className={c.uploadTips}>商品图片最多存在1张</div>
         </div>
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span>*</span> */}
-        {/*     <div className={c.itemText}>商品分类</div> */}
-        {/*   </div> */}
-        {/*     <Dropdown overlay={community_goods_category_menu}> */}
-        {/*       <Button size="small" className={c.itemDropdown}> */}
-        {/*         <div className={c.hiddenText}> */}
-        {/*           {/1* 请设置商品分类 *1/} */}
-        {/*         </div> */}
-        {/*         <DownOutlined /> */}
-        {/*       </Button> */}
-        {/*     </Dropdown> */}
-        {/*   <Button type="primary" className={c.itemBtn} onClick={()=>{ */}
-        {/*     push('/main/editGoodCategory') */}
-        {/*   }}>新增分类</Button> */}
-        {/* </div> */}
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span>*</span> */}
-        {/*     <div className={c.itemText}>下单模型</div> */}
-        {/*   </div> */}
-        {/*     <Dropdown overlay={menu}> */}
-        {/*       <Button size="small" className={c.itemDropdown}> */}
-        {/*         <div className={c.hiddenText}> */}
-        {/*           请设置下单模型 */}
-        {/*         </div> */}
-        {/*         <DownOutlined /> */}
-        {/*       </Button> */}
-        {/*     </Dropdown> */}
-        {/*   <Button type="primary" className={c.itemBtn}>新增模型</Button> */}
-        {/* </div> */}
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>商品分类</div>
+          </div>
+            <div onClick={()=>{
+               win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
+            }} className={c.itemSelect}>
+              <div className={c.itemSelectP}>{community_goods_category_id?community_goods_category_id:'请设置商品分类'}</div>
+              <div>选择</div>
+            </div>
+            <Button type="primary" className={c.itemBtn} onClick={()=>{
+              push('/main/editGoodCategory')
+            }}>新增分类</Button>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>下单模型</div>
+          </div>
+            <div onClick={()=>{
+               win = window.open("/select-order-model", "_blank", "left=390,top=145,width=1200,height=700")
+            }} className={c.itemSelect}>
+              <div className={c.itemSelectP}>{community_param_template_id?community_param_template_id:'请设置下单模型'}</div>
+              <div>选择</div>
+            </div>
+            <Button type="primary" className={c.itemBtn} onClick={()=>{
+              push('/main/editOrderModel')
+            }}>新增模型</Button>
+        </div>
         <div className={c.item} style={{alignItems:'flex-start'}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
@@ -347,17 +366,15 @@ function RTable ({ tags }) {
   const views = []
 
   tags.forEach((it, i) => {
+    const { id: tag_id, name } = it
     views.push(
-      <Button key={i} className={c.viewTable}>标签</Button>
+      <Button key={tag_id} className={c.viewTable}>{name}</Button>
     )
   })
 
   views.push(
-    <Button type="primary" style={{marginLeft:0}} className={c.itemBtn} onClick={()=>{
-         window.open("/main/select-table", "_blank", {
-           height: 500,
-           width: 900,
-         })
+    <Button type="primary" key="select" style={{marginLeft:0,marginBottom:28}} className={c.itemBtn} onClick={()=>{
+         win = window.open("/select-table", "_blank", "left=390,top=145,width=1200,height=700")
       }}>重新选择</Button>
   )
 

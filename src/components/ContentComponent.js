@@ -127,9 +127,6 @@ function ContentComponent () {
         <Route exact path="/main/table">
           <TableView />
         </Route>
-        <Route exact path="/main/select-table">
-          <SelectTableView />
-        </Route>
         <Route exact path="/main/peopleService">
           <PeopleServiceView />
         </Route>
