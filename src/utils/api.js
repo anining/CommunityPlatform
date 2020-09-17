@@ -131,7 +131,22 @@ export function communityDiscPrices (page, size, uid, goods_id, goods_name, good
   return transformFetch("GET", `/users/${uid}/community-disc-prices`, data)
 }
 
-// 添加用户的商品密价(社区/卡密)
-export function addDiscPrices (uid, goods_id, goods_type, disc_price) {
-  return transformFetch("POST", `/users/${uid}/disc-prices`, { goods_id, goods_type, disc_price })
+// 设置用户的商品密价(社区/卡密)
+export function addDiscPrices (user_id, goods_id, goods_type = "community", disc_price) {
+  return transformFetch("POST", `/disc-prices`, { user_id, goods_id, goods_type, disc_price })
+}
+
+// 删除用户的商品密价(社区/卡密)
+export function deleteDiscPrices (did) {
+  return transformFetch("POST", `/disc-prices/${did}`)
+}
+
+// 店铺设置
+export function storeConfig (type, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/store-config")
+    default:
+      return transformFetch("PUT", "/store-config", body)
+  }
 }

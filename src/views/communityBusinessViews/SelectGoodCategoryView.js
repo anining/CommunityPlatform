@@ -64,7 +64,7 @@ function RTable () {
         multiple: 1,
       },
       render: (text, record, index) => (
-        <div style={{color:"#2c68ff"}} onclick={()=>{
+        <div style={{color:"#2c68ff",cursor:'pointer'}} onClick={()=>{
             window.opener.localClick('good_category_id', text)
           }}>{text}</div>
       )

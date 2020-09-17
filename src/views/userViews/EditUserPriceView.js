@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Radio } from 'antd'
-import good1 from '../../icons/good/good1.png'
+import { Button, Dropdown, Table, Menu, Input, Switch } from 'antd'
 import c from '../../styles/view.module.css'
 import ce from '../../styles/edit.module.css'
 import { DownOutlined } from '@ant-design/icons';
 import good5 from '../../icons/good/good5.png'
-import good2 from '../../icons/good/good2.png'
-import good3 from '../../icons/good/good3.png'
-import good4 from '../../icons/good/good4.png'
 import good27 from '../../icons/good/good27.png'
 import good9 from '../../icons/good/good9.png'
 import { useHistory } from "react-router-dom"
-import { goBack } from "../../utils/util"
-import { communityDiscPrices } from "../../utils/api"
+import { communityDiscPrices, communityGoodsCategories } from "../../utils/api"
 
 function EditUserPriceView () {
   const { state = {} } = useHistory().location || {}
   const { account, id } = state
-  const [visible, setVisible] = useState(false)
   const [value, setValue] = useState()
+  const [checked, setChecked] = useState(true)
 
   function onChange (e) {
     setValue(e.target.value)
@@ -35,7 +30,7 @@ function EditUserPriceView () {
           <img src={good5} alt="" className={ce.headerImg}/>
           <div>首页 / 用户管理 / <span>修改用户密价</span></div>
         </div>
-        <div className={c.header} style={{marginTop:24}}>
+        <div className={c.header} style={{marginTop:24, height:188}}>
           <div className={c.headerL} style={{
             width:'auto',
             flexDirection:'column',
@@ -52,68 +47,63 @@ function EditUserPriceView () {
             </div>
             <div style={{
               display:'flex',
-              alignItems:'center',
+              alignItems:'flex-start',
             }}>
               <div style={{
                 color:'#34374A',
-                fontWeight:500
-              }}>价格类型</div>
-              <Radio.Group onChange={onChange} value={value}>
-                {/* <Radio value={1} style={{marginLeft:33,marginRight:70}}>单价</Radio> */}
-                {/* <Radio value={2}>密价</Radio> */}
-              </Radio.Group>
-            </div>
-          </div>
-          <div style={{
-            display:'flex',
-            flexDirection:'column',
-            alignItems:'center'
-          }}>
-            <div style={{marginBottom:11}}>
-              <Button size="small" style={{
-                width:131,
-                height:40,
-                color:'#979BA3',
+                fontWeight:500,
                 fontSize:'1.142rem',
-                marginRight:32
-              }} onClick={goBack}>放弃</Button>
-              <Button size="small" type="primary" style={{
-                width:131,
-                height:40,
-                background:'#2C68FF',
-                fontSize:'1.142rem'
-              }} onClick={save}>保存</Button>
+                marginTop:12,
+              }}>是否使用密价</div>
+              <Switch checked={checked} onClick={e=>setChecked(e)} style={{marginTop:14,marginLeft:32,marginRight:14}}></Switch>
+              <div style={{marginTop:16,color:'#2C68FF',fontSize:'0.857rem'}}>当前状态： 使用密价</div>
+              <div className={c.headerText} style={{
+                width:457,
+                height:'auto',
+                marginLeft:10,
+                fontSize:'0.857rem',
+                display:'flex',
+                alignItems:'flex-start',
+                paddingTop:15,
+                paddingBottom:15,
+              }}>
+                <img src={good27} alt="" className={c.tipsImg}/>
+                <div>用户密价高于所有价格类型；当用户密价被填写时，系统将会使用用户密价。当用户密价未填写时，将会根据您的配置，使用密价或者单价。如果密价未填写，用户密价也未填写，系统将会使用单价。</div>
+              </div>
             </div>
-            <div style={{
-              color:'#979BA3',
-              fontSize:'0.857rem'
-            }}>上次保存： 2020.01.15 15:25:04</div>
           </div>
         </div>
-        <div className={c.headerTips}>
-          <div className={c.headerText}>
-            <img src={good27} alt="" className={c.tipsImg}/>
-            <div>当用户密价填写时，系统会优先使用用户密价。</div>
-          </div>
-        </div>
-        <RTable setVisible={setVisible} id={id}/>
+        <RTable id={id}/>
       </div>
     </div>
   )
 }
 
-function RTable ({ setVisible, id }) {
+function RTable ({ id }) {
   const [selectionType, setSelectionType] = useState('checkbox');
   const [data, setData] = useState([])
+  const [good_categorys, setGood_categorys] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
   const [goods_id, setGoods_id] = useState()
   const [goods_name, setGoods_name] = useState()
+  const [goods_category, setGoods_category] = useState()
 
   useEffect(() => {
     get(current)
+    getGoodCategory()
   }, [])
+
+  function getGoodCategory () {
+    communityGoodsCategories("get", undefined, { page: current, size: pageSize }).then(r => {
+      if (!r.error) {
+        const { data } = r
+        console.log(data)
+        setGood_categorys(format(data))
+      }
+    })
+  }
 
   function get (current) {
     communityDiscPrices(current, pageSize, id, goods_id, goods_name).then(r => {
@@ -201,27 +191,25 @@ function RTable ({ setVisible, id }) {
     }),
   };
 
-  function handleMenuClick (e) {
-    message.info('Click on menu item.');
-    console.log('click', e);
-  }
-
   function reset () {
     setGoods_name(undefined)
     setGoods_id(undefined)
   }
 
+  function handleMenuClick (e) {
+    setGoods_category(Number.parseInt(e.key))
+  }
+
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">
-        1st menu item
-      </Menu.Item>
-      <Menu.Item key="2">
-        2nd menu item
-      </Menu.Item>
-      <Menu.Item key="3">
-        3rd menu item
-      </Menu.Item>
+      {good_categorys.map((item,i)=>{
+        const { id,name } = item
+        return (
+          <Menu.Item key={id}>
+            {name}
+          </Menu.Item>
+        )
+      })}
     </Menu>
   );
 
@@ -240,14 +228,14 @@ function RTable ({ setVisible, id }) {
               {/*     <DownOutlined /> */}
               {/*   </Button> */}
               {/* </Dropdown> */}
-              {/* <Dropdown overlay={menu}> */}
-              {/*   <Button size="small" className={c.dropdownBtn} style={{width:'20.394%'}}> */}
-              {/*     <div className={c.hiddenText}> */}
-              {/*       请选择商品类型 */}
-              {/*     </div> */}
-              {/*     <DownOutlined /> */}
-              {/*   </Button> */}
-              {/* </Dropdown> */}
+              <Dropdown overlay={menu}>
+                <Button size="small" className={c.dropdownBtn} style={{width:'20.394%'}}>
+                  <div className={c.hiddenText}>
+                    { goods_category ? good_categorys.filter(i => i.id === goods_category)[0].name : "请选择商品类型" }
+                  </div>
+                  <DownOutlined />
+                </Button>
+              </Dropdown>
             </div>
             <div className={c.searchR}>
               <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>
@@ -280,51 +268,6 @@ function RTable ({ setVisible, id }) {
       />
     </div>
   )
-}
-
-function HeaderItem () {
-  const views = [];
-  const data = [
-    {
-      label: '商品总数',
-      number: '10,100',
-      icon: good3,
-      id: 111,
-    },
-    {
-      label: '已上架数',
-      number: '10,111',
-      icon: good1,
-      id: 222,
-    },
-    {
-      label: '已下架数',
-      number: '10,111',
-      icon: good2,
-      id: 333,
-    },
-    {
-      label: '关闭下单',
-      number: '10,111',
-      icon: good4,
-      id: 444,
-    },
-  ]
-
-  data.forEach((item, index) => {
-    const { label, number, icon, id } = item;
-    views.push(
-      <div className={c.headerItem} key={id}>
-        <img src={icon} alt="" className={c.headerItemImg} />
-        <div className={c.headerIR} style={{borderRightWidth:index<data.length-1?1:0}}>
-          <div className={c.headerNumber}>{number}</div>
-          <div className={c.headerLabel}>{label}</div>
-        </div>
-      </div>
-    )
-  })
-
-  return views
 }
 
 export default EditUserPriceView

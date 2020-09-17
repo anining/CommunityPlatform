@@ -65,7 +65,7 @@ function RTable () {
         multiple: 1,
       },
       render: (text, record, index) => (
-        <div style={{color:"#2c68ff"}} onclick={()=>{
+        <div style={{color:"#2c68ff",cursor:'pointer'}} onClick={()=>{
             window.opener.localClick('order-model-id', text)
           }}>{text}</div>
       )
@@ -99,7 +99,6 @@ function RTable () {
               size = "small"
                 className={c.searchBtn} style={{
                   marginLeft:19.422,
-                  // marginLeft:0,
                   borderColor:'#3372FF',
                   color:'#2C68FF'
               }}>搜索模型</Button>
