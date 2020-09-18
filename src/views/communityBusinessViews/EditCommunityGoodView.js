@@ -18,6 +18,7 @@ function EditCommunityGoodView () {
   const [community_param_template_id, setCommunity_param_template_id] = useState()
   const [tag_ids, setTag_ids] = useState()
   const [tags, setTags] = useState([])
+  const [unit, setUnit] = useState("")
   const [unit_price, setUnit_price] = useState()
   const [refundable, setRefundable] = useState()
   const [unit_cost, setUnit_cost] = useState()
@@ -66,6 +67,7 @@ function EditCommunityGoodView () {
       },
       name,
       status,
+      unit,
       pics,
       community_goods_category_id,
       community_param_template_id,
@@ -262,13 +264,13 @@ function EditCommunityGoodView () {
           <div className={c.itemName} />
           <div>如果不填写此项目，系统将会使用售价进行对接。</div>
         </div>
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span>*</span> */}
-        {/*     <div className={c.itemText}>单位</div> */}
-        {/*   </div> */}
-        {/*   <Input placeholder="请输入商品的计算单位" className={c.itemInput}></Input> */}
-        {/* </div> */}
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>单位</div>
+          </div>
+          <Input value={unit} onChange={e=>setUnit(e.target.value)} placeholder="请输入商品的计算单位" className={c.itemInput}></Input>
+        </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>

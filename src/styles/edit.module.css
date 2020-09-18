@@ -389,3 +389,29 @@
   background: #FF8E32;
   border-color: #FF8E32;
 }
+
+.user_disc_price_div {
+  width: 94px;
+  height: 34px;
+}
+
+.user_disc_price_input {
+  width: 94px;
+  height: 34px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  border: 1px solid #4177FE;
+}
+
+.user_disc_price_v {
+  display: flex;
+  align-items: center;
+}
+
+.user_disc_price_btn {
+  width: 58px;
+  height: 32px;
+  background: #2C67FF;
+  border-radius: 2px;
+  margin-left: 7px;
+}

@@ -133,12 +133,12 @@ export function communityDiscPrices (page, size, uid, goods_id, goods_name, good
 
 // 设置用户的商品密价(社区/卡密)
 export function addDiscPrices (user_id, goods_id, goods_type = "community", disc_price) {
-  return transformFetch("POST", `/disc-prices`, { user_id, goods_id, goods_type, disc_price })
+  return transformFetch("PUT", `/disc-prices`, { user_id, goods_id, goods_type, disc_price })
 }
 
 // 删除用户的商品密价(社区/卡密)
 export function deleteDiscPrices (did) {
-  return transformFetch("POST", `/disc-prices/${did}`)
+  return transformFetch("DELETE", `/disc-prices/${did}`)
 }
 
 // 店铺设置

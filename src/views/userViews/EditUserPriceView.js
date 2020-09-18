@@ -7,21 +7,13 @@ import good5 from '../../icons/good/good5.png'
 import good27 from '../../icons/good/good27.png'
 import good9 from '../../icons/good/good9.png'
 import { useHistory } from "react-router-dom"
-import { communityDiscPrices, communityGoodsCategories } from "../../utils/api"
+import { communityDiscPrices, communityGoodsCategories, addDiscPrices, deleteDiscPrices } from "../../utils/api"
+import { saveSuccess } from "../../utils/util";
 
 function EditUserPriceView () {
   const { state = {} } = useHistory().location || {}
   const { account, id } = state
-  const [value, setValue] = useState()
   const [checked, setChecked] = useState(true)
-
-  function onChange (e) {
-    setValue(e.target.value)
-  }
-
-  function save () {
-
-  }
 
   return (
     <div className="container">
@@ -30,7 +22,7 @@ function EditUserPriceView () {
           <img src={good5} alt="" className={ce.headerImg}/>
           <div>首页 / 用户管理 / <span>修改用户密价</span></div>
         </div>
-        <div className={c.header} style={{marginTop:24, height:188}}>
+        <div className={c.header} style={{marginTop:24,marginBottom:24, height:188}}>
           <div className={c.headerL} style={{
             width:'auto',
             flexDirection:'column',
@@ -56,7 +48,7 @@ function EditUserPriceView () {
                 marginTop:12,
               }}>是否使用密价</div>
               <Switch checked={checked} onClick={e=>setChecked(e)} style={{marginTop:14,marginLeft:32,marginRight:14}}></Switch>
-              <div style={{marginTop:16,color:'#2C68FF',fontSize:'0.857rem'}}>当前状态： 使用密价</div>
+              <div style={{marginTop:16,color:'#2C68FF',fontSize:'0.857rem'}}>当前状态： 使用{checked?"密价":"单价"}</div>
               <div className={c.headerText} style={{
                 width:457,
                 height:'auto',
@@ -73,22 +65,24 @@ function EditUserPriceView () {
             </div>
           </div>
         </div>
-        <RTable id={id}/>
+        <RTable id={id} checked={checked}/>
       </div>
     </div>
   )
 }
 
-function RTable ({ id }) {
-  const [selectionType, setSelectionType] = useState('checkbox');
+function RTable ({ id, checked }) {
+  // const [selectionType, setSelectionType] = useState('checkbox');
   const [data, setData] = useState([])
-  const [good_categorys, setGood_categorys] = useState([])
+  const [val, setVal] = useState("")
+  const [visible, setVisible] = useState([])
+  const [categorys, setCategorys] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
   const [goods_id, setGoods_id] = useState()
   const [goods_name, setGoods_name] = useState()
-  const [goods_category, setGoods_category] = useState()
+  const [category, setCategory] = useState()
 
   useEffect(() => {
     get(current)
@@ -96,11 +90,10 @@ function RTable ({ id }) {
   }, [])
 
   function getGoodCategory () {
-    communityGoodsCategories("get", undefined, { page: current, size: pageSize }).then(r => {
+    communityGoodsCategories("get", undefined, { page: 1, size: 50 }).then(r => {
       if (!r.error) {
         const { data } = r
-        console.log(data)
-        setGood_categorys(format(data))
+        setCategorys(format(data))
       }
     })
   }
@@ -114,6 +107,40 @@ function RTable ({ id }) {
         setData(format(data))
       }
     })
+  }
+
+  function insert (index, user_disc_price) {
+    setVal(user_disc_price)
+    setVisible(data.map((item, i) => i === index))
+  }
+
+  function insertSave (goods_id) {
+    setVisible(data.map((item, i) => false))
+    if (val) {
+      addDiscPrices(id, goods_id, "community", val).then(r => {
+        const localData = [...data]
+        localData.forEach((item, i) => {
+          if (item.id === goods_id) {
+            item.user_disc_price = val
+          }
+        })
+        setData(localData)
+        setVal("");
+        !r.error && saveSuccess(false)
+      })
+    } else {
+      deleteDiscPrices(goods_id).then(r => {
+        const localData = [...data]
+        localData.forEach((item, i) => {
+          if (item.id === goods_id) {
+            item.user_disc_price = val
+          }
+        })
+        setData(localData)
+        setVal("");
+        !r.error && saveSuccess(false)
+      })
+    }
   }
 
   function format (arr) {
@@ -142,7 +169,7 @@ function RTable ({ id }) {
     {
       title: '商品分类',
       align: 'center',
-      dataIndex: 'category',
+      dataIndex: 'category_name',
   },
     {
       title: '业务类型',
@@ -151,58 +178,65 @@ function RTable ({ id }) {
   },
     {
       title: '进价',
-      dataIndex: 'in_price',
+      dataIndex: 'unit_price',
       align: 'center',
-      render: (text, record, index) => {
-        return <div style={{color:'#FF8D30'}}>{text}</div>
-      }
   },
     {
       title: '单价',
-      dataIndex: 'a_price',
       align: 'center',
+      render: (text, record, index) => {
+        const { unit_cost, disc_price, user_disc_price } = record
+        const color = (checked && user_disc_price > 0) ? "#595959" : disc_price > 0 ? "#595959" : "#4177FE"
+        return <div style={{color}}>{unit_cost}</div>
+      }
   },
     {
       title: '密价',
       align: 'center',
-      dataIndex: 'price',
+      dataIndex: 'disc_price',
       render: (text, record, index) => {
-        return <div style={{color:'#4177FE'}}>{text}</div>
+        const { disc_price, user_disc_price } = record
+        const color = (checked && user_disc_price > 0) ? "#595959" : disc_price > 0 ? "#4177FE" : "#595959"
+        return <div style={{color}}>{disc_price}</div>
       }
   },
     {
       title: '用户密价',
-      align: 'center',
-      dataIndex: 'user_price',
+      align: 'left',
+      dataIndex: 'user_disc_price',
       render: (text, record, index) => {
-        return <div style={{color:'#4177FE'}}>{text}</div>
+        const { user_disc_price, id } = record
+        if (visible[index]) {
+          return (
+            <div className={ce.user_disc_price_v}>
+              <Input value={val} onChange={e=>setVal(e.target.value)} onPressEnter={()=>insertSave(id)} placeholder="请填写密价" className={ce.user_disc_price_input}/>
+              <Button onClick={()=>insertSave(id)} className={ce.user_disc_price_btn} size="small" type="primary">确定</Button>
+            </div>
+          )
+        } else {
+          return (
+            <div className={ce.user_disc_price_v}>
+              <Button onClick={()=>insert(index, user_disc_price)} style={{color:user_disc_price?"#2C68FF":"#979BA3"}} size="small" className={ce.user_disc_price_div}>{user_disc_price || "请填写密价"}</Button>
+            </div>
+          )
+        }
       }
-  }
-];
-
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
-    getCheckboxProps: record => ({
-      // disabled: record.name === 'Disabled User',
-      // Column configuration not to be checked
-      // name: record.name,
-    }),
-  };
+    }
+  ];
 
   function reset () {
     setGoods_name(undefined)
     setGoods_id(undefined)
+    setCategory(undefined)
   }
 
   function handleMenuClick (e) {
-    setGoods_category(Number.parseInt(e.key))
+    setCategory(Number.parseInt(e.key))
   }
 
-  const menu = (
+  const categorys_menu = (
     <Menu onClick={handleMenuClick}>
-      {good_categorys.map((item,i)=>{
+      {categorys.map((item,i)=>{
         const { id,name } = item
         return (
           <Menu.Item key={id}>
@@ -228,10 +262,10 @@ function RTable ({ id }) {
               {/*     <DownOutlined /> */}
               {/*   </Button> */}
               {/* </Dropdown> */}
-              <Dropdown overlay={menu}>
+              <Dropdown overlay={categorys_menu}>
                 <Button size="small" className={c.dropdownBtn} style={{width:'20.394%'}}>
                   <div className={c.hiddenText}>
-                    { goods_category ? good_categorys.filter(i => i.id === goods_category)[0].name : "请选择商品类型" }
+                    { category ? categorys.filter(i => i.id === category)[0].name : "请选择商品类型" }
                   </div>
                   <DownOutlined />
                 </Button>
@@ -249,14 +283,7 @@ function RTable ({ id }) {
             </div>
           </div>
       </div>
-      <Table columns={columns} rowSelection={{
-        type: selectionType,
-        ...rowSelection
-      }} dataSource={data} rowClassName={(record,index)=>{
-        if (index % 2) {
-          return "f1f5ff"
-        }
-      }} size="small" pagination={{
+      <Table columns={columns} dataSource={data} size="small" pagination={{
           showQuickJumper:true,
           current,
           pageSize,

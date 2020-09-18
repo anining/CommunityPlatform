@@ -29,8 +29,6 @@ function LoginView () {
       return;
     }
     login(account, password).then(r => {
-      setAccount(undefined)
-      setPassword(undefined)
       const { error, data } = r;
       if (!error) {
         const { access_token, disclaimer_agreed, role } = data;

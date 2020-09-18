@@ -53,7 +53,7 @@ function ContentComponent () {
 
   return (
     <Layout.Content style={{
-      marginLeft:24,
+      marginLeft:224,
       marginRight:24,
       marginTop:84,
     }}>
