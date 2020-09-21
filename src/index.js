@@ -4,14 +4,18 @@ import 'antd/dist/antd.less'
 import 'ant-design-pro/dist/ant-design-pro.css';
 import './styles/modify.css'
 import './styles/index.css'
+import { ConfigProvider } from 'antd'
+import zhCN from 'antd/es/locale/zh_CN';
 import Router from '../src/router/Router';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom'
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Router />
-  </BrowserRouter>,
+  <ConfigProvider locale={zhCN}>
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
+  </ConfigProvider>,
   document.getElementById('root')
 );
 
