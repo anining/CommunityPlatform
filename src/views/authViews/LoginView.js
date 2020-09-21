@@ -31,6 +31,7 @@ function LoginView () {
     }
     setLoading(true)
     const promise = login(account, password)
+    setter([["old_password", password]])
     setPassword(undefined)
     promise.then(r => {
       setLoading(false)
