@@ -27,4 +27,8 @@ function goBack () {
   history.goBack();
 }
 
-export { saveSuccess, goBack, push }
+function transformTime (old_time) {
+  return `${old_time.slice(0,10)} ${old_time.slice(11,19)}`
+}
+
+export { saveSuccess, transformTime, goBack, push }
