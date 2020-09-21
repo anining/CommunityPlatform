@@ -4,30 +4,50 @@ import { Input, Button, message } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import good8 from '../../icons/good/good8.png'
 import { communityParamTemplates } from "../../utils/api"
-import { saveSuccess } from "../../utils/util"
+import { saveSuccess, goBack } from "../../utils/util"
 import { useHistory } from "react-router-dom"
+import DropdownComponent from "../../components/DropdownComponent"
 
 function EditOrderModelView () {
-  const { record = {} } = useHistory().location.state || {}
-  const { id, name: n, weight: w, params: p = [] } = record
+  const { state = {} } = useHistory().location
+  const { id, name: n, params: p = [] } = state
   const [name, setName] = useState(n)
-  const [weight, setWeight] = useState(w)
+  const [weight, setWeight] = useState()
   const [params, setParams] = useState(p)
+  const [loading, setLoading] = useState(false)
 
-  function save (value) {
-    if (!name || !weight || !params.length) {
+  function save (jump) {
+    if (!name || !params.length) {
       message.warning("请完善信息")
-      return;
+      return
     }
-    communityParamTemplates(n ? 'modify' : 'add', id, undefined, { name, params, weight }).then(r => {
+    if (weight > 32767 || weight < -32768) {
+      message.warning("权重值超出范围")
+      return
+    }
+    if (params.filter(i => !i.type).length) {
+      message.warning("请完善信息")
+      return
+    }
+    let body = {};
+    if (n !== name) {
+      body = { ...body, ...{ name } }
+    }
+    if (weight) {
+      body = { ...body, ...{ weight } }
+    }
+    if (params.length) {
+      body = { ...body, ...{ params } }
+    }
+    setLoading(true)
+    communityParamTemplates(n ? 'modify' : 'add', id, undefined, body).then(r => {
+      setLoading(false)
+      saveSuccess(jump)
       setName(undefined)
-      setWeight(0)
+      setWeight(undefined)
       setParams([])
-      if (!r.error) {
-        if (value) {
-          saveSuccess()
-        }
-      }
+    }).catch(e => {
+      setLoading(false)
     })
   }
 
@@ -48,14 +68,14 @@ function EditOrderModelView () {
             <span>*</span>
             <div className={c.itemText}>模型名称</div>
           </div>
-          <Input onChange={e=>setName(e.target.value)} value={name} placeholder="请输入模型名称" className={c.itemInput}></Input>
+          <Input maxLength={20} onChange={e=>setName(e.target.value)} value={name} placeholder="请输入模型名称" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>排序权重</div>
           </div>
-          <Input placeholder="请填写权重数值，默认权重为1" type="number" onChange={e=>setWeight(e.target.value)} value={weight} className={c.itemInput}></Input>
+          <Input maxLength={5} placeholder="请填写权重数值，默认权重为1" onChange={e=>setWeight(e.target.value)} value={weight} className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -82,9 +102,9 @@ function EditOrderModelView () {
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
-            <Button type="primary" className={c.submit} onClick={()=>save(true)}>保存</Button>
+            <Button loading={loading} type="primary" className={c.submit} onClick={()=>save(true)}>保存</Button>
             <div className={c.btnTipsView}>
-              <div className={c.quitBtn}>放弃编辑</div>
+              <div className={c.quitBtn} onClick={goBack}>放弃编辑</div>
               <div className={c.quitBorder}/>
               <div className={c.saveBtn} onClick={()=>save(false)}>保存并新增</div>
             </div>
@@ -106,7 +126,7 @@ function RModel ({ params = [], setParams }) {
 
   function onChange (e, index, name) {
     const localParams = [...params]
-    localParams[index][name] = e.target.value
+    localParams[index][name] = name === "type" ? e : e.target.value
     setParams(localParams)
   }
 
@@ -114,9 +134,9 @@ function RModel ({ params = [], setParams }) {
     const { name, placeholder, type } = item
     views.push(
       <div className={c.orderInputView} key={index}>
-        <Input onChange={e=>onChange(e,index,"name")} value={name} placeholder="参数名称，如：数量" className={c.orderInput}></Input>
-        <Input onChange={e=>onChange(e,index,'placeholder')} value={placeholder} placeholder="参数提示语，如：请输入数量" className={c.orderInput}></Input>
-        <Input placeholder="参数类型，如：text" onChange={e=>onChange(e,index,'type')} value={type} className={c.orderInput}></Input>
+        <Input maxLength={20} onChange={e=>onChange(e,index,"name")} value={name} placeholder="参数名称，如：数量" className={c.orderInput}></Input>
+        <Input maxLength={20} onChange={e=>onChange(e,index,'placeholder')} value={placeholder} placeholder="参数提示语，如：请输入数量" className={c.orderInput}></Input>
+        <DropdownComponent action={type} style={{width:'27.372%',height:40}} placeholder="参数类型，如：text" setAction={e=>onChange(e,index,"type")} keys={[{key:'text',name:'文本'},{key:'number',name:'数字'},{key:'url',name:'链接'}]}/>
         <Button size="small" danger className={c.orderBtn} onClick={()=>deleteI(index)}>删除</Button>
       </div>
     )

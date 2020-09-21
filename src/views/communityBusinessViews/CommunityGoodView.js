@@ -154,7 +154,7 @@ function RTable ({ setVisible }) {
   const data = [
     {
       key: 1240,
-      id:1,
+      id: 1,
       name: '哔哩哔哩关注',
       category: '哔哩哔哩',
       model: '（1815）自定义模型',
@@ -167,7 +167,7 @@ function RTable ({ setVisible }) {
     },
     {
       key: 1241,
-      id:1,
+      id: 1,
       name: '哔哩哔哩关注',
       category: '哔哩哔哩',
       model: '（1815）自定义模型',
@@ -181,7 +181,7 @@ function RTable ({ setVisible }) {
     {
       key: 1242,
       name: '哔哩哔哩关注',
-      id:1,
+      id: 1,
       category: '哔哩哔哩',
       model: '（1815）自定义模型',
       in_price: 0.05,
@@ -201,7 +201,7 @@ function RTable ({ setVisible }) {
     data.push({
       key: 1242,
       name: '哔哩哔哩关注',
-      id:1,
+      id: 1,
       category: '哔哩哔哩',
       model: '（1815）自定义模型',
       in_price: 0.05,
