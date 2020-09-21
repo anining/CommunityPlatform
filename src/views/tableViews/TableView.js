@@ -1,46 +1,49 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import c from '../../styles/edit.module.css'
 import cs from '../../styles/business.module.css'
 import edit1 from '../../icons/edit/edit1.png'
-import { Button, Input, Tag } from 'antd'
+import { Button, Input, Tag, message } from 'antd'
 import { tagGroups, tags as tagsApi } from "../../utils/api"
 
 function TableView () {
   const [inputGroupVisible, setInputGroupVisible] = useState(false)
   const [inputGroupValue, setInputGroupValue] = useState()
   const [tagsGroup, setTagsGroup] = useState([])
-  const saveInputGroupRef = useRef(null)
+  const saveInputGroupRef = useCallback(node => {
+    node && node.focus()
+  })
 
   useEffect(() => {
+    get()
+  }, [])
+
+  function get () {
     tagGroups('get').then(r => {
       const { data, error } = r;
       !error && setTagsGroup(data)
     })
-  }, [])
+  }
 
   function handleInputGroupConfirm () {
     if (inputGroupValue && !tagsGroup.filter(i => i.name === inputGroupValue).length) {
       tagGroups('add', undefined, { name: inputGroupValue }).then(r => {
-        r.error && setTagsGroup([...tagsGroup].filter(item => item.name !== inputGroupValue))
+        !r.error && get()
       })
-      setTagsGroup([...tagsGroup, { name: inputGroupValue, tags: [] }]);
+      setInputGroupVisible(false)
+      setInputGroupValue(undefined)
+    } else {
+      message.warning("重复的标签名称")
     }
-    setInputGroupVisible(false)
-    setInputGroupValue(undefined)
   }
 
   return (
     <div className={c.container}>
-      <div className={c.main} style={{
-        marginTop:0,
-        marginBottom:24,
-        paddingBottom:0,
-      }}>
+      <div className={c.main}>
         <div className={c.headerT}>
           <div style={{zIndex:1}}>标签管理</div>
           <div className={c.circle} />
         </div>
-        <RGroup tagsGroup={tagsGroup} setTagsGroup={setTagsGroup}/>
+        <RGroup tagsGroup={tagsGroup} get={get} setTagsGroup={setTagsGroup}/>
         {inputGroupVisible && (
           <Input
             ref={saveInputGroupRef}
@@ -55,10 +58,7 @@ function TableView () {
           />
         )}
         {!inputGroupVisible && (
-          <Tag onClick={()=>{
-            setInputGroupVisible(true)
-            // saveInputGroupRef.focus()
-          }} className={cs.tAddGroup}>
+          <Tag onClick={()=>setInputGroupVisible(true)} className={cs.tAddGroup}>
             <img src={edit1} alt="" />
             <div>添加分组</div>
           </Tag>
@@ -68,34 +68,29 @@ function TableView () {
   )
 }
 
-function RGroup ({ tagsGroup, setTagsGroup }) {
-  const saveInputRef = useRef(null)
+function RGroup ({ tagsGroup, get, setTagsGroup }) {
   const [inputValue, setInputValue] = useState()
   const [inputVisible, setInputVisible] = useState(false)
   const [value, setValue] = useState()
+  const saveInputRef = useCallback(node => {
+    node && node.focus()
+  })
 
   function handleInputConfirm (index, id) {
     if (inputValue && !tagsGroup[index].tags.filter(i => i.name === inputValue).length) {
       tagsApi('add', undefined, { name: inputValue, tag_group_id: id }).then(r => {
-        if (r.error) {
-          const localTagsGroup = [...tagsGroup]
-          localTagsGroup[index].tags.splice(-1, 1)
-          setTagsGroup(localTagsGroup);
-          setInputVisible(false)
-          setInputValue(undefined)
-        }
+        !r.error && get()
       })
-      const tags = [...tagsGroup]
-      tags[index].tags.push({ name: inputValue, id: 'templates_id' })
       setInputVisible(false)
       setInputValue(undefined)
-      setTagsGroup(tags);
+    } else {
+      message.warning("重复的标签名称")
     }
   }
 
-  function handleClose (id, index, i) {
+  function handleClose (id, index, i = -1) {
     const tags = [...tagsGroup]
-    if (i) {
+    if (i > -1) {
       const v = tags[index].tags.splice(i, 1)
       setTagsGroup(tags);
       tagsApi("delete", id).then(r => {
@@ -124,7 +119,7 @@ function RGroup ({ tagsGroup, setTagsGroup }) {
       items.push(
         <Tag key={tag_id} closable onClose={e => {
           e.preventDefault();
-          handleClose(id,index,i);
+          handleClose(tag_id, index, i);
         }} className={cs.tagChild}>
           {name}
         </Tag>
@@ -148,7 +143,6 @@ function RGroup ({ tagsGroup, setTagsGroup }) {
       items.push(
         <Tag onClick={()=>{
           setInputVisible(true)
-          // saveInputRef.focus()
           setValue(index)
         }} className={cs.tAdd} key={`tag${id}`}>
           <img src={edit1} alt="" />
