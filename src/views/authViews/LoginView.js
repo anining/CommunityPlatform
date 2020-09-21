@@ -4,13 +4,14 @@ import { Input, message, Button } from 'antd';
 import auth2 from '../../icons/auth/auth2.png'
 import auth3 from '../../icons/auth/auth3.png'
 import auth4 from '../../icons/auth/auth4.png'
-import { h } from '../../utils/history'
 import { login } from '../../utils/api'
 import { setter } from '../../utils/store'
+import { push } from "../../utils/util";
 
 function LoginView () {
   const [account, setAccount] = useState()
   const [password, setPassword] = useState()
+  const [loading, setLoading] = useState(false)
 
   function onChange (e, key) {
     const { value } = e.target;
@@ -28,14 +29,19 @@ function LoginView () {
       message.warning("请完善信息")
       return;
     }
-    login(account, password).then(r => {
+    setLoading(true)
+    const promise = login(account, password)
+    setPassword(undefined)
+    promise.then(r => {
+      setLoading(false)
       const { error, data } = r;
       if (!error) {
         const { access_token, disclaimer_agreed, role } = data;
         setter([['authorization', `Bearer ${access_token}`], ['disclaimer_agreed', disclaimer_agreed], ['role', role]], true);
-        const history = h.get()
-        history.push('/guide1')
+        push('/guide1')
       }
+    }).catch(e => {
+      setLoading(false)
     })
   }
 
@@ -57,18 +63,18 @@ function LoginView () {
               <div className={c.inputTitle}>登录社区</div>
               <div className={c.inputItem}>
                 <div className={c.inputText}>账号</div>
-                <Input size="small" maxLength={11} onChange={e=>onChange(e,1)} value={account} className={c.input} placeholder="请输入登录手机号" prefix={
+                <Input size="small" maxLength={20} onChange={e=>onChange(e,1)} value={account} className={c.input} placeholder="请输入登录手机号" prefix={
                   <img src={ auth3 } alt="" className={c.inputImg}/>
                 } />
               </div>
               <div className={c.inputItem} style={{height:'25.677%',marginTop:'9.576%',marginBottom:'18.04%'}}>
                 <div className={c.inputText}>密码</div>
-                <Input size="small" onPressEnter={submit} type="password" onChange={e=>onChange(e,2)} value={password} className={c.input}  placeholder="请输入登录密码" prefix={
+                <Input size="small" maxLength={40} onPressEnter={submit} type="password" onChange={e=>onChange(e,2)} value={password} className={c.input}  placeholder="请输入登录密码" prefix={
                   <img src={ auth4 } alt="" className={c.inputImg}/>
                   } style={{height:'40.15%'}}/>
                 <div style={{opacity:0}}>login</div>
               </div>
-              <Button type="primary" onClick={submit} className={c.btn}>登录</Button>
+              <Button loading={loading} type="primary" onClick={submit} className={c.btn}>登录</Button>
             </div>
           </div>
         </div>

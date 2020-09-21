@@ -102,11 +102,7 @@ function RTable ({ setVisible }) {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <Space size="small" style={{color:'#2C68FF'}}>
-          <div>修改状态</div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div>退款</div>
-        </Space>
+        <div style={{color:'#2c68ff',cursor:'pointer'}}>修改状态</div>
       )
   },
 ];

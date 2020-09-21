@@ -47,7 +47,6 @@ import UserStatisticsView from "../views/statisticsViews/UserStatisticsView"
 import WebStatisticsView from "../views/statisticsViews/WebStatisticsView"
 import GoodStatisticsView from "../views/statisticsViews/GoodStatisticsView"
 import TableView from "../views/tableViews/TableView"
-import SelectTableView from "../views/tableViews/SelectTableView"
 
 function ContentComponent () {
 
@@ -55,6 +54,7 @@ function ContentComponent () {
     <Layout.Content style={{
       marginLeft:224,
       marginRight:24,
+      marginBottom:24,
       marginTop:84,
     }}>
       <Switch>

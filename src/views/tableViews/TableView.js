@@ -36,7 +36,7 @@ function TableView () {
         marginBottom:24,
         paddingBottom:0,
       }}>
-        <div className={c.headerT} style={{marginBottom:24}}>
+        <div className={c.headerT}>
           <div style={{zIndex:1}}>标签管理</div>
           <div className={c.circle} />
         </div>

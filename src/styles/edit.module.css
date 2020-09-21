@@ -62,7 +62,7 @@
 .tips {
   color: #FF5730;
   font-size: 0.857rem;
-  margin: 32px 0 8px 0;
+  margin: 32px 0 0 0;
 }
 
 .item {
@@ -175,7 +175,7 @@
 }
 
 .itemTips {
-  margin-top: 16px;
+  margin-top: 6px;
   width: 100%;
   color: rgba(0, 0, 0, 0.45);
   font-size: 0.857%;

@@ -1,7 +1,6 @@
 .bg {
-  height: 100%;
-  width: 100%;
   background-image: url(../icons//auth/auth1.png);
+  min-height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
@@ -42,7 +41,7 @@
   position: absolute;
   width: 50%;
   height: 16.100%;
-  margin-top: 5.989%;
+  margin-top: 8.989%;
   top: 0;
   left: 0;
   color: #2c67ff;
@@ -119,8 +118,6 @@
 .btn {
   width: 100%;
   height: 11.207%;
-  line-height: 11.207%;
-  text-align: center;
   font-size: 1.428rem;
 }
 

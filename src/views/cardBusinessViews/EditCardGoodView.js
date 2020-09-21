@@ -12,7 +12,7 @@ function EditCardGoodView () {
   const [imageUrl, setImageUrl] = useState()
   const [loading, setLoading] = useState()
   const [value, setValue] = useState()
-  const [quillValue, setQuillValue] = useState()
+  const [quillValue, setQuillValue] = useState("")
 
   function getBase64 (img, callback) {
     const reader = new FileReader();

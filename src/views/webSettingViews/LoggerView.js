@@ -38,7 +38,7 @@ function RTable () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      item.account = item.manager.account
+      // item.account = item.manager.account
     })
     return arr
   }

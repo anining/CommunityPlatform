@@ -2,23 +2,13 @@ import React from 'react'
 
 function LogoComponent () {
 
-  return (
-    <div style={styles.logoView}>
-      <div style={styles.logo}/>
-    </div>
-  )
+  return <div style={styles.logo}/>
 }
 
 const styles = {
-  logoView: {
-    boxSizing: 'border-box',
-    paddingTop: 12,
-    height: 104,
-  },
   logo: {
-    width: 168,
-    marginLeft: 16,
-    height: 62,
+    width: 84,
+    height: 31,
     background: "#2C67FF"
   }
 }

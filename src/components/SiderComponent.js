@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Layout, Menu } from 'antd'
 import c from '../styles/header.module.css'
-import LogoComponent from './LogoComponent'
 import sider1 from '../icons/sider/sider1.png'
 import sider2 from '../icons/sider/sider2.png'
 import sider3 from '../icons/sider/sider3.png'
@@ -56,8 +55,7 @@ function SiderComponent ({ collapsed, toggle }) {
   }
 
   return (
-    <Layout.Sider theme="light" trigger={null} collapsible={true} collapsed={collapsed} width={200} style={{overflow:'auto',height:'100vh',position:'fixed',left:0}} className={c.siderLayout}>
-      <LogoComponent toggle={toggle} />
+    <Layout.Sider style={{paddingTop:24}} theme="light" trigger={null} collapsible={true} collapsed={collapsed} width={200} className={c.siderLayout}>
       <Menu theme="light" mode="inline"openKeys={openKeys} selectedKeys={selectedKeys} onClick={menuItemClick} multiple={false}>
         <Menu.Item key="home" icon={<Icon keys="home" selectedKeys={selectedKeys}/>}>
           用户首页

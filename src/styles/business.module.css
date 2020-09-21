@@ -95,6 +95,7 @@
 .bDetail {
   color: #2C68FF;
   margin-bottom: 44px;
+  margin-top: -14px;
   width: 100%;
 }
 
@@ -126,6 +127,7 @@
 .bNum {
   color: #34374A;
   font-size: 2.142rem;
+  font-weight: 500;
   margin-left: 52px;
 }
 
@@ -146,13 +148,13 @@
 .tInput {
   width: 105px;
   height: 32px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .tagTitle {
   height: 32px;
   color: #FF8D30;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .tagChild {
@@ -208,7 +210,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .tAdd img {

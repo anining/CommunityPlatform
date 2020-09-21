@@ -120,8 +120,8 @@ function RTable ({ setVisible }) {
       render: (text, record, index) => {
         return (
           <div style={{color:'#595959'}}>
-            <div>最低数量：100   重复下单：<span style={{color:"#52C41A"}}>开启</span></div>
-            <div>最高数量：100   重复下单：<span style={{color:"#C8C8C8"}}>关闭</span></div>
+            <div>最低数量：100<span style={{marginLeft:20}}>重复下单：<span style={{color:"#52C41A"}}>开启</span></span></div>
+            <div>最高数量：100<span style={{marginLeft:20}}>批量下单：<span style={{color:"#52C41A"}}>开启</span></span></div>
           </div>
         )
       }
@@ -154,6 +154,7 @@ function RTable ({ setVisible }) {
   const data = [
     {
       key: 1240,
+      id:1,
       name: '哔哩哔哩关注',
       category: '哔哩哔哩',
       model: '（1815）自定义模型',
@@ -166,6 +167,7 @@ function RTable ({ setVisible }) {
     },
     {
       key: 1241,
+      id:1,
       name: '哔哩哔哩关注',
       category: '哔哩哔哩',
       model: '（1815）自定义模型',
@@ -179,6 +181,7 @@ function RTable ({ setVisible }) {
     {
       key: 1242,
       name: '哔哩哔哩关注',
+      id:1,
       category: '哔哩哔哩',
       model: '（1815）自定义模型',
       in_price: 0.05,
@@ -198,6 +201,7 @@ function RTable ({ setVisible }) {
     data.push({
       key: 1242,
       name: '哔哩哔哩关注',
+      id:1,
       category: '哔哩哔哩',
       model: '（1815）自定义模型',
       in_price: 0.05,
@@ -240,7 +244,7 @@ function RTable ({ setVisible }) {
   );
 
   return (
-    <div className={c.main}>
+    <div className={c.main} style={{marginTop:24}}>
         <div className={c.searchView}>
           <div className={c.search}>
             <div className={c.searchL}>

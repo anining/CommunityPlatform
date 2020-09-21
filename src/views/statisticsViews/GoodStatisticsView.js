@@ -31,7 +31,7 @@ function GoodStatisticsView () {
     xField: '城市',
     yField: '销售额',
     groupField: '细分',
-    color: ['#1ca9e6', '#f88c24'],
+    color: [ '#FF8D30','#2C68FF'],
     xAxis: {
       visible: true,
       label: {

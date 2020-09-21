@@ -10,8 +10,8 @@ function MainComponent () {
   return (
     <Layout className='layoutView'>
       <SiderComponent collapsed={collapsed} toggle={()=>setCollapsed(!collapsed)} />
+      <HeaderComponent collapsed={collapsed}/>
       <Layout>
-        <HeaderComponent collapsed={collapsed}/>
         <ContentComponent />
       </Layout>
     </Layout>

@@ -118,34 +118,34 @@ function StoreSettingView () {
           <div style={{zIndex:1}}>SEO相关</div>
           <div className={c.circle} />
         </div>
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span className={c.white}>*</span> */}
-        {/*     <div className={c.itemText}>站点标题</div> */}
-        {/*   </div> */}
-        {/*   <Input placeholder="请输入站点的名称" className={c.itemInput}></Input> */}
-        {/* </div> */}
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span className={c.white}>*</span> */}
-        {/*     <div className={c.itemText}>SEO关键字</div> */}
-        {/*   </div> */}
-        {/*   <Input placeholder="请输入SEO的关键字" className={c.itemInput}></Input> */}
-        {/* </div> */}
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span className={c.white}>*</span> */}
-        {/*     <div className={c.itemText}>站点副标题</div> */}
-        {/*   </div> */}
-        {/*   <Input placeholder="请输入站点的副标题" className={c.itemInput}></Input> */}
-        {/* </div> */}
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span className={c.white}>*</span> */}
-        {/*     <div className={c.itemText}>SEO描述</div> */}
-        {/*   </div> */}
-        {/*   <Input placeholder="请输入SEO描述" className={c.itemInput}></Input> */}
-        {/* </div> */}
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>站点标题</div>
+          </div>
+          <Input placeholder="请输入站点的名称" className={c.itemInput}></Input>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>SEO关键字</div>
+          </div>
+          <Input placeholder="请输入SEO的关键字" className={c.itemInput}></Input>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>站点副标题</div>
+          </div>
+          <Input placeholder="请输入站点的副标题" className={c.itemInput}></Input>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>SEO描述</div>
+          </div>
+          <Input placeholder="请输入SEO描述" className={c.itemInput}></Input>
+        </div>
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
           </div>

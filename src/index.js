@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import 'antd/dist/antd.less'
 import 'ant-design-pro/dist/ant-design-pro.css';
 import './styles/modify.css'
-import './styles/row.css'
 import './styles/index.css'
 import Router from '../src/router/Router';
 import * as serviceWorker from './serviceWorker';

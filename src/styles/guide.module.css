@@ -79,6 +79,10 @@
   position: relative;
 }
 
+.firstItem:hover {
+  border-width: 1px;
+}
+
 @media screen and (max-width: 1500px) {
   .firstItem {
     width: 250px;

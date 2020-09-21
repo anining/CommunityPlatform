@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button,Timeline, Menu, Dropdown, Table, message, Input, Space, Popconfirm, DatePicker } from 'antd'
+import { Button, Timeline, Menu, Dropdown, Table, message, Input, Space, Popconfirm, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import { DownOutlined } from '@ant-design/icons';
 import good17 from '../../icons/good/good17.png'
@@ -31,12 +31,12 @@ function RTable () {
   const [selectionType, setSelectionType] = useState('checkbox');
   const [visible, setVisible] = useState([])
 
-  function detail (id,index) {
+  function detail (id, index) {
     const localVisible = []
-    data.forEach((item,i)=>{
-      if(index===i) {
+    data.forEach((item, i) => {
+      if (index === i) {
         localVisible.push(true)
-      }else{
+      } else {
         localVisible.push(false)
       }
     })
@@ -52,7 +52,7 @@ function RTable () {
 
   function close () {
     const localVisible = []
-    data.forEach((item,i)=>{
+    data.forEach((item, i) => {
       localVisible.push(false)
     })
     // localVisible[index] = true
@@ -82,19 +82,19 @@ function RTable () {
     }
   ]
   const columns = [
-    {
-      title: '订单编号',
-      dataIndex: 'id',
-      align: 'center',
+      {
+        title: '订单编号',
+        dataIndex: 'id',
+        align: 'center',
   },
-    {
-      title: '下单信息',
-      dataIndex: 'msg',
-      align: 'center',
-      render: (text, record, index) => {
-        const { uri, number, password } = text;
-        return (
-          <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+      {
+        title: '下单信息',
+        dataIndex: 'msg',
+        align: 'center',
+        render: (text, record, index) => {
+          const { uri, number, password } = text;
+          return (
+            <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
             <div>
               <div>主页链接 :{uri}</div>
               <div style={{display:'flex'}}>
@@ -103,80 +103,80 @@ function RTable () {
               </div>
             </div>
           </div>
-        )
-      }
+          )
+        }
   },
-    {
-      title: '扩展信息',
-      align: 'center',
-      dataIndex: 'text',
-      render: (text, record, index) => {
-        const { begin_num, num } = text;
-        return (
-          <div>
+      {
+        title: '扩展信息',
+        align: 'center',
+        dataIndex: 'text',
+        render: (text, record, index) => {
+          const { begin_num, num } = text;
+          return (
+            <div>
             <div>初始量 :{begin_num}</div>
             <div>当前量: {num}</div>
           </div>
-        )
-      }
+          )
+        }
   },
-    {
-      title: '下单数量',
-      dataIndex: 'number',
-      align: 'center',
+      {
+        title: '下单数量',
+        dataIndex: 'number',
+        align: 'center',
   },
-    {
-      title: '订单金额',
-      dataIndex: 'price',
-      align: 'center',
+      {
+        title: '订单金额',
+        dataIndex: 'price',
+        align: 'center',
   },
-    {
-      title: '订单状态',
-      align: 'center',
-      dataIndex: 'status',
-      render: (text, record, index) => {
-        const { text: t, color } = obj[text]
-        return <div style={{color}}>{t}</div>
-      }
+      {
+        title: '订单状态',
+        align: 'center',
+        dataIndex: 'status',
+        render: (text, record, index) => {
+          const { text: t, color } = obj[text]
+          return <div style={{color}}>{t}</div>
+        }
   },
-    {
-      title: '下单时间',
-      dataIndex: 'time',
-      align: 'center',
+      {
+        title: '下单时间',
+        dataIndex: 'time',
+        align: 'center',
   },
-    {
-      title: '订单历程',
-      align: 'center',
-      render: (text, record, index) => (
-            <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
-          }
-          visible = { visible[index] }
-          placement = "left"
-          title = {
-              () => {
-                return (
-                  <div style={styles.view}>
+      {
+        title: '订单历程',
+        align: 'center',
+        render: (text, record, index) => (
+          <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
+        }
+        visible = { visible[index] }
+        placement = "leftTop"
+        title = {
+          () => {
+            return (
+              <div style={styles.view}>
                     <div style={styles.close} onClick={close}>
                       <img src={good40} style={styles.closeImg} alt="" />
                     </div>
                     <Timeline>
-                      <Timeline.Item color="#1890FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
+                      <Timeline.Item color="#2C67FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
                       <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
-                      <Timeline.Item color="#1890FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
-                      <Timeline.Item color="#1890FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
-                      <Timeline.Item color="#1890FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
+                      <Timeline.Item color="#2C67FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
+                      <Timeline.Item color="#2C67FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
+                      <Timeline.Item color="#2C67FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
                       <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
                       <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
                       <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
                     </Timeline>
                   </div>
-                )
-              }
-            } >
-              <div style={{color:'#2C68FF',textDecoration:'underline',textDecorationColor:'#2C68FF'}} onClick={()=>detail(text,index)}>点击查看</div>
-            </Popconfirm>
+            )
+          }
+        } >
+        <div style={{color:'#2C68FF'}} onClick={()=>detail(text,index)}>点击查看</div> <
+        /Popconfirm>
       )
-  },
+    },
     {
       title: '操作',
       align: 'center',
@@ -184,7 +184,7 @@ function RTable () {
         <Space size="small" style={{color:'#2C68FF'}}>
             <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
               }
-              placement = "left"
+              placement = "leftTop"
               title = {
                   () => {
                     return (
@@ -203,12 +203,12 @@ function RTable () {
                     )
                   }
                 } >
-              <div style={{color:'#FF4D4F',textDecoration:'#FF4D4F underline'}}>退款</div>
+              <div style={{color:'#FF4D4F'}}>退款</div>
             </Popconfirm>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
             <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
               }
-              placement = "left"
+              placement = "leftTop"
               title = {
                   () => {
                     return (
@@ -226,143 +226,143 @@ function RTable () {
                     )
                   }
                 } >
-              <div style={{color:'#2C68FF',textDecoration:'#2C68FF underline'}}>添加备注</div>
+              <div style={{color:'#2C68FF'}}>添加备注</div>
             </Popconfirm>
         </Space>
       )
-  },
+    },
 ];
 
-  const data = [
-    {
-      key: 1240,
-      id: 1,
-      msg: {
-        uri: "https://www.baidu.com/s/324654",
-        number: 127587,
-        password: "57657575",
-      },
-      text: {
-        begin_num: '1,456',
-        num: '1,456',
-      },
-      number: '1,2333',
-      price: '1,2333',
-      time: '2020-10-31  23:12:00',
-      status: 0,
+const data = [
+  {
+    key: 1240,
+    id: 1,
+    msg: {
+      uri: "https://www.baidu.com/s/324654",
+      number: 127587,
+      password: "57657575",
     },
-    {
-      key: 1240,
-      id: 1,
-      msg: {
-        uri: "https://www.baidu.com/s/324654",
-        number: 127587,
-        password: "57657575",
-      },
-      text: {
-        begin_num: '1,456',
-        num: '1,456',
-      },
-      number: '1,2333',
-      price: '1,2333',
-      time: '2020-10-31  23:12:00',
-      status: 1,
+    text: {
+      begin_num: '1,456',
+      num: '1,456',
     },
-    {
-      key: 1240,
-      id: 1,
-      msg: {
-        uri: "https://www.baidu.com/s/324654",
-        number: 127587,
-        password: "57657575",
-      },
-      text: {
-        begin_num: '1,456',
-        num: '1,456',
-      },
-      number: '1,2333',
-      price: '1,2333',
-      time: '2020-10-31  23:12:00',
-      status: 2,
+    number: '1,2333',
+    price: '1,2333',
+    time: '2020-10-31  23:12:00',
+    status: 0,
     },
-    {
-      key: 1240,
-      id: 1,
-      msg: {
-        uri: "https://www.baidu.com/s/324654",
-        number: 127587,
-        password: "57657575",
-      },
-      text: {
-        begin_num: '1,456',
-        num: '1,456',
-      },
-      number: '1,2333',
-      price: '1,2333',
-      time: '2020-10-31  23:12:00',
-      status: 3,
+  {
+    key: 1240,
+    id: 1,
+    msg: {
+      uri: "https://www.baidu.com/s/324654",
+      number: 127587,
+      password: "57657575",
     },
-    {
-      key: 1240,
-      id: 1,
-      msg: {
-        uri: "https://www.baidu.com/s/324654",
-        number: 127587,
-        password: "57657575",
-      },
-      text: {
-        begin_num: '1,456',
-        num: '1,456',
-      },
-      number: '1,2333',
-      price: '1,2333',
-      time: '2020-10-31  23:12:00',
-      status: 4,
+    text: {
+      begin_num: '1,456',
+      num: '1,456',
+    },
+    number: '1,2333',
+    price: '1,2333',
+    time: '2020-10-31  23:12:00',
+    status: 1,
+    },
+  {
+    key: 1240,
+    id: 1,
+    msg: {
+      uri: "https://www.baidu.com/s/324654",
+      number: 127587,
+      password: "57657575",
+    },
+    text: {
+      begin_num: '1,456',
+      num: '1,456',
+    },
+    number: '1,2333',
+    price: '1,2333',
+    time: '2020-10-31  23:12:00',
+    status: 2,
+    },
+  {
+    key: 1240,
+    id: 1,
+    msg: {
+      uri: "https://www.baidu.com/s/324654",
+      number: 127587,
+      password: "57657575",
+    },
+    text: {
+      begin_num: '1,456',
+      num: '1,456',
+    },
+    number: '1,2333',
+    price: '1,2333',
+    time: '2020-10-31  23:12:00',
+    status: 3,
+    },
+  {
+    key: 1240,
+    id: 1,
+    msg: {
+      uri: "https://www.baidu.com/s/324654",
+      number: 127587,
+      password: "57657575",
+    },
+    text: {
+      begin_num: '1,456',
+      num: '1,456',
+    },
+    number: '1,2333',
+    price: '1,2333',
+    time: '2020-10-31  23:12:00',
+    status: 4,
     },
   ];
 
-  // function onChange (pagination, filters, sorter, extra) {
-  //   console.log('params', pagination, filters, sorter, extra);
-  // }
+// function onChange (pagination, filters, sorter, extra) {
+//   console.log('params', pagination, filters, sorter, extra);
+// }
 
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: 1240,
-      id: 1,
-      msg: {
-        uri: "https://www.baidu.com/s/324654",
-        number: 127587,
-        password: "57657575",
-      },
-      text: {
-        begin_num: '1,456',
-        num: '1,456',
-      },
-      number: '1,2333',
-      price: '1,2333',
-      time: '2020-10-31  23:12:00',
-      status: 0,
-    })
-  }
-
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+for (let i = 0; i < 100; i++) {
+  data.push({
+    key: 1240,
+    id: 1,
+    msg: {
+      uri: "https://www.baidu.com/s/324654",
+      number: 127587,
+      password: "57657575",
     },
-    getCheckboxProps: record => ({
-      // disabled: record.name === 'Disabled User',
-      // Column configuration not to be checked
-      // name: record.name,
-    }),
-  };
+    text: {
+      begin_num: '1,456',
+      num: '1,456',
+    },
+    number: '1,2333',
+    price: '1,2333',
+    time: '2020-10-31  23:12:00',
+    status: 0,
+  })
+}
 
-  function handleMenuClick (e) {
-    message.info('Click on menu item.');
-    console.log('click', e);
-  }
+const rowSelection = {
+  onChange: (selectedRowKeys, selectedRows) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  getCheckboxProps: record => ({
+    // disabled: record.name === 'Disabled User',
+    // Column configuration not to be checked
+    // name: record.name,
+  }),
+};
 
-  const menu = (
-    <Menu onClick={handleMenuClick}>
+function handleMenuClick (e) {
+  message.info('Click on menu item.');
+  console.log('click', e);
+}
+
+const menu = (
+  <Menu onClick={handleMenuClick}>
       <Menu.Item key="1">
         1st menu item
       </Menu.Item>
@@ -373,10 +373,10 @@ function RTable () {
         3rd menu item
       </Menu.Item>
     </Menu>
-  );
+);
 
-  return (
-    <div className={c.main}>
+return (
+  <div className={c.main}>
       <div className={c.searchView} style={{height:72}}>
         <div className={c.search} style={{borderBottomWidth:0}}>
             <div className={c.searchL}>
@@ -447,7 +447,7 @@ function RTable () {
       }} size="small" pagination={{showQuickJumper:true}}
       />
     </div>
-  )
+)
 }
 
 function HeaderItem () {
@@ -503,12 +503,7 @@ function HeaderItem () {
 
 const styles = {
   item: {
-    width:'100%',
-  },
-  view: {
-    width: 328,
-    display: 'flex',
-    flexDirection:'column',
+    width: '100%',
   },
   close: {
     width: '100%',
@@ -519,6 +514,46 @@ const styles = {
   },
   closeImg: {
     width: 13
+  },
+  view: {
+    width: 340,
+  },
+  input: {
+    height: 32,
+    width: "100%",
+    marginTop: 29,
+  },
+  header: {
+    marginTop: 18,
+    color: 'rgba(0, 0, 0, 0.65)',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  footer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  icon: {
+    width: 14,
+    marginRight: 9,
+  },
+  cancelBtn: {
+    height: 24,
+    width: 58,
+    color: 'rgba(0, 0, 0, 0.65)',
+  },
+  okBtn: {
+    marginLeft: 19,
+    height: 24,
+    width: 58,
+    background: '#2C67FF'
+  },
+  tips: {
+    color: '#2C68FF',
+    fontSize: '0.857rem',
+    marginTop: 8,
+    marginBottom: 46,
   }
 }
 

@@ -84,6 +84,12 @@ function RTable () {
       dataIndex: 'created_at',
       align: 'center',
   },
+    {
+      title: '操作',
+      align: 'center',
+      render:()=>{
+        return <div style={{color:'#2C68FF',fontSize:'0.857rem'}}>选择</div>      }
+  },
 ];
 
   return (
