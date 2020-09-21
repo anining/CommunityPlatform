@@ -10,6 +10,53 @@ export function password (old_password, new_password) {
   return transformFetch("PUT", "/password", { old_password, new_password })
 }
 
+// 社区商品分类
+export function communityGoodsCategories (type, cid, table, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/community-goods-categories", table)
+    case "add":
+      return transformFetch("POST", "/community-goods-categories", body);
+    case "modify":
+      return transformFetch("PATCH", `/community-goods-categories/${cid}`, body);
+    default:
+      return transformFetch("DELETE", `/community-goods-categories/${cid}`);
+  }
+}
+
+// 社区下单模型
+export function communityParamTemplates (type, pid, table, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/community-param-templates", table)
+    case "add":
+      return transformFetch("POST", "/community-param-templates", body)
+    case "modify":
+      return transformFetch("PATCH", `/community-param-templates/${pid}`, body)
+    default:
+      return transformFetch("DELETE", `/community-param-templates/${pid}`)
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 权限列表
 export function permissions () {
   return transformFetch("GET", "/permissions")
@@ -35,20 +82,6 @@ export function loginlogs (page, size) {
   return transformFetch("GET", "/loginlogs", { page, size })
 }
 
-// 社区商品分类
-export function communityGoodsCategories (type, cid, table, body) {
-  switch (type) {
-    case "get":
-      return transformFetch("GET", "/community-goods-categories", table)
-    case "add":
-      return transformFetch("POST", "/community-goods-categories", body);
-    case "modify":
-      return transformFetch("PATCH", `/community-goods-categories/${cid}`, body);
-    default:
-      return transformFetch("DELETE", `/community-goods-categories/${cid}`);
-  }
-}
-
 // 社区商品
 export function communityGoods (type, gid, table, body) {
   switch (type) {
@@ -60,20 +93,6 @@ export function communityGoods (type, gid, table, body) {
       //   return transformFetch("PATCH", `/community-goods-categories/${gid}`, body);
       // default:
       //   return transformFetch("DELETE", `/community-goods-categories/${gid}`);
-  }
-}
-
-// 社区下单模型
-export function communityParamTemplates (type, pid, table, body) {
-  switch (type) {
-    case "get":
-      return transformFetch("GET", "/community-param-templates", table)
-    case "add":
-      return transformFetch("POST", "/community-param-templates", body)
-    case "modify":
-      return transformFetch("PATCH", `/community-param-templates/${pid}`, body)
-    default:
-      return transformFetch("DELETE", `/community-param-templates/${pid}`)
   }
 }
 

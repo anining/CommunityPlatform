@@ -3,29 +3,41 @@ import c from '../../styles/edit.module.css'
 import { Input, Button, message } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import { communityGoodsCategories } from '../../utils/api'
-import { saveSuccess } from "../../utils/util"
+import { saveSuccess, goBack } from "../../utils/util"
 import { useHistory } from "react-router-dom"
 
 function EditGoodCategoryView () {
   const { state = {} } = useHistory().location
-  const { record = {} } = state
-  const { id, name: n, weight: w } = record
+  const { id, name: n, weight: w } = state
   const [name, setName] = useState(n)
   const [weight, setWeight] = useState(w)
+  const [loading, setLoading] = useState(false)
 
-  function save () {
-    if (!name || !weight) {
+  function save (jump) {
+    if (!name) {
       message.warning("请完善信息")
       return
     }
-    communityGoodsCategories(id ? "modify" : "add", id, undefined, { name, weight }).then(r => {
-      setWeight(0)
+    if (weight > 32767 || weight < -32768) {
+      message.warning("权重值超出范围")
+      return
+    }
+    let body = {};
+    if (n !== name) {
+      body = { ...body, ...{ name } }
+    }
+    if (weight) {
+      body = { ...body, ...{ weight } }
+    }
+    setLoading(true)
+    communityGoodsCategories(id ? "modify" : "add", id, undefined, body).then(r => {
+      setLoading(false)
+      saveSuccess(jump)
       setName(undefined)
-      if (!r.error) {
-        saveSuccess()
-      }
+      setWeight(undefined)
+    }).catch(e => {
+      setLoading(false)
     })
-
   }
 
   return (
@@ -45,14 +57,14 @@ function EditGoodCategoryView () {
             <span>*</span>
             <div className={c.itemText}>分类名称</div>
           </div>
-          <Input onChange={e=>setName(e.target.value)} value={name} placeholder="请输入分类名称" className={c.itemInput}></Input>
+          <Input maxLength={20} onChange={e=>setName(e.target.value)} value={name} placeholder="请输入分类名称" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>排序权重</div>
           </div>
-          <Input onChange={e=>setWeight(e.target.value)} value={weight} placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
+          <Input maxLength={5} onChange={e=>setWeight(e.target.value)} value={weight} placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -62,11 +74,11 @@ function EditGoodCategoryView () {
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
-            <Button type="primary" className={c.submit} onClick={save}>保存</Button>
+            <Button type="primary" loading={loading} className={c.submit} onClick={()=>save(true)}>保存</Button>
             <div className={c.btnTipsView}>
-              <div className={c.quitBtn}>放弃编辑</div>
+              <div className={c.quitBtn} onClick={goBack}>放弃编辑</div>
               <div className={c.quitBorder}/>
-              <div className={c.saveBtn}>保存并新增</div>
+              <div className={c.saveBtn} onClick={()=>save(false)}>保存并新增</div>
             </div>
           </div>
         </div>

@@ -67,11 +67,11 @@ function SiderComponent ({ collapsed, toggle }) {
         {/*   <Menu.Item key="webStatistics">网站访问统计</Menu.Item> */}
         {/*   <Menu.Item key="goodStatistics">商品订单统计</Menu.Item> */}
         {/* </Menu.SubMenu> */}
-        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务"> */}
-        {/*   <Menu.Item key="communityGood">社区商品</Menu.Item> */}
-        {/*   <Menu.Item key="goodCategory">商品分类</Menu.Item> */}
-        {/*   <Menu.Item key="orderModel">下单模型</Menu.Item> */}
-        {/* </Menu.SubMenu> */}
+        <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务">
+          <Menu.Item key="communityGood">社区商品</Menu.Item>
+          <Menu.Item key="goodCategory">商品分类</Menu.Item>
+          <Menu.Item key="orderModel">下单模型</Menu.Item>
+        </Menu.SubMenu>
         {/* <Menu.SubMenu onTitleClick={onTitleClick} key="cardBusiness" icon={<Icon keys="cardBusiness" selectedKeys={selectedKeys} />} title="卡密业务"> */}
         {/*   <Menu.Item key="cardGood">卡密商品</Menu.Item> */}
         {/*   <Menu.Item key="cardManage">卡密管理</Menu.Item> */}
