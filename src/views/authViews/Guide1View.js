@@ -4,13 +4,13 @@ import c from '../../styles/guide.module.css'
 import guide1 from '../../icons/guide/guide1.png'
 import guide2 from '../../icons/guide/guide2.png'
 import guide3 from '../../icons/guide/guide3.png'
-import { h } from '../../utils/history'
+import { push } from "../../utils/util"
+import Circle from "../../components/CircleComponent"
 
 function Guide1View () {
 
   function submit () {
-    const history = h.get();
-    history.push('/guide2')
+    push("/guide2")
   }
 
   return (
@@ -22,11 +22,8 @@ function Guide1View () {
       </div>
       <div className={c.footer}>
         <Button type="primary" className={c.btn} onClick={submit}>下一步</Button>
-        <div className={c.footerText} onClick={()=>{
-          const history = h.get()
-          history.push('/main')
-        }}>稍后设置</div>
-        <Circle/>
+        <div className={c.footerText} onClick={()=>push("/main")}>稍后设置</div>
+        <Circle i={0}/>
       </div>
       </div>
     </div>
@@ -65,48 +62,30 @@ function Context () {
     }
   ]
 
-  function onChange (e, id) {
+  function onChange (id) {
     const localSelects = [...selects]
-    if (e.target.checked) {
-      setSelects([...localSelects, id])
-    } else {
+    if (localSelects.includes(id)) {
       localSelects.splice(localSelects.findIndex(item => item === id), 1)
       setSelects(localSelects)
+    } else {
+      setSelects([...localSelects, id])
     }
   }
 
   data.forEach((item, index) => {
     const { label, icon, id } = item;
     views.push(
-      <div className={c.firstItem} style={{
-        borderWidth: selects.includes(id) ? 1 : 0
+      <div className={c.firstItem} onClick={()=>onChange(id)} style={{
+        borderColor: selects.includes(id) ? '#2C67FF' : "rgba(44, 103, 255, 0.03)"
       }} key={id}>
         <img src={icon} alt="" className={c.firstImg}/>
         <div className={c.firstText}>{label}</div>
-        <Checkbox onChange={(e)=>onChange(e,id)} className={c.firstCheckBox} />
+        <Checkbox checked={selects.includes(id)} className={c.firstCheckBox} />
       </div>
     )
   });
 
   return views
-}
-
-function Circle () {
-  const views = [];
-  [0, 1, 2, 3].forEach((item, index) => {
-    views.push(
-      <div style={{
-        height: 8,
-        width: 8,
-        marginLeft: 4,
-        marginRight: 4,
-        borderRadius: 8,
-        background: index?'#D6D7DB':'#2C67FF'
-      }} key={index}/>
-    )
-  })
-
-  return <div className={c.circleView}>{views}</div>
 }
 
 export default Guide1View

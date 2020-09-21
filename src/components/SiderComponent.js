@@ -57,61 +57,61 @@ function SiderComponent ({ collapsed, toggle }) {
   return (
     <Layout.Sider style={{paddingTop:24}} theme="light" trigger={null} collapsible={true} collapsed={collapsed} width={200} className={c.siderLayout}>
       <Menu theme="light" mode="inline"openKeys={openKeys} selectedKeys={selectedKeys} onClick={menuItemClick} multiple={false}>
-        <Menu.Item key="home" icon={<Icon keys="home" selectedKeys={selectedKeys}/>}>
-          用户首页
-        </Menu.Item>
-        <Menu.SubMenu onTitleClick={onTitleClick} key="statistics" icon={<Icon keys="statistics" selectedKeys={selectedKeys} />} title="数据统计">
-          <Menu.Item key="dataStatistics">数据统计</Menu.Item>
-          <Menu.Item key="moneyStatistics">资金统计</Menu.Item>
-          <Menu.Item key="userStatistics">用户统计</Menu.Item>
-          <Menu.Item key="webStatistics">网站访问统计</Menu.Item>
-          <Menu.Item key="goodStatistics">商品订单统计</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务">
-          <Menu.Item key="communityGood">社区商品</Menu.Item>
-          <Menu.Item key="goodCategory">商品分类</Menu.Item>
-          <Menu.Item key="orderModel">下单模型</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu onTitleClick={onTitleClick} key="cardBusiness" icon={<Icon keys="cardBusiness" selectedKeys={selectedKeys} />} title="卡密业务">
-          <Menu.Item key="cardGood">卡密商品</Menu.Item>
-          <Menu.Item key="cardManage">卡密管理</Menu.Item>
-          <Menu.Item key="cardCategory">卡密分类</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu onTitleClick={onTitleClick} key="services" icon={<Icon keys="services" selectedKeys={selectedKeys} />} title="增值服务">
-          <Menu.Item key="docking">对接</Menu.Item>
-          <Menu.Item key="store">供货商</Menu.Item>
-          <Menu.Item key="subService">开通服务</Menu.Item>
-        </Menu.SubMenu>
+        {/* <Menu.Item key="home" icon={<Icon keys="home" selectedKeys={selectedKeys}/>}> */}
+        {/*   用户首页 */}
+        {/* </Menu.Item> */}
+        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="statistics" icon={<Icon keys="statistics" selectedKeys={selectedKeys} />} title="数据统计"> */}
+        {/*   <Menu.Item key="dataStatistics">数据统计</Menu.Item> */}
+        {/*   <Menu.Item key="moneyStatistics">资金统计</Menu.Item> */}
+        {/*   <Menu.Item key="userStatistics">用户统计</Menu.Item> */}
+        {/*   <Menu.Item key="webStatistics">网站访问统计</Menu.Item> */}
+        {/*   <Menu.Item key="goodStatistics">商品订单统计</Menu.Item> */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" icon={<Icon keys="communityBusiness" selectedKeys={selectedKeys} />} title="社区业务"> */}
+        {/*   <Menu.Item key="communityGood">社区商品</Menu.Item> */}
+        {/*   <Menu.Item key="goodCategory">商品分类</Menu.Item> */}
+        {/*   <Menu.Item key="orderModel">下单模型</Menu.Item> */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="cardBusiness" icon={<Icon keys="cardBusiness" selectedKeys={selectedKeys} />} title="卡密业务"> */}
+        {/*   <Menu.Item key="cardGood">卡密商品</Menu.Item> */}
+        {/*   <Menu.Item key="cardManage">卡密管理</Menu.Item> */}
+        {/*   <Menu.Item key="cardCategory">卡密分类</Menu.Item> */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="services" icon={<Icon keys="services" selectedKeys={selectedKeys} />} title="增值服务"> */}
+        {/*   <Menu.Item key="docking">对接</Menu.Item> */}
+        {/*   <Menu.Item key="store">供货商</Menu.Item> */}
+        {/*   <Menu.Item key="subService">开通服务</Menu.Item> */}
+        {/* </Menu.SubMenu> */}
         <Menu.Item key="table" icon={<Icon keys="table" selectedKeys={selectedKeys}/>}>
           标签管理
         </Menu.Item>
-        <Menu.SubMenu onTitleClick={onTitleClick} key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录">
-          <Menu.Item key="communityOrder">社区订单</Menu.Item>
-          <Menu.Item key="cardOrder">卡密订单</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}>
-          资金流水
-        </Menu.Item>
-        <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}>
-          用户管理
-        </Menu.Item>
-        <Menu.SubMenu onTitleClick={onTitleClick} key="childWeb" icon={<Icon keys="childWeb" selectedKeys={selectedKeys} />} title="分站管理">
-          <Menu.Item key="childWebList">分站列表</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置">
-          <Menu.Item key="storeSetting">店铺设置</Menu.Item>
-          <Menu.Item key="rebot">加款机器人</Menu.Item>
-          <Menu.Item key="images">图床配置</Menu.Item>
-          <Menu.Item key="peopleService">客服配置</Menu.Item>
-          <Menu.Item key="notice">发布公告</Menu.Item>
-          <Menu.Item key="admin">系统管理员</Menu.Item>
-          <Menu.Item key="password">修改密码</Menu.Item>
-          <Menu.Item key="logger">登录日志</Menu.Item>
-          <Menu.Item key="about">系统信息</Menu.Item>
-          <Menu.Item key="businessSetting">业务配置</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu onTitleClick={onTitleClick} key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置">
-        </Menu.SubMenu>
+        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录"> */}
+        {/*   <Menu.Item key="communityOrder">社区订单</Menu.Item> */}
+        {/*   <Menu.Item key="cardOrder">卡密订单</Menu.Item> */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}> */}
+        {/*   资金流水 */}
+        {/* </Menu.Item> */}
+        {/* <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}> */}
+        {/*   用户管理 */}
+        {/* </Menu.Item> */}
+        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="childWeb" icon={<Icon keys="childWeb" selectedKeys={selectedKeys} />} title="分站管理"> */}
+        {/*   <Menu.Item key="childWebList">分站列表</Menu.Item> */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置"> */}
+        {/*   <Menu.Item key="storeSetting">店铺设置</Menu.Item> */}
+        {/*   <Menu.Item key="rebot">加款机器人</Menu.Item> */}
+        {/*   <Menu.Item key="images">图床配置</Menu.Item> */}
+        {/*   <Menu.Item key="peopleService">客服配置</Menu.Item> */}
+        {/*   <Menu.Item key="notice">发布公告</Menu.Item> */}
+        {/*   <Menu.Item key="admin">系统管理员</Menu.Item> */}
+        {/*   <Menu.Item key="password">修改密码</Menu.Item> */}
+        {/*   <Menu.Item key="logger">登录日志</Menu.Item> */}
+        {/*   <Menu.Item key="about">系统信息</Menu.Item> */}
+        {/*   <Menu.Item key="businessSetting">业务配置</Menu.Item> */}
+        {/* </Menu.SubMenu> */}
+        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置"> */}
+        {/* </Menu.SubMenu> */}
       </Menu>
     </Layout.Sider>
   )

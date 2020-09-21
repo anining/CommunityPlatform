@@ -48,6 +48,7 @@
   color: #6F717E;
   margin-top: 1.333%;
   margin-bottom: 4.166%;
+  cursor: pointer;
 }
 
 .btn {
@@ -71,12 +72,17 @@
   display: grid;
   place-items: center;
   background-color: #fff;
-  border: 1px solid #2c67ff;
   border-radius: 70px 1px 70px 1px;
   display: grid;
-  box-shadow: 0px 12px 48px 16px rgba(44, 103, 255, 0.03), 0px 9px 28px 0px rgba(44, 103, 255, 0.05), 0px 6px 16px -8px rgba(44, 103, 255, 0.08);
+  cursor: pointer;
+  border: 1px solid #2C67FF;
   place-items: center;
+  box-shadow: 0px 12px 48px 16px rgba(44, 103, 255, 0.03), 0px 9px 28px 0px rgba(44, 103, 255, 0.05), 0px 6px 16px -8px rgba(44, 103, 255, 0.08);
   position: relative;
+}
+
+.firstItem:hover {
+  border: 1px solid #2C67FF!important;
 }
 
 .firstItem:hover {
@@ -97,11 +103,15 @@
   padding:0 30px;
   place-items: center;
   background-color: #fff;
-  border: 1px solid #2c67ff;
+  border: 1px solid rgba(44, 103, 255, 0.03);
   border-radius: 70px 1px 70px 1px;
   display: grid;
   box-shadow: 0px 12px 48px 16px rgba(44, 103, 255, 0.03), 0px 9px 28px 0px rgba(44, 103, 255, 0.05), 0px 6px 16px -8px rgba(44, 103, 255, 0.08);
   place-items: center;
+}
+
+.threeItem:hover {
+  border: 1px solid #2c67ff;
 }
 
 .threeFooter {
@@ -184,6 +194,10 @@
   margin-top: 24px;
   align-items: center;
   position: relative;
+}
+
+.childItem:hover {
+  border: 1px solid #2C67FF!important;
 }
 
 .childImg {

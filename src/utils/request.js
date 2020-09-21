@@ -3,7 +3,8 @@ import { message } from 'antd'
 import { getter } from '../utils/store'
 
 const ERROR_MSG = {
-  "incorrect_user_or_password": "账号或者密码错误"
+  "incorrect_user_or_password": "账号或者密码错误",
+  "tag_exists": "重复的标签名称"
 }
 
 function parameterTransform (method, key, parameter) {
@@ -33,14 +34,19 @@ async function transformFetch (method, url, data = {}) {
         const DATA_TEXT = await FETCH_DATA.text();
         const localDate = DEVELOPER === 'Production' ? JSON.parse(DATA_TEXT) : JSON.parse(DATA_TEXT)
         const { error } = localDate
-        if (error) {
-          if (error in ERROR_MSG) {
-            message.error(ERROR_MSG[error])
-          } else {
-            message.error(localDate.msg || error || "请求错误")
+        if (FETCH_DATA.status === 422) {
+          message.error("参数错误")
+          resolve({ error: "参数错误" });
+        } else {
+          if (error) {
+            if (error in ERROR_MSG) {
+              message.error(ERROR_MSG[error])
+            } else {
+              message.error(localDate.msg || error || "请求错误")
+            }
           }
+          resolve(localDate);
         }
-        resolve(localDate);
       } catch (e) {
         message.error("网络错误")
       }

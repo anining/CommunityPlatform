@@ -14,13 +14,13 @@ import guide13 from '../../icons/guide/guide13.png'
 import guide14 from '../../icons/guide/guide14.png'
 import guide15 from '../../icons/guide/guide15.png'
 import guide17 from '../../icons/guide/guide17.png'
-import { h } from '../../utils/history'
+import Circle from "../../components/CircleComponent"
+import { push } from "../../utils/util"
 
 function Guide2View () {
 
   function submit () {
-    const history = h.get();
-    history.push('/guide3')
+    push('/guide3')
   }
 
   return (
@@ -32,11 +32,8 @@ function Guide2View () {
       </div>
       <div className={c.footer}>
         <Button type="primary" className={c.btn} onClick={submit}>下一步</Button>
-        <div className={c.footerText} onClick={()=>{
-          const history = h.get()
-          history.push('/main')
-        }}>稍后设置</div>
-        <Circle/>
+        <div className={c.footerText} onClick={()=>push('/main')}>稍后设置</div>
+        <Circle i={1}/>
       </div>
       </div>
     </div>
@@ -159,13 +156,13 @@ function Context () {
     },
   ]
 
-  function onChange (e, id) {
+  function onChange (id) {
     const localSelects = [...selects]
-    if (e.target.checked) {
-      setSelects([...localSelects, id])
-    } else {
+    if (selects.includes(id)) {
       localSelects.splice(localSelects.findIndex(item => item === id), 1)
       setSelects(localSelects)
+    } else {
+      setSelects([...localSelects, id])
     }
   }
 
@@ -175,7 +172,7 @@ function Context () {
     child.forEach(i => {
       const { label, icon, text, id } = i;
       childViews.push(
-        <div className={c.childItem} key={id} style={{
+        <div className={c.childItem} onClick={()=>onChange(id)} key={id} style={{
           borderColor: selects.includes(id) ? "#2C68FF" : "#D6D7DB"
         }}>
           <img src={icon} alt="" className={c.childImg}/>
@@ -183,7 +180,7 @@ function Context () {
             <div className={c.childLabel}>{label}</div>
             <div className={c.childText}>{text}</div>
           </div>
-          <Checkbox onChange={e=>onChange(e,id)} className={c.childBox}/>
+          <Checkbox className={c.childBox} checked={selects.includes(id)}/>
         </div>
       )
     })
@@ -201,24 +198,6 @@ function Context () {
   return (
     <div className={c.secondView}>{views}</div>
   )
-}
-
-function Circle () {
-  const views = [];
-  [0, 1, 2, 3].forEach((item, index) => {
-    views.push(
-      <div style={{
-        height: 8,
-        width: 8,
-        marginLeft: 4,
-        marginRight: 4,
-        borderRadius: 8,
-        background: index!==1?'#D6D7DB':'#2C67FF'
-      }} key={index}/>
-    )
-  })
-
-  return <div className={c.circleView}>{views}</div>
 }
 
 export default Guide2View

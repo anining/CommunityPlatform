@@ -55,7 +55,7 @@ function ContentComponent () {
       marginLeft:224,
       marginRight:24,
       marginBottom:24,
-      marginTop:84,
+      marginTop:84
     }}>
       <Switch>
         <Route path="/main/home">

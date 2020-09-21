@@ -1,14 +1,24 @@
-import React from 'react'
-import { Button, Input } from 'antd'
+import React, { useState } from 'react'
+import { Button, Input, message } from 'antd'
 import c from '../../styles/guide.module.css'
-import { h } from '../../utils/history'
 import auth4 from '../../icons/auth/auth4.png'
+import { push, saveSuccess } from "../../utils/util"
+import Circle from "../../components/CircleComponent"
+import { password } from "../../utils/api"
+import { getter } from "../../utils/store"
 
 function Guide4View () {
+  const [new_password, setNew_password] = useState('')
 
   function submit () {
-    const history = h.get();
-    history.push('/mian')
+    if (!new_password) {
+      message.warning("请完善信息")
+      return
+    }
+    const { old_password } = getter(['old_password']);
+    password(old_password.get(), new_password).then(r => {
+      !r.error && saveSuccess(true, '/main')
+    })
   }
 
   return (
@@ -16,15 +26,12 @@ function Guide4View () {
       <div className={c.view}>
       <Title/>
       <div className={c.content}>
-        <Context/>
+        <Context new_password={new_password} setNew_password={setNew_password}/>
       </div>
       <div className={c.footer}>
         <Button type="primary" className={c.btn} onClick={submit}>完成</Button>
-        <div className={c.footerText} onClick={()=>{
-          const history = h.get()
-          history.push('/main')
-        }}>稍后设置</div>
-        <Circle/>
+        <div className={c.footerText} onClick={()=>push('/main')}>稍后设置</div>
+        <Circle i={3}/>
       </div>
       </div>
     </div>
@@ -42,33 +49,15 @@ function Title () {
   )
 }
 
-function Context () {
+function Context ({ new_password, setNew_password }) {
 
   return (
     <div style={{width:'100%',display:'grid',placeItems:'center'}}>
-      <Input.Password className={c.password} placeholder="请在这里输入新密码" prefix={
+      <Input.Password onChange={e=>{setNew_password(e.target.value)}} maxLength={40} value={new_password} className={c.password} placeholder="请在这里输入新密码" prefix={
                   <img src={ auth4 } alt="" className={c.inputImg}/>
                 } />
     </div>
   )
-}
-
-function Circle () {
-  const views = [];
-  [0, 1, 2, 3].forEach((item, index) => {
-    views.push(
-      <div style={{
-        height: 8,
-        width: 8,
-        marginLeft: 4,
-        marginRight: 4,
-        borderRadius: 8,
-        background: index !== 3 ? '#D6D7DB' : '#2C67FF'
-      }} key={index}/>
-    )
-  })
-
-  return <div className={c.circleView}>{views}</div>
 }
 
 export default Guide4View
