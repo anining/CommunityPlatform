@@ -11,12 +11,26 @@ function AddAdminView () {
   const [name, setName] = useState() // 管理员名称
   const [purview, setPurview] = useState([]) // 权限列表
   const [targetKeys, setTargetKeys] = useState([]) // 选中权限列表
+  const [loading, setLoading] = useState(false)
 
   function format (arr) {
+    const obj = {
+      orderlog: "订单记录",
+      citecfg: "站点管理",
+      usermng: "用户管理",
+      capitalflow: "资金流水",
+      valueaddedsrv: "增值服务",
+      tagmng: '标签管理',
+      statistics: '统计信息',
+      subcitemng: '分站管理',
+      commbiz: '社区业务',
+      cardbiz: '卡密业务'
+    }
     const localArr = [];
     arr.forEach((item, index) => {
       localArr.push({
-        title: item,
+        title: obj[item] || item,
+        val: item,
         key: index
       })
     })
@@ -31,19 +45,23 @@ function AddAdminView () {
   }, [])
 
   function save () {
-    if (!name || !number) {
+    if (!name || !number || !targetKeys.length) {
       message.warning("请完善信息")
       return;
     }
+    setLoading(true)
     const localPurview = []
     targetKeys.forEach(item => {
-      localPurview.push(purview[item].title)
+      localPurview.push(purview[item].val)
     })
     addManagers(number, name, localPurview).then(r => {
+      setLoading(false)
       setNumber(undefined)
       setName(undefined)
       setTargetKeys([]);
       !r.error && saveSuccess()
+    }).catch(e => {
+      setLoading(false)
     })
   }
 
@@ -67,7 +85,7 @@ function AddAdminView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>管理员账号</div>
           </div>
-          <Input value={number} onChange={e=>setNumber(e.target.value)} placeholder="请填写管理员登录账号" className={c.itemInput}></Input>
+          <Input maxLength={20} value={number} onChange={e=>setNumber(e.target.value)} placeholder="请填写管理员登录账号" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -78,7 +96,7 @@ function AddAdminView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>管理员名称</div>
           </div>
-          <Input value={name} onChange={e=>setName(e.target.value)} placeholder="请填写管理员名称" className={c.itemInput}></Input>
+          <Input maxLength={20} value={name} onChange={e=>setName(e.target.value)} placeholder="请填写管理员名称" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
@@ -99,7 +117,7 @@ function AddAdminView () {
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
-            <Button type="primary" className={c.submit} onClick={save}>保存</Button>
+            <Button type="primary" loading={loading} className={c.submit} onClick={save}>保存</Button>
           </div>
         </div>
       </div>
