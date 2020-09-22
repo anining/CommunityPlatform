@@ -38,6 +38,20 @@ export function communityParamTemplates (type, pid, table, body) {
   }
 }
 
+// 社区商品
+export function communityGoods (type, gid, table, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/community-goods", table)
+    case "add":
+      return transformFetch("POST", "/community-goods", body);
+    case "modify":
+      return transformFetch("PATCH", `/community-goods/${gid}`, body);
+    default:
+      return transformFetch("DELETE", `/community-goods/${gid}`);
+  }
+}
+
 
 
 
@@ -80,20 +94,6 @@ export function addManagers (account, nickname, permissions) {
 // 获取登录日志
 export function loginlogs (page, size) {
   return transformFetch("GET", "/loginlogs", { page, size })
-}
-
-// 社区商品
-export function communityGoods (type, gid, table, body) {
-  switch (type) {
-    // case "get":
-    //   return transformFetch("GET", "/community-goods-categories", table)
-    case "add":
-      return transformFetch("POST", "/community-goods", body);
-      // case "modify":
-      //   return transformFetch("PATCH", `/community-goods-categories/${gid}`, body);
-      // default:
-      //   return transformFetch("DELETE", `/community-goods-categories/${gid}`);
-  }
 }
 
 // 标签分组

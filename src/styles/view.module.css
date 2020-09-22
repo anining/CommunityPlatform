@@ -7,45 +7,69 @@
 
 .header {
   width: 100%;
-  padding: 0 24px;
-  height: 110px;
+  padding-right: 24px;
   background: #FFFFFF;
   border-radius: 2px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
 .headerL {
   display: flex;
   align-items: center;
-  width: 70.135%;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: calc(100%-122px);
   height: 100%;
 }
 
 .headerItem {
   display: flex;
   align-items: center;
-  height: 100%;
-  width: 25.021%;
+  justify-content: space-between;
+  height: 110px;
+  width: 256px;
+  color: #6F717E;
+}
+
+.headerBorder {
+  width: 1px;
+  height: 50px;
+  background: rgba(214, 215, 219, 0.55);
+  margin-right: 7%;
+  margin-left: 10%;
+}
+
+@media screen and (max-width: 1174px) {
+  .headerItem:nth-child(2) .headerBorder,.headerItem:nth-child(4) .headerBorder,.headerItem:nth-child(6) .headerBorder {
+    background: #fff;
+  }
+}
+
+@media screen and (max-width: 1450px ) and (min-width: 1175px) {
+  .headerItem:nth-child(3) .headerBorder,.headerItem:nth-child(6) .headerBorder {
+    background: #fff;
+  }
+}
+
+.headerItem:last-child .headerBorder {
+  background-color: #fff;
 }
 
 .headerItemImg {
-  width: 30.157%;
-  margin-right: 0.368%;
+  width: 103px;
 }
 
 .headerIR {
   display: flex;
-  padding-right: 14.035%;
-  margin-right: 14.035%;
   flex-direction: column;
   justify-content: center;
-  border-right: 1px solid rgba(214, 215, 219, 0.55);
 }
 
 .headerAddBtn {
   font-size: 1.142rem;
+  margin-top: 35px;
   height: 40px;
   width: 122px;
 }
@@ -53,14 +77,7 @@
 .headerNumber {
   font-size: 2.142rem;
   font-weight: 800;
-  color: #000;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.headerLabel {
-  color: #6F717E;
+  color: rgba(0, 0, 0, 0.85);
 }
 
 .main {
@@ -68,29 +85,58 @@
   width: 100%;
   background-color: #fff;
   border-radius: 2px;
+  margin-top: 24px;
   padding: 0 24px;
 }
 
 .searchView {
   width: 100%;
-  height: 80px;
 }
 
 .actionView {
   width: 100%;
-  height: 88px;
   display: flex;
   align-items: center;
 }
 
-.actionBtn {
-  height: 32px;
+.dropdownBtn {
   width: 7.573%;
   margin-right: 2.463%;
+}
+
+.actionBtn {
+  height: 32px;
+  width: 123px;
+  margin: 24px 40px 24px 0;
   color: #979BA3;
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
+}
+
+@media screen and (max-width: 1200px) {
+  .actionBtn:nth-child(3), .actionBtn:nth-child(4), .actionBtn:nth-child(5), .actionBtn:nth-child(6) {
+    margin-top: 0;
+  }
+}
+
+@media screen and (min-width: 1201px) and (max-width: 1426px) {
+  .actionBtn:nth-child(4), .actionBtn:nth-child(5), .actionBtn:nth-child(6) {
+    margin-top: 0;
+  }
+}
+
+@media screen and (min-width: 1427px) and (max-width: 1637px) {
+  .actionBtn:nth-child(5), .actionBtn:nth-child(6) {
+    margin-top: 0;
+  }
+}
+
+@media screen and (min-width: 1638px) {
+  .actionBtn:nth-child(6) {
+    margin-top: 0;
+  }
 }
 
 .action {
@@ -106,21 +152,21 @@
 .search{
   border-bottom: 1px solid rgba(0,0,0,0.09);
   width: 100%;
-  height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
 .searchL {
-  width: 68.596%;
+  width: calc(100%-212px);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .searchR {
-  width: 31.404%;
+  margin:24px 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -129,20 +175,21 @@
 .resetBtn {
   height: 32px;
   width: 65px;
-  color: #000;
+  color: rgba(0, 0, 0, 0.65);
   border-radius: 2px;
 }
 
 .searchBtn {
   height: 32px;
   width: 112px;
-  border-radius: 2px;
-  margin-left: 6.862%;
+  margin-left: 35px;
 }
 
 .searchInput {
   height: 32px;
-  width: 18.850%;
+  margin: 24px 40px 24px 0;
+  width: 186px;
+  width: 186px;
   color: #979BA3;
 }
 
@@ -150,16 +197,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.dropdownBtn {
-  width: 16.696%;
-  height: 32px;
-  color: #979BA3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: nowrap;
 }
 
 .headerTips {
@@ -191,4 +228,17 @@
   text-decoration: underline;
   text-decoration: underline #2c68ff;
   color: #2c68ff;
+}
+
+.cgView {
+  width: 220px;
+  height: 44px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.cgItem {
+  height: 22px;
+  width: 100px;
 }

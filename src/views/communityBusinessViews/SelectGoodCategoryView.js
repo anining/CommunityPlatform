@@ -3,15 +3,12 @@ import { Button, Table, Input } from 'antd'
 import c from '../../styles/view.module.css'
 import good31 from '../../icons/good/good31.png'
 import { communityGoodsCategories } from '../../utils/api'
+import { transformTime } from "../../utils/util";
 
 function SelectGoodCategoryView () {
 
   return (
-    <div className="view" style={{
-      background:'#F0F2F5',
-      minHeight:'100%',
-      padding:24
-    }}>
+    <div className="select-view">
       <div className={c.container}>
         <RTable />
       </div>
@@ -20,6 +17,7 @@ function SelectGoodCategoryView () {
 }
 
 function RTable () {
+  const [search_name, setSearch_name] = useState()
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
@@ -30,7 +28,11 @@ function RTable () {
   }, [])
 
   function get (current) {
-    communityGoodsCategories("get", undefined, { page: current, size: pageSize }).then(r => {
+    let body = { page: current, size: pageSize }
+    if (search_name) {
+      body = { ...body, ...{ search_name } }
+    }
+    communityGoodsCategories("get", undefined, body).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
@@ -42,7 +44,7 @@ function RTable () {
   function format (arr = []) {
     arr.forEach((item, index) => {
       item.key = index
-      // item.account = item.manager.account
+      item.time = transformTime(item.created_at)
     })
     return arr
   }
@@ -57,17 +59,12 @@ function RTable () {
       title: '分类编号',
       dataIndex: 'id',
       align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          console.log(a, b)
-        },
-        multiple: 1,
-      },
-      render: (text, record, index) => (
-        <div style={{color:"#2c68ff",cursor:'pointer'}} onClick={()=>{
-            window.opener.localClick('good_category_id', text)
-          }}>{text}</div>
-      )
+      // sorter: {
+      //   compare: (a, b) => {
+      //     console.log(a, b)
+      //   },
+      //   multiple: 1,
+      // }
   },
     {
       title: '分类名称',
@@ -81,41 +78,43 @@ function RTable () {
   },
     {
       title: '创建时间',
-      dataIndex: 'created_at',
+      dataIndex: 'time',
       align: 'center',
   },
     {
       title: '操作',
       align: 'center',
-      render:()=>{
-        return <div style={{color:'#2C68FF',fontSize:'0.857rem'}}>选择</div>      }
-  },
-];
+      dataIndex: 'id',
+      render: (text, record, index) => (
+        <div className={c.clickText} onClick={()=>{window.opener.localClick('good_category_id', text)}}>选择</div>
+      )
+    },
+  ];
 
   return (
-    <div className={c.main} style={{marginTop:0}}>
-      <div className={c.searchView} style={{height:88}}>
+    <div className={c.main}>
+      <div className={c.searchView}>
           <div className={c.search}>
-            <div className={c.searchL} style={{width:'22.783%'}}>
-              <Input placeholder="请输入分类名称" size="small" className={c.searchInput} style={{width:'61.621%'}}/>
-              <Button icon={
-                <img src={good31} alt="" style={{width:14,marginRight:6}} />
-              }
-              size = "small"
-                className={c.searchBtn} style={{
-                  marginLeft:19.422,
-                  // marginLeft:0,
-                  borderColor:'#3372FF',
-                  color:'#2C68FF'
-              }}>搜索分类</Button>
+            <div className={c.searchL}>
+              <Input onPressEnter={()=>get(current)} placeholder="请输入分类名称" value={search_name} onChange={e=>setSearch_name(e.target.value)} size="small" className={c.searchInput} />
+              <Button
+                icon={
+                  <img src={good31} alt="" style={{width:14,marginRight:6}} />
+                }
+                size = "small"
+                onClick={()=>get(current)}
+                className={c.searchBtn}>搜索分类</Button>
             </div>
           </div>
       </div>
-      <Table columns={columns} dataSource={data} size="small" pagination={{
+      <Table
+        columns={columns}
+        dataSource={data}
+        size="small"
+        pagination={{
           showQuickJumper:true,
           current,
           pageSize,
-          hideOnSinglePage:false,
           showLessItems:true,
           total,
           onChange

@@ -113,20 +113,16 @@ function RTable () {
 
   return (
     <div className={c.main}>
-      <div className={c.searchView} style={{height:88}}>
+      <div className={c.searchView}>
           <div className={c.search}>
-            <div className={c.searchL} style={{width:'22.783%'}}>
-              <Input value={search_name} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入分类名称" size="small" className={c.searchInput} style={{width:'61.621%'}}/>
+            <div className={c.searchL}>
+              <Input value={search_name} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入分类名称" size="small" className={c.searchInput}/>
               <Button icon={
                 <img src={good31} alt="" style={{width:14,marginRight:6}} />
               }
                 size = "small"
                 onClick={()=>get(current)}
-                className={c.searchBtn} style={{
-                  marginLeft:19.422,
-                  borderColor:'#3372FF',
-                  color:'#2C68FF'
-              }}>搜索模型</Button>
+                className={c.searchBtn}>搜索模型</Button>
             </div>
             <div className={c.searchR}>
               <Button icon={
@@ -139,7 +135,7 @@ function RTable () {
             </div>
           </div>
       </div>
-      <DropdownComponent submit={submit} keys={[{key:'delete',name:'批量删除'}]}/>
+      <DropdownComponent submit={submit} keys={[]}/>
       <Table
         columns={columns}
         rowSelection={{

@@ -44,6 +44,13 @@ html, body, #root {
   width: 100%;
 }
 
+.select-view {
+  width: 100%;
+  background-color: #f0f2f5;
+  min-height: 100%;
+  padding: 0 24px;
+}
+
 .view {
   width: 100%;
 }
@@ -54,6 +61,13 @@ html, body, #root {
 
 .f {
   display: flex;
+}
+
+.f-r-c-c {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .f-c-c-sb {
