@@ -17,6 +17,7 @@
 
 #root .ant-table-small .ant-table-thead > tr > th {
   background-color: #F1F5FF;
+  height: 54px;
   color: #000;
   font-weight: 500;
 }
@@ -73,6 +74,11 @@ td.ant-table-column-sort {
 .ql-toolbar.ql-snow {
   display: flex;
   flex-wrap: wrap;
+  border-radius: 2px 2px 0 0;
+}
+
+.ql-container.ql-snow {
+  border-radius: 0 0 2px 2px;
 }
 
 .ql-toolbar.ql-snow, .ql-container.ql-snow {

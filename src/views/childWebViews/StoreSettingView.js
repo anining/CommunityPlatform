@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Button, Switch } from 'antd'
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import cs from '../../styles/childWebSetting.module.css'
 import { storeConfig } from "../../utils/api";
 import { saveSuccess } from "../../utils/util";

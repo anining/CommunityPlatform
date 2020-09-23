@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Button, message } from 'antd'
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
 import { announcements } from "../../utils/api";
 import { saveSuccess } from "../../utils/util";

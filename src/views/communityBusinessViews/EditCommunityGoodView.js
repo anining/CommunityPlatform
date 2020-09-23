@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Tooltip, Button, Upload, message, Radio, Checkbox } from 'antd'
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
 import edit1 from '../../icons/edit/edit1.png'
 import { goBack, saveSuccess, push } from "../../utils/util";
@@ -378,7 +377,7 @@ function EditCommunityGoodView () {
             }} checked={refundable} className={c.checkbox}>退单</Checkbox>
           </div>
         </div>
-        <div className={c.item}>
+        <div className={c.item} style={{alignItems:'flex-start'}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>目标描述</div>
