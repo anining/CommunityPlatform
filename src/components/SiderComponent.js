@@ -85,10 +85,10 @@ function SiderComponent ({ collapsed, toggle }) {
         <Menu.Item key="table" icon={<Icon keys="table" selectedKeys={selectedKeys}/>}>
           标签管理
         </Menu.Item>
-        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录"> */}
-        {/*   <Menu.Item key="communityOrder">社区订单</Menu.Item> */}
-        {/*   <Menu.Item key="cardOrder">卡密订单</Menu.Item> */}
-        {/* </Menu.SubMenu> */}
+        <Menu.SubMenu onTitleClick={onTitleClick} key="orderRecording" icon={<Icon keys="orderRecording" selectedKeys={selectedKeys} />} title="订单记录">
+          <Menu.Item key="communityOrder">社区订单</Menu.Item>
+          {/* <Menu.Item key="cardOrder">卡密订单</Menu.Item> */}
+        </Menu.SubMenu>
         {/* <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}> */}
         {/*   资金流水 */}
         {/* </Menu.Item> */}
@@ -103,7 +103,7 @@ function SiderComponent ({ collapsed, toggle }) {
           {/* <Menu.Item key="rebot">支付配置</Menu.Item> */}
           <Menu.Item key="images">图床配置</Menu.Item>
           {/* <Menu.Item key="peopleService">客服配置</Menu.Item> */}
-          {/* <Menu.Item key="notice">发布公告</Menu.Item> */}
+          <Menu.Item key="notice">发布公告</Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu onTitleClick={onTitleClick} key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置">
           <Menu.Item key="admin">系统管理员</Menu.Item>

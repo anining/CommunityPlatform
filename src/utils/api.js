@@ -169,8 +169,8 @@ export function deleteDiscPrices (did) {
 }
 
 // 获取社区商品订单
-export function communityGoodsOrders (id, search_user_account, search_goods_name, community_goods_category_id, status, start_from, end_with) {
-  let data = {}
+export function communityGoodsOrders (page, size, id, search_user_account, search_goods_name, community_goods_category_id, status, start_from, end_with) {
+  let data = { page, size }
   if (id) {
     data = { ...data, ...{ id } }
   }
