@@ -88,3 +88,15 @@ td.ant-table-column-sort {
 .ql-editor {
   min-height: 200px;
 }
+
+.ant-table-row-level-0 .ant-table-cell {
+  height: 63px;
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+  background-color: #F7FAFF;
+}
+
+.ant-table-tbody > tr.ant-table-row-selected > td {
+  background-color: #F1F5FF;
+}

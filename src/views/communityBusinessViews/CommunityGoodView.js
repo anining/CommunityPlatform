@@ -165,17 +165,13 @@ function RTable () {
       align: 'center',
       dataIndex: 'text',
       render: (text, record, index) => {
-        const { min_order_amount, max_order_amount, repeat_order, batch_order } = record
+        const { repeat_order, batch_order } = record
         const repeat = repeat_order > 0 ? { text: "开启", color: "#52C41A" } : { text: "关闭", color: "#C8C8C8" }
         const batch = batch_order > 0 ? { text: "开启", color: "#52C41A" } : { text: "关闭", color: "#C8C8C8" }
         return (
-          <div className="f-r-c-c">
-            <div className={c.cgView}>
-              <div className={c.cgItem}>最低数量: {min_order_amount}</div>
-              <div className={c.cgItem}>批量下单: <span style={{color:repeat.color}}>{repeat.text}</span></div>
-              <div className={c.cgItem}>最高数量: {max_order_amount}</div>
-              <div className={c.cgItem}>重复下单: <span style={{color:batch.color}}>{batch.text}</span></div>
-            </div>
+          <div>
+            <div>批量下单: <span style={{color:repeat.color}}>{repeat.text}</span></div>
+            <div>重复下单: <span style={{color:batch.color}}>{batch.text}</span></div>
           </div>
         )
       }

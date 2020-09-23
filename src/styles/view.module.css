@@ -230,27 +230,6 @@
   color: #2c68ff;
 }
 
-.cgView {
-  width: 220px;
-  height: 44px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.cgItem {
-  height: 22px;
-  width: 100px;
-  text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.cgItem:nth-child(2), .cgItem:nth-child(4) {
-  text-align: right;
-}
-
 .dataPicker {
   height: 32px;
   width: 348px;
