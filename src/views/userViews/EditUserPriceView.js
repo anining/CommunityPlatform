@@ -22,7 +22,7 @@ function EditUserPriceView () {
           <img src={good5} alt="" className={ce.headerImg}/>
           <div>首页 / 用户管理 / <span>修改用户密价</span></div>
         </div>
-        <div className={c.header} style={{marginTop:24,paddingLeft:24,marginBottom:24, height:188}}>
+        <div className={c.header} style={{marginTop:24,paddingLeft:24, height:188}}>
           <div className={c.headerL} style={{
             width:'auto',
             flexDirection:'column',

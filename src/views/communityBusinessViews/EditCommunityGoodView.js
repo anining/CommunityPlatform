@@ -8,6 +8,7 @@ import edit1 from '../../icons/edit/edit1.png'
 import { goBack, saveSuccess, push } from "../../utils/util";
 import { communityGoods } from "../../utils/api";
 import { useHistory } from "react-router-dom";
+import { MODULES } from "../../utils/config";
 
 let win
 
@@ -382,7 +383,7 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>目标描述</div>
           </div>
-          <ReactQuill className={c.quill} theme="snow" value={introduction} onChange={e=>setIntroduction(e)}/>
+          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={introduction} onChange={e=>setIntroduction(e)}/>
         </div>
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
