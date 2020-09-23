@@ -29,11 +29,11 @@ function TableView () {
       tagGroups('add', undefined, { name: inputGroupValue }).then(r => {
         !r.error && get()
       })
-      setInputGroupVisible(false)
-      setInputGroupValue(undefined)
-    } else {
+    } else if (inputGroupValue) {
       message.warning("重复的标签名称")
     }
+    setInputGroupVisible(false)
+    setInputGroupValue(undefined)
   }
 
   return (
@@ -81,11 +81,11 @@ function RGroup ({ tagsGroup, get, setTagsGroup }) {
       tagsApi('add', undefined, { name: inputValue, tag_group_id: id }).then(r => {
         !r.error && get()
       })
-      setInputVisible(false)
-      setInputValue(undefined)
-    } else {
+    } else if (inputValue) {
       message.warning("重复的标签名称")
     }
+    setInputVisible(false)
+    setInputValue(undefined)
   }
 
   function handleClose (id, index, i = -1) {
