@@ -119,25 +119,6 @@ export function storeConfig (type, body) {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // 获取用户列表
 export function users (page, size, account, status) {
   let data = { page, size }
@@ -151,8 +132,15 @@ export function users (page, size, account, status) {
 }
 
 // 添加用户
-export function addUsers (account, password, status) {
-  return transformFetch("POST", "/users", { account, password, status })
+export function addUsers (account, password, status, email) {
+  let data = { account, status }
+  if (password) {
+    data = { ...data, ...{ password } }
+  }
+  if (email) {
+    data = { ...data, ...{ email } }
+  }
+  return transformFetch("POST", "/users", data)
 }
 
 // 获取用户的社区商品密价列表

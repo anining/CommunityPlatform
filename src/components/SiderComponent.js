@@ -92,26 +92,26 @@ function SiderComponent ({ collapsed, toggle }) {
         {/* <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" selectedKeys={selectedKeys} />}> */}
         {/*   资金流水 */}
         {/* </Menu.Item> */}
-        {/* <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}> */}
-        {/*   用户管理 */}
-        {/* </Menu.Item> */}
+        <Menu.Item key="user" icon={<Icon keys="user" selectedKeys={selectedKeys} />}>
+          用户管理
+        </Menu.Item>
         {/* <Menu.SubMenu onTitleClick={onTitleClick} key="childWeb" icon={<Icon keys="childWeb" selectedKeys={selectedKeys} />} title="分站管理"> */}
         {/*   <Menu.Item key="childWebList">分站列表</Menu.Item> */}
         {/* </Menu.SubMenu> */}
-        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置"> */}
-        {/*   <Menu.Item key="storeSetting">店铺设置</Menu.Item> */}
-        {/*   <Menu.Item key="rebot">加款机器人</Menu.Item> */}
-        {/*   <Menu.Item key="images">图床配置</Menu.Item> */}
-        {/*   <Menu.Item key="peopleService">客服配置</Menu.Item> */}
-        {/*   <Menu.Item key="notice">发布公告</Menu.Item> */}
-        {/*   <Menu.Item key="admin">系统管理员</Menu.Item> */}
-        {/*   <Menu.Item key="password">修改密码</Menu.Item> */}
-        {/*   <Menu.Item key="logger">登录日志</Menu.Item> */}
+        <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" icon={<Icon keys="webSetting" selectedKeys={selectedKeys} />} title="站点设置">
+          <Menu.Item key="storeSetting">店铺设置</Menu.Item>
+          {/* <Menu.Item key="rebot">支付配置</Menu.Item> */}
+          <Menu.Item key="images">图床配置</Menu.Item>
+          {/* <Menu.Item key="peopleService">客服配置</Menu.Item> */}
+          {/* <Menu.Item key="notice">发布公告</Menu.Item> */}
+        </Menu.SubMenu>
+        <Menu.SubMenu onTitleClick={onTitleClick} key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置">
+          <Menu.Item key="admin">系统管理员</Menu.Item>
+          <Menu.Item key="password">修改密码</Menu.Item>
+          <Menu.Item key="logger">登录日志</Menu.Item>
         {/*   <Menu.Item key="about">系统信息</Menu.Item> */}
-        {/*   <Menu.Item key="businessSetting">业务配置</Menu.Item> */}
-        {/* </Menu.SubMenu> */}
-        {/* <Menu.SubMenu onTitleClick={onTitleClick} key="systemSetting" icon={<Icon keys="systemSetting" selectedKeys={selectedKeys} />} title="系统设置"> */}
-        {/* </Menu.SubMenu> */}
+          {/* <Menu.Item key="businessSetting">业务配置</Menu.Item> */}
+        </Menu.SubMenu>
       </Menu>
     </Layout.Sider>
   )

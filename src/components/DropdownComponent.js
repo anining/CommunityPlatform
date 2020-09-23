@@ -41,7 +41,7 @@ function DropdownComponent ({ action, style = {}, submit, keys, setAction, place
     <Dropdown overlay={menu}>
         <Button size="small" className={c.actionBtn} style={style}>
           <div className={c.hiddenText}>
-            { key ? keys.filter(i => i.key === key)[0].name : placeholder}
+            { action ? keys.filter(i => i.key === action)[0].name : placeholder }
           </div>
           <DownOutlined />
         </Button>
