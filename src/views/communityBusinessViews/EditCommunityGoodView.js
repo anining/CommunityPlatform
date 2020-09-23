@@ -19,6 +19,8 @@ function EditCommunityGoodView () {
   const [pics, setPics] = useState([])
   const [community_goods_category_id, setCommunity_goods_category_id] = useState()
   const [community_param_template_id, setCommunity_param_template_id] = useState()
+  const [community_goods_category_name, setCommunity_goods_category_name] = useState()
+  const [community_param_template_name, setCommunity_param_template_name] = useState()
   const [tag_ids, setTag_ids] = useState([])
   const [tags, setTags] = useState([])
   const [unit, setUnit] = useState(u)
@@ -42,10 +44,12 @@ function EditCommunityGoodView () {
         setTag_ids(ids.map(i => i.id))
         break
       case 'good_category_id':
-        setCommunity_goods_category_id(ids)
+        setCommunity_goods_category_id(ids.id)
+        setCommunity_goods_category_name(ids.name)
         break
       case 'order-model-id':
-        setCommunity_param_template_id(ids)
+        setCommunity_param_template_id(ids.id)
+        setCommunity_param_template_name(ids.name)
         break
       default:
         ;
@@ -231,7 +235,7 @@ function EditCommunityGoodView () {
             <div onClick={()=>{
                win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
             }} className={c.itemSelect}>
-              <div className={c.itemSelectP}>{community_goods_category_id?community_goods_category_id:'请设置商品分类'}</div>
+              <div className={c.itemSelectP}>{community_goods_category_name?community_goods_category_name:'请设置商品分类'}</div>
               <div>选择</div>
             </div>
             <Button type="primary" className={c.itemBtn} onClick={()=>{
@@ -246,7 +250,7 @@ function EditCommunityGoodView () {
             <div onClick={()=>{
                win = window.open("/select-order-model", "_blank", "left=390,top=145,width=1200,height=700")
             }} className={c.itemSelect}>
-              <div className={c.itemSelectP}>{community_param_template_id?community_param_template_id:'请设置下单模型'}</div>
+              <div className={c.itemSelectP}>{community_param_template_name?community_param_template_name:'请设置下单模型'}</div>
               <div>选择</div>
             </div>
             <Button type="primary" className={c.itemBtn} onClick={()=>{

@@ -84,9 +84,8 @@ function RTable () {
     {
       title: '操作',
       align: 'center',
-      dataIndex: 'id',
       render: (text, record, index) => (
-        <div className={c.clickText} onClick={()=>{window.opener.localClick('good_category_id', text)}}>选择</div>
+        <div className={c.clickText} onClick={()=>{window.opener.localClick('good_category_id', record)}}>选择</div>
       )
     },
   ];
