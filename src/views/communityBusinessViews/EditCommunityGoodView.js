@@ -19,7 +19,7 @@ function EditCommunityGoodView () {
   const [pics, setPics] = useState([])
   const [community_goods_category_id, setCommunity_goods_category_id] = useState()
   const [community_param_template_id, setCommunity_param_template_id] = useState()
-  const [tag_ids, setTag_ids] = useState()
+  const [tag_ids, setTag_ids] = useState([])
   const [tags, setTags] = useState([])
   const [unit, setUnit] = useState(u)
   const [unit_price, setUnit_price] = useState(u_p)
