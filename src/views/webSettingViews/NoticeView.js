@@ -1,137 +1,129 @@
-import React, { useState } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input, Space, Modal, Pagination } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Button, Table, message } from 'antd'
 import c from '../../styles/view.module.css'
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
-import { h } from '../../utils/history'
 import good7 from '../../icons/good/good7.png'
+import { push, transformTime } from "../../utils/util";
+import DropdownComponent from "../../components/DropdownComponent";
+import { announcements } from '../../utils/api'
 
 function NoticeView () {
-  const [visible, setVisible] = useState(false)
 
   return (
-    <div className="container">
+    <div className="view">
       <div className={c.container}>
-        <RTable setVisible={setVisible} />
+        <RTable />
       </div>
     </div>
   )
 }
 
-function RTable ({ setVisible }) {
-  const [selectionType, setSelectionType] = useState('checkbox');
+function RTable () {
+  const [selectedRows, setSelectRows] = useState([]);
+  const [data, setData] = useState([])
+  const [current, setCurrent] = useState(1)
+  const [pageSize] = useState(10)
+  const [total, setTotal] = useState(0)
+
+  useEffect(() => {
+    get(current)
+  }, [])
+
+  function get (current) {
+    announcements("get", undefined, { current, pageSize }).then(r => {
+      if (!r.error) {
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
+  }
+
+  function format (arr = []) {
+    arr.forEach((item, index) => {
+      item.key = index
+      item.time = transformTime(item.created_at)
+    })
+    return arr
+  }
+
+  function onChange (page, pageSize) {
+    setCurrent(page)
+    get(page)
+  }
 
   const columns = [
     {
       title: '公告标题',
-      dataIndex: 'label',
+      dataIndex: 'title',
       align: 'center',
   },
     {
       title: '公告内容',
-      dataIndex: 'name',
+      dataIndex: 'content',
+      width: 300,
       align: 'center',
+      remder: (text, record, index) => <div className={c.hiddenText}>{text}</div>
   },
     {
       title: '发送人',
       align: 'center',
-      dataIndex: 'user',
+      dataIndex: 'manager_account',
   },
     {
       title: '创建时间',
       dataIndex: 'time',
       align: 'center',
-  },
-];
-
-  const data = [
-    {
-      key: 1240,
-      label: '新增知乎会员',
-      name: '店铺上新啦，新增知乎会员购买，快来下单吧…',
-      user: '名字是什么',
-      time: '2017-10-31  23:12:00',
     },
   ];
 
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: 1240,
-      label: '新增知乎会员',
-      name: '店铺上新啦，新增知乎会员购买，快来下单吧…',
-      user: '名字是什么',
-      time: '2017-10-31  23:12:00',
-    })
-  }
-
   const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
-    getCheckboxProps: record => ({
-      // disabled: record.name === 'Disabled User',
-      // Column configuration not to be checked
-      // name: record.name,
-    }),
+    onChange: (selectedRowKeys, rows) => {
+      setSelectRows(selectedRowKeys)
+    }
   };
 
-  function handleMenuClick (e) {
-    message.info('Click on menu item.');
-    console.log('click', e);
+  function submit (key) {
+    switch (key) {
+      case "delete":
+        message.success('批量删除操作');
+        break
+      default:
+        ;
+    }
   }
-
-  const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">
-        1st menu item
-      </Menu.Item>
-      <Menu.Item key="2">
-        2nd menu item
-      </Menu.Item>
-      <Menu.Item key="3">
-        3rd menu item
-      </Menu.Item>
-    </Menu>
-  );
 
   return (
     <div className={c.main} style={{marginTop:0}}>
-        <div className={c.searchView}>
-          <div className={c.search}>
-            <div className={c.searchL}>
-            </div>
-            <div className={c.searchR}>
-              <Button icon={
+      <div className={c.searchView}>
+        <div className={c.search}>
+          <div className={c.searchL}/>
+          <div className={c.searchR}>
+            <Button icon={
                 <img src={good7} alt="" style={{width:14,marginRight:6}} />
               }
               type = "primary"
               size = "small"
-                onClick={()=>{
-                  const history = h.get()
-                  history.push("/main/addNotice")
-                }}
+              onClick={()=>push('/main/addNotice')}
               className={c.searchBtn}>新增公告</Button>
-            </div>
           </div>
+        </div>
       </div>
-      <div className={c.actionView}>
-        <Dropdown overlay={menu}>
-          <Button size="small" className={c.actionBtn}>
-            <div className={c.hiddenText}>
-              批量操作
-            </div>
-            <DownOutlined />
-          </Button>
-        </Dropdown>
-        <Button className={c.action} onClick={()=>setVisible(true)} size="small">执行操作</Button>
-      </div>
-      <Table columns={columns} rowSelection={{
-        type: selectionType,
-        ...rowSelection
-      }} dataSource={data} rowClassName={(record,index)=>{
-        if (index % 2) {
-          return "f1f5ff"
-        }
-      }} size="small" pagination={{showQuickJumper:true}}
+      <DropdownComponent submit={submit} keys={[]}/>
+      <Table
+        columns={columns}
+        rowSelection={{
+          ...rowSelection
+        }}
+        dataSource={data}
+        size="small"
+        pagination={{
+          showQuickJumper:true,
+          current,
+          pageSize,
+          showLessItems:true,
+          total,
+          onChange
+        }}
       />
     </div>
   )

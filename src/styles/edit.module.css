@@ -220,7 +220,6 @@
 
 .quill {
   width: 29.25%;
-  /* height: 113px; */
   white-space: nowrap;
   text-overflow: ellipsis;
 }

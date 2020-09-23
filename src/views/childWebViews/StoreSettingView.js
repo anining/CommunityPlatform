@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import cs from '../../styles/childWebSetting.module.css'
 import { storeConfig } from "../../utils/api";
 import { saveSuccess } from "../../utils/util";
+import { MODULES } from "../../utils/config";
 
 function StoreSettingView () {
   const [under_maintenance, setUnder_maintenance] = useState(false) // 店铺维护中
@@ -15,29 +16,6 @@ function StoreSettingView () {
   const [icp, setIcp] = useState("") // 备案信息
   const [announcement, setAnnouncement] = useState("") //维护公告
   const [loading, setLoading] = useState(false)
-
-  const modules = {
-    toolbar: [
-          ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-          ['blockquote', 'code-block'],
-          ['link', 'image'],
-
-          [{ 'header': 1 }, { 'header': 2 }], // custom button values
-          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-          [{ 'script': 'sub' }, { 'script': 'super' }], // superscript/subscript
-          [{ 'indent': '-1' }, { 'indent': '+1' }], // outdent/indent
-          [{ 'direction': 'rtl' }], // text direction
-
-          [{ 'size': ['small', false, 'large', 'huge'] }], // custom dropdown
-          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-          [{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
-          [{ 'font': [] }],
-          [{ 'align': [] }],
-
-          ['clean'] // remove formatting button
-      ]
-  }
 
   useEffect(() => {
     storeConfig('get').then(r => {
@@ -140,7 +118,7 @@ function StoreSettingView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>维护公告</div>
           </div>
-          <ReactQuill className={c.quill} modules={modules} theme="snow" value={announcement} onChange={e=>setAnnouncement(e)}/>
+          <ReactQuill className={c.quill} modules={MODULES} theme="snow" value={announcement} onChange={e=>setAnnouncement(e)}/>
         </div>
         {/* <div className={c.headerT} style={{marginTop:50}}> */}
         {/*   <div style={{zIndex:1}}>SEO相关</div> */}

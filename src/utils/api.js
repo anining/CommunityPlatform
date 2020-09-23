@@ -167,3 +167,44 @@ export function addDiscPrices (user_id, goods_id, goods_type = "community", disc
 export function deleteDiscPrices (did) {
   return transformFetch("DELETE", `/disc-prices/${did}`)
 }
+
+// 获取社区商品订单
+export function communityGoodsOrders (id, search_user_account, search_goods_name, community_goods_category_id, status, start_from, end_with) {
+  let data = {}
+  if (id) {
+    data = { ...data, ...{ id } }
+  }
+  if (search_user_account) {
+    data = { ...data, ...{ search_user_account } }
+  }
+  if (search_goods_name) {
+    data = { ...data, ...{ search_goods_name } }
+  }
+  if (community_goods_category_id) {
+    data = { ...data, ...{ community_goods_category_id } }
+  }
+  if (status) {
+    data = { ...data, ...{ status } }
+  }
+  if (start_from) {
+    data = { ...data, ...{ start_from } }
+  }
+  if (end_with) {
+    data = { ...data, ...{ end_with } }
+  }
+  return transformFetch("GET", "/community-goods-orders", data)
+}
+
+// 公告
+export function announcements (type, cid, table, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/announcements", table)
+    case "add":
+      return transformFetch("POST", "/announcements", body);
+      // case "modify":
+      //   return transformFetch("PATCH", `/community-goods-categories/${cid}`, body);
+    default:
+      // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
+  }
+}
