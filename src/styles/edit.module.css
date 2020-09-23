@@ -415,3 +415,26 @@
   border-radius: 2px;
   margin-left: 7px;
 }
+
+.igsItem {
+  display: flex;
+  align-items: center;
+  width: 341px;
+  justify-content: space-between;
+  color: #979BA3;
+  font-size: 1rem;
+}
+
+.igs_label {
+  color: #34374A;
+  font-weight: 800;
+}
+
+.otherBtn {
+  width: 100px;
+  height: 38px;
+  border-color: #4177FE;
+  margin-left: 32px;
+  margin-top: 32px;
+  color: #2C67FF;
+}

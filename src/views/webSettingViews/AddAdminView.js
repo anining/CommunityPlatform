@@ -5,8 +5,11 @@ import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
 import { permissions, addManagers } from "../../utils/api";
 import { saveSuccess } from "../../utils/util";
+import { useHistory } from "react-router-dom";
 
 function AddAdminView () {
+  const { state = {} } = useHistory().location
+  const { account, id, nickname } = state
   const [number, setNumber] = useState() // 管理员账号
   const [name, setName] = useState() // 管理员名称
   const [purview, setPurview] = useState([]) // 权限列表

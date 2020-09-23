@@ -52,6 +52,36 @@ export function communityGoods (type, gid, table, body) {
   }
 }
 
+// 管理员列表
+export function managers () {
+  return transformFetch("GET", "/managers")
+}
+
+// 管理员权限列表
+export function managersPermissions (manager_id) {
+  return transformFetch("GET", `/managers/${manager_id}/permissions`, { manager_id })
+}
+
+// 新增管理员
+export function addManagers (account, nickname, permissions) {
+  return transformFetch("POST", "/managers", { account, nickname, permissions })
+}
+
+// 获取登录日志
+export function loginlogs (page, size, manager_id, start_from, end_with) {
+  let data = { page, size }
+  if (end_with) {
+    data = { ...data, ...{ end_with } }
+  }
+  if (start_from) {
+    data = { ...data, ...{ start_from } }
+  }
+  if (manager_id) {
+    data = { ...data, ...{ manager_id } }
+  }
+  return transformFetch("GET", "/loginlogs", data)
+}
+
 
 
 
@@ -74,26 +104,6 @@ export function communityGoods (type, gid, table, body) {
 // 权限列表
 export function permissions () {
   return transformFetch("GET", "/permissions")
-}
-
-// 管理员列表
-export function managers () {
-  return transformFetch("GET", "/managers")
-}
-
-// 管理员权限列表
-export function managersPermissions (manager_id) {
-  return transformFetch("GET", `/managers/${manager_id}/permissions`, { manager_id })
-}
-
-// 新增管理员
-export function addManagers (account, nickname, permissions) {
-  return transformFetch("POST", "/managers", { account, nickname, permissions })
-}
-
-// 获取登录日志
-export function loginlogs (page, size) {
-  return transformFetch("GET", "/loginlogs", { page, size })
 }
 
 // 标签分组

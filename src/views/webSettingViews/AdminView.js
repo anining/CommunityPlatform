@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Table, Space, Popconfirm } from 'antd'
 import c from '../../styles/view.module.css'
-import { h } from '../../utils/history'
 import { managers, managersPermissions } from '../../utils/api'
 import good7 from '../../icons/good/good7.png'
 import home9 from '../../icons/home/home9.png'
 import good40 from '../../icons/good/good40.png'
+import { push, transformTime } from "../../utils/util"
 
 function AdminView () {
 
   return (
-    <div className="container">
+    <div className="view">
       <div className={c.container}>
         <RTable />
       </div>
@@ -59,6 +59,7 @@ function RTable () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
+      item.time = transformTime(item.created_at)
     })
     return arr
   }
@@ -87,19 +88,19 @@ function RTable () {
           purview.forEach((item, index) => {
             views.push(
               <div style={{...styles.item,...{
-                borderLeftWidth: index % 3 === 0 ? 1 : 0,
-                borderTopWidth: index < 3 ? 1 : 0
+              borderLeftWidth: index % 3 === 0 ? 1 : 0,
+              borderTopWidth: index < 3 ? 1 : 0
             }}} key={index}>{item}</div>
             )
           })
           views.length === 0 && views.push(
             <div style={styles.nullView}>
-              <img src={home9} alt="" style={styles.nullImg}/>
-            </div>
+            <img src={home9} alt="" style={styles.nullImg}/>
+          </div>
           )
           return (
             <Popconfirm
-              icon={()=><img src="" alt="" style={{width:0,height:0}}/>
+            icon = { <img src="" alt="" style={{width:0,height:0}}/>
           }
           visible = { visible[index] }
           placement = "left"
@@ -116,7 +117,7 @@ function RTable () {
                 )
               }
             } >
-            <div style={{cursor:'pointer',textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>detail(text,index)}>查看详情</div> <
+            <div className={c.clickText} onClick={()=>detail(text,index)}>查看详情</div> <
             /Popconfirm>
         )
       }
@@ -124,26 +125,18 @@ function RTable () {
     {
       title: '创建时间',
       align: 'center',
-      dataIndex: 'created_at',
+      dataIndex: 'time',
     }, {
       title: '操作',
       dataIndex: 'id',
       align: 'center',
       render: (text, record, index) => (
-        <Space size="small" style={{color:'#2C68FF'}}>
-          <div style={{textDecoration:"underline",cursor:'pointer',textDecorationColor:'#2C68FF'}} onClick={()=>{
-            const history = h.get()
-            history.push("/main/AddAdminView")
-          }}>修改</div>
+        <Space size="small">
+          <div style={{cursor:"wait"}} className={c.clickText} onClick={()=>{}}>修改</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div style={{textDecoration:"underline",cursor:'pointer',textDecorationColor:'#2C68FF'}} onClick={()=>{
-            const history = h.get()
-            history.push("/main/password", { manager_id: text })
-          }}>重置密码</div>
+          <div className={c.clickText} style={{cursor:'wait'}} onClick={()=>{}}>重置密码</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div style={{textDecoration:"underline",cursor:'pointer',textDecorationColor:'#FF4D4F',color:'#FF4D4F'}} onClick={()=>{
-
-          }}>删除</div>
+          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{}}>删除</div>
         </Space>
       )
     }
@@ -153,23 +146,27 @@ return (
   <div className={c.main}>
       <div className={c.searchView}>
         <div className={c.search} style={{borderBottom:'none'}}>
-          <div className={c.searchL}>
-          </div>
+          <div className={c.searchL} />
           <div className={c.searchR}>
             <Button icon={
               <img src={good7} alt="" style={{width:14,marginRight:6}} />
             }
-            type = "primary"
-            size = "small"
-              onClick={()=>{
-                const history = h.get()
-                history.push("/main/addAdmin")
-              }}
-            className={c.searchBtn}>新增管理员</Button>
+              type = "primary"
+              size = "small"
+              onClick={()=>push('/main/addAdmin')}
+              className={c.searchBtn}>新增管理员</Button>
           </div>
         </div>
       </div>
-      <Table columns={columns} dataSource={data} size="small" pagination={false}/>
+      <Table
+        columns={columns}
+        dataSource={data}
+        size="small"
+        pagination={{
+          showQuickJumper:true,
+          showLessItems:true,
+        }}
+      />
     </div>
 )
 }
