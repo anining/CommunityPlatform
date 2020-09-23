@@ -104,7 +104,7 @@ function EditCommunityGoodView () {
     if (introduction) {
       body = { ...body, ...{ introduction } }
     }
-    const promise = communityGoods(id ? "modify" : 'add', undefined, undefined, body)
+    const promise = communityGoods(id ? "modify" : 'add', id, undefined, body)
     promise.then(r => {
       if (!r.error) {
         setLoading(false)
