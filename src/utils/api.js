@@ -82,25 +82,6 @@ export function loginlogs (page, size, manager_id, start_from, end_with) {
   return transformFetch("GET", "/loginlogs", data)
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // 权限列表
 export function permissions () {
   return transformFetch("GET", "/permissions")
@@ -127,6 +108,35 @@ export function tags (type, tid, body) {
       return transformFetch("DELETE", `/tags/${tid}`)
   }
 }
+
+// 店铺设置
+export function storeConfig (type, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/store-config")
+    default:
+      return transformFetch("PUT", "/store-config", body)
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 获取用户列表
 export function users (page, size, account, status) {
@@ -168,14 +178,4 @@ export function addDiscPrices (user_id, goods_id, goods_type = "community", disc
 // 删除用户的商品密价(社区/卡密)
 export function deleteDiscPrices (did) {
   return transformFetch("DELETE", `/disc-prices/${did}`)
-}
-
-// 店铺设置
-export function storeConfig (type, body) {
-  switch (type) {
-    case "get":
-      return transformFetch("GET", "/store-config")
-    default:
-      return transformFetch("PUT", "/store-config", body)
-  }
 }

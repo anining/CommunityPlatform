@@ -69,3 +69,8 @@ td.ant-table-column-sort {
   padding-top: 0;
   padding-bottom: 0;
 }
+
+.ql-toolbar.ql-snow {
+  display: flex;
+  flex-wrap: wrap;
+}
