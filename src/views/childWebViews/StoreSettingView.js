@@ -63,7 +63,7 @@ function StoreSettingView () {
           <div className={c.itemName} />
           <div>开启时，表示店铺正在维护，用户不可下单；关闭时，表示店铺正常营业。</div>
         </div>
-        <div className={c.item}>
+        <div className={c.item} style={{marginTop:32}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>商品状态</div>
@@ -77,7 +77,7 @@ function StoreSettingView () {
           <div className={c.itemName} />
           <div>开启时，当店铺处于维护中状态，用户可以看见商品；关闭时，当店铺处于维护中状态，用户不可以看见商品。</div>
         </div>
-        <div className={c.item}>
+        <div className={c.item} style={{marginTop:32}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>允许注册</div>
@@ -91,7 +91,7 @@ function StoreSettingView () {
           <div className={c.itemName} />
           <div>开启时，用户可以注册；关闭时，用户只能登陆，不能注册。</div>
         </div>
-        <div className={c.item}>
+        <div className={c.item} style={{marginTop:32}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>游客模式</div>
@@ -105,14 +105,14 @@ function StoreSettingView () {
           <div className={c.itemName} />
           <div>开启时，用户无须登录就可以直接访问商城；关闭时，用户必须要登录才能访问商城。</div>
         </div>
-        <div className={c.item}>
+        <div className={c.item} style={{marginTop:32}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>备注信息</div>
           </div>
           <Input onChange={e=>setIcp(e.target.value)} value={icp} placeholder="请输入备案编号" className={c.itemInput}></Input>
         </div>
-        <div className={c.item}>
+        <div className={c.item} style={{marginTop:32}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>维护公告</div>
