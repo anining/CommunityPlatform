@@ -59,7 +59,6 @@ function TableView () {
         )}
         {!inputGroupVisible && (
           <Tag onClick={()=>setInputGroupVisible(true)} className={cs.tAddGroup}>
-            <img src={edit1} alt="" />
             <div>添加分组</div>
           </Tag>
         )}
@@ -145,7 +144,7 @@ function RGroup ({ tagsGroup, get, setTagsGroup }) {
           setInputVisible(true)
           setValue(index)
         }} className={cs.tAdd} key={`tag${id}`}>
-          <img src={edit1} alt="" />
+          <div>+</div>
           <div>添加标签</div>
         </Tag>
       )

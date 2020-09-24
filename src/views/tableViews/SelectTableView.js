@@ -3,6 +3,9 @@ import c from '../../styles/edit.module.css'
 import cs from '../../styles/business.module.css'
 import edit21 from '../../icons/edit/edit21.png'
 import edit22 from '../../icons/edit/edit22.png'
+import edit24 from '../../icons/edit/edit24.png'
+import edit25 from '../../icons/edit/edit25.png'
+import edit26 from '../../icons/edit/edit26.png'
 import { Button } from 'antd'
 import { tagGroups } from "../../utils/api"
 
@@ -35,7 +38,7 @@ function SelectTableView () {
         marginBottom:0,
         paddingBottom:0,
       }}>
-        <div className={c.headerT} style={{marginBottom:24}}>
+        <div className={c.headerT}>
           <div style={{zIndex:1}}>标签管理</div>
           <div className={c.circle} />
         </div>
@@ -80,9 +83,9 @@ function RGroup ({ tagsGroup, setTagsGroup, selects, setSelects }) {
         <Button key={tag_id} onClick={() => {
           handleClose(it);
         }} className={cs.tagChild} style={{
-          background: '#fff',
-          borderColor: val ? "#2C68FF" : '#95B3FF',
-          color: val ? "#2C68FF" : "rgba(0, 0, 0, 0.65)",
+          background:val ? "#2C68FF" : "#fff",
+          borderColor: val ? "#2C68FF" : 'rgba(0,0,0,0.15)',
+          color: val ? "#fff" : "rgba(0, 0, 0, 0.65)",
         }}>
           <div style={{
             display:'flex',
@@ -90,7 +93,7 @@ function RGroup ({ tagsGroup, setTagsGroup, selects, setSelects }) {
             justifyContent:'center',
           }}>
             {name}
-            <img src={val?edit21:edit22} alt="" style={{width:9,marginLeft:18}}/>
+            <img src={val?edit24:edit26} alt="" style={{width:9,marginLeft:18}}/>
           </div>
         </Button>
       )
