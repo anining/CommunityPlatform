@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Button, message } from 'antd'
-import 'react-quill/dist/quill.snow.css';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import good5 from '../../icons/good/good5.png'
 import auth4 from '../../icons/auth/auth4.png'

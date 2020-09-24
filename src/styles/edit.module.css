@@ -51,11 +51,11 @@
 
 .circle {
   position: absolute;
-  top: 11px;
-  left: 35px;
+  top: 5px;
+  left: 30px;
   height: 14px;
   width: 14px;
-  background: linear-gradient(142deg, #9FF7D8 0%, #31F191 100%);
+  background: linear-gradient(144deg, #B4C9FF 0%, #1657FF 100%);
   border-radius: 14px;
 }
 
@@ -430,4 +430,86 @@
   margin-left: 32px;
   margin-top: 32px;
   color: #2C67FF;
+}
+
+.orderHV {
+  display: flex;
+  align-items: center;
+  width: 61.75%;
+}
+
+.orderHI {
+  width: 23.58%;
+  height: 111px;
+  border-radius: 2px;
+  margin: 32px 32px 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #34374A;
+}
+
+.orderHI div {
+  font-weight: 500;
+  font-size: 1.785rem;
+}
+
+.orderHI span {
+  font-size: 0.857rem;
+}
+
+.orderM {
+  width: 80.5%;
+  min-height: 100px;
+  background-color: #F9F9F9;
+}
+
+.orderMH {
+  height: 70px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  color: #34374A;
+  font-weight: 500;
+  font-size: 1.142rem;
+  border-bottom: 1px solid #D8D8D8;
+  margin-bottom: 30px;
+}
+
+.orderLine {
+  color: #34374A;
+  font-size: 0.857rem;
+}
+
+.orderLine div:first-child {
+  font-weight: 800;
+  margin-right: 20px;
+}
+
+.orderLine div {
+  display: inline;
+}
+
+.orderLine span {
+  color: #FF4D4F;
+}
+
+.orderLineView {
+  margin: 0 20px;
+}
+
+.orderNull {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.65);
+  padding-bottom: 33px;
+}
+
+.orderNull img {
+  width: 100px;
+  margin-bottom: 8px;
 }

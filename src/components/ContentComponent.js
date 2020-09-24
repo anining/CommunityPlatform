@@ -47,6 +47,7 @@ import UserStatisticsView from "../views/statisticsViews/UserStatisticsView"
 import WebStatisticsView from "../views/statisticsViews/WebStatisticsView"
 import GoodStatisticsView from "../views/statisticsViews/GoodStatisticsView"
 import TableView from "../views/tableViews/TableView"
+import OrderView from "../views/orderRecordingViews/OrderView"
 
 function ContentComponent () {
 
@@ -96,6 +97,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/cardManage">
           <CardManageView />
+        </Route>
+        <Route exact path="/main/order">
+          <OrderView />
         </Route>
         <Route exact path="/main/editCardManage">
           <EditCardManageView />
