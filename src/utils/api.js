@@ -208,3 +208,29 @@ export function announcements (type, cid, table, body) {
       // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
   }
 }
+
+// 获取用户资金流水列表
+export function balanceChanges (page, size, start_from, end_with) {
+  let data = { page, size }
+  if (start_from) {
+    data = { ...data, ...{ start_from } }
+  }
+  if (end_with) {
+    data = { ...data, ...{ end_with } }
+  }
+  return transformFetch("GET", "/balance-changes", data)
+}
+
+// 客服
+export function customerServices (type, cid, table, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/customer-services", table)
+    case "add":
+      return transformFetch("POST", "/customer-services", body);
+    case "modify":
+      return transformFetch("PATCH", `/customer-services/${cid}`, body);
+    default:
+      // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
+  }
+}

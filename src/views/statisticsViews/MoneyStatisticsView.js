@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { TimelineChart } from 'ant-design-pro/lib/Charts';
-import { Button, DatePicker, Radio, Table, Timeline } from 'antd'
+import { Button, DatePicker } from 'antd'
 import c from '../../styles/home.module.css'
 import ct from '../../styles/statistics.module.css'
 
@@ -41,8 +41,8 @@ function MoneyStatisticsView () {
             </div>
             <div className={ct.data}>总计：2584.1548/245.1575</div>
           </div>
-          <div className={ct.bView}>
-            <DatePicker.RangePicker className={ct.picker}/>
+          <div className={ct.mView}>
+            <DatePicker.RangePicker className={ct.mPicker}/>
             <Button size="small" className={ct.btn}>确定</Button>
           </div>
         </div>
@@ -57,8 +57,8 @@ function MoneyStatisticsView () {
             </div>
             <div className={ct.data}>总计：2584.1548/245.1575</div>
           </div>
-          <div className={ct.bView}>
-            <DatePicker.RangePicker className={ct.picker}/>
+          <div className={ct.mView}>
+            <DatePicker.RangePicker className={ct.mPicker}/>
             <Button size="small" className={ct.btn}>确定</Button>
           </div>
         </div>
@@ -73,8 +73,8 @@ function MoneyStatisticsView () {
             </div>
             <div className={ct.data}>总计：2584.1548/245.1575</div>
           </div>
-          <div className={ct.bView}>
-            <DatePicker.RangePicker className={ct.picker}/>
+          <div className={ct.mView}>
+            <DatePicker.RangePicker className={ct.mPicker}/>
             <Button size="small" className={ct.btn}>确定</Button>
           </div>
         </div>

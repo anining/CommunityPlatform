@@ -1,29 +1,10 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Menu, Dropdown, Button, Upload, message, Radio, Checkbox } from 'antd'
+import { Input, Button } from 'antd'
 import good5 from '../../icons/good/good5.png'
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import DropdownComponent from "../../components/DropdownComponent";
 
 function EditDockingView () {
-
-  function handleMenuClick (e) {
-    message.info('Click on menu item.');
-    console.log('click', e);
-  }
-
-  const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">
-        1st menu item
-      </Menu.Item>
-      <Menu.Item key="2">
-        2nd menu item
-      </Menu.Item>
-      <Menu.Item key="3">
-        3rd menu item
-      </Menu.Item>
-    </Menu>
-  );
 
   return (
     <div className={c.container}>
@@ -49,14 +30,15 @@ function EditDockingView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>对接系统</div>
           </div>
-          <Dropdown overlay={menu}>
-            <Button size="small" className={c.itemDropdown}>
-              <div className={c.hiddenText}>
-                同系统
-              </div>
-              <DownOutlined />
-            </Button>
-          </Dropdown>
+          <DropdownComponent keys={[]} placeholder="同系统" style={{
+            width: '29.25%',
+            height: 40,
+            marginTop:0,
+            marginLeft:0,
+            marginBottom:0,
+            marginRight:0,
+            color: 'rgba(0,0,0,0.25)',
+          }}/>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>

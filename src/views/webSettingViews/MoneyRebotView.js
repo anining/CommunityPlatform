@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Switch, Dropdown, Button, Upload, message, Radio, Checkbox } from 'antd'
+import { Switch, Button, Upload, message } from 'antd'
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import cs from '../../styles/childWebSetting.module.css'
 import edit1 from '../../icons/edit/edit1.png'
+import { MODULES } from "../../utils/config";
 
 function MoneyRebotView () {
   const [imageUrl, setImageUrl] = useState()
@@ -47,8 +47,8 @@ function MoneyRebotView () {
   }
 
   function onChange (e) {
-    console.log('radio checked', e.target.value);
-    setValue(e.target.value)
+    console.log('radio checked', e);
+    // setValue(e.target.value)
   }
 
   return (
@@ -65,7 +65,7 @@ function MoneyRebotView () {
           </div>
           <div className={cs.switchView}>
             <Switch defaultChecked onChange={onChange} className={cs.switch}/>
-            <div className={cs.switchText}>当前状态 ： 开启加款机器人支付</div>
+            <div className={cs.switchText} style={{color:value?"rgb(44, 104, 255)":"rgb(52, 55, 74)"}}>当前状态 ： 开启加款机器人支付</div>
           </div>
         </div>
         <div className={c.item} style={{alignItems:'flex-start'}}>
@@ -95,7 +95,7 @@ function MoneyRebotView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>充值教程</div>
           </div>
-          <ReactQuill className={c.quill} theme="snow" value={quillValue} onChange={setQuillValue}/>
+          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={quillValue} onChange={setQuillValue}/>
         </div>
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>

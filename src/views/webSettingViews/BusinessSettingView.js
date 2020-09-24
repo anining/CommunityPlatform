@@ -7,15 +7,6 @@ import guide2 from '../../icons/guide/guide2.png'
 import guide3 from '../../icons/guide/guide3.png'
 
 function BusinessSettingView () {
-  const [checkes, setChecks] = useState([])
-
-  function onChange (e, value) {
-    if (e.target.checked) {
-      setChecks([...checkes, ...[value]])
-    } else {
-      setChecks([...checkes].filter(item => item !== value))
-    }
-  }
 
   return (
     <div className={c.container}>
@@ -30,21 +21,7 @@ function BusinessSettingView () {
         <div className={cs.main}>
           <div className={cs.title}>我们将会根据您的选择，为您定制您的管理系统。</div>
           <div className={cs.center}>
-            <div className={cs.itemView} style={{borderColor:checkes.includes(1)?"#2C67FF":"#fff"}}>
-              <img src={guide1} alt="" />
-              <div className={cs.label}>全部业务</div>
-              <Checkbox className={cs.checkbox} onChange={e=>onChange(e,1)} />
-            </div>
-            <div className={cs.itemView} style={{borderColor:checkes.includes(2)?"#2C67FF":"#fff"}}>
-              <img src={guide3} alt="" />
-              <div className={cs.label}>卡密业务</div>
-              <Checkbox className={cs.checkbox} onChange={e=>onChange(e,2)} />
-            </div>
-            <div className={cs.itemView} style={{borderColor:checkes.includes(3)?"#2C67FF":"#fff"}}>
-              <img src={guide2} alt="" />
-              <div className={cs.label}>社区业务</div>
-              <Checkbox className={cs.checkbox} onChange={e=>onChange(e,3)} />
-            </div>
+            <Context />
           </div>
           <div className={cs.tips}>业务类型调整会影响到您的系统管理员的权限，请在调整业务之后，对系统管理的权限进行重新分配。</div>
           <Button size="small" type="primary" className={cs.btn}>保存</Button>
@@ -52,6 +29,53 @@ function BusinessSettingView () {
       </div>
     </div>
   )
+}
+
+function Context () {
+  const [selects, setSelects] = useState([])
+  const views = [];
+  const data = [
+    {
+      label: "全部业务",
+      icon: guide1,
+      id: 111,
+    },
+    {
+      label: "卡密业务",
+      icon: guide3,
+      id: 222,
+    },
+    {
+      label: '社区业务',
+      icon: guide2,
+      id: 333,
+    }
+  ]
+
+  function onChange (id) {
+    const localSelects = [...selects]
+    if (localSelects.includes(id)) {
+      localSelects.splice(localSelects.findIndex(item => item === id), 1)
+      setSelects(localSelects)
+    } else {
+      setSelects([...localSelects, id])
+    }
+  }
+
+  data.forEach((item, index) => {
+    const { label, icon, id } = item;
+    views.push(
+      <div className={cs.itemView} onClick={()=>onChange(id)} style={{
+        borderColor: selects.includes(id) ? '#2C67FF' : "rgba(44, 103, 255, 0.03)"
+      }} key={id}>
+        <img src={icon} alt=""/>
+        <div className={cs.label}>{label}</div>
+        <Checkbox checked={selects.includes(id)} className={cs.checkbox} />
+      </div>
+    )
+  });
+
+  return views
 }
 
 export default BusinessSettingView

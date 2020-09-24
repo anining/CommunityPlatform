@@ -329,7 +329,7 @@ function RTable () {
   return (
     <div className={c.main}>
       <div className={c.searchView}>
-        <div className={c.search} style={{borderBottomWidth:0}}>
+        <div className={c.search}>
           <div className={c.searchL}>
             <Input onPressEnter={()=>get(current)} placeholder="请输入订单编号" size="small" className={c.searchInput}/>
             <Input onPressEnter={()=>get(current)} placeholder="请输入商品名称" size="small" className={c.searchInput}/>

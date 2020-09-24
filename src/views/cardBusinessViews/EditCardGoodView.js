@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Menu, Dropdown, Button, Upload, message, Radio, Checkbox } from 'antd'
+import { Input, Menu, Button, Upload, message, Radio } from 'antd'
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import edit1 from '../../icons/edit/edit1.png'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { MODULES } from "../../utils/config";
+import DropdownComponent from "../../components/DropdownComponent";
 
 function EditCardGoodView () {
   const [imageUrl, setImageUrl] = useState()
@@ -128,15 +127,16 @@ function EditCardGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>商品分类</div>
           </div>
-            <Dropdown overlay={menu}>
-              <Button size="small" className={c.itemDropdown}>
-                <div className={c.hiddenText}>
-                  请设置商品分类
-                </div>
-                <DownOutlined />
-              </Button>
-            </Dropdown>
-          <Button type="primary" className={c.itemBtn}>新增分类</Button>
+            <DropdownComponent keys={[]} placeholder="请设置商品分类" style={{
+              width:"29.25%",
+              height:40,
+              marginTop:0,
+              marginBottom:0,
+              marginLeft:0,
+              marginRight:0,
+              color:'rgba(0,0,0,0.25)'
+            }}/>
+            <Button type="primary" className={c.itemBtn}>新增分类</Button>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
@@ -171,7 +171,7 @@ function EditCardGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>目标描述</div>
           </div>
-          <ReactQuill className={c.quill} theme="snow" value={quillValue} onChange={setQuillValue}/>
+          <ReactQuill className={c.quill} modules={MODULES} theme="snow" value={quillValue} onChange={setQuillValue}/>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
@@ -179,14 +179,15 @@ function EditCardGoodView () {
             <div className={c.itemText}>预留方式</div>
           </div>
           <div style={{width:'29.25%',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-            <Dropdown overlay={menu}>
-              <Button size="small" className={c.dropdownBtn}>
-                <div className={c.hiddenText}>
-                  预留信息
-                </div>
-                <DownOutlined />
-              </Button>
-            </Dropdown>
+            <DropdownComponent keys={[]} placeholder="预留信息" style={{
+              width:"23.931%",
+              height:40,
+              marginTop:0,
+              marginBottom:0,
+              marginLeft:0,
+              marginRight:'1.5%',
+              color:'#34374A'
+            }}/>
             <Input placeholder="请输入预留信息" className={c.itemInput} style={{width:'70.94%'}}></Input>
           </div>
         </div>
@@ -258,12 +259,12 @@ function EditCardGoodView () {
           <div className={c.itemName} />
           <div>数值越大，排序越靠前；数值相同，商品编号越大，排序越靠前</div>
         </div>
-        <div className={c.item}>
+        <div className={c.item} style={{alignItems:"flex-start"}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>备注</div>
           </div>
-          <ReactQuill className={c.quill} theme="snow" value={quillValue} onChange={setQuillValue}/>
+          <ReactQuill className={c.quill} modules={MODULES} theme="snow" value={quillValue} onChange={setQuillValue}/>
         </div>
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>

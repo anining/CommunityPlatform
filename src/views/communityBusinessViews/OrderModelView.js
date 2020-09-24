@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Menu, Dropdown, Table, message, Input } from 'antd'
 import c from '../../styles/view.module.css'
-import { DownOutlined } from '@ant-design/icons';
 import good7 from '../../icons/good/good7.png'
 import good31 from '../../icons/good/good31.png'
-import { h } from '../../utils/history'
 import { communityParamTemplates } from "../../utils/api";
 import DropdownComponent from '../../components/DropdownComponent'
 import { push, transformTime } from "../../utils/util";

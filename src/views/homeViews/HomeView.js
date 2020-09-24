@@ -204,11 +204,13 @@ function HomeView () {
             <div className={c.tableTitle}>商品概况</div>
             <div className={c.tableTips}>查看全部</div>
           </div>
-          <Table columns={columns} dataSource={data} rowClassName={(record,index)=>{
-            if (index % 2) {
-              return "f1f5ff"
-            }
-          }} size="small" pagination={{showQuickJumper:true}}
+          <Table
+            columns={columns}
+            dataSource={data}
+            size="small"
+            pagination={{
+              showQuickJumper:true
+            }}
           />
         </div>
     </div>

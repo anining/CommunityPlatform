@@ -69,8 +69,6 @@
 .firstItem {
   width: 310px;
   height: 310px;
-  display: grid;
-  place-items: center;
   background-color: #fff;
   border-radius: 70px 1px 70px 1px;
   display: grid;
@@ -83,10 +81,6 @@
 
 .firstItem:hover {
   border: 1px solid #2C67FF!important;
-}
-
-.firstItem:hover {
-  border-width: 1px;
 }
 
 @media screen and (max-width: 1500px) {
@@ -164,10 +158,6 @@
   width: 100%;
   overflow: hidden;
   overflow-y: auto;
-}
-
-.secondItem {
-
 }
 
 .secondTitle {

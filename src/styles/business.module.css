@@ -30,16 +30,21 @@
 
 .itemView {
   width: 19.871%;
+  min-width: 250px;
   margin-right: 6.666%;
-  background: #FFFFFF;
-  box-shadow: 0px 12px 48px 16px rgba(44, 103, 255, 0.03), 0px 9px 28px 0px rgba(44, 103, 255, 0.05), 0px 6px 16px -8px rgba(44, 103, 255, 0.08);
-  border-radius: 70px 1px 70px 1px;
-  border: 1px solid #2C67FF;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
   padding: 0 0.65%;
+  background-color: #fff;
+  border-radius: 70px 1px 70px 1px;
+  display: grid;
+  cursor: pointer;
+  border: 1px solid #2C67FF;
+  place-items: center;
+  box-shadow: 0px 12px 48px 16px rgba(44, 103, 255, 0.03), 0px 9px 28px 0px rgba(44, 103, 255, 0.05), 0px 6px 16px -8px rgba(44, 103, 255, 0.08);
+  position: relative;
+}
+
+.itemView:hover {
+  border: 1px solid #2C67FF!important;
 }
 
 .itemView img {
@@ -50,7 +55,7 @@
 .label {
   color: #333649;
   font-size: 1.142rem;
-  margin-bottom: -2.451%;
+  margin-bottom: 2.451%;
 }
 
 .checkbox {

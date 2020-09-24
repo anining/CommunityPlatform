@@ -58,7 +58,23 @@
 .payLabel {
   width: 100%;
   text-align: left;
-  color: #000;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.lPayView {
+  display: flex;
+  width: 544px;
+  padding: 28px 35px 8px 35px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lPayTypeView {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
 }
 
 .payTypeView {
@@ -100,10 +116,26 @@
 }
 
 .payTips {
+  padding: 0 75px;
   color: #979BA3;
   font-size: 0.857rem;
   margin-bottom: 41px;
+}
+
+.payTips div {
+  color: #2c68ff;
+  width: 40px;
+  text-align: center;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.lBtnView {
+  width: 100%;
+  padding: 0 68px;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .payBtn {
@@ -121,5 +153,4 @@
   border: 1px solid #2C68FF;
   color: #2C68FF;
   font-weight: 500;
-  margin-right: 56px;
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
 import cs from '../../styles/subService.module.css'
-import { Input, Modal, Dropdown, Button, Upload, message, Radio, Checkbox } from 'antd'
+import { Modal, Button } from 'antd'
 import service7 from '../../icons/service/service7.png'
 import service3 from '../../icons/service/service3.png'
 import service5 from '../../icons/service/service5.png'
@@ -22,7 +22,7 @@ function SubServiceView () {
   }
 
   function handleCancel () {
-
+    setVisiblePay(false)
   }
 
   useEffect(() => {
@@ -115,20 +115,16 @@ function SubServiceView () {
         </div>
       </Modal>
       <Modal
+        width={610}
         visible={visiblePay}
         onOk={handleOk}
         footer={null}
         onCancel={handleCancel}
       >
-        <div style={{
-          display:'flex',
-          flexDirection:'column',
-          alignItems:'center',
-          justifyContent:'center',
-          }}>
+        <div className={cs.lPayView}>
           <div className={cs.payLabel}>支付方式：</div>
-          <div style={{display:'flex',alignItems:'center',marginTop:16}}>
-            <div onClick={()=>setPayType("ali")} className={cs.payTypeView} style={{marginRight:46,borderColor:payType==='ali'?"#4076FF":"#E0E3EA",background:payType==='ali'?"#ECF2FF":"#FFFFFF"}}>
+          <div className={cs.lPayTypeView}>
+            <div onClick={()=>setPayType("ali")} className={cs.payTypeView} style={{borderColor:payType==='ali'?"#4076FF":"#E0E3EA",background:payType==='ali'?"#ECF2FF":"#FFFFFF"}}>
               <Circle value={payType==='ali'}/>
               <img src={service6} alt="" />
               <div>支付宝支付</div>
@@ -140,8 +136,12 @@ function SubServiceView () {
             </div>
           </div>
           <QRCode value="http://facebook.github.io/react/" className={cs.qrCode}/>
-          <div className={cs.payTips}>请在<div style={{color:"#2C68FF",width:40,textAlign:'center'}}>{number}s</div>内扫码付款，付款完成后请点击“已支付”，如有疑问请与客服取得联系。</div>
-          <div>
+          <div className={cs.payTips}>
+            请在
+            <div>{number}s</div>
+            内扫码付款，付款完成后请点击“已支付”，如有疑问请与客服取得联系。
+          </div>
+          <div className={cs.lBtnView}>
             <Button size="small" className={cs.payBtnF}>未支付</Button>
             <Button type="primary" size="small" className={cs.payBtn}>已支付</Button>
           </div>

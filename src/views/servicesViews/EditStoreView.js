@@ -1,30 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Menu, Dropdown, Button, Upload, message, Radio, Checkbox } from 'antd'
+import { Input, Button } from 'antd'
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import DropdownComponent from "../../components/DropdownComponent";
 
 function EditStoreView () {
-
-  function handleMenuClick (e) {
-    message.info('Click on menu item.');
-    console.log('click', e);
-  }
-
-  const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">
-        1st menu item
-      </Menu.Item>
-      <Menu.Item key="2">
-        2nd menu item
-      </Menu.Item>
-      <Menu.Item key="3">
-        3rd menu item
-      </Menu.Item>
-    </Menu>
-  );
 
   return (
     <div className={c.container}>
@@ -62,14 +43,15 @@ function EditStoreView () {
             <div className={c.itemText}>联系方式</div>
           </div>
           <div style={{width:'29.25%',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-            <Dropdown overlay={menu}>
-              <Button size="small" className={c.dropdownBtn}>
-                <div className={c.hiddenText}>
-                  联系信息
-                </div>
-                <DownOutlined />
-              </Button>
-            </Dropdown>
+            <DropdownComponent keys={[]} placeholder="联系信息" style={{
+              width: '23.931%',
+              height: 40,
+              marginTop:0,
+              marginLeft:0,
+              marginBottom:0,
+              marginRight:'1.5%',
+              color: '#34374A',
+            }}/>
             <Input placeholder="请输入供货商联系方式" className={c.itemInput} style={{width:'70.94%'}}></Input>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Menu, Dropdown, Button, Upload, message, Radio, Checkbox } from 'antd'
+import { Input, Button, Checkbox } from 'antd'
 import good5 from '../../icons/good/good5.png'
 
 function EditCardManageView () {
