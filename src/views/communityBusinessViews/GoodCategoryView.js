@@ -4,8 +4,6 @@ import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
-import { h } from '../../utils/history'
-import { styles } from '../../styles/modal'
 import { communityGoodsCategories } from '../../utils/api'
 import { push, transformTime } from "../../utils/util";
 import DropdownComponent from '../../components/DropdownComponent'
@@ -150,7 +148,7 @@ function RTable ({ setVisible }) {
   }
 
   return (
-    <div className={c.main}>
+    <div className={c.main} style={{marginTop:0}}>
       <div className={c.searchView}>
           <div className={c.search}>
             <div className={c.searchL}>

@@ -205,7 +205,6 @@ function RTable () {
               format="YYYY-MM-DD"
               onChange={dateChange}
               value={moment}
-              style={{marginTop:24}}
               className={c.dataPicker}/>
           </div>
           <div className={c.searchR}>
