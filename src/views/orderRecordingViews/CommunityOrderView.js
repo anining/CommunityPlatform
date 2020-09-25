@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, message, Input, DatePicker } from 'antd'
+import { Button, Space, Popconfirm, Table, message, Input, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import good17 from '../../icons/good/good17.png'
 import good18 from '../../icons/good/good18.png'
@@ -84,9 +84,9 @@ function RTable () {
   function get (current) {
     communityGoodsOrders(current, pageSize, id, search_user_account, search_goods_name, community_goods_category_id, status, date[0], date[1]).then(r => {
       if (!r.error) {
-        // const { data, total } = r
-        // setTotal(total)
-        // setData(format(data))
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
       }
     })
   }
@@ -190,12 +190,12 @@ function RTable () {
   },
     {
       title: '推送状态',
-      dataIndex: 'number',
+      dataIndex: 'push_status',
       align: 'center',
   },
     {
       title: '售后状态',
-      dataIndex: 'price',
+      dataIndex: 'refund_status',
       align: 'center',
   },
     {
@@ -215,90 +215,62 @@ function RTable () {
     {
       title: '订单历程',
       align: 'center',
-      // render: (text, record, index) => (
-      //   <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
-      // }
-      // visible = { visible[index] }
-      // placement = "leftTop"
-      // title = {
-      //   () => {
-      //     return (
-      //       <div style={styles.view}>
-      //             <div style={styles.close} onClick={close}>
-      //               <img src={good40} style={styles.closeImg} alt="" />
-      //             </div>
-      //             <Timeline>
-      //               <Timeline.Item color="#2C67FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
-      //               <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
-      //               <Timeline.Item color="#2C67FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
-      //               <Timeline.Item color="#2C67FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
-      //               <Timeline.Item color="#2C67FF">2020.01.15 15:01:04　用户下单，订单状态变为<span style={{color:'#4177FE'}}>待处理</span></Timeline.Item>
-      //               <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
-      //               <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
-      //               <Timeline.Item color="#979BA3">Create a services site 2015-09-01</Timeline.Item>
-      //             </Timeline>
-      //           </div>
-      //     )
-      //   }
-      // } >
-      // <div style={{color:'#2C68FF'}} onClick={()=>detail(text,index)}>点击查看</div> <
-      // /Popconfirm>
-      // )
+      render: (text, record, index) => <div className={c.clickText}>点击查看</div>
     },
     {
       title: '操作',
       align: 'center',
-      // render: (text, record, index) => (
-      //   <Space size="small" style={{color:'#2C68FF'}}>
-      //       <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
-      //         }
-      //         placement = "leftTop"
-      //         title = {
-      //             () => {
-      //               return (
-      //                 <div style={styles.view}>
-      //                   <div style={styles.header}>
-      //                     <img src={good41} alt="" style={styles.icon}/>
-      //                     <div>请输入需要退款的数量</div>
-      //                   </div>
-      //                   <Input style={styles.input} placeholder="请在这里输入退款数量"/>
-      //                   <div style={styles.tips}>全部退款</div>
-      //                   <div style={styles.footer}>
-      //                     <Button size="small" style={styles.cancelBtn}>取消</Button>
-      //                     <Button size="small" type="primary" style={styles.okBtn}>确定</Button>
-      //                   </div>
-      //                 </div>
-      //               )
-      //             }
-      //           } >
-      //         <div style={{color:'#FF4D4F'}}>退款</div>
-      //       </Popconfirm>
-      //     <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-      //       <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
-      //         }
-      //         placement = "leftTop"
-      //         title = {
-      //             () => {
-      //               return (
-      //                 <div style={styles.view}>
-      //                   <div style={styles.header}>
-      //                     <img src={good41} alt="" style={styles.icon}/>
-      //                     <div>请为此订单输入备注信息</div>
-      //                   </div>
-      //                   <Input style={styles.input} placeholder="请在这里输入备注信息"/>
-      //                   <div style={styles.footer}>
-      //                     <Button size="small" style={styles.cancelBtn}>取消</Button>
-      //                     <Button size="small" type="primary" style={styles.okBtn}>确定</Button>
-      //                   </div>
-      //                 </div>
-      //               )
-      //             }
-      //           } >
-      //         <div style={{color:'#2C68FF'}}>添加备注</div>
-      //       </Popconfirm>
-      //   </Space>
-      // )
-      },
+      render: (text, record, index) => (
+        <Space size="small">
+            <Popconfirm icon={<img src="" alt="" style={{width:0,height:0}}/>
+              }
+              placement = "leftTop"
+              title = {
+                  () => {
+                    // return (
+                    //   // {/* <div style={styles.view}> */}
+                    //   // {/*   <div style={styles.header}> */}
+                    //   // {/*     <img src={good41} alt="" style={styles.icon}/> */}
+                    //   // {/*     <div>请输入需要退款的数量</div> */}
+                    //   // {/*   </div> */}
+                    //   // {/*   <Input style={styles.input} placeholder="请在这里输入退款数量"/> */}
+                    //   // {/*   <div style={styles.tips}>全部退款</div> */}
+                    //   // {/*   <div style={styles.footer}> */}
+                    //   // {/*     <Button size="small" style={styles.cancelBtn}>取消</Button> */}
+                    //   // {/*     <Button size="small" type="primary" style={styles.okBtn}>确定</Button> */}
+                    //   // {/*   </div> */}
+                    //   // {/* </div> */}
+                    // )
+                  }
+                } >
+              <div style={{color:'#FF4D4F',textDecorationColor:"#ff4d4f"}} className={c.clickText}>退款</div>
+            </Popconfirm>
+            <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+            <Popconfirm icon={<img src="" alt="" style={{width:0,height:0}}/>
+              }
+              placement = "leftTop"
+              title = {
+                  () => {
+                    // return (
+                    //   <div style={styles.view}>
+                    //     <div style={styles.header}>
+                    //       <img src={good41} alt="" style={styles.icon}/>
+                    //       <div>请为此订单输入备注信息</div>
+                    //     </div>
+                    //     <Input style={styles.input} placeholder="请在这里输入备注信息"/>
+                    //     <div style={styles.footer}>
+                    //       <Button size="small" style={styles.cancelBtn}>取消</Button>
+                    //       <Button size="small" type="primary" style={styles.okBtn}>确定</Button>
+                    //     </div>
+                    //   </div>
+                    // )
+                  }
+                } >
+              <div className={c.clickText}>添加备注</div>
+            </Popconfirm>
+        </Space>
+      )
+    }
   ];
 
   const rowSelection = {
