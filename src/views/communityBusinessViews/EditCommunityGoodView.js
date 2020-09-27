@@ -243,7 +243,7 @@ function EditCommunityGoodView () {
             <div onClick={()=>{
                win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
             }} className={c.itemSelect}>
-              <div className={c.itemSelectP}>{community_goods_category_name?community_goods_category_name:'请设置商品分类'}</div>
+              <div className={c.itemSelectP} style={{color:community_goods_category_name?"rgba(0, 0, 0, 0.85)":"rgba(0,0,0,0.25)"}}>{community_goods_category_name?community_goods_category_name:'请设置商品分类'}</div>
               <div>选择</div>
             </div>
             <Button type="primary" className={c.itemBtn} onClick={()=>{
@@ -258,7 +258,7 @@ function EditCommunityGoodView () {
             <div onClick={()=>{
                win = window.open("/select-order-model", "_blank", "left=390,top=145,width=1200,height=700")
             }} className={c.itemSelect}>
-              <div className={c.itemSelectP}>{community_param_template_name?community_param_template_name:'请设置下单模型'}</div>
+              <div className={c.itemSelectP} style={{color:community_param_template_name?"rgba(0, 0, 0, 0.85)":"rgba(0,0,0,0.25)"}}>{community_param_template_name?community_param_template_name:'请设置下单模型'}</div>
               <div>选择</div>
             </div>
             <Button type="primary" className={c.itemBtn} onClick={()=>{
@@ -283,7 +283,7 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>进价</div>
           </div>
-          <Input onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>
+          <Input type="number" onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -294,14 +294,14 @@ function EditCommunityGoodView () {
             <span>*</span>
             <div className={c.itemText}>单价</div>
           </div>
-          <Input onChange={e=>setUnit_price(e.target.value)} value={unit_price} placeholder="请输入商品销售单价" className={c.itemInput}></Input>
+          <Input type="number" onChange={e=>setUnit_price(e.target.value)} value={unit_price} placeholder="请输入商品销售单价" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>密价</div>
           </div>
-          <Input onChange={e=>setDisc_price(e.target.value)} value={disc_price} placeholder="请输入商品对接密价" className={c.itemInput}></Input>
+          <Input type="number" onChange={e=>setDisc_price(e.target.value)} value={disc_price} placeholder="请输入商品对接密价" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -319,21 +319,21 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>最低数量</div>
           </div>
-          <Input onChange={e=>setMin_order_amount(e.target.value)} value={min_order_amount} placeholder="该商品每一单最低多少起下，默认为0" className={c.itemInput}></Input>
+          <Input type="number" onChange={e=>setMin_order_amount(e.target.value)} value={min_order_amount} placeholder="该商品每一单最低多少起下，默认为0" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>最高数量</div>
           </div>
-          <Input placeholder="该商品每一单最高多下多少个，默认为0" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput}></Input>
+          <Input type="number" placeholder="该商品每一单最高多下多少个，默认为0" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>重复下单</div>
           </div>
-          <Input onChange={e=>setRepeat_order(e.target.value)} value={repeat_order} placeholder="允许重复下单的数量" className={c.itemInput}></Input>
+          <Input type="number" onChange={e=>setRepeat_order(e.target.value)} value={repeat_order} placeholder="允许重复下单的数量" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -344,7 +344,7 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>批量下单</div>
           </div>
-          <Input onChange={e=>setBatch_order(e.target.value)} value={batch_order} placeholder="允许批量下单的数量" className={c.itemInput}></Input>
+          <Input type="number" onChange={e=>setBatch_order(e.target.value)} value={batch_order} placeholder="允许批量下单的数量" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -372,7 +372,7 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>排序权重</div>
           </div>
-          <Input onChange={e=>setWeight(e.target.value)} value={weight} placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
+          <Input type="number" onChange={e=>setWeight(e.target.value)} value={weight} placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />

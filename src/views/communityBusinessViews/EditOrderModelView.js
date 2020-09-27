@@ -83,7 +83,7 @@ function EditOrderModelView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>排序权重</div>
           </div>
-          <Input maxLength={5} placeholder="请填写权重数值，默认权重为1" onChange={e=>setWeight(e.target.value)} value={weight} className={c.itemInput}></Input>
+          <Input type="number" maxLength={5} placeholder="请填写权重数值，默认权重为1" onChange={e=>setWeight(e.target.value)} value={weight} className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -142,9 +142,9 @@ function RModel ({ params = [], setParams }) {
     const { name, placeholder, type } = item
     views.push(
       <div className={c.orderInputView} key={index}>
-        <Input maxLength={20} onChange={e=>onChange(e,index,"name")} value={name} placeholder="参数名称，如：数量" className={c.orderInput}></Input>
-        <Input maxLength={20} onChange={e=>onChange(e,index,'placeholder')} value={placeholder} placeholder="参数提示语，如：请输入数量" className={c.orderInput}></Input>
-        <DropdownComponent action={type} style={{width:'27.372%',height:40}} placeholder="参数类型，如：text" setAction={e=>onChange(e,index,"type")} keys={[{key:'text',name:'文本'},{key:'number',name:'数字'},{key:'url',name:'链接'}]}/>
+        <Input maxLength={20} onChange={e=>onChange(e,index,"name")} value={name} placeholder="参数名称，如：数量" className={c.orderInput} style={{fontSize:'1rem'}}></Input>
+        <Input maxLength={20} onChange={e=>onChange(e,index,'placeholder')} value={placeholder} placeholder="参数提示语，如：请输入数量" style={{fontSize:'1rem'}} className={c.orderInput}></Input>
+        <DropdownComponent action={type} style={{width:'27.372%',height:40,marginBottom:0}} placeholder="参数类型，如：text" setAction={e=>onChange(e,index,"type")} keys={[{key:'text',name:'文本'},{key:'number',name:'数字'},{key:'url',name:'链接'}]}/>
         <Button size="small" danger className={c.orderBtn} onClick={()=>deleteI(index)}>删除</Button>
       </div>
     )

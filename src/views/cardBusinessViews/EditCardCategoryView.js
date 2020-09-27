@@ -38,7 +38,7 @@ function EditCardCategoryView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>排序权重</div>
           </div>
-          <Input placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
+          <Input type="number" placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />

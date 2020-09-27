@@ -52,6 +52,7 @@ function TableView () {
             maxLength={5}
             className={cs.tInputGroup}
             value={inputGroupValue}
+            placeholder="请输入分组名称"
             onChange={e=>setInputGroupValue(e.target.value)}
             onBlur={handleInputGroupConfirm}
             onPressEnter={handleInputGroupConfirm}

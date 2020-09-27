@@ -205,7 +205,7 @@ function EditCardGoodView () {
             <span>*</span>
             <div className={c.itemText}>进价</div>
           </div>
-          <Input placeholder="请输入商品进价" className={c.itemInput}></Input>
+          <Input type="number" placeholder="请输入商品进价" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -216,14 +216,14 @@ function EditCardGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>单价</div>
           </div>
-          <Input placeholder="请输入商品销售单价" className={c.itemInput}></Input>
+          <Input type="number" placeholder="请输入商品销售单价" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
             <div className={c.itemText}>密价</div>
           </div>
-          <Input placeholder="请输入商品对接密价" className={c.itemInput}></Input>
+          <Input type="number" placeholder="请输入商品对接密价" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
@@ -262,7 +262,7 @@ function EditCardGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>排序权重</div>
           </div>
-          <Input placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
+          <Input type="number" placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
