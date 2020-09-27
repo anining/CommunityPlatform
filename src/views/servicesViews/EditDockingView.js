@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Button } from 'antd'
+import { Input, Button, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import DropdownComponent from "../../components/DropdownComponent";
+import {push} from "../../utils/util";
 
 function EditDockingView () {
 
@@ -10,7 +11,15 @@ function EditDockingView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 增值服务 / <span>对接</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/docking")}>对接</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>新增对接</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>

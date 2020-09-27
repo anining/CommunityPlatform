@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Button, message } from 'antd'
+import { Input, Button, message, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import good8 from '../../icons/good/good8.png'
 import { communityParamTemplates } from "../../utils/api"
-import { saveSuccess, goBack } from "../../utils/util"
+import { saveSuccess, goBack, push } from "../../utils/util"
 import { useHistory } from "react-router-dom"
 import DropdownComponent from "../../components/DropdownComponent"
 
@@ -55,7 +55,15 @@ function EditOrderModelView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 社区业务 / <span>下单模型</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/orderModel")}>下单模型</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>新增模型</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>

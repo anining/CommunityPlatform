@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Button, message } from 'antd'
+import { Input, Button, message, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import { communityGoodsCategories } from '../../utils/api'
-import { saveSuccess, goBack } from "../../utils/util"
+import { saveSuccess, goBack, push } from "../../utils/util"
 import { useHistory } from "react-router-dom"
 
 function EditGoodCategoryView () {
@@ -44,7 +44,15 @@ function EditGoodCategoryView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 社区业务 / <span>社区商品</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/goodCategory")}>商品分类</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>新增分类</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Checkbox } from 'antd'
+import { Button, Breadcrumb, Checkbox } from 'antd'
 import c from '../../styles/guide.module.css'
 import guide4 from '../../icons/guide/guide4.png'
 import good5 from '../../icons/good/good5.png'
@@ -17,6 +17,7 @@ import guide15 from '../../icons/guide/guide15.png'
 import guide17 from '../../icons/guide/guide17.png'
 import { h } from '../../utils/history'
 import ce from '../../styles/edit.module.css'
+import {push} from "../../utils/util"
 
 function DataSettingView () {
 
@@ -29,7 +30,12 @@ function DataSettingView () {
     <div className={ce.container}>
       <div className={ce.header}>
         <img src={good5} alt="" className={ce.headerImg}/>
-        <div>首页 / 用户主页 / <span>主页看板设置</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>首页看板设置</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={ce.main}>
         <div className={ce.headerT}>

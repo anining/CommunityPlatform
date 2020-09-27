@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Menu, Dropdown, Button, Select, message, Radio, Checkbox } from 'antd'
+import { Input, Menu, Dropdown, Button, Select, message, Radio, Checkbox, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
 import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { push } from "../../utils/util";
 
 function EditChildWebView () {
   const [value, setValue] = useState()
@@ -47,7 +48,15 @@ function EditChildWebView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 分站管理 / 分站列表 / <span>添加站点</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/childWebList")}>分站列表</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>添加站点</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>

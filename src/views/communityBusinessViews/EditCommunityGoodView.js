@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Tooltip, Button, Upload, message, Radio, Checkbox } from 'antd'
+import { Input, Tooltip, Button, Upload, message, Radio, Checkbox, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
 import edit1 from '../../icons/edit/edit1.png'
@@ -181,7 +181,15 @@ function EditCommunityGoodView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 社区业务 / <span>社区商品</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/communityGood")}>社区业务</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>社区商品</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>

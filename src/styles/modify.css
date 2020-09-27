@@ -100,3 +100,16 @@ td.ant-table-column-sort {
 .ant-table-tbody > tr.ant-table-row-selected > td {
   background-color: #F1F5FF;
 }
+
+.ant-breadcrumb .ant-breadcrumb-link span {
+  color: rgba(0, 0, 0, 0.45);
+  transition: color 0.3s;
+  touch-action: manipulation;
+  background-color:transparent;
+  outline:none;
+  cursor: pointer;
+}
+
+.ant-breadcrumb .ant-breadcrumb-link span:hover {
+  color: #548aff;
+}

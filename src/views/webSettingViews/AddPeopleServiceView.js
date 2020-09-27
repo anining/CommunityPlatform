@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Button, message, } from 'antd'
+import { Input, Button, message, Breadcrumb, } from 'antd'
 import good5 from '../../icons/good/good5.png'
-import { goBack, saveSuccess } from "../../utils/util";
+import { goBack, saveSuccess, push } from "../../utils/util";
 import { customerServices } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 
@@ -37,7 +37,15 @@ function AddPeopleServiceView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 站点管理 / <span>添加客服</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/peopleService")}>客服配置</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>添加客服</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>

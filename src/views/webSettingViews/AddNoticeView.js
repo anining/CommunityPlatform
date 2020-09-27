@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Button, message } from 'antd'
+import { Input, Button, message, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
 import { announcements } from "../../utils/api";
-import { saveSuccess } from "../../utils/util";
+import { saveSuccess, push } from "../../utils/util";
 import { MODULES } from "../../utils/config";
 
 function AddNoticeView () {
@@ -32,7 +32,15 @@ function AddNoticeView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 站点设置 / 发布公告 / <span>发布新公告</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/notice")}>发布公告</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>新增公告</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main} style={{marginBottom:0}}>
         <div className={c.headerT}>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Button, Checkbox } from 'antd'
+import { Input, Button, Checkbox, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
+import {push} from "../../utils/util"
 
 function EditCardManageView () {
   const [value, setValue] = useState()
@@ -15,7 +16,15 @@ function EditCardManageView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 卡密业务 / <span>卡密商品</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/cardManage")}>卡密管理</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>新增卡密</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>

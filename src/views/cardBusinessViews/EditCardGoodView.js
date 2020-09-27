@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Menu, Button, Upload, message, Radio } from 'antd'
+import { Input, Menu, Button, Upload, message, Radio, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
 import edit1 from '../../icons/edit/edit1.png'
 import { MODULES } from "../../utils/config";
 import DropdownComponent from "../../components/DropdownComponent";
+import {push} from "../../utils/util";
 
 function EditCardGoodView () {
   const [imageUrl, setImageUrl] = useState()
@@ -76,7 +77,15 @@ function EditCardGoodView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 卡密业务 / <span>卡密商品</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/cardGood")}>卡密商品</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>新增商品</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>

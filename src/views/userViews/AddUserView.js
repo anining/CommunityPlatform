@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Tooltip, Button, Radio, message, } from 'antd'
+import { Input, Tooltip, Button, Radio, message, Breadcrumb, } from 'antd'
 import good5 from '../../icons/good/good5.png'
-import { goBack, saveSuccess } from "../../utils/util";
+import { goBack, saveSuccess, push } from "../../utils/util";
 import { addUsers } from "../../utils/api";
 
 function AddUserView () {
@@ -37,7 +37,15 @@ function AddUserView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 用户管理 / <span>添加用户</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/user")}>用户管理</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>添加用户</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>
