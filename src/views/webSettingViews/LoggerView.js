@@ -79,9 +79,10 @@ function RTable () {
       align: 'center',
       render: (text, record, index) => {
         return ''
+        // const { text: t, color } = getKey(text, obj)
         // const { status, t } = text;
         // return (
-        //   <div style={{color:obj[status]}}>{t}</div>
+        //   <div style={{color}}>{t}</div>
         // )
       }
   },

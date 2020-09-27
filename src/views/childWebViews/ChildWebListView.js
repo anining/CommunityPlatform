@@ -126,9 +126,10 @@ function RTable ({ setVisible }) {
       dataIndex: 'text',
       // render: (text, record, index) => {
       //   const { status, t } = text
+      // const { text: t, color } = getKey(text, obj)
       //   return (
       //     <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-      //       <img src={obj[status].icon} alt="" style={{width:20}}/>
+      //       <img src={icon} alt="" style={{width:20}}/>
       //       <div style={{marginLeft:12}}>{t}</div>
       //     </div>
       //   )
@@ -138,8 +139,9 @@ function RTable ({ setVisible }) {
       title: '状态',
       align: 'center',
       dataIndex: 'status',
+      // const { text: t, color } = getKey(text, obj)
       // render: (text, record, index) => {
-      //   const { text: t, color } = obj[text]
+      //   const { text: t, color } =
       //   return <div style={{color}}>{t}</div>
       // }
   },

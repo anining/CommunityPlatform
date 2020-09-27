@@ -61,19 +61,21 @@ function HomeView () {
       title: '涨跌值',
       align: 'center',
       dataIndex: 'price',
-      render: (text, record, index) => {
-        const { status, t } = text
-        return <div style={{color:obj[status]}}>{t}</div>
-      }
+      // render: (text, record, index) => {
+      //   const { text: t, color } = getKey(text, obj)
+      //   const { status, t } = text
+      //   return <div style={}>{t}</div>
+      // }
   },
     {
       title: '涨跌值',
       align: 'center',
       dataIndex: 'price',
-      render: (text, record, index) => {
-        const { status, t } = text
-        return <div style={{color:obj[status]}}>{t}</div>
-      }
+      // render: (text, record, index) => {
+      //   const { text: t, color } = getKey(text, obj)
+      //   const { status, t } = text
+      //   return <div style={}>{t}</div>
+      // }
   },
     {
       title: '创建时间',

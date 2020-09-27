@@ -127,8 +127,9 @@ function RTable () {
       //   multiple: 1,
       // },
       // render: (text, record, index) => {
+      // const { text: t, color } = getKey(text, obj)
       //   const { status, t } = text
-      //   const { textColor: color } = obj[status]
+      //   const { textColor: color } =
       //   return <div style={{color}}>{t}</div>
       // }
   },
@@ -141,8 +142,9 @@ function RTable () {
       title: '消费类型',
       dataIndex: 'close_type',
       align: 'center',
+      // const { text: t, color } = getKey(text, obj)
       // render: (text, record, index) => {
-      //   const { text: t, color } = obj[text]
+      //   const { text: t, color }
       //   return <div style={{color}}>{t}</div>
       // }
   },

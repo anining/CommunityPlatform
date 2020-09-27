@@ -4,7 +4,7 @@ import { Input, Transfer, Button, message } from 'antd'
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
 import { permissions, addManagers } from "../../utils/api";
-import { saveSuccess } from "../../utils/util";
+import { saveSuccess, getKey } from "../../utils/util";
 import { useHistory } from "react-router-dom";
 
 function AddAdminView () {
@@ -31,8 +31,9 @@ function AddAdminView () {
     }
     const localArr = [];
     arr.forEach((item, index) => {
+      const title = getKey(item, obj)
       localArr.push({
-        title: obj[item] || item,
+        title,
         val: item,
         key: index
       })

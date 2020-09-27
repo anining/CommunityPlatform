@@ -1,4 +1,5 @@
 import { h } from './history'
+import * as R from 'kefir.ramda'
 import { message } from "antd"
 import { JUMP_DELAY } from './config'
 
@@ -31,4 +32,11 @@ function transformTime (old_time) {
   return `${old_time.slice(0,10)} ${old_time.slice(11,19)}`
 }
 
-export { saveSuccess, transformTime, goBack, push }
+function getKey (k, ks) {
+  if (!R.has(k)(ks)) {
+    k = R.keys(ks)[0]
+  }
+  return R.prop(k)(ks)
+}
+
+export { getKey, saveSuccess, transformTime, goBack, push }

@@ -7,7 +7,7 @@ import good3 from '../../icons/good/good3.png'
 import good4 from '../../icons/good/good4.png'
 import good9 from '../../icons/good/good9.png'
 import DropdownComponent from "../../components/DropdownComponent";
-import { push } from "../../utils/util"
+import { push, getKey } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import { communityGoods } from "../../utils/api"
 
@@ -181,7 +181,7 @@ function RTable () {
       align: 'center',
       dataIndex: 'status',
       render: (text, record, index) => {
-        const { text: t, color } = obj[text]
+        const { text: t, color } = getKey(text, obj)
         return <div style={{color}}>{t}</div>
       }
   },

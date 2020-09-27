@@ -113,7 +113,8 @@ function RTable () {
       dataIndex: 'status',
       align: 'center',
       // render: (text, record, index) => {
-      //   const { text: t, color } = obj[text];
+      // const { text: t, color } = getKey(text, obj)
+      //   const { text: t, color } =
       //   return <div style={{color}}>{t}</div>
       // }
   },

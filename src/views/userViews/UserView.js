@@ -8,7 +8,7 @@ import good41 from '../../icons/good/good41.png'
 import { users } from "../../utils/api";
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
-import { transformTime, push } from "../../utils/util"
+import { transformTime, push, getKey } from "../../utils/util"
 
 function UserView () {
   const data = [
@@ -136,7 +136,7 @@ function RTable ({ setVisible }) {
       dataIndex: 'status',
       align: 'center',
       render: (text, record, index) => {
-        const { color, text: t } = obj[text]
+      const { text: t, color } = getKey(text, obj)
         return <div style={{color}}>{t}</div>
       }
   },

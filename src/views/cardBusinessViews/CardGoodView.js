@@ -192,7 +192,8 @@ function RTable ({ setVisible }) {
       align: 'center',
       dataIndex: 'status',
       // render: (text, record, index) => {
-      //   const { text: t, color } = obj[text]
+      // const { text: t, color } = getKey(text, obj)
+      //   const { text: t, color } =
       //   return <div style={{color}}>{t}</div>
       // }
   },
@@ -201,7 +202,8 @@ function RTable ({ setVisible }) {
       align: 'center',
       dataIndex: 'status',
       // render: (text, record, index) => {
-      //   const { text: t, color } = obj2[text]
+      // const { text: t, color } = getKey(text, obj)
+      //   const { text: t, color } =
       //   return <div style={{color}}>{t}</div>
       // }
   },

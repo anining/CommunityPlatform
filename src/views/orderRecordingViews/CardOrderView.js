@@ -106,10 +106,11 @@ function RTable ({ setVisible }) {
       dataIndex: 'msg',
       align: 'center',
       // render: (text, record, index) => {
+      // const { text: t, color } = getKey(text, obj)
       //   const { type, number } = text;
       //   return (
       //     <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-      //       <img src={obj[type].icon} alt="" style={{width:20,marginRight:12}}/>
+      //       <img src={} alt="" style={{width:20,marginRight:12}}/>
       //       <div>{number}</div>
       //     </div>
       //   )
@@ -135,7 +136,8 @@ function RTable ({ setVisible }) {
       align: 'center',
       dataIndex: 'status',
       // render: (text, record, index) => {
-      //   const { text: t, color } = obj[text]
+      // const { text: t, color } = getKey(text, obj)
+      //   const { text: t, color } =
       //   return <div style={{color}}>{t}</div>
       // }
   },
