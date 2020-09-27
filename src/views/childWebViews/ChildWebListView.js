@@ -38,7 +38,7 @@ function ChildWebListView () {
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent path="/main/editChildWeb" data={data} text="新增分站"/>
+        <TableHeaderComponent path="/main/editChildWebList" data={data} text="新增分站"/>
         <RTable />
       </div>
     </div>

@@ -1,4 +1,5 @@
 import * as U from 'karet.util'
+import { setter } from "./store";
 
 class router {
   constructor(history, authRouterName) {
@@ -9,7 +10,17 @@ class router {
   }
 
   push(path, state) {
-    this.history.push(path, state)
+    try {
+      const arr = path.split('/')
+      let v = arr[arr.length - 1].includes("edit") ? arr[arr.length - 1].substr(4) : arr[arr.length - 1]
+      arr[arr.length - 1].includes("add") && (v = arr[arr.length - 1].substr(3))
+      v = v.replace(v[0], v[0].toLowerCase())
+      v && setter([["selectedKeys", v]]);
+      this.history.push(path, state)
+    } catch (e) {
+      console.log(e)
+      this.history.push(path, state)
+    }
   }
 
   goBack() {

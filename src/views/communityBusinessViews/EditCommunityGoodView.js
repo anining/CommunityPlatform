@@ -419,7 +419,7 @@ function RTable ({ tags }) {
   tags.forEach((it, i) => {
     const { id: tag_id, name } = it
     views.push(
-      <Button key={tag_id} className={c.viewTable}>{name}</Button>
+      <Button key={tag_id} style={{width:'auto'}} className={c.viewTable}>{name}</Button>
     )
   })
 

@@ -93,7 +93,7 @@ function ContentComponent () {
         <Route exact path="/main/childWebList">
           { localPermissions.includes('subcitemng') ? <ChildWebListView /> : <Redirect to="/main/error" /> }
         </Route>
-        <Route exact path="/main/editChildWeb">
+        <Route exact path="/main/editChildWebList">
           { localPermissions.includes('subcitemng') ? <EditChildWebView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/childWebSetting">
