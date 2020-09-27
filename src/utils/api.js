@@ -234,3 +234,8 @@ export function customerServices (type, cid, table, body) {
       // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
   }
 }
+
+// 当前管理员的权限列表
+export function currentManagerPermissions () {
+  return transformFetch("GET", "/current-manager/permissions");
+}

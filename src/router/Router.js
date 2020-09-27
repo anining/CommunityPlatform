@@ -17,9 +17,13 @@ import SelectOrderModelView from "../views/communityBusinessViews/SelectOrderMod
 function Router () {
   proxyRouter(useHistory(), '/login')
   const localAuthorization = storage.getItem("authorization")
-  const { authorization } = getter(['authorization']);
+  const localPermissions = storage.getItem("permissions")
+  const localRole = storage.getItem("role")
+  const { authorization, permissions, role } = getter(['authorization', 'role', 'permissions']);
   const history = h.get();
-  !authorization.get() && localAuthorization && setter([["authorization", localAuthorization.replace(/\"/g, "")]])
+  !authorization.get() && localAuthorization && setter([["authorization", localAuthorization.replace(/\"/g, "")]]);
+  !permissions.get().length && localPermissions && setter([["permissions", JSON.parse(localPermissions)]]);
+  !role.get() && localRole && setter([["role", localRole]])
 
   useEffect(() => {
     const timer = setInterval(() => {

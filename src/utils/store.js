@@ -11,6 +11,7 @@ const localStore = {
   // gradeRange: null,
   // nextRedLevel: null,
   // highPerformance: false, // 高性能模式默认关闭
+  permissions: [],
   authorization: null,
 };
 const store = U.atom(localStore);

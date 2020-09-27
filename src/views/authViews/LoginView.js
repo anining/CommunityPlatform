@@ -4,9 +4,10 @@ import { Input, message, Button } from 'antd';
 import auth2 from '../../icons/auth/auth2.png'
 import auth3 from '../../icons/auth/auth3.png'
 import auth4 from '../../icons/auth/auth4.png'
-import { login } from '../../utils/api'
+import { login, currentManagerPermissions } from '../../utils/api'
 import { setter } from '../../utils/store'
 import { push } from "../../utils/util";
+import { storage } from "../../utils/storage";
 
 function LoginView () {
   const [account, setAccount] = useState()
@@ -39,10 +40,27 @@ function LoginView () {
       if (!error) {
         const { access_token, disclaimer_agreed, role } = data;
         setter([['authorization', `Bearer ${access_token}`], ['disclaimer_agreed', disclaimer_agreed], ['role', role]], true);
-        push('/guide1')
+        const permissions = storage.getItem("permissions");
+        if (permissions) {
+          setter([['permissions', permissions]]);
+          push('/guide1')
+          get(role)
+        } else {
+          get(role, true)
+        }
       }
     }).catch(e => {
       setLoading(false)
+    })
+  }
+
+  function get (role, jump = false) {
+    currentManagerPermissions().then(r => {
+      const { data, error } = r
+      if (!error) {
+        setter([['permissions', role === "superuser" ? ["orderlog", "citecfg", "usermng", "capitalflow", "valueaddedsrv", "tagmng", "statistics", "subcitemng", "commbiz", "cardbiz"] : data]], true);
+        jump && push('/main')
+      }
     })
   }
 

@@ -49,8 +49,12 @@ import GoodStatisticsView from "../views/statisticsViews/GoodStatisticsView"
 import TableView from "../views/tableViews/TableView"
 import OrderView from "../views/orderRecordingViews/OrderView"
 import AddPeopleServiceView from "../views/webSettingViews/AddPeopleServiceView"
+import { getter } from "../utils/store"
+import ErrorView from "../views/systemSettingViews/ErrorView"
 
 function ContentComponent () {
+  const { permissions, role } = getter(['permissions', 'role']);
+  const localPermissions = permissions.get() || []
 
   return (
     <Layout.Content style={{
@@ -63,146 +67,159 @@ function ContentComponent () {
         <Route path="/main/home">
           <HomeView />
         </Route>
+        <Route path="/main/error">
+          <ErrorView />
+        </Route>
+        {/* 社区业务 */}
         <Route exact path="/main/goodCategory">
-          <GoodCategoryView />
+          { localPermissions.includes('commbiz') ? <GoodCategoryView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editGoodCategory">
-          <EditGoodCategoryView />
+          { localPermissions.includes('commbiz') ? <EditGoodCategoryView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/communityGood">
-          <CommunityGoodView />
+          { localPermissions.includes('commbiz') ? <CommunityGoodView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editCommunityGood">
-          <EditCommunityGoodView />
+          { localPermissions.includes('commbiz') ? <EditCommunityGoodView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/orderModel">
-          <OrderModelView />
+          { localPermissions.includes('commbiz') ? <OrderModelView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editOrderModel">
-          <EditOrderModelView />
+          { localPermissions.includes('commbiz') ? <EditOrderModelView /> : <Redirect to="/main/error" /> }
         </Route>
+        {/* 分站管理 */}
         <Route exact path="/main/childWebList">
-          <ChildWebListView />
+          { localPermissions.includes('subcitemng') ? <ChildWebListView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editChildWeb">
-          <EditChildWebView />
+          { localPermissions.includes('subcitemng') ? <EditChildWebView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/childWebSetting">
-          <ChildWebSettingView />
+          { localPermissions.includes('subcitemng') ? <ChildWebSettingView /> : <Redirect to="/main/error" /> }
         </Route>
+        {/* 卡密业务 */}
         <Route exact path="/main/cardGood">
-          <CardGoodView />
+          { localPermissions.includes('cardbiz') ? <CardGoodView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editCardGood">
-          <EditCardGoodView />
+          { localPermissions.includes('cardbiz') ? <EditCardGoodView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/cardManage">
-          <CardManageView />
-        </Route>
-        <Route exact path="/main/order">
-          <OrderView />
+          { localPermissions.includes('cardbiz') ? <CardManageView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editCardManage">
-          <EditCardManageView />
+          { localPermissions.includes('cardbiz') ? <EditCardManageView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/cardCategory">
-          <CardCategoryView />
+          { localPermissions.includes('cardbiz') ? <CardCategoryView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editCardCategory">
-          <EditCardCategoryView />
+          { localPermissions.includes('cardbiz') ? <EditCardCategoryView /> : <Redirect to="/main/error" /> }
         </Route>
-        <Route exact path="/main/docking">
-          <DockingView />
-        </Route>
-        <Route exact path="/main/editDocking">
-          <EditDockingView />
-        </Route>
-        <Route exact path="/main/store">
-          <StoreView />
-        </Route>
-        <Route exact path="/main/storeSetting">
-          <StoreSettingView />
-        </Route>
-        <Route exact path="/main/rebot">
-          <MoneyRebotView />
-        </Route>
-        <Route exact path="/main/images">
-          <ImagesView />
-        </Route>
-        <Route exact path="/main/table">
-          <TableView />
-        </Route>
-        <Route exact path="/main/peopleService">
-          <PeopleServiceView />
-        </Route>
-        <Route exact path="/main/addPeopleService">
-          <AddPeopleServiceView />
-        </Route>
-        <Route exact path="/main/notice">
-          <NoticeView />
-        </Route>
-        <Route exact path="/main/addNotice">
-          <AddNoticeView />
-        </Route>
-        <Route exact path="/main/admin">
-          <AdminView />
-        </Route>
-        <Route exact path="/main/addAdmin">
-          <AddAdminView />
-        </Route>
-        <Route exact path="/main/password">
-          <PassWordView />
-        </Route>
-        <Route exact path="/main/logger">
-          <LoggerView />
-        </Route>
-        <Route exact path="/main/about">
-          <AboutView />
-        </Route>
-        <Route exact path="/main/businessSetting">
-          <BusinessSettingView />
-        </Route>
-        <Route exact path="/main/dataSetting">
-          <DataSettingView />
-        </Route>
-        <Route exact path="/main/editStore">
-          <EditStoreView />
-        </Route>
-        <Route exact path="/main/dataStatistics">
-          <DataStatisticsView />
-        </Route>
-        <Route exact path="/main/goodStatistics">
-          <GoodStatisticsView />
-        </Route>
-        <Route exact path="/main/moneyStatistics">
-          <MoneyStatisticsView />
-        </Route>
-        <Route exact path="/main/userStatistics">
-          <UserStatisticsView />
-        </Route>
-        <Route exact path="/main/webStatistics">
-          <WebStatisticsView />
-        </Route>
-        <Route exact path="/main/subService">
-          <SubServiceView />
+        {/* 订单记录 */}
+        <Route exact path="/main/order">
+          { localPermissions.includes('orderlog') ? <OrderView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/communityOrder">
-          <CommunityOrderView />
+          { localPermissions.includes('orderlog') ? <CommunityOrderView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route path="/main/cardOrder">
-          <CardOrderView />
+          { localPermissions.includes('orderlog') ? <CardOrderView /> : <Redirect to="/main/error" /> }
         </Route>
+        {/* 增值服务 */}
+        <Route exact path="/main/subService">
+          { localPermissions.includes('valueaddedsrv') ? <SubServiceView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/editStore">
+          { localPermissions.includes('valueaddedsrv') ? <EditStoreView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/docking">
+          { localPermissions.includes('valueaddedsrv') ? <DockingView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/editDocking">
+          { localPermissions.includes('valueaddedsrv') ? <EditDockingView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/store">
+          { localPermissions.includes('valueaddedsrv') ? <StoreView /> : <Redirect to="/main/error" /> }
+        </Route>
+        {/* 站点管理 */}
+        <Route exact path="/main/storeSetting">
+          { localPermissions.includes('citecfg') ? <StoreSettingView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/rebot">
+          { localPermissions.includes('citecfg') ? <MoneyRebotView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/images">
+          { localPermissions.includes('citecfg') ? <ImagesView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/peopleService">
+          { localPermissions.includes('citecfg') ? <PeopleServiceView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/addPeopleService">
+          { localPermissions.includes('citecfg') ? <AddPeopleServiceView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/notice">
+          { localPermissions.includes('citecfg') ? <NoticeView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/addNotice">
+          { localPermissions.includes('citecfg') ? <AddNoticeView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/admin">
+          { role.get() === 'superuser' ? <AdminView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/addAdmin">
+          { localPermissions.includes('citecfg') ? <AddAdminView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/password">
+          { localPermissions.includes('citecfg') ? <PassWordView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/logger">
+          { localPermissions.includes('citecfg') ? <LoggerView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/about">
+          { localPermissions.includes('citecfg') ? <AboutView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/businessSetting">
+          { localPermissions.includes('citecfg') ? <BusinessSettingView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/dataSetting">
+          { localPermissions.includes('citecfg') ? <DataSettingView /> : <Redirect to="/main/error" /> }
+        </Route>
+        {/* 标签管理 */}
+        <Route exact path="/main/table">
+          { localPermissions.includes('tagmng') ? <TableView /> : <Redirect to="/main/error" /> }
+        </Route>
+        {/* 数据统计 */}
+        <Route exact path="/main/dataStatistics">
+          { localPermissions.includes('statistics') ? <DataStatisticsView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/goodStatistics">
+          { localPermissions.includes('statistics') ? <GoodStatisticsView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/moneyStatistics">
+          { localPermissions.includes('statistics') ? <MoneyStatisticsView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/userStatistics">
+          { localPermissions.includes('statistics') ? <UserStatisticsView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/webStatistics">
+          { localPermissions.includes('statistics') ? <WebStatisticsView /> : <Redirect to="/main/error" /> }
+        </Route>
+        {/* 资金流水 */}
         <Route path="/main/capitalFlow">
-          <CapitalFlowView />
+          { localPermissions.includes('capitalflow') ? <CapitalFlowView /> : <Redirect to="/main/error" /> }
         </Route>
+        {/* 用户管理 */}
         <Route path="/main/user">
-          <UserView />
+          { localPermissions.includes('usermng') ? <UserView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route path="/main/addUser">
-          <AddUserView />
+          { localPermissions.includes('usermng') ? <AddUserView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route path="/main/editUserPrice">
-          <EditUserPriceView />
+          { localPermissions.includes('usermng') ? <EditUserPriceView /> : <Redirect to="/main/error" /> }
         </Route>
         <Redirect to="/main/home" />
       </Switch>

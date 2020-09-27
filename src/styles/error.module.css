@@ -9,7 +9,7 @@
 }
 
 .text {
-  color: #000;
+  color: rgba(0, 0, 0, 0.45);
   font-size: 1.428rem;
   margin: 35px 0 24px 0;
 }
