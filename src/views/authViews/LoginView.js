@@ -97,14 +97,14 @@ function LoginView () {
             </div>
           </div>
         </div>
-        <div className={c.bottomView}>
-          <div className={c.footerView}>
-            <div className={c.item}>帮助中心</div>
-            <div className={c.item}>开放平台</div>
-            <div className={c.item}>免责条款</div>
-          </div>
-          <div className={c.footer}>Cooyright © 2020 光棱科技 </div>
-        </div>
+        {/* <div className={c.bottomView}> */}
+        {/*   <div className={c.footerView}> */}
+        {/*     <div className={c.item}>帮助中心</div> */}
+        {/*     <div className={c.item}>开放平台</div> */}
+        {/*     <div className={c.item}>免责条款</div> */}
+        {/*   </div> */}
+        {/*   <div className={c.footer}>Cooyright © 2020 光棱科技 </div> */}
+        {/* </div> */}
       </div>
     </div>
   )

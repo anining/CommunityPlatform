@@ -8,7 +8,7 @@ function ImagesView () {
     <div className={c.container}>
       <div className={c.main} style={{marginTop:0}}>
         <div className={c.headerT}>
-          <div style={{zIndex:1}}>图床配置</div>
+          <div style={{zIndex:1}}>使用七牛云图床</div>
           <div className={c.circle} />
         </div>
         <div>

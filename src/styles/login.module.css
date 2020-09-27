@@ -3,20 +3,26 @@
   min-height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* align-items: center; */
+  display: grid;
+  place-items: center;
 }
 
 .topView {
-  width: 62.604%;
+  /* width: 62.604%; */
+  width: 1029px;
+  /* width: 53.604%; */
+  height: 580px;
   max-width: 1080px;
-  padding-top: 37.213%;
+  /* padding-top: 37.213%; */
+  /* padding-top: 30.213%; */
   background-color: #fff;
   border-radius: 32px;
   position: relative;
   display: flex;
-  margin-top: 7.187%;
+  /* margin-top: 7.187%; */
 }
 
 .bottomView {
@@ -143,5 +149,5 @@
 }
 
 .inputImg {
-  width: 14px;
+  width: 16px;
 }
