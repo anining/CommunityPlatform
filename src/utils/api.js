@@ -54,14 +54,6 @@ export function loginlogs (page, size, manager_id, start_from, end_with) {
   return transformFetch("GET", "/loginlogs", data)
 }
 
-
-
-
-
-
-//
-
-
 // 社区商品分类
 export function communityGoodsCategories (type, cid, table, body) {
   switch (type) {
@@ -72,9 +64,17 @@ export function communityGoodsCategories (type, cid, table, body) {
     case "modify":
       return transformFetch("PATCH", `/community-goods-categories/${cid}`, body);
     default:
-      return transformFetch("DELETE", `/community-goods-categories/${cid}`);
+      return transformFetch("DELETE", `/community-goods-categories?${body}`);
   }
 }
+
+
+
+
+
+
+//
+
 
 // 社区下单模型
 export function communityParamTemplates (type, pid, table, body) {

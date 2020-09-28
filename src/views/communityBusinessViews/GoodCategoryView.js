@@ -1,29 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Menu, Table, message, Input, Modal } from 'antd'
+import { Button, Table, Input } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
-import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
 import { communityGoodsCategories } from '../../utils/api'
-import { push, transformTime } from "../../utils/util";
+import { push, transformTime, saveSuccess } from "../../utils/util";
 import DropdownComponent from '../../components/DropdownComponent'
 
 function GoodCategoryView () {
-  const [visible, setVisible] = useState(false)
-  const [actionId, setActionId] = useState(2)
+  // const [visible, setVisible] = useState(false)
+  // const [actionId, setActionId] = useState(2)
 
-  function handleOk () {
+  // function handleOk () {
 
-  }
+  // }
 
-  function handleCancel () {
+  // function handleCancel () {
 
-  }
+  // }
 
   return (
     <div className="view">
       <div className={c.container}>
-        <RTable setVisible={setVisible} />
+        <RTable />
       </div>
       {/* <Modal */}
       {/*   visible={visible} */}
@@ -56,7 +55,7 @@ function GoodCategoryView () {
   )
 }
 
-function RTable ({ setVisible }) {
+function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
   const [search_name, setSearch_name] = useState()
   const [data, setData] = useState([])
@@ -134,13 +133,22 @@ function RTable ({ setVisible }) {
   const rowSelection = {
     onChange: (selectedRowKeys, rows) => {
       setSelectRows(selectedRowKeys)
-    }
+    },
+    selectedRowKeys: selectedRows
   };
 
   function submit (key) {
     switch (key) {
       case "delete":
-        message.success('批量删除操作');
+        const params = new URLSearchParams()
+        selectedRows.forEach(i => params.append("ids", data[i].id))
+        communityGoodsCategories("delete", undefined, undefined, params.toString()).then(r => {
+          if (!r.error) {
+            saveSuccess(false)
+            setSelectRows([])
+            get(current)
+          }
+        })
         break
       default:
         ;
@@ -173,7 +181,7 @@ function RTable ({ setVisible }) {
             </div>
           </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
       <Table
         columns={columns}
         rowSelection={{

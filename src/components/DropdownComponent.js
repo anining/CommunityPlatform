@@ -3,7 +3,7 @@ import { Menu, Button, Dropdown } from 'antd'
 import { DownOutlined } from '@ant-design/icons';
 import c from '../styles/view.module.css'
 
-function DropdownComponent ({ action, style = {}, submit, keys, setAction, placeholder = "批量操作" }) {
+function DropdownComponent ({ selectedRows, action, style = {}, submit, keys, setAction, placeholder = "批量操作" }) {
   const [key, setKey] = useState(action)
 
   const menu = (
@@ -32,7 +32,7 @@ function DropdownComponent ({ action, style = {}, submit, keys, setAction, place
             <DownOutlined />
           </Button>
         </Dropdown>
-        <Button disabled={!key} className={c.action} onClick={()=>submit(key)} size="small">执行操作</Button>
+        <Button disabled={!key || selectedRows.length===0} className={c.action} onClick={()=>submit(key)} size="small">执行操作</Button>
       </div>
     )
   }

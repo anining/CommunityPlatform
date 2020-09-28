@@ -27,7 +27,7 @@ async function transformFetch (method, url, data = {}) {
     const { authorization } = getter(['authorization']);
     authorization.get() && (HEADER = Object.assign(HEADER, { authorization: authorization.get() }));
     const request = { method, headers: new Headers(HEADER) };
-    (method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE') && (request.body = POST_DATA);
+    (method === 'POST' || method === 'PUT' || method === 'PATCH') && (request.body = POST_DATA);
     return new Promise(async (resolve, reject) => {
       try {
         const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);

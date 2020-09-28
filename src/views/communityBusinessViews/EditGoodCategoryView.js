@@ -26,7 +26,7 @@ function EditGoodCategoryView () {
     if (n !== name) {
       body = { ...body, ...{ name } }
     }
-    if (weight) {
+    if (weight !== w) {
       body = { ...body, ...{ weight } }
     }
     setLoading(true)
