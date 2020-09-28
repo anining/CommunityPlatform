@@ -23,4 +23,16 @@ const MODULES = {
         ['clean'] // remove formatting button
     ]
 }
-export { API_URL, DEVELOPER, JUMP_DELAY, MODULES }
+const PERMISSIONS = {
+  orderlog: "订单记录",
+  citecfg: "站点管理",
+  usermng: "用户管理",
+  capitalflow: "资金流水",
+  valueaddedsrv: "增值服务",
+  tagmng: '标签管理',
+  statistics: '统计信息',
+  subcitemng: '分站管理',
+  commbiz: '社区业务',
+  cardbiz: '卡密业务'
+}
+export { API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }

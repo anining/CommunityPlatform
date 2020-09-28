@@ -23,7 +23,7 @@ function Router () {
   const history = h.get();
   !authorization.get() && localAuthorization && setter([["authorization", localAuthorization.replace(/\"/g, "")]]);
   !permissions.get().length && localPermissions && setter([["permissions", JSON.parse(localPermissions)]]);
-  !role.get() && localRole && setter([["role", localRole]])
+  !role.get() && localRole && setter([["role", localRole.replace(/\"/g, "")]])
 
   useEffect(() => {
     const timer = setInterval(() => {

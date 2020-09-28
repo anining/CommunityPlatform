@@ -11,7 +11,7 @@ import good41 from '../../icons/good/good41.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
-import { transformTime } from "../../utils/util";
+import { transformTime, push, getKey } from "../../utils/util";
 import { communityGoodsOrders } from "../../utils/api"
 
 function CommunityOrderView () {
@@ -95,6 +95,7 @@ function RTable () {
     arr.forEach((item, index) => {
       item.key = index
       item.time = transformTime(item.created_at)
+      item.refund_status = item.refund_status || '-'
     })
     return arr
   }
@@ -127,28 +128,28 @@ function RTable () {
     // setVisible(localVisible)
   }
 
-  // const obj = [
-  //   {
-  //     color: "#FF8D30",
-  //     text: '待处理',
-  //   },
-  //   {
-  //     color: "#2C68FF",
-  //     text: '进行中',
-  //   },
-  //   {
-  //     color: "#52C41A",
-  //     text: '已完成',
-  //   },
-  //   {
-  //     color: "#FF8D30",
-  //     text: '异常',
-  //   },
-  //   {
-  //     color: "#FF5730",
-  //     text: '申请退款',
-  //   }
-  // ]
+  const obj = {
+    pending: {
+      color: "#FF8D30",
+      text: '待处理',
+    },
+    processing: {
+      color: "#2C68FF",
+      text: '进行中',
+    },
+    completed: {
+      color: "#52C41A",
+      text: '已完成',
+    },
+    // {
+    //   color: "#FF8D30",
+    //   text: '异常',
+    // },
+    closed: {
+      color: "#FF5730",
+      text: '申请退款',
+    }
+  }
   const columns = [
     {
       title: '订单编号',
@@ -157,7 +158,7 @@ function RTable () {
   },
     {
       title: '下单信息',
-      dataIndex: 'msg',
+      dataIndex: 'goods_name',
       align: 'center',
       // render: (text, record, index) => {
       //   const { uri, number, password } = text;
@@ -177,21 +178,23 @@ function RTable () {
     {
       title: '扩展信息',
       align: 'center',
-      dataIndex: 'text',
-      // render: (text, record, index) => {
-      //   const { begin_num, num } = text;
-      //   return (
-      //     <div>
-      //     <div>初始量 :{begin_num}</div>
-      //     <div>当前量: {num}</div>
-      //   </div>
-      //   )
-      // }
+      render: (text, record, index) => {
+        const { amount, cost } = record;
+        return (
+          <div>
+          <div>初始量 :{amount}</div>
+          <div>当前量: {cost}</div>
+        </div>
+        )
+      }
   },
     {
       title: '推送状态',
       dataIndex: 'push_status',
       align: 'center',
+      render: (text, record, index) => {
+        return '-'
+      }
   },
     {
       title: '售后状态',
@@ -202,11 +205,10 @@ function RTable () {
       title: '订单状态',
       align: 'center',
       dataIndex: 'status',
-      // render: (text, record, index) => {
-      // const { text: t, color } = getKey(text, obj)
-      //   const { text: t, color } =
-      //   return <div style={{color}}>{t}</div>
-      // }
+      render: (text, record, index) => {
+        const { text: t, color } = getKey(text, obj)
+        return <div style={{color}}>{t}</div>
+      }
   },
     {
       title: '下单时间',
@@ -216,7 +218,7 @@ function RTable () {
     {
       title: '订单历程',
       align: 'center',
-      render: (text, record, index) => <div className={c.clickText}>点击查看</div>
+      render: (text, record, index) => <div onClick={()=>push('/main/editCommunityOrder',record)} className={c.clickText}>点击查看</div>
     },
     {
       title: '操作',
@@ -244,7 +246,7 @@ function RTable () {
                     // )
                   }
                 } >
-              <div style={{color:'#FF4D4F',textDecorationColor:"#ff4d4f"}} className={c.clickText}>退款</div>
+              <div style={{color:'#FF4D4F',cursor:'wait',textDecorationColor:"#ff4d4f"}} className={c.clickText}>退款</div>
             </Popconfirm>
             <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
             <Popconfirm icon={<img src="" alt="" style={{width:0,height:0}}/>
@@ -267,7 +269,7 @@ function RTable () {
                     // )
                   }
                 } >
-              <div className={c.clickText}>添加备注</div>
+              <div style={{cursor:'wait'}} className={c.clickText}>添加备注</div>
             </Popconfirm>
         </Space>
       )

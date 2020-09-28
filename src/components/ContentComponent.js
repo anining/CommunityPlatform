@@ -119,7 +119,7 @@ function ContentComponent () {
           { localPermissions.includes('cardbiz') ? <EditCardCategoryView /> : <Redirect to="/main/error" /> }
         </Route>
         {/* 订单记录 */}
-        <Route exact path="/main/order">
+        <Route exact path="/main/editCommunityOrder">
           { localPermissions.includes('orderlog') ? <OrderView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/communityOrder">

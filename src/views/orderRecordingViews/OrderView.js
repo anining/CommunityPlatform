@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Timeline } from 'antd'
+import { Timeline, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import edit23 from '../../icons/edit/edit23.png'
+import { push } from "../../utils/util"
 
 function OrderView () {
   const [nums, setNums] = useState([
@@ -36,7 +37,15 @@ function OrderView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 订单记录 / 社区订单 / <span>订单历程</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/communityOrder")}>社区订单</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>订单历程</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>
