@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, message, Input, DatePicker } from 'antd'
+import { Button, Space, Table, message, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import good22 from '../../icons/good/good22.png'
 import good27 from '../../icons/good/good27.png'
@@ -9,6 +9,7 @@ import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { balanceChanges } from "../../utils/api"
+import { getKey, transformTime } from "../../utils/util"
 
 function CapitalFlowView () {
   const data = [
@@ -62,11 +63,11 @@ function RTable () {
   }, [])
 
   function get (current) {
-    balanceChanges(current, pageSize, data[0], data[1]).then(r => {
+    balanceChanges(current, pageSize, date[0], date[1]).then(r => {
       if (!r.error) {
-        // const { data, total } = r
-        // setTotal(total)
-        // setData(format(data))
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
       }
     })
   }
@@ -74,7 +75,7 @@ function RTable () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = item.created_at
+      item.time = transformTime(item.created_at)
     })
     return arr
   }
@@ -84,27 +85,36 @@ function RTable () {
     get(page)
   }
 
-  // const obj = [
-  //   {
-  //     color: "#53C41C",
-  //     text: '充值',
-  //     textColor: '#2C68FF',
-  //   },
-  //   {
-  //     color: "#FF8D30",
-  //     text: '系统加款',
-  //     textColor: '#FF4D4F',
-  //   },
-  //   {
-  //     color: "#FF4D4F",
-  //     text: '退款',
-  //     textColor: '#FF8D30',
-  //   },
-  //   {
-  //     color: "#2C68FF",
-  //     text: '购买卡密商品',
-  //   }
-  // ]
+  const obj = {
+    charge: {
+      color: "#53C41C",
+      text: '充值',
+      textColor: '#2C68FF',
+    },
+    refund: {
+      color: "#FF4D4F",
+      text: '退款',
+      textColor: '#FF8D30',
+    },
+    add_fund: {
+      color: "#FF8D30",
+      text: '系统加款',
+      textColor: '#FF4D4F',
+    },
+    sub_fund: {
+      color: "#FF8D30",
+      text: '系统减款',
+      textColor: '#FF4D4F',
+    },
+    consumed_by_comm_goods: {
+      color: "#2C68FF",
+      text: '购买社区商品',
+    },
+    consumed_by_card_goods: {
+      color: "#2C68FF",
+      text: '购买卡密商品',
+    },
+  }
   const columns = [
     {
       title: 'ID',
@@ -113,40 +123,40 @@ function RTable () {
   },
     {
       title: '用户账号',
-      dataIndex: 'number',
+      dataIndex: 'user_account',
       align: 'center',
   },
     {
       title: '流水金额',
       align: 'center',
-      dataIndex: 'price',
+      dataIndex: 'amount',
+      render: (text, record, index) => {
+        const color = Number(text) > 0 ? "#2C68FF" : "#FF4D4F"
+        return <div style={{color}}>{text}</div>
+      }
       // sorter: {
       //   compare: (a, b) => {
       //     console.log(a, b)
       //   },
       //   multiple: 1,
       // },
-      // render: (text, record, index) => {
-      // const { text: t, color } = getKey(text, obj)
-      //   const { status, t } = text
-      //   const { textColor: color } =
-      //   return <div style={{color}}>{t}</div>
-      // }
   },
     {
       title: '支付方式',
-      dataIndex: 'type',
-      align: 'center'
-  },
+      dataIndex: 'pay_type',
+      align: 'center',
+      render: (text, record, index) => {
+        return '-'
+      }
+    },
     {
       title: '消费类型',
-      dataIndex: 'close_type',
+      dataIndex: 'type',
       align: 'center',
-      // const { text: t, color } = getKey(text, obj)
-      // render: (text, record, index) => {
-      //   const { text: t, color }
-      //   return <div style={{color}}>{t}</div>
-      // }
+      render: (text, record, index) => {
+        const { text: t, color } = getKey(text, obj)
+        return <div style={{color}}>{t}</div>
+      }
   },
     {
       title: '时间',
@@ -156,16 +166,16 @@ function RTable () {
     {
       title: '操作',
       align: 'center',
-      // render: (text, record, index) => (
-      //   <Space size="small" style={{color:'#2C68FF'}}>
-      //     <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
-      //       const history = h.get()
-      //       history.push("/main/editCommunityGood")
-      //     }}>修改状态</div>
-      //     <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-      //     <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">退款</div>
-      //   </Space>
-      // )
+      render: (text, record, index) => (
+        <Space size="small">
+          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{
+            // const history = h.get()
+            // history.push("/main/editCommunityGood")
+          }}>修改状态</div>
+          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.clickText} style={{cursor:'wait'}}>退款</div>
+        </Space>
+      )
     },
   ];
 
@@ -186,11 +196,12 @@ function RTable () {
   }
 
   function reset () {
-    // setId(undefined)
+    setMoment(undefined)
+    setDate([])
   }
 
   function dateChange (data, dataString) {
-    setDate(dataString)
+    setDate([new Date(dataString[0]).toISOString(), new Date(dataString[1]).toISOString()])
     setMoment(data)
   }
 
@@ -199,10 +210,10 @@ function RTable () {
       <div className={c.searchView}>
         <div className={c.search}>
           <div className={c.searchL}>
-            <Input placeholder="请输入用户账户" size="small" className={c.searchInput}/>
-            <Input placeholder="请输入订单编号" size="small" className={c.searchInput}/>
-            <DropdownComponent keys={[]} placeholder="请选择支付方式" style={{width:186}}/>
-            <DropdownComponent keys={[]} placeholder="请选择消费类型" style={{width:186}}/>
+            {/* <Input placeholder="请输入用户账户" size="small" className={c.searchInput}/> */}
+            {/* <Input placeholder="请输入订单编号" size="small" className={c.searchInput}/> */}
+            {/* <DropdownComponent keys={[]} placeholder="请选择支付方式" style={{width:186}}/> */}
+            {/* <DropdownComponent keys={[]} placeholder="请选择消费类型" style={{width:186}}/> */}
             <DatePicker.RangePicker
               format="YYYY-MM-DD"
               onChange={dateChange}
