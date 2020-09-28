@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Input, Switch } from 'antd'
+import { Button, Table, Input, Switch, Breadcrumb } from 'antd'
 import c from '../../styles/view.module.css'
 import ce from '../../styles/edit.module.css'
 import good5 from '../../icons/good/good5.png'
 import good27 from '../../icons/good/good27.png'
 import good9 from '../../icons/good/good9.png'
 import { useHistory } from "react-router-dom"
-import { communityDiscPrices, communityGoodsCategories, addDiscPrices, deleteDiscPrices } from "../../utils/api"
-import { saveSuccess } from "../../utils/util";
-import DropdownComponent from "../../components/DropdownComponent";
+import { communityDiscPrices, addDiscPrices, deleteDiscPrices } from "../../utils/api"
+import { saveSuccess, push } from "../../utils/util";
+import SelectComponent from "../../components/SelectComponent"
+
+let win
 
 function EditUserPriceView () {
   const { state = {} } = useHistory().location
@@ -20,7 +22,15 @@ function EditUserPriceView () {
       <div className={c.container}>
         <div className={ce.header} style={{flexShrink:0}}>
           <img src={good5} alt="" className={ce.headerImg}/>
-          <div>首页 / 用户管理 / <span>修改用户密价</span></div>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <span onClick={()=>push("/main/home")}>首页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <span onClick={()=>push("/main/user")}>用户管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>修改用户密价</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
         <div className={c.header} style={{marginTop:24,paddingLeft:24, height:188}}>
           <div className={c.headerL} style={{
@@ -58,6 +68,7 @@ function EditUserPriceView () {
                 alignItems:'flex-start',
                 paddingTop:15,
                 paddingBottom:15,
+                paddingRight:15
               }}>
                 <img src={good27} alt="" className={c.tipsImg}/>
                 <div style={{textAlign:'justify'}}>用户的密价高于所有价格类型；当用户密价被填写时，系统将会使用用户密价。当用户密价未填写时，将会根据您的配置，使用密价或者单价。如果密价未填写，用户密价也未填写，系统将会使用单价。</div>
@@ -79,24 +90,21 @@ function RTable ({ id, checked }) {
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
+
   const [goods_id, setGoods_id] = useState()
   const [goods_name, setGoods_name] = useState()
   const [good_category_id, setGood_category_id] = useState()
-  // const [category, setCategory] = useState()
+  const [good_category_name, setGood_category_name] = useState()
+
+  window.localClick = function (type, ids) {
+    setGood_category_id(ids.id)
+    setGood_category_name(ids.name)
+    win && win.close()
+  }
 
   useEffect(() => {
     get(current)
-    getGoodCategory()
   }, [])
-
-  function getGoodCategory () {
-    // communityGoodsCategories("get", undefined, { page: 1, size: 10 }).then(r => {
-    //   if (!r.error) {
-    //     const { data } = r
-    //     setCategorys(format(data))
-    //   }
-    // })
-  }
 
   function get (current) {
     communityDiscPrices(current, pageSize, id, goods_id, goods_name, good_category_id).then(r => {
@@ -150,6 +158,17 @@ function RTable ({ id, checked }) {
     get(page)
   }
 
+  function reset () {
+    setGoods_name(undefined)
+    setGoods_id(undefined)
+    setGood_category_id(undefined)
+    setGood_category_name(undefined)
+  }
+
+  function click () {
+    win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
+  }
+
   const columns = [
     {
       title: '商品ID',
@@ -170,6 +189,9 @@ function RTable ({ id, checked }) {
       title: '业务类型',
       dataIndex: 'type',
       align: 'center',
+      render: (text, record, index) => {
+        return '-'
+      }
   },
     {
       title: '进价',
@@ -182,7 +204,7 @@ function RTable ({ id, checked }) {
       render: (text, record, index) => {
         const { unit_cost, disc_price, user_disc_price } = record
         const color = (checked && user_disc_price > 0) ? "#595959" : disc_price > 0 ? "#595959" : "#4177FE"
-        return <div style={{color}}>{unit_cost}</div>
+        return <div style={{color}}>{unit_cost || '-'}</div>
       }
   },
     {
@@ -192,7 +214,7 @@ function RTable ({ id, checked }) {
       render: (text, record, index) => {
         const { disc_price, user_disc_price } = record
         const color = (checked && user_disc_price > 0) ? "#595959" : disc_price > 0 ? "#4177FE" : "#595959"
-        return <div style={{color}}>{disc_price}</div>
+        return <div style={{color}}>{disc_price || '-'}</div>
       }
   },
     {
@@ -215,28 +237,6 @@ function RTable ({ id, checked }) {
     }
   ];
 
-  function reset () {
-    setGoods_name(undefined)
-    setGoods_id(undefined)
-  }
-
-  // function handleMenuClick (e) {
-  //   setCategory(Number.parseInt(e.key))
-  // }
-
-  // const categorys_menu = (
-  //   <Menu onClick={handleMenuClick}>
-  //     {categorys.map((item,i)=>{
-  //       const { id,name } = item
-  //       return (
-  //         <Menu.Item key={id}>
-  //           {name}
-  //         </Menu.Item>
-  //       )
-  //     })}
-  //   </Menu>
-  // );
-
   return (
     <div className={c.main}>
         <div className={c.searchView}>
@@ -244,8 +244,7 @@ function RTable ({ id, checked }) {
             <div className={c.searchL}>
               <Input placeholder="请输入商品ID" onChange={e=>setGoods_id(e.target.value)} value={goods_id} size="small" className={c.searchInput} onPressEnter={()=>get(current)} />
               <Input placeholder="请输入商品名称" onChange={e=>setGoods_name(e.target.value)} value={goods_name} size="small" className={c.searchInput} onPressEnter={()=>get(current)}/>
-              <DropdownComponent keys={[]} placeholder="请选择业务类型" style={{width:186}}/>
-              <DropdownComponent keys={[]} placeholder="请选择商品类型" style={{width:186}}/>
+              <SelectComponent click={click} id={good_category_id} name={good_category_name} placeholder="请选择商品类型" style={{width:186}}/>
             </div>
             <div className={c.searchR}>
               <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>

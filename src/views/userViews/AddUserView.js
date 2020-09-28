@@ -24,10 +24,12 @@ function AddUserView () {
     setLoading(true)
     addUsers(account, password, value, email).then(r => {
       setLoading(false)
-      saveSuccess(jump)
-      setAccount(undefined)
-      setPassWord(undefined)
-      setEmail(undefined)
+      if (!r.error) {
+        saveSuccess(jump)
+        setAccount(undefined)
+        setPassWord(undefined)
+        setEmail(undefined)
+      }
     }).catch(e => {
       setLoading(false)
     })

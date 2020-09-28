@@ -72,6 +72,27 @@ function RTable ({ setVisible }) {
     get(page)
   }
 
+  const rowSelection = {
+    onChange: (selectedRowKeys, rows) => {
+      setSelectRows(selectedRowKeys)
+    }
+  };
+
+  function submit (key) {
+    switch (key) {
+      case "delete":
+        message.success('批量删除操作');
+        break
+      default:
+        ;
+    }
+  }
+
+  function reset () {
+    setAccount(undefined)
+    setStatus(undefined)
+  }
+
   const obj = {
     normal: {
       color: '#2C68FF',
@@ -136,7 +157,7 @@ function RTable ({ setVisible }) {
       dataIndex: 'status',
       align: 'center',
       render: (text, record, index) => {
-      const { text: t, color } = getKey(text, obj)
+        const { text: t, color } = getKey(text, obj)
         return <div style={{color}}>{t}</div>
       }
   },
@@ -172,27 +193,6 @@ function RTable ({ setVisible }) {
       )
     },
   ];
-
-  const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
-      setSelectRows(selectedRowKeys)
-    }
-  };
-
-  function submit (key) {
-    switch (key) {
-      case "delete":
-        message.success('批量删除操作');
-        break
-      default:
-        ;
-    }
-  }
-
-  function reset () {
-    setAccount(undefined)
-    setStatus(undefined)
-  }
 
   return (
     <div className={c.main}>
