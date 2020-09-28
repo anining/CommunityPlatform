@@ -96,6 +96,20 @@
   height: 40px;
 }
 
+.selectC {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 0 12px;
+  color: #2C68FF;
+  border-radius: 2px;
+  border: 1px solid #D9D9D9;
+  cursor: pointer;
+  height: 32px;
+  width: 186px;
+  margin: 0 40px 24px 0;
+}
+
 .itemSelect {
   width: 29.25%;
   height: 40px;

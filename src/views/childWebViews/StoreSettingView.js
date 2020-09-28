@@ -9,8 +9,8 @@ import { MODULES } from "../../utils/config";
 
 function StoreSettingView () {
   const [under_maintenance, setUnder_maintenance] = useState(false) // 店铺维护中
-  const [show_goods_under_maintenance, setShow_goods_under_maintenance] = useState(true) // 商品状态
-  const [allow_registration, setAllow_registration] = useState(true) // 允许注册
+  const [show_goods_under_maintenance, setShow_goods_under_maintenance] = useState(false) // 商品状态
+  const [allow_registration, setAllow_registration] = useState(false) // 允许注册
   const [allow_guest, setAllow_guest] = useState(false) // 允许游客
   const [icp, setIcp] = useState("") // 备案信息
   const [announcement, setAnnouncement] = useState("") //维护公告
