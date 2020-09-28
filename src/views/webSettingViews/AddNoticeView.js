@@ -20,9 +20,11 @@ function AddNoticeView () {
     setLoading(true)
     announcements("add", undefined, undefined, { title, content }).then(r => {
       setLoading(false)
-      saveSuccess()
-      setTitle(undefined)
-      setContent(undefined)
+      if (!r.error) {
+        saveSuccess()
+        setTitle(undefined)
+        setContent(undefined)
+      }
     }).catch(e => {
       setLoading(false)
     })
