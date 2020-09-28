@@ -68,14 +68,6 @@ export function communityGoodsCategories (type, cid, table, body) {
   }
 }
 
-
-
-
-
-
-//
-
-
 // 社区下单模型
 export function communityParamTemplates (type, pid, table, body) {
   switch (type) {
@@ -86,9 +78,18 @@ export function communityParamTemplates (type, pid, table, body) {
     case "modify":
       return transformFetch("PATCH", `/community-param-templates/${pid}`, body)
     default:
-      return transformFetch("DELETE", `/community-param-templates/${pid}`)
+      return transformFetch("DELETE", `/community-param-templates?${body}`)
   }
 }
+
+
+
+
+
+
+
+//
+
 
 // 社区商品
 export function communityGoods (type, gid, table, body) {

@@ -11,13 +11,14 @@ import DropdownComponent from "../../components/DropdownComponent"
 function EditOrderModelView () {
   const { state = {} } = useHistory().location
   const { id, name: n, params: p = [] } = state
+  const [insert, setInsert] = useState(id)
   const [name, setName] = useState(n)
   const [weight, setWeight] = useState()
   const [params, setParams] = useState(p)
   const [loading, setLoading] = useState(false)
 
   function save (jump) {
-    if (!name || !params.length) {
+    if (!name) {
       message.warning("请完善信息")
       return
     }
@@ -33,20 +34,25 @@ function EditOrderModelView () {
     if (n !== name) {
       body = { ...body, ...{ name } }
     }
-    if (weight) {
+    if (weight || weight === 0) {
       body = { ...body, ...{ weight } }
     }
     if (params.length) {
       body = { ...body, ...{ params } }
     }
     setLoading(true)
-    communityParamTemplates(n ? 'modify' : 'add', id, undefined, body).then(r => {
+    communityParamTemplates(insert ? 'modify' : 'add', id, undefined, body).then(r => {
+      setInsert(jump)
       setLoading(false)
-      saveSuccess(jump)
-      setName(undefined)
-      setWeight(undefined)
-      setParams([])
+      if (!r.error) {
+        setLoading(false)
+        saveSuccess(jump)
+        setName(undefined)
+        setWeight(undefined)
+        setParams([])
+      }
     }).catch(e => {
+      setInsert(jump)
       setLoading(false)
     })
   }

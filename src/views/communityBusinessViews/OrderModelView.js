@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Menu, Dropdown, Table, message, Input } from 'antd'
+import { Button, Table, Input } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good31 from '../../icons/good/good31.png'
 import { communityParamTemplates } from "../../utils/api";
 import DropdownComponent from '../../components/DropdownComponent'
-import { push, transformTime } from "../../utils/util";
+import { push, transformTime, saveSuccess } from "../../utils/util";
 
 function OrderModelView () {
 
@@ -96,13 +96,22 @@ function RTable () {
   const rowSelection = {
     onChange: (selectedRowKeys, rows) => {
       setSelectRows(selectedRowKeys)
-    }
+    },
+    selectedRowKeys: selectedRows
   };
 
   function submit (key) {
     switch (key) {
       case "delete":
-        message.success('批量删除操作');
+        const params = new URLSearchParams()
+        selectedRows.forEach(i => params.append("ids", data[i].id))
+        communityParamTemplates("delete", undefined, undefined, params.toString()).then(r => {
+          if (!r.error) {
+            saveSuccess(false)
+            setSelectRows([])
+            get(current)
+          }
+        })
         break
       default:
         ;
@@ -114,7 +123,7 @@ function RTable () {
       <div className={c.searchView}>
           <div className={c.search}>
             <div className={c.searchL}>
-              <Input value={search_name} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入分类名称" size="small" className={c.searchInput}/>
+              <Input value={search_name} onPressEnter={()=>get(current)} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入分类名称" size="small" className={c.searchInput}/>
               <Button icon={
                 <img src={good31} alt="" style={{width:14,marginRight:6}} />
               }
@@ -133,7 +142,7 @@ function RTable () {
             </div>
           </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
       <Table
         columns={columns}
         rowSelection={{

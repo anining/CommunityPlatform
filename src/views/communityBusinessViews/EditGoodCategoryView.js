@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom"
 function EditGoodCategoryView () {
   const { state = {} } = useHistory().location
   const { id, name: n, weight: w } = state
+  const [insert, setInsert] = useState(id)
   const [name, setName] = useState(n)
   const [weight, setWeight] = useState(w)
   const [loading, setLoading] = useState(false)
@@ -30,12 +31,16 @@ function EditGoodCategoryView () {
       body = { ...body, ...{ weight } }
     }
     setLoading(true)
-    communityGoodsCategories(id ? "modify" : "add", id, undefined, body).then(r => {
+    communityGoodsCategories(insert ? "modify" : "add", id, undefined, body).then(r => {
+      setInsert(jump)
       setLoading(false)
-      saveSuccess(jump)
-      setName(undefined)
-      setWeight(undefined)
+      if (!r.error) {
+        saveSuccess(jump)
+        setName(undefined)
+        setWeight(undefined)
+      }
     }).catch(e => {
+      setInsert(jump)
       setLoading(false)
     })
   }
