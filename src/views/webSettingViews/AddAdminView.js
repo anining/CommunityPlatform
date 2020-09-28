@@ -3,35 +3,24 @@ import c from '../../styles/edit.module.css'
 import { Input, Transfer, Button, message } from 'antd'
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
-import { permissions, addManagers } from "../../utils/api";
+import { permissions, managers } from "../../utils/api";
 import { saveSuccess, getKey } from "../../utils/util";
 import { useHistory } from "react-router-dom";
+import { PERMISSIONS } from "../../utils/config";
 
 function AddAdminView () {
   const { state = {} } = useHistory().location
-  const { account, id, nickname } = state
-  const [number, setNumber] = useState() // 管理员账号
-  const [name, setName] = useState() // 管理员名称
+  const { account, id, nickname, permissions: p = [] } = state
+  const [number, setNumber] = useState(account) // 管理员账号
+  const [name, setName] = useState(nickname) // 管理员名称
   const [purview, setPurview] = useState([]) // 权限列表
   const [targetKeys, setTargetKeys] = useState([]) // 选中权限列表
   const [loading, setLoading] = useState(false)
 
   function format (arr) {
-    const obj = {
-      orderlog: "订单记录",
-      citecfg: "站点管理",
-      usermng: "用户管理",
-      capitalflow: "资金流水",
-      valueaddedsrv: "增值服务",
-      tagmng: '标签管理',
-      statistics: '统计信息',
-      subcitemng: '分站管理',
-      commbiz: '社区业务',
-      cardbiz: '卡密业务'
-    }
     const localArr = [];
     arr.forEach((item, index) => {
-      const title = getKey(item, obj)
+      const title = getKey(item, PERMISSIONS)
       localArr.push({
         title,
         val: item,
@@ -44,12 +33,21 @@ function AddAdminView () {
   useEffect(() => {
     permissions().then(r => {
       const { error, data } = r;
+      let localIndex = []
+      p.forEach((it, i) => {
+        data.forEach((item, index) => {
+          if (it === item) {
+            localIndex = [...localIndex, index]
+          }
+        })
+      })
+      setTargetKeys(localIndex);
       !error && setPurview(format(data))
     })
   }, [])
 
   function save () {
-    if (!name || !number || !targetKeys.length) {
+    if (!name || !number) {
       message.warning("请完善信息")
       return;
     }
@@ -58,7 +56,14 @@ function AddAdminView () {
     targetKeys.forEach(item => {
       localPurview.push(purview[item].val)
     })
-    addManagers(number, name, localPurview).then(r => {
+    let body = { permissions: localPurview }
+    if (!id) {
+      body = { ...body, ...{ account: number } }
+    }
+    if (name !== nickname) {
+      body = { ...body, ...{ nickname: name } }
+    }
+    managers(id ? "modify" : "add", id, body).then(r => {
       setLoading(false)
       setNumber(undefined)
       setName(undefined)
@@ -89,7 +94,7 @@ function AddAdminView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>管理员账号</div>
           </div>
-          <Input maxLength={20} value={number} onChange={e=>setNumber(e.target.value)} placeholder="请填写管理员登录账号" className={c.itemInput}></Input>
+          <Input disabled={id} maxLength={20} value={number} onChange={e=>setNumber(e.target.value)} placeholder="请填写管理员登录账号" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />

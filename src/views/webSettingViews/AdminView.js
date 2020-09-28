@@ -5,7 +5,8 @@ import { managers, managersPermissions } from '../../utils/api'
 import good7 from '../../icons/good/good7.png'
 import home9 from '../../icons/home/home9.png'
 import good40 from '../../icons/good/good40.png'
-import { push, transformTime } from "../../utils/util"
+import { push, transformTime, getKey } from "../../utils/util"
+import { PERMISSIONS } from "../../utils/config"
 
 function AdminView () {
 
@@ -24,7 +25,7 @@ function RTable () {
   const [visible, setVisible] = useState([])
 
   useEffect(() => {
-    managers().then(r => {
+    managers("get").then(r => {
       const { error, data } = r;
       !error && setData(format(data))
     })
@@ -44,6 +45,15 @@ function RTable () {
           }
         })
         setVisible(localVisible)
+      }
+    })
+  }
+
+  function change (id, record) {
+    managersPermissions(id).then(r => {
+      const { error, data } = r;
+      if (!error) {
+        push('/main/addAdmin', { ...record, ...{ permissions: data } })
       }
     })
   }
@@ -86,15 +96,16 @@ function RTable () {
         render: (text, record, index) => {
           const views = []
           purview.forEach((item, index) => {
+            const title = getKey(item, PERMISSIONS)
             views.push(
               <div style={{...styles.item,...{
               borderLeftWidth: index % 3 === 0 ? 1 : 0,
               borderTopWidth: index < 3 ? 1 : 0
-            }}} key={index}>{item}</div>
+            }}} key={index}>{title}</div>
             )
           })
           views.length === 0 && views.push(
-            <div style={styles.nullView}>
+            <div style={styles.nullView} key="permissions_null_key">
             <img src={home9} alt="" style={styles.nullImg}/>
           </div>
           )
@@ -132,7 +143,7 @@ function RTable () {
       align: 'center',
       render: (text, record, index) => (
         <Space size="small">
-          <div style={{cursor:"wait"}} className={c.clickText} onClick={()=>{}}>修改</div>
+          <div className={c.clickText} onClick={()=>change(text,record)}>修改</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
           <div className={c.clickText} style={{cursor:'wait'}} onClick={()=>{}}>重置密码</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
@@ -143,7 +154,7 @@ function RTable () {
 ];
 
 return (
-  <div className={c.main}>
+  <div className={c.main} style={{marginTop:0}}>
       <div className={c.searchView}>
         <div className={c.search} style={{borderBottom:'none'}}>
           <div className={c.searchL} />
@@ -188,6 +199,7 @@ const styles = {
     flexWrap: 'wrap',
     color: 'rgba(0, 0, 0, 0.65)',
     fontSize: '0.857rem',
+    paddingBottom: 20
   },
   header: {
     width: '100%',

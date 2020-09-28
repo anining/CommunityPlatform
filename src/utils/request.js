@@ -48,6 +48,7 @@ async function transformFetch (method, url, data = {}) {
           resolve(localDate);
         }
       } catch (e) {
+        reject()
         message.error("网络错误")
       }
     })

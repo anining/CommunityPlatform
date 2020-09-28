@@ -10,6 +10,43 @@ export function password (old_password, new_password) {
   return transformFetch("PUT", "/password", { old_password, new_password })
 }
 
+// 权限列表
+export function permissions () {
+  return transformFetch("GET", "/permissions")
+}
+
+// 管理员
+export function managers (type, mid, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/managers")
+    case "add":
+      return transformFetch("POST", "/managers", body);
+    case "modify":
+      return transformFetch("PATCH", `/managers/${mid}`, body);
+    default:
+      // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
+  }
+}
+
+// 管理员权限列表
+export function managersPermissions (manager_id) {
+  return transformFetch("GET", `/managers/${manager_id}/permissions`, { manager_id })
+}
+
+// 当前管理员的权限列表
+export function currentManagerPermissions () {
+  return transformFetch("GET", "/current-manager/permissions");
+}
+
+
+
+
+
+
+//
+
+
 // 社区商品分类
 export function communityGoodsCategories (type, cid, table, body) {
   switch (type) {
@@ -52,21 +89,6 @@ export function communityGoods (type, gid, table, body) {
   }
 }
 
-// 管理员列表
-export function managers () {
-  return transformFetch("GET", "/managers")
-}
-
-// 管理员权限列表
-export function managersPermissions (manager_id) {
-  return transformFetch("GET", `/managers/${manager_id}/permissions`, { manager_id })
-}
-
-// 新增管理员
-export function addManagers (account, nickname, permissions) {
-  return transformFetch("POST", "/managers", { account, nickname, permissions })
-}
-
 // 获取登录日志
 export function loginlogs (page, size, manager_id, start_from, end_with) {
   let data = { page, size }
@@ -80,11 +102,6 @@ export function loginlogs (page, size, manager_id, start_from, end_with) {
     data = { ...data, ...{ manager_id } }
   }
   return transformFetch("GET", "/loginlogs", data)
-}
-
-// 权限列表
-export function permissions () {
-  return transformFetch("GET", "/permissions")
 }
 
 // 标签分组
@@ -233,9 +250,4 @@ export function customerServices (type, cid, table, body) {
     default:
       // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
   }
-}
-
-// 当前管理员的权限列表
-export function currentManagerPermissions () {
-  return transformFetch("GET", "/current-manager/permissions");
 }
