@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, message, Input } from 'antd'
+import { Button, Table, Input } from 'antd'
 import good1 from '../../icons/good/good1.png'
 import c from '../../styles/view.module.css'
 import good2 from '../../icons/good/good2.png'
@@ -7,12 +7,15 @@ import good3 from '../../icons/good/good3.png'
 import good4 from '../../icons/good/good4.png'
 import good9 from '../../icons/good/good9.png'
 import DropdownComponent from "../../components/DropdownComponent";
-import { push, getKey } from "../../utils/util"
+import { push, getKey, saveSuccess } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import { communityGoods } from "../../utils/api"
+import SelectComponent from "../../components/SelectComponent"
+
+let win
 
 function CommunityGoodView () {
-  const [data, setData] = useState([
+  const [data] = useState([
     {
       label: '商品总数',
       number: '10,100',
@@ -55,7 +58,20 @@ function RTable () {
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
+
   const [id, setId] = useState()
+  const [search_name, setSearch_name] = useState()
+  const [community_goods_category_id, setCommunity_goods_category_id] = useState()
+  const [community_goods_category_name, setCommunity_goods_category_name] = useState()
+  const [status, setStatus] = useState()
+  const [refundable, setRefundable] = useState()
+  const [order_by, setOrder_by] = useState()
+
+  window.localClick = function (type, ids) {
+    setCommunity_goods_category_id(ids.id)
+    setCommunity_goods_category_name(ids.name)
+    win && win.close()
+  }
 
   useEffect(() => {
     get(current)
@@ -65,6 +81,21 @@ function RTable () {
     let body = { page: current, size: pageSize }
     if (id) {
       body = { ...body, ...{ id } }
+    }
+    if (search_name) {
+      body = { ...body, ...{ search_name } }
+    }
+    if (community_goods_category_id) {
+      body = { ...body, ...{ community_goods_category_id } }
+    }
+    if (status) {
+      body = { ...body, ...{ status } }
+    }
+    if (refundable === "refundable" || refundable === "no_refundable") {
+      body = { ...body, ...{ refundable: refundable === "refundable" } }
+    }
+    if (order_by) {
+      body = { ...body, ...{ order_by } }
     }
     communityGoods("get", undefined, body).then(r => {
       if (!r.error) {
@@ -82,9 +113,42 @@ function RTable () {
     return arr
   }
 
+  function click () {
+    win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
+  }
+
   function onChange (page, pageSize) {
     setCurrent(page)
     get(page)
+  }
+
+  const rowSelection = {
+    onChange: (selectedRowKeys, rows) => {
+      setSelectRows(selectedRowKeys)
+    },
+    selectedRowKeys: selectedRows
+  };
+
+  function submit (key) {
+    const params = new URLSearchParams()
+    selectedRows.forEach(i => params.append("ids", data[i].id))
+    communityGoods("modifys", undefined, params.toString(), { status: key }).then(r => {
+      if (!r.error) {
+        saveSuccess(false)
+        setSelectRows([])
+        get(current)
+      }
+    })
+  }
+
+  function reset () {
+    setId(undefined)
+    setSearch_name(undefined)
+    setCommunity_goods_category_name(undefined)
+    setCommunity_goods_category_id(undefined)
+    setStatus(undefined)
+    setRefundable(undefined)
+    setOrder_by(undefined)
   }
 
   const obj = {
@@ -126,6 +190,9 @@ function RTable () {
       title: '进价',
       dataIndex: 'unit_cost',
       align: 'center',
+      render: (text, record, index) => {
+        return '-'
+      }
       // sorter: {
       //   compare: (a, b) => {
       //     console.log(a, b)
@@ -148,6 +215,9 @@ function RTable () {
       title: '密价',
       align: 'center',
       dataIndex: 'disc_price',
+      render: (text, record, index) => {
+        return '-'
+      }
       // sorter: {
       //   compare: (a, b) => {
       //     console.log(a, b)
@@ -194,36 +264,16 @@ function RTable () {
     },
   ];
 
-  const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
-      setSelectRows(selectedRowKeys)
-    }
-  };
-
-  function submit (key) {
-    switch (key) {
-      case "delete":
-        message.success('批量删除操作');
-        break
-      default:
-        ;
-    }
-  }
-
-  function reset () {
-    setId(undefined)
-  }
-
   return (
     <div className={c.main}>
       <div className={c.searchView}>
         <div className={c.search}>
           <div className={c.searchL}>
             <Input value={id} onPressEnter={()=>get(current)} onChange={e=>setId(e.target.value)} placeholder="请输入商品编号" size="small" className={c.searchInput}/>
-            <DropdownComponent keys={[]} placeholder="请选择商品分类" style={{width:186}}/>
-            <DropdownComponent keys={[]} placeholder="请选择商品状态" style={{width:186}}/>
-            <DropdownComponent keys={[]} placeholder="请选择用户权限" style={{width:186}}/>
-            <DropdownComponent keys={[]} placeholder="请选择供货商" style={{width:186}}/>
+            <Input value={search_name} onPressEnter={()=>get(current)} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入商品名称" size="small" className={c.searchInput}/>
+            <DropdownComponent action={status} setAction={setStatus} keys={[{name:"已上架",key:"available"},{name:"已关闭订单",key:"unavailable"},{name:"已下架",key:"paused"}]} placeholder="请选择商品状态" style={{width:186}}/>
+            <DropdownComponent keys={[{name:"可退单",key:"refundable"},{name:"不可退单",key:"no_refundable"},{name:"全部",key:"un_refundable"}]} action={refundable} setAction={setRefundable} placeholder="请选择是否可退单" style={{width:186}}/>
+            <SelectComponent placeholder="请选择商品分类" id={community_goods_category_id} name={community_goods_category_name} click={click}/>
           </div>
           <div className={c.searchR}>
             <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>
@@ -237,7 +287,7 @@ function RTable () {
             </div>
         </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
       <Table
         columns={columns}
         rowSelection={{

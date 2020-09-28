@@ -14,7 +14,9 @@ let win
 function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
   const { id, name: n, batch_order: b_o, category_name, disc_price: d_p, max_order_amount: max_o_a, min_order_amount: min_o_a, param_template_name, repeat_order: r_o, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
+  console.log(state)
   const [name, setName] = useState(n)
+  const [insert, setInsert] = useState(id)
   const [status, setStatus] = useState(s)
   const [pics, setPics] = useState([])
   const [community_goods_category_id, setCommunity_goods_category_id] = useState()
@@ -108,10 +110,11 @@ function EditCommunityGoodView () {
     if (introduction) {
       body = { ...body, ...{ introduction } }
     }
-    const promise = communityGoods(id ? "modify" : 'add', id, undefined, body)
+    const promise = communityGoods(insert ? "modify" : 'add', id, undefined, body)
     promise.then(r => {
+      setInsert(jump)
+      setLoading(false)
       if (!r.error) {
-        setLoading(false)
         saveSuccess(jump)
         setName(undefined)
         setStatus("available")
@@ -134,6 +137,7 @@ function EditCommunityGoodView () {
         setImageUrl(undefined)
       }
     }).catch(e => {
+      setInsert(jump)
       setLoading(false)
     })
   }
