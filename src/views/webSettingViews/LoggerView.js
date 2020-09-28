@@ -3,6 +3,7 @@ import { Button, Table, Input, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import good9 from '../../icons/good/good9.png'
 import { loginlogs } from "../../utils/api"
+import { transformTime } from "../../utils/util"
 
 function LoggerView () {
 
@@ -52,6 +53,7 @@ function RTable () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
+      item.time = transformTime(item.created_at)
     })
     return arr
   }
@@ -61,7 +63,7 @@ function RTable () {
     get(page)
   }
 
-  const obj = ["#FF4D4F", "#FF8D30", '#000'];
+  // const obj = ["#FF4D4F", "#FF8D30", '#000'];
   const columns = [
     {
       title: 'ID',
@@ -78,7 +80,7 @@ function RTable () {
       dataIndex: 'text',
       align: 'center',
       render: (text, record, index) => {
-        return ''
+        return '-'
         // const { text: t, color } = getKey(text, obj)
         // const { status, t } = text;
         // return (
@@ -88,7 +90,7 @@ function RTable () {
   },
     {
       title: '登录时间',
-      dataIndex: 'created_at',
+      dataIndex: 'time',
       align: 'center',
     },
   ];

@@ -39,6 +39,21 @@ export function currentManagerPermissions () {
   return transformFetch("GET", "/current-manager/permissions");
 }
 
+// 获取登录日志
+export function loginlogs (page, size, manager_id, start_from, end_with) {
+  let data = { page, size }
+  if (end_with) {
+    data = { ...data, ...{ end_with } }
+  }
+  if (start_from) {
+    data = { ...data, ...{ start_from } }
+  }
+  if (manager_id) {
+    data = { ...data, ...{ manager_id } }
+  }
+  return transformFetch("GET", "/loginlogs", data)
+}
+
 
 
 
@@ -87,21 +102,6 @@ export function communityGoods (type, gid, table, body) {
     default:
       return transformFetch("DELETE", `/community-goods/${gid}`);
   }
-}
-
-// 获取登录日志
-export function loginlogs (page, size, manager_id, start_from, end_with) {
-  let data = { page, size }
-  if (end_with) {
-    data = { ...data, ...{ end_with } }
-  }
-  if (start_from) {
-    data = { ...data, ...{ start_from } }
-  }
-  if (manager_id) {
-    data = { ...data, ...{ manager_id } }
-  }
-  return transformFetch("GET", "/loginlogs", data)
 }
 
 // 标签分组
