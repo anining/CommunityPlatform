@@ -24,10 +24,12 @@ function AddPeopleServiceView () {
     setLoading(true)
     customerServices(id ? 'modify' : 'add', undefined, undefined, { name, contact, comment }).then(r => {
       setLoading(false)
-      saveSuccess(jump)
-      setName(undefined)
-      setContact(undefined)
-      setComment(undefined)
+      if (!r.error) {
+        saveSuccess(jump)
+        setName(undefined)
+        setContact(undefined)
+        setComment(undefined)
+      }
     }).catch(e => {
       setLoading(false)
     })
