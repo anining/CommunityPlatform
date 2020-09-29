@@ -36,7 +36,7 @@ function AddAdminView () {
       let localIndex = []
       p.forEach((it, i) => {
         data.forEach((item, index) => {
-          if (it === item) {
+          if (it.permission === item) {
             localIndex = [...localIndex, index]
           }
         })
