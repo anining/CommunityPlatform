@@ -245,10 +245,9 @@
 
 .noticeHtml {
   height: 46px;
+  width: 300px;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  -webkit-box-pack: center;
-  -webkit-box-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 46px;
 }
