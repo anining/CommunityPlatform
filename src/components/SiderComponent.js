@@ -29,7 +29,7 @@ import sider22 from '../icons/sider/sider22.png'
 import sider23 from '../icons/sider/sider23.png'
 import sider24 from '../icons/sider/sider24.png'
 import { getter, setter } from "../utils/store"
-import {push} from "../utils/util"
+import { push } from "../utils/util"
 
 function SiderComponent ({ collapsed, toggle }) {
   const { role, openKeys, selectedKeys, permissions } = getter(["permissions", "selectedKeys", "openKeys", "role"])
@@ -155,20 +155,57 @@ function SiderComponent ({ collapsed, toggle }) {
 function Icon ({ keys }) {
   const { selectedKeys } = getter(["selectedKeys"])
   const obj = {
-    "home": [sider15, sider5],
-    "table": [sider23, sider24],
-    "statistics": [sider18, sider14],
-    "communityBusiness": [sider12, sider4],
-    "cardBusiness": [sider2, sider6],
-    "services": [sider7, sider9],
-    "orderRecording": [sider13, sider10],
-    "capitalFlow": [sider17, sider3],
-    "user": [sider8, sider1],
-    "webSetting": [sider11, sider20],
-    "systemSetting": [sider19, sider16],
-    "childWeb": [sider21, sider22],
+    "home": {
+      icon: [sider15, sider5],
+      keys: ["home"]
+    },
+    "table": {
+      icon: [sider23, sider24],
+      keys: ["table"]
+    },
+    "statistics": {
+      icon: [sider18, sider14],
+      keys: ["dataStatistics", "moneyStatistics", "userStatistics", "webStatistics", "goodStatistics"]
+    },
+    "communityBusiness": {
+      icon: [sider12, sider4],
+      keys: ["communityGood", "goodCategory", "orderModel"]
+    },
+    "cardBusiness": {
+      icon: [sider2, sider6],
+      keys: ["cardGood", "cardManage", "cardCategory"]
+    },
+    "services": {
+      icon: [sider7, sider9],
+      keys: ["docking", "store", "subService"]
+    },
+    "orderRecording": {
+      icon: [sider13, sider10],
+      keys: ["communityOrder", "cardOrder"]
+    },
+    "capitalFlow": {
+      icon: [sider17, sider3],
+      keys: ["capitalFlow"]
+    },
+    "user": {
+      icon: [sider8, sider1],
+      keys: ["user"]
+    },
+    "webSetting": {
+      icon: [sider11, sider20],
+      keys: ["storeSetting", "rebot", "images", "peopleService", 'notice']
+    },
+    "systemSetting": {
+      icon: [sider19, sider16],
+      keys: ["admin", "password", "logger", "about", "businessSetting"]
+    },
+    "childWeb": {
+      icon: [sider21, sider22],
+      keys: ["childWebList"]
+    },
   }
-  return <>{U.ifElse(R.includes(keys, selectedKeys), <img src={obj[keys][1]} alt="" style={{width:21,marginBottom:7,marginRight:16}} />, <img src={obj[keys][0]} alt="" style={{width:21,marginBottom:7,marginRight:16}} />)
+
+  return <>{U.ifElse(R.includes(selectedKeys, obj[keys].keys), <img src={obj[keys].icon[1]} alt="" style={{width:21,marginBottom:7,marginRight:16}} />, <img src={obj[keys].icon[0]} alt="" style={{width:21,marginBottom:7,marginRight:16}} />)
 } < />}
 
 export default SiderComponent
