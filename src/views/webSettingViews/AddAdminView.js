@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Transfer, Button, message } from 'antd'
+import { Input, Transfer, Button, message, Breadcrumb } from 'antd'
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
 import { permissions, managers } from "../../utils/api";
-import { saveSuccess, getKey } from "../../utils/util";
+import { saveSuccess, getKey, push } from "../../utils/util";
 import { useHistory } from "react-router-dom";
 import { PERMISSIONS } from "../../utils/config";
 
@@ -82,7 +82,15 @@ function AddAdminView () {
     <div className={c.container}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 站点设置 / 管理员 / <span>新增管理员</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/admin")}>管理员</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>新增管理员</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main} style={{marginBottom:0}}>
         <div className={c.headerT}>
