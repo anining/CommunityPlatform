@@ -56,13 +56,7 @@ function AddAdminView () {
     targetKeys.forEach(item => {
       localPurview.push(purview[item].val)
     })
-    let body = { permissions: localPurview }
-    if (!id) {
-      body = { ...body, ...{ account: number } }
-    }
-    if (name !== nickname) {
-      body = { ...body, ...{ nickname: name } }
-    }
+    let body = { account: number, nickname: name, permissions: localPurview }
     managers(id ? "modify" : "add", id, body).then(r => {
       setLoading(false)
       setNumber(undefined)

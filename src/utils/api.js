@@ -23,7 +23,7 @@ export function managers (type, mid, body) {
     case "add":
       return transformFetch("POST", "/managers", body);
     case "modify":
-      return transformFetch("PATCH", `/managers/${mid}`, body);
+      return transformFetch("PUT", `/managers/${mid}`, body);
     default:
       // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
   }
