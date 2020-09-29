@@ -62,7 +62,7 @@ export function communityGoodsCategories (type, cid, table, body) {
     case "add":
       return transformFetch("POST", "/community-goods-categories", body);
     case "modify":
-      return transformFetch("PATCH", `/community-goods-categories/${cid}`, body);
+      return transformFetch("PUT", `/community-goods-categories/${cid}`, body);
     default:
       return transformFetch("DELETE", `/community-goods-categories?${body}`);
   }
