@@ -6,7 +6,7 @@ import good5 from '../../icons/good/good5.png'
 import good27 from '../../icons/good/good27.png'
 import good9 from '../../icons/good/good9.png'
 import { useHistory } from "react-router-dom"
-import { communityDiscPrices, addDiscPrices, deleteDiscPrices } from "../../utils/api"
+import { communityDiscPrices, addDiscPrices, deleteDiscPrices, usersPricingType } from "../../utils/api"
 import { saveSuccess, push } from "../../utils/util";
 import SelectComponent from "../../components/SelectComponent"
 
@@ -15,7 +15,14 @@ let win
 function EditUserPriceView () {
   const { state = {} } = useHistory().location
   const { account, id } = state
-  const [checked, setChecked] = useState(true)
+  const [checked, setChecked] = useState(false)
+
+  function check (e) {
+    setChecked(e)
+    usersPricingType(id, e ? "disc" : "normal").then(r => {
+      !r.error && saveSuccess(false)
+    })
+  }
 
   return (
     <div className="view">
@@ -57,7 +64,7 @@ function EditUserPriceView () {
                 fontSize:'1.142rem',
                 marginTop:12,
               }}>是否使用密价</div>
-              <Switch checked={checked} onClick={e=>setChecked(e)} style={{marginTop:14,marginLeft:32,marginRight:14}}></Switch>
+              <Switch checked={checked} onClick={check} style={{marginTop:14,marginLeft:32,marginRight:14}}></Switch>
               <div style={{marginTop:16,color:'#2C68FF',fontSize:'0.857rem'}}>当前状态： 使用{checked?"密价":"单价"}</div>
               <div className={c.headerText} style={{
                 width:457,

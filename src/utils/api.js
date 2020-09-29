@@ -222,22 +222,12 @@ export function balanceChanges (page, size, start_from, end_with) {
   return transformFetch("GET", "/balance-changes", data)
 }
 
+// 获取社区商品
+export function communityGood (gid) {
+  return transformFetch("GET", `/community-goods/${gid}`)
+}
 
-
-
-
-
-
-
-
-
-
-
-
-//
-
-
-// 获取社区商品订单
+// 获取社区订单列表
 export function communityGoodsOrders (page, size, id, search_user_account, search_goods_name, community_goods_category_id, status, start_from, end_with) {
   let data = { page, size }
   if (id) {
@@ -264,3 +254,14 @@ export function communityGoodsOrders (page, size, id, search_user_account, searc
   return transformFetch("GET", "/community-goods-orders", data)
 }
 
+// 设置用户的定价类型
+export function usersPricingType (uid, community_pricing, card_pricing) {
+  let data = {}
+  if (community_pricing) {
+    data = { ...data, ...{ community_pricing } }
+  }
+  if (card_pricing) {
+    data = { ...data, ...{ card_pricing } }
+  }
+  return transformFetch("PATCH", `/users/${uid}/pricing-type`, data)
+}
