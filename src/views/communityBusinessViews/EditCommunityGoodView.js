@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Tooltip, Button, Upload, message, Radio, Checkbox, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
 import edit1 from '../../icons/edit/edit1.png'
 import { goBack, saveSuccess, push } from "../../utils/util";
-import { communityGoods } from "../../utils/api";
+import { communityGoods, communityGood } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import { MODULES } from "../../utils/config";
 
@@ -14,15 +14,14 @@ let win
 function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
   const { id, name: n, batch_order: b_o, category_name, disc_price: d_p, max_order_amount: max_o_a, min_order_amount: min_o_a, param_template_name, repeat_order: r_o, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
-  console.log(state)
   const [name, setName] = useState(n)
   const [insert, setInsert] = useState(id)
   const [status, setStatus] = useState(s)
   const [pics, setPics] = useState([])
   const [community_goods_category_id, setCommunity_goods_category_id] = useState()
   const [community_param_template_id, setCommunity_param_template_id] = useState()
-  const [community_goods_category_name, setCommunity_goods_category_name] = useState()
-  const [community_param_template_name, setCommunity_param_template_name] = useState()
+  const [community_goods_category_name, setCommunity_goods_category_name] = useState(category_name)
+  const [community_param_template_name, setCommunity_param_template_name] = useState(param_template_name)
   const [tag_ids, setTag_ids] = useState([])
   const [tags, setTags] = useState([])
   const [unit, setUnit] = useState(u)
@@ -38,6 +37,25 @@ function EditCommunityGoodView () {
   const [introduction, setIntroduction] = useState("")
   const [imageUrl, setImageUrl] = useState()
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (id) {
+      communityGood(id).then(r => {
+        if (!r.error) {
+          const { community_goods_category_id, community_param_template_id, introduction = "", pics, provider_goods_id, provider_type, refundable, tags, weight } = r.data
+          setPics(pics)
+          pics.length && setImageUrl(pics[0])
+          setCommunity_goods_category_id(community_goods_category_id)
+          setCommunity_param_template_id(community_param_template_id)
+          setIntroduction(introduction)
+          setRefundable(refundable)
+          setWeight(weight)
+          setTag_ids(tags.map(i => i.id))
+          setTags(tags)
+        }
+      })
+    }
+  }, [])
 
   window.localClick = function (type, ids) {
     switch (type) {
