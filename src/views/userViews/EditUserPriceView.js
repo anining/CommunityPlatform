@@ -128,7 +128,7 @@ function RTable ({ id, checked }) {
     setVisible(data.map((item, i) => i === index))
   }
 
-  function insertSave (goods_id, index) {
+  function insertSave (goods_id, index, disc_price_id) {
     setVisible(data.map((item, i) => false))
     if (val) {
       addDiscPrices(id, goods_id, "community", val).then(r => {
@@ -141,7 +141,7 @@ function RTable ({ id, checked }) {
         }
       })
     } else {
-      deleteDiscPrices(goods_id).then(r => {
+      deleteDiscPrices(disc_price_id).then(r => {
         if (!r.error) {
           const localData = [...data]
           localData[index].user_disc_price = val
@@ -230,12 +230,12 @@ function RTable ({ id, checked }) {
       width: 219,
       dataIndex: 'user_disc_price',
       render: (text, record, index) => {
-        const { user_disc_price, id } = record
+        const { user_disc_price, id, disc_price_id } = record
         if (visible[index]) {
           return (
             <div>
-              <Input maxLength={6} value={val} onChange={e=>setVal(e.target.value)} onPressEnter={()=>insertSave(id,index)} placeholder="请填写密价" className={ce.user_disc_price_input}/>
-              <Button onClick={()=>insertSave(id,index)} className={ce.user_disc_price_btn} size="small" type="primary">确定</Button>
+              <Input maxLength={6} value={val} onChange={e=>setVal(e.target.value)} onPressEnter={()=>insertSave(id,index,disc_price_id)} placeholder="请填写密价" className={ce.user_disc_price_input}/>
+              <Button onClick={()=>insertSave(id,index,disc_price_id)} className={ce.user_disc_price_btn} size="small" type="primary">确定</Button>
             </div>
           )
         }
