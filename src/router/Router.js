@@ -19,11 +19,13 @@ function Router () {
   const localAuthorization = storage.getItem("authorization")
   const localPermissions = storage.getItem("permissions")
   const localRole = storage.getItem("role")
-  const { authorization, permissions, role } = getter(['authorization', 'role', 'permissions']);
+  const localNickname = storage.getItem("nickname")
+  const { authorization, nickname, permissions, role } = getter(['nickname', 'authorization', 'role', 'permissions']);
   const history = h.get();
   !authorization.get() && localAuthorization && setter([["authorization", localAuthorization.replace(/\"/g, "")]]);
   !permissions.get().length && localPermissions && setter([["permissions", JSON.parse(localPermissions)]]);
-  !role.get() && localRole && setter([["role", localRole.replace(/\"/g, "")]])
+  !role.get() && localRole && setter([["role", localRole.replace(/\"/g, "")]]);
+  !nickname.get() && localNickname && setter([["role", localNickname]])
 
   useEffect(() => {
     const timer = setInterval(() => {

@@ -30,13 +30,13 @@ export function managers (type, mid, body) {
 }
 
 // 管理员权限列表
-export function managersPermissions (manager_id) {
-  return transformFetch("GET", `/managers/${manager_id}/permissions`, { manager_id })
-}
+// export function managersPermissions (manager_id) {
+//   return transformFetch("GET", `/managers/${manager_id}/permissions`, { manager_id })
+// }
 
-// 当前管理员的权限列表
-export function currentManagerPermissions () {
-  return transformFetch("GET", "/current-manager/permissions");
+// 当前管理员信息
+export function currentManager() {
+  return transformFetch("GET", "/current-manager");
 }
 
 // 获取登录日志

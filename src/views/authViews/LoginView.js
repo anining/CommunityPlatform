@@ -4,7 +4,7 @@ import { Input, message, Button } from 'antd';
 import auth2 from '../../icons/auth/auth2.png'
 import auth3 from '../../icons/auth/auth3.png'
 import auth4 from '../../icons/auth/auth4.png'
-import { login, currentManagerPermissions } from '../../utils/api'
+import { login, currentManager } from '../../utils/api'
 import { setter } from '../../utils/store'
 import { push } from "../../utils/util";
 import { storage } from "../../utils/storage";
@@ -55,10 +55,11 @@ function LoginView () {
   }
 
   function get (role, jump = false) {
-    currentManagerPermissions().then(r => {
+    currentManager().then(r => {
       const { data, error } = r
       if (!error) {
-        setter([['permissions', role === "superuser" ? ["orderlog", "citecfg", "usermng", "capitalflow", "valueaddedsrv", "tagmng", "statistics", "subcitemng", "commbiz", "cardbiz"] : data]], true);
+        const { permissions, nickname } = data
+        setter([["nickname", nickname], ['permissions', role === "superuser" ? ["orderlog", "citecfg", "usermng", "capitalflow", "valueaddedsrv", "tagmng", "statistics", "subcitemng", "commbiz", "cardbiz"] : permissions]], true);
         jump && push('/main')
       }
     })

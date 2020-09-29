@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Table, Space, Popconfirm } from 'antd'
 import c from '../../styles/view.module.css'
-import { managers, managersPermissions } from '../../utils/api'
+// import { managers, managersPermissions } from '../../utils/api'
+import { managers } from '../../utils/api'
 import good7 from '../../icons/good/good7.png'
 import home9 from '../../icons/home/home9.png'
 import good40 from '../../icons/good/good40.png'
@@ -32,30 +33,30 @@ function RTable () {
   }, [])
 
   function detail (id, index) {
-    managersPermissions(id).then(r => {
-      const { error, data: d } = r;
-      if (!error) {
-        setPurview(d)
-        const localVisible = []
-        data.forEach((item, i) => {
-          if (index === i) {
-            localVisible.push(true)
-          } else {
-            localVisible.push(false)
-          }
-        })
-        setVisible(localVisible)
-      }
-    })
+    // managersPermissions(id).then(r => {
+    //   const { error, data: d } = r;
+    //   if (!error) {
+    //     setPurview(d)
+    //     const localVisible = []
+    //     data.forEach((item, i) => {
+    //       if (index === i) {
+    //         localVisible.push(true)
+    //       } else {
+    //         localVisible.push(false)
+    //       }
+    //     })
+    //     setVisible(localVisible)
+    //   }
+    // })
   }
 
   function change (id, record) {
-    managersPermissions(id).then(r => {
-      const { error, data } = r;
-      if (!error) {
-        push('/main/addAdmin', { ...record, ...{ permissions: data } })
-      }
-    })
+    // managersPermissions(id).then(r => {
+    //   const { error, data } = r;
+    //   if (!error) {
+    //     push('/main/addAdmin', { ...record, ...{ permissions: data } })
+    //   }
+    // })
   }
 
   function close () {
@@ -128,7 +129,7 @@ function RTable () {
                 )
               }
             } >
-            <div className={c.clickText} onClick={()=>detail(text,index)}>查看详情</div> <
+              <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>detail(text,index)}>查看详情</div> <
             /Popconfirm>
         )
       }
@@ -143,7 +144,7 @@ function RTable () {
       align: 'center',
       render: (text, record, index) => (
         <Space size="small">
-          <div className={c.clickText} onClick={()=>change(text,record)}>修改</div>
+          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>change(text,record)}>修改</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
           <div className={c.clickText} style={{cursor:'wait'}} onClick={()=>{}}>重置密码</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
