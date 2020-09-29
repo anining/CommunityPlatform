@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button, Table, message } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
-import { push, transformTime } from "../../utils/util";
+import { push, transformTime, getSimpleText } from "../../utils/util";
 import DropdownComponent from "../../components/DropdownComponent";
 import { announcements } from '../../utils/api'
 
@@ -62,7 +62,7 @@ function RTable () {
       dataIndex: 'content',
       width: 300,
       align: 'center',
-      remder: (text, record, index) => <div className={c.hiddenText}>{text}</div>
+      render: (text, record, index) => <div className={c.noticeHtml}>{getSimpleText(text)}</div>
   },
     {
       title: '发送人',

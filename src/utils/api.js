@@ -265,3 +265,8 @@ export function usersPricingType (uid, community_pricing, card_pricing) {
   }
   return transformFetch("PATCH", `/users/${uid}/pricing-type`, data)
 }
+
+// 获取价格历史列表
+export function priceHistories (goods_type, goods_id) {
+  return transformFetch("GET", "/price-histories")
+}

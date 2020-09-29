@@ -39,4 +39,11 @@ function getKey (k, ks) {
   return R.prop(k)(ks)
 }
 
-export { getKey, saveSuccess, transformTime, goBack, push }
+//html剔除富文本标签，留下纯文本
+function getSimpleText (html) {
+  var re1 = new RegExp("<.+?>", "g"); //匹配html标签的正则表达式，"g"是搜索匹配多个符合的内容
+  var msg = html.replace(re1, ''); //执行替换成空字符
+  return msg;
+}
+
+export { getSimpleText, getKey, saveSuccess, transformTime, goBack, push }
