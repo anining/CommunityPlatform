@@ -1,14 +1,15 @@
-import React from 'react'
+import * as React from 'karet'
 import { Menu, Dropdown, Button } from 'antd'
 import c from '../styles/header.module.css'
 import { Layout } from 'antd'
 import header1 from '../icons/header/header1.png'
 import header3 from '../icons/header/header3.png'
 import header4 from '../icons/header/header4.png'
-import { clear } from '../utils/store'
+import { clear, getter } from '../utils/store'
 import LogoComponent from './LogoComponent'
 
 function HeaderComponent ({ collapsed, toggle }) {
+  const { nickname } = getter(["nickname"])
 
   const menu = (
     <Menu>
@@ -32,7 +33,7 @@ function HeaderComponent ({ collapsed, toggle }) {
         <Dropdown overlay={menu}>
           <Button className={c.btn}>
             <img src={header1} alt="" className={c.avatar}/>
-            <div>用户名</div>
+            <div>{nickname}</div>
             <img src={header3} alt="" className={c.down}/>
           </Button>
         </Dropdown>

@@ -9,7 +9,7 @@ const localStore = {
   // banner: null,
   // gradeSetting: null,
   // gradeRange: null,
-  // nextRedLevel: null,
+  nickname: '',
   openKeys: [], // 当前展开的 SubMenu 菜单项 key 数组
   selectedKeys: [], // 当前选中的菜单项 key 数组
   permissions: [],

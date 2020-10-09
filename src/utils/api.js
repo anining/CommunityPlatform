@@ -23,20 +23,20 @@ export function managers (type, mid, body) {
     case "add":
       return transformFetch("POST", "/managers", body);
     case "modify":
-      return transformFetch("PATCH", `/managers/${mid}`, body);
+      return transformFetch("PUT", `/managers/${mid}`, body);
     default:
       // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
   }
 }
 
 // 管理员权限列表
-export function managersPermissions (manager_id) {
-  return transformFetch("GET", `/managers/${manager_id}/permissions`, { manager_id })
-}
+// export function managersPermissions (manager_id) {
+//   return transformFetch("GET", `/managers/${manager_id}/permissions`, { manager_id })
+// }
 
-// 当前管理员的权限列表
-export function currentManagerPermissions () {
-  return transformFetch("GET", "/current-manager/permissions");
+// 当前管理员信息
+export function currentManager() {
+  return transformFetch("GET", "/current-manager");
 }
 
 // 获取登录日志
@@ -62,7 +62,7 @@ export function communityGoodsCategories (type, cid, table, body) {
     case "add":
       return transformFetch("POST", "/community-goods-categories", body);
     case "modify":
-      return transformFetch("PATCH", `/community-goods-categories/${cid}`, body);
+      return transformFetch("PUT", `/community-goods-categories/${cid}`, body);
     default:
       return transformFetch("DELETE", `/community-goods-categories?${body}`);
   }

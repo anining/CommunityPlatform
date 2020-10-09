@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import * as React from 'karet'
+import { useState, useEffect } from 'react'
 import { TimelineChart } from 'ant-design-pro/lib/Charts';
 import { Button, Radio, Table, Timeline } from 'antd'
 import c from '../../styles/home.module.css'
@@ -12,8 +13,10 @@ import home7 from '../../icons/home/home7.png'
 import home8 from '../../icons/home/home8.png'
 import home9 from '../../icons/home/home9.png'
 import { h } from '../../utils/history'
+import { getter } from "../../utils/store";
 
 function HomeView () {
+  const { nickname } = getter(["nickname"])
   const [views, setViews] = useState([])
   const [views2, setViews2] = useState([])
   const [value3, setValue3] = useState('Apple')
@@ -126,7 +129,7 @@ function HomeView () {
           <img src={home8} alt="" className={c.avatar}/>
           <div className={c.headerU}>
             <div className={c.headerUN}>
-              <div>欢迎您，想喝冰阔泺，祝您开心每一天！</div>
+              <div>欢迎您，{nickname}，祝您开心每一天！</div>
               <div className={c.headerUNTips}>旗舰版</div>
             </div>
             <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>2021.01.01 01:15:23</div>　<span>续费</span></div>
