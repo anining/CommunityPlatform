@@ -13,17 +13,17 @@ let win
 
 function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
-  const { id, name: n, batch_order: b_o, category_name, disc_price: d_p, max_order_amount: max_o_a, min_order_amount: min_o_a, param_template_name, repeat_order: r_o, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
+  const { id, name: n, tags: tag_s = [], batch_order: b_o, category_name, weight: w, disc_price: d_p, pics: ps = [], max_order_amount: max_o_a, community_goods_category_id: c_id, community_param_template_id: t_id, min_order_amount: min_o_a, param_template_name, repeat_order: r_o, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
   const [name, setName] = useState(n)
   const [insert, setInsert] = useState(id)
   const [status, setStatus] = useState(s)
-  const [pics, setPics] = useState([])
-  const [community_goods_category_id, setCommunity_goods_category_id] = useState()
-  const [community_param_template_id, setCommunity_param_template_id] = useState()
+  const [pics, setPics] = useState(ps)
+  const [community_goods_category_id, setCommunity_goods_category_id] = useState(c_id)
+  const [community_param_template_id, setCommunity_param_template_id] = useState(t_id)
   const [community_goods_category_name, setCommunity_goods_category_name] = useState(category_name)
   const [community_param_template_name, setCommunity_param_template_name] = useState(param_template_name)
-  const [tag_ids, setTag_ids] = useState([])
-  const [tags, setTags] = useState([])
+  const [tag_ids, setTag_ids] = useState(tag_s.map(i=>i.id))
+  const [tags, setTags] = useState(tag_s)
   const [unit, setUnit] = useState(u)
   const [unit_price, setUnit_price] = useState(u_p)
   const [refundable, setRefundable] = useState(true)
@@ -33,29 +33,11 @@ function EditCommunityGoodView () {
   const [max_order_amount, setMax_order_amount] = useState(max_o_a)
   const [repeat_order, setRepeat_order] = useState(r_o)
   const [batch_order, setBatch_order] = useState(b_o)
-  const [weight, setWeight] = useState()
+  const [weight, setWeight] = useState(w)
   const [introduction, setIntroduction] = useState("")
-  const [imageUrl, setImageUrl] = useState()
+  const [imageUrl, setImageUrl] = useState(pics[0])
   const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    if (id) {
-      communityGood(id).then(r => {
-        if (!r.error) {
-          const { community_goods_category_id, community_param_template_id, introduction = "", pics, provider_goods_id, provider_type, refundable, tags, weight } = r.data
-          setPics(pics)
-          pics.length && setImageUrl(pics[0])
-          setCommunity_goods_category_id(community_goods_category_id)
-          setCommunity_param_template_id(community_param_template_id)
-          setIntroduction(introduction)
-          setRefundable(refundable)
-          setWeight(weight)
-          setTag_ids(tags.map(i => i.id))
-          setTags(tags)
-        }
-      })
-    }
-  }, [])
+  const [recommended, setRecommended] = useState(false)
 
   window.localClick = function (type, ids) {
     switch (type) {
@@ -91,43 +73,19 @@ function EditCommunityGoodView () {
       message.warning("权重值超出范围")
       return
     }
-    let body = { provider_goods: { provider_type: 'internal', goods_id: 1 }, pics, community_goods_category_id, community_param_template_id, tag_ids, refundable }
-    if (name !== n) {
+    let body = {recommended, provider_goods: { provider_type: 'internal', goods_id: 1 }, pics, community_goods_category_id, community_param_template_id, tag_ids, refundable }
       body = { ...body, ...{ name } }
-    }
-    if (unit_price !== u_p) {
       body = { ...body, ...{ unit_price } }
-    }
-    if (unit !== u) {
       body = { ...body, ...{ unit } }
-    }
-    if (status !== s || !id) {
       body = { ...body, ...{ status } }
-    }
-    if (unit_cost !== u_c) {
       body = { ...body, ...{ unit_cost } }
-    }
-    if (disc_price !== d_p) {
       body = { ...body, ...{ disc_price } }
-    }
-    if (min_order_amount !== min_o_a) {
       body = { ...body, ...{ min_order_amount } }
-    }
-    if (max_order_amount !== max_o_a) {
       body = { ...body, ...{ max_order_amount } }
-    }
-    if (repeat_order !== r_o) {
       body = { ...body, ...{ repeat_order } }
-    }
-    if (batch_order !== b_o) {
       body = { ...body, ...{ batch_order } }
-    }
-    if (weight) {
       body = { ...body, ...{ weight } }
-    }
-    if (introduction) {
       body = { ...body, ...{ introduction } }
-    }
     const promise = communityGoods(insert ? "modify" : 'add', id, undefined, body)
     promise.then(r => {
       setInsert(jump)
@@ -399,6 +357,16 @@ function EditCommunityGoodView () {
         <div className={c.itemTips}>
           <div className={c.itemName} />
           <div>数值越大，排序越靠前；数值相同，商品编号越大，排序越靠前</div>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>推荐</div>
+          </div>
+          <Radio.Group onChange={e=>setRecommended(e.target.value)} value={recommended} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+            <Radio value={false} className={c.itemRadio} style={{width:'33.333%'}}>关闭</Radio>
+            <Radio value={true} className={c.itemRadio} style={{width:'33.333%'}}>开启</Radio>
+          </Radio.Group>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>

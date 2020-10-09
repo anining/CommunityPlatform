@@ -10,10 +10,10 @@ import DropdownComponent from "../../components/DropdownComponent"
 
 function EditOrderModelView () {
   const { state = {} } = useHistory().location
-  const { id, name: n, params: p = [] } = state
+  const { id, name: n, params: p = [], weight: w } = state
   const [insert, setInsert] = useState(id)
   const [name, setName] = useState(n)
-  const [weight, setWeight] = useState()
+  const [weight, setWeight] = useState(w)
   const [params, setParams] = useState(p)
   const [loading, setLoading] = useState(false)
 
@@ -31,15 +31,9 @@ function EditOrderModelView () {
       return
     }
     let body = {};
-    if (n !== name) {
-      body = { ...body, ...{ name } }
-    }
-    if (weight || weight === 0) {
-      body = { ...body, ...{ weight } }
-    }
-    if (params.length) {
-      body = { ...body, ...{ params } }
-    }
+    body = { ...body, ...{ name } }
+    body = { ...body, ...{ weight } }
+    body = { ...body, ...{ params } }
     setLoading(true)
     communityParamTemplates(insert ? 'modify' : 'add', id, undefined, body).then(r => {
       setInsert(jump)
