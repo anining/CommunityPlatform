@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import * as R from 'kefir.ramda'
 import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
 import LoginView from '../views/authViews/LoginView'
 import Guide1View from '../views/authViews/Guide1View'

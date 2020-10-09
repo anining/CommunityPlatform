@@ -76,7 +76,7 @@ export function communityParamTemplates (type, pid, table, body) {
     case "add":
       return transformFetch("POST", "/community-param-templates", body)
     case "modify":
-      return transformFetch("PATCH", `/community-param-templates/${pid}`, body)
+      return transformFetch("PUT", `/community-param-templates/${pid}`, body)
     default:
       return transformFetch("DELETE", `/community-param-templates?${body}`)
   }
@@ -90,7 +90,7 @@ export function communityGoods (type, gid, table, body) {
     case "add":
       return transformFetch("POST", "/community-goods", body);
     case "modify":
-      return transformFetch("PATCH", `/community-goods/${gid}`, body);
+      return transformFetch("PUT", `/community-goods/${gid}`, body);
     case "modifys":
       return transformFetch("PATCH", `/community-goods?${table}`, body);
     default:
