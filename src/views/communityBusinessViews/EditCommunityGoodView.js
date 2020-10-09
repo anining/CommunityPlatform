@@ -73,19 +73,27 @@ function EditCommunityGoodView () {
       message.warning("权重值超出范围")
       return
     }
-    let body = {recommended, provider_goods: { provider_type: 'internal', goods_id: 1 }, pics, community_goods_category_id, community_param_template_id, tag_ids, refundable }
-      body = { ...body, ...{ name } }
-      body = { ...body, ...{ unit_price } }
-      body = { ...body, ...{ unit } }
-      body = { ...body, ...{ status } }
-      body = { ...body, ...{ unit_cost } }
-      body = { ...body, ...{ disc_price } }
-      body = { ...body, ...{ min_order_amount } }
-      body = { ...body, ...{ max_order_amount } }
-      body = { ...body, ...{ repeat_order } }
-      body = { ...body, ...{ batch_order } }
-      body = { ...body, ...{ weight } }
-      body = { ...body, ...{ introduction } }
+    let body = {
+      name,
+      status,
+      provider_goods: { provider_type: 'internal', goods_id: 1 },
+      pics,
+      community_goods_category_id,
+      community_param_template_id,
+      tag_ids,
+      unit_price,
+      unit,
+      refundable,
+      recommended,
+      min_order_amount: min_order_amount || 1,
+      max_order_amount: max_order_amount || 1,
+      weight: weight || 1,
+      unit_cost,
+      disc_price,
+      repeat_order,
+      batch_order,
+      introduction
+    }
     const promise = communityGoods(insert ? "modify" : 'add', id, undefined, body)
     promise.then(r => {
       setInsert(jump)
