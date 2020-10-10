@@ -307,14 +307,14 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>最低数量</div>
           </div>
-          <Input type="number" onChange={e=>setMin_order_amount(e.target.value)} value={min_order_amount} placeholder="该商品每一单最低多少起下，默认为0" className={c.itemInput}></Input>
+          <Input type="number" onChange={e=>setMin_order_amount(e.target.value)} value={min_order_amount} placeholder="该商品每一单最低多少起下，默认为1" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>最高数量</div>
           </div>
-          <Input type="number" placeholder="该商品每一单最高多下多少个，默认为0" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput}></Input>
+          <Input type="number" placeholder="该商品每一单最高多下多少个，默认为1" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>

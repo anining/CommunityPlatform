@@ -18,7 +18,7 @@ function EditOrderModelView () {
   const [loading, setLoading] = useState(false)
 
   function save (jump) {
-    if (!name) {
+    if (!name || !weight) {
       message.warning("请完善信息")
       return
     }
@@ -26,7 +26,8 @@ function EditOrderModelView () {
       message.warning("权重值超出范围")
       return
     }
-    if (params.filter(i => !i.type).length) {
+    console.log(params)
+    if (params.filter(i => i.type).length === 0) {
       message.warning("请完善信息")
       return
     }

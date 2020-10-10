@@ -84,7 +84,6 @@ export function communityParamTemplates (type, pid, table, body) {
 
 // 社区商品
 export function communityGoods (type, gid, table, body) {
-  console.log(type)
   switch (type) {
     case "get":
       return transformFetch("GET", "/community-goods", table)
