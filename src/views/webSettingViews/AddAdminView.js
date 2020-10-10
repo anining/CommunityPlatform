@@ -34,9 +34,9 @@ function AddAdminView () {
     permissions().then(r => {
       const { error, data } = r;
       let localIndex = []
-      p.forEach((it, i) => {
+      p.forEach(i => {
         data.forEach((item, index) => {
-          if (it.permission === item) {
+          if (i.permission === item) {
             localIndex = [...localIndex, index]
           }
         })
@@ -63,12 +63,12 @@ function AddAdminView () {
       setName(undefined)
       setTargetKeys([]);
       !r.error && saveSuccess()
-    }).catch(e => {
+    }).catch(() => {
       setLoading(false)
     })
   }
 
-  function handleChange (nextTargetKeys, direction, moveKeys) {
+  function handleChange (nextTargetKeys) {
     setTargetKeys(nextTargetKeys)
   };
 
@@ -83,17 +83,17 @@ function AddAdminView () {
           <Breadcrumb.Item>
             <span onClick={()=>push("/main/admin")}>管理员</span>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>新增管理员</Breadcrumb.Item>
+          <Breadcrumb.Item>{id?"修改":"新增"}管理员</Breadcrumb.Item>
         </Breadcrumb>
       </div>
       <div className={c.main} style={{marginBottom:0}}>
         <div className={c.headerT}>
-          <div style={{zIndex:1}}>新增管理员</div>
+          <div style={{zIndex:1}}>{id?"修改":"新增"}管理员</div>
           <div className={c.circle} />
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span className={c.white}>*</span>
+            <span>*</span>
             <div className={c.itemText}>管理员账号</div>
           </div>
           <Input disabled={id} maxLength={20} value={number} onChange={e=>setNumber(e.target.value)} placeholder="请填写管理员登录账号" className={c.itemInput}></Input>
@@ -104,7 +104,7 @@ function AddAdminView () {
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span className={c.white}>*</span>
+            <span>*</span>
             <div className={c.itemText}>管理员名称</div>
           </div>
           <Input maxLength={20} value={name} onChange={e=>setName(e.target.value)} placeholder="请填写管理员名称" className={c.itemInput}></Input>

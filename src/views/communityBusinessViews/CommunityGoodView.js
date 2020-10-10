@@ -66,6 +66,9 @@ function RTable () {
   const [status, setStatus] = useState()
   const [refundable, setRefundable] = useState()
   const [order_by, setOrder_by] = useState()
+  const [ordering, setOrdering] = useState()
+  const [loading, setLoading] = useState(false)
+  const [actionLoading, setActionLoading] = useState(false)
 
   window.localClick = function (type, ids) {
     setCommunity_goods_category_id(ids.id)
@@ -94,15 +97,22 @@ function RTable () {
     if (refundable === "refundable" || refundable === "no_refundable") {
       body = { ...body, ...{ refundable: refundable === "refundable" } }
     }
-    if (order_by) {
-      body = { ...body, ...{ order_by } }
-    }
+    // if (order_by) {
+    //   body = { ...body, ...{ order_by } }
+    // }
+    // if (ordering) {
+    //   body = { ...body, ...{ ordering } }
+    // }
+    setLoading(true)
     communityGoods("get", undefined, body).then(r => {
+      setLoading(false)
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
       }
+    }).catch(() => {
+      setLoading(false)
     })
   }
 
@@ -130,14 +140,18 @@ function RTable () {
   };
 
   function submit (key) {
+    setActionLoading(true)
     const params = new URLSearchParams()
     selectedRows.forEach(i => params.append("ids", data[i].id))
     communityGoods("modifys", undefined, params.toString(), { status: key }).then(r => {
+      setActionLoading(false)
       if (!r.error) {
         saveSuccess(false)
         setSelectRows([])
         get(current)
       }
+    }).catch(() => {
+      setActionLoading(false)
     })
   }
 
@@ -282,12 +296,13 @@ function RTable () {
             }
               type = "primary"
               size = "small"
+              loading={loading}
               onClick={()=>get(current)}
               className={c.searchBtn}>搜索商品</Button>
             </div>
         </div>
       </div>
-      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
+      <DropdownComponent loading={actionLoading} selectedRows={selectedRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
       <Table
         columns={columns}
         rowSelection={{

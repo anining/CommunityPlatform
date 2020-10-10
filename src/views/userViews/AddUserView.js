@@ -30,7 +30,7 @@ function AddUserView () {
         setPassWord(undefined)
         setEmail(undefined)
       }
-    }).catch(e => {
+    }).catch(() => {
       setLoading(false)
     })
   }

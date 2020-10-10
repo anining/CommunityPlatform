@@ -8,7 +8,7 @@ import header4 from '../icons/header/header4.png'
 import { clear, getter } from '../utils/store'
 import LogoComponent from './LogoComponent'
 
-function HeaderComponent ({ collapsed, toggle }) {
+function HeaderComponent ({ toggle }) {
   const { nickname } = getter(["nickname"])
 
   const menu = (

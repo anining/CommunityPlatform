@@ -8,8 +8,8 @@ import { useHistory } from "react-router-dom"
 
 function EditGoodCategoryView () {
   const { state = {} } = useHistory().location
+  const h = useHistory()
   const { id, name: n, weight: w } = state
-  const [insert, setInsert] = useState(id)
   const [name, setName] = useState(n)
   const [weight, setWeight] = useState(w)
   const [loading, setLoading] = useState(false)
@@ -23,18 +23,22 @@ function EditGoodCategoryView () {
       message.warning("权重值超出范围")
       return
     }
-    let body = { name, weight };
+    let body = { name, weight: weight || 0 };
     setLoading(true)
-    communityGoodsCategories(insert ? "modify" : "add", id, undefined, body).then(r => {
-      setInsert(jump)
+    communityGoodsCategories(id ? "modify" : "add", id, undefined, body).then(r => {
       setLoading(false)
+      if (!jump) {
+        h.replace('/main/editGoodCategory')
+      }
       if (!r.error) {
-        saveSuccess(jump)
         setName(undefined)
         setWeight(undefined)
+        saveSuccess(jump)
       }
-    }).catch(e => {
-      setInsert(jump)
+    }).catch(() => {
+      if (!jump) {
+        h.replace('/main/editGoodCategory')
+      }
       setLoading(false)
     })
   }
@@ -50,12 +54,12 @@ function EditGoodCategoryView () {
           <Breadcrumb.Item>
             <span onClick={()=>push("/main/goodCategory")}>商品分类</span>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>新增分类</Breadcrumb.Item>
+          <Breadcrumb.Item>{id?"修改":"新增"}分类</Breadcrumb.Item>
         </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>
-          <div style={{zIndex:1}}>新增社区商品分类</div>
+          <div style={{zIndex:1}}>{id?"修改":"新增"}社区商品分类</div>
           <div className={c.circle} />
         </div>
         <div className={c.tips}>带“ * ”的项目必须填写。</div>

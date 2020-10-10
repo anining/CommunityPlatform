@@ -7,7 +7,7 @@ import { push } from "../utils/util";
 function TableHeaderComponent ({ data, path, text }) {
   const views = [];
 
-  data.forEach((item, index) => {
+  data.forEach(item => {
     const { label, number, icon, id } = item;
     views.push(
       <div className={c.headerItem} key={id}>

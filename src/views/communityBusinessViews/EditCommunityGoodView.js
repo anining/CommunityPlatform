@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Tooltip, Button, Upload, message, Radio, Checkbox, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
 import edit1 from '../../icons/edit/edit1.png'
 import { goBack, saveSuccess, push } from "../../utils/util";
-import { communityGoods, communityGood } from "../../utils/api";
+import { communityGoods } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import { MODULES } from "../../utils/config";
 
@@ -13,16 +13,16 @@ let win
 
 function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
-  const { id, name: n, tags: tag_s = [], batch_order: b_o, category_name, weight: w, disc_price: d_p, pics: ps = [], max_order_amount: max_o_a, community_goods_category_id: c_id, community_param_template_id: t_id, min_order_amount: min_o_a, param_template_name, repeat_order: r_o, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
+  const h = useHistory()
+  const { id, name: n, tags: tag_s = [], batch_order: b_o, category_name, weight: w, introduction: i_td = "", disc_price: d_p, pics: ps = [], max_order_amount: max_o_a, community_goods_category_id: c_id, community_param_template_id: t_id, min_order_amount: min_o_a, param_template_name, repeat_order: r_o, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
   const [name, setName] = useState(n)
-  const [insert, setInsert] = useState(id)
   const [status, setStatus] = useState(s)
   const [pics, setPics] = useState(ps)
   const [community_goods_category_id, setCommunity_goods_category_id] = useState(c_id)
   const [community_param_template_id, setCommunity_param_template_id] = useState(t_id)
   const [community_goods_category_name, setCommunity_goods_category_name] = useState(category_name)
   const [community_param_template_name, setCommunity_param_template_name] = useState(param_template_name)
-  const [tag_ids, setTag_ids] = useState(tag_s.map(i=>i.id))
+  const [tag_ids, setTag_ids] = useState(tag_s.map(i => i.id))
   const [tags, setTags] = useState(tag_s)
   const [unit, setUnit] = useState(u)
   const [unit_price, setUnit_price] = useState(u_p)
@@ -34,7 +34,7 @@ function EditCommunityGoodView () {
   const [repeat_order, setRepeat_order] = useState(r_o)
   const [batch_order, setBatch_order] = useState(b_o)
   const [weight, setWeight] = useState(w)
-  const [introduction, setIntroduction] = useState("")
+  const [introduction, setIntroduction] = useState(i_td)
   const [imageUrl, setImageUrl] = useState(pics[0])
   const [loading, setLoading] = useState(false)
   const [recommended, setRecommended] = useState(false)
@@ -94,17 +94,22 @@ function EditCommunityGoodView () {
       batch_order,
       introduction
     }
-    const promise = communityGoods(insert ? "modify" : 'add', id, undefined, body)
+    setLoading(true)
+    const promise = communityGoods(id ? "modify" : 'add', id, undefined, body)
     promise.then(r => {
-      setInsert(jump)
       setLoading(false)
       if (!r.error) {
+        if (!jump) {
+          h.replace('/main/editCommunityGood')
+        }
         saveSuccess(jump)
         setName(undefined)
         setStatus("available")
         setPics([])
         setCommunity_param_template_id(undefined)
         setCommunity_goods_category_id(undefined)
+        setCommunity_param_template_name(undefined)
+        setCommunity_goods_category_name(undefined)
         setTag_ids([])
         setTags([])
         setUnit(undefined)
@@ -120,8 +125,10 @@ function EditCommunityGoodView () {
         setIntroduction("");
         setImageUrl(undefined)
       }
-    }).catch(e => {
-      setInsert(jump)
+    }).catch(() => {
+      if (!jump) {
+        h.replace('/main/editCommunityGood')
+      }
       setLoading(false)
     })
   }
@@ -181,7 +188,7 @@ function EditCommunityGoodView () {
       </div>
       <div className={c.main}>
         <div className={c.headerT}>
-          <div style={{zIndex:1}}>新增社区商品</div>
+          <div style={{zIndex:1}}>{id?"修改":"新增"}社区商品</div>
           <div className={c.circle} />
         </div>
         <div className={c.tips}>带“ * ”的项目必须填写。</div>

@@ -35,7 +35,7 @@ function StoreSettingView () {
     storeConfig('modify', { under_maintenance, show_goods_under_maintenance, allow_registration, allow_guest, icp, announcement }).then(r => {
       setLoading(false);
       !r.error && saveSuccess(false)
-    }).catch(e => {
+    }).catch(() => {
       setLoading(false)
     })
   }

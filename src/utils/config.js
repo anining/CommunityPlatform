@@ -35,4 +35,5 @@ const PERMISSIONS = {
   commbiz: '社区业务',
   cardbiz: '卡密业务'
 }
+
 export { API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }

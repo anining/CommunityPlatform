@@ -29,13 +29,8 @@ export function managers (type, mid, body) {
   }
 }
 
-// 管理员权限列表
-// export function managersPermissions (manager_id) {
-//   return transformFetch("GET", `/managers/${manager_id}/permissions`, { manager_id })
-// }
-
 // 当前管理员信息
-export function currentManager() {
+export function currentManager () {
   return transformFetch("GET", "/current-manager");
 }
 
