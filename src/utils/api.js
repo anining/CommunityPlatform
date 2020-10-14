@@ -265,3 +265,17 @@ export function usersPricingType (uid, community_pricing, card_pricing) {
 export function priceHistories (goods_type, goods_id) {
   return transformFetch("GET", "/price-histories")
 }
+
+// 供货商
+export function providers (type, id, table, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/providers", table)
+    case "add":
+      return transformFetch("POST", "/providers", body);
+    case "modify":
+      return transformFetch("PUT", `/providers/${id}`, body);
+    default:
+      // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
+  }
+}

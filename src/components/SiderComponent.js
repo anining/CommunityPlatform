@@ -90,13 +90,13 @@ function SiderComponent ({ collapsed, toggle }) {
         {/*       <Menu.Item key="cardCategory">卡密分类</Menu.Item> */}
         {/*     </Menu.SubMenu> */}
         {/* )) } */}
-        {/* { U.when(R.includes('valueaddedsrv',permissions), ( */}
-        {/*     <Menu.SubMenu onTitleClick={onTitleClick} key="services" icon={<Icon keys="services" />} title="增值服务"> */}
-        {/*       <Menu.Item key="docking">对接</Menu.Item> */}
-        {/*       <Menu.Item key="store">供货商</Menu.Item> */}
-        {/*       <Menu.Item key="subService">开通服务</Menu.Item> */}
-        {/*     </Menu.SubMenu> */}
-        {/* )) } */}
+        { U.when(R.includes('valueaddedsrv',permissions), (
+            <Menu.SubMenu onTitleClick={onTitleClick} key="services" icon={<Icon keys="services" />} title="增值服务">
+              {/* <Menu.Item key="docking">对接</Menu.Item> */}
+              <Menu.Item key="store">供货商</Menu.Item>
+              {/* <Menu.Item key="subService">开通服务</Menu.Item> */}
+            </Menu.SubMenu>
+        )) }
         { U.when(R.includes('tagmng', permissions), (
             <Menu.Item key="table" icon={<Icon keys="table" />}>
               标签管理
