@@ -279,3 +279,13 @@ export function providers (type, id, table, body) {
       // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
   }
 }
+
+// 供货商摘要
+export function providerSummaries () {
+  return transformFetch("GET", "/provider-summaries")
+}
+
+// 供货商商品摘要
+export function goodsSummaries (id) {
+  return transformFetch("GET", `/providers/${id}/goods-summaries`)
+}

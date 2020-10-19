@@ -136,6 +136,27 @@
   color: #979BA3;
 }
 
+.dropdownPromise {
+  width: 29.25%;
+  height: 40px;
+  padding: 4px 11px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropItem {
+  padding: 5px 12px;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  transform: all 0.3s;
+}
+
+.dropItem:hover {
+  background-color: #f5f5f5;
+}
+
 .actionBtn {
   height: 32px;
   width: 123px;

@@ -38,9 +38,13 @@ function SelectTableView () {
         marginBottom:0,
         paddingBottom:0,
       }}>
-        <div className={c.headerT}>
+        <div className={c.table_header}>
           <div style={{zIndex:1}}>标签管理</div>
-          <div className={c.circle} />
+          <div className={c.table_circle} />
+          <div className={c.table_header_btn_view}>
+            <Button className={c.table_btn}>编辑标签</Button>
+            <div>编辑标签会离开这页面，请先保存已填写的内容。</div>
+          </div>
         </div>
         <RGroup tagsGroup={tagsGroup} setTagsGroup={setTagsGroup} selects={selects} setSelects={setSelects}/>
         <div className={c.selectTabBtnV}>

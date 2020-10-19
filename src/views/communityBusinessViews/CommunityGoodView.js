@@ -6,16 +6,24 @@ import good2 from '../../icons/good/good2.png'
 import good3 from '../../icons/good/good3.png'
 import good4 from '../../icons/good/good4.png'
 import good9 from '../../icons/good/good9.png'
+import good45 from '../../icons/good/good45.png'
 import DropdownComponent from "../../components/DropdownComponent";
+import ModalComponent from "../../components/ModalComponent";
 import { push, getKey, saveSuccess } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import { communityGoods } from "../../utils/api"
 import SelectComponent from "../../components/SelectComponent"
+import { GOODS_STATUS } from "../../utils/config"
 
 let win
 
 function CommunityGoodView () {
-  const [data] = useState([
+  const [visible, setVisible] = useState(false)
+  const [title, setTitle] = useState()
+  const [selected, setSelected] = useState([])
+  const [key, setKey] = useState()
+  const [src, setSrc] = useState()
+  const [label] = useState([
     {
       label: '商品总数',
       number: '10,100',
@@ -41,18 +49,6 @@ function CommunityGoodView () {
       id: 444,
     },
   ])
-
-  return (
-    <div className="view">
-      <div className={c.container}>
-        <TableHeaderComponent path="/main/editCommunityGood" data={data} text="添加商品"/>
-        <RTable />
-      </div>
-    </div>
-  )
-}
-
-function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
@@ -67,18 +63,6 @@ function RTable () {
   const [refundable, setRefundable] = useState()
   const [order_by, setOrder_by] = useState()
   const [ordering, setOrdering] = useState()
-  const [loading, setLoading] = useState(false)
-  const [actionLoading, setActionLoading] = useState(false)
-
-  window.localClick = function (type, ids) {
-    setCommunity_goods_category_id(ids.id)
-    setCommunity_goods_category_name(ids.name)
-    win && win.close()
-  }
-
-  useEffect(() => {
-    get(current)
-  }, [])
 
   function get (current) {
     let body = { page: current, size: pageSize }
@@ -103,16 +87,12 @@ function RTable () {
     // if (ordering) {
     //   body = { ...body, ...{ ordering } }
     // }
-    setLoading(true)
     communityGoods("get", undefined, body).then(r => {
-      setLoading(false)
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
       }
-    }).catch(() => {
-      setLoading(false)
     })
   }
 
@@ -122,6 +102,56 @@ function RTable () {
     })
     return arr
   }
+
+  function onCancel () {
+    setVisible(false)
+  }
+
+  function onOk () {
+    setVisible(false)
+    const params = new URLSearchParams()
+    selected.forEach(i => params.append("ids", i.id))
+    communityGoods("modifys", undefined, params.toString(), { status: key }).then(r => {
+      if (!r.error) {
+        saveSuccess(false)
+        setSelectRows([])
+        get(current)
+      }
+    })
+  }
+
+  let text = []
+  selected.forEach(i => text.push(i.name))
+
+  return (
+    <div className="view">
+      <div className={c.container}>
+        <TableHeaderComponent path="/main/editCommunityGood" data={label} text="添加商品"/>
+        <RTable selectedRows={selectedRows} setVisible={setVisible} setSelectRows={setSelectRows} data={data} setData={setData} current={current} setCurrent={setCurrent} pageSize={pageSize} total={total} setTotal={setTotal} id={id} setId={setId} search_name={search_name} setSearch_name={setSearch_name} community_goods_category_id={community_goods_category_id} setCommunity_goods_category_id={setCommunity_goods_category_id} community_goods_category_name={community_goods_category_name} setCommunity_goods_category_name={setCommunity_goods_category_name} status={status} setStatus={setStatus} refundable={refundable} setRefundable={setRefundable} order_by={order_by} setOrder_by={setOrder_by} ordering={ordering} setOrdering={setOrdering} get={get} setTitle={setTitle} setSelected={setSelected} setSrc={setSrc} setKey={setKey} />
+      </div>
+      <ModalComponent
+        src={src}
+        div="当前选中商品："
+        span={text.join('、')}
+        title={title}
+        visible={visible}
+        onCancel={onCancel}
+        onOk={onOk}
+      />
+    </div>
+  )
+}
+
+function RTable ({ selectedRows, setSelectRows, data, setData, current, setCurrent, pageSize, total, setTotal, id, setId, search_name, setSearch_name, community_goods_category_id, setCommunity_goods_category_id, community_goods_category_name, setCommunity_goods_category_name, status, setStatus, refundable, setRefundable, order_by, setOrder_by, ordering, setOrdering, get, setVisible, setTitle, setSelected, setSrc, setKey }) {
+  window.localClick = function (type, ids) {
+    setCommunity_goods_category_id(ids.id)
+    setCommunity_goods_category_name(ids.name)
+    win && win.close()
+  }
+
+  useEffect(() => {
+    get(current)
+  }, [])
 
   function click () {
     win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
@@ -140,19 +170,11 @@ function RTable () {
   };
 
   function submit (key) {
-    setActionLoading(true)
-    const params = new URLSearchParams()
-    selectedRows.forEach(i => params.append("ids", data[i].id))
-    communityGoods("modifys", undefined, params.toString(), { status: key }).then(r => {
-      setActionLoading(false)
-      if (!r.error) {
-        saveSuccess(false)
-        setSelectRows([])
-        get(current)
-      }
-    }).catch(() => {
-      setActionLoading(false)
-    })
+    setTitle(`修改商品状态为${GOODS_STATUS[key].text}`)
+    setSelected(selectedRows.map(i => data[i]))
+    setSrc(GOODS_STATUS[key].src)
+    setKey(key)
+    setVisible(true)
   }
 
   function reset () {
@@ -165,20 +187,6 @@ function RTable () {
     setOrder_by(undefined)
   }
 
-  const obj = {
-    available: {
-      color: "#2C68FF",
-      text: '已上架',
-    },
-    unavailable: {
-      color: "#FF8D30",
-      text: '已关闭订单',
-    },
-    paused: {
-      color: "#FF4D4F",
-      text: '已下架',
-    },
-  }
   const columns = [
     {
       title: '商品编号',
@@ -189,6 +197,9 @@ function RTable () {
       title: '商品名称',
       dataIndex: 'name',
       align: 'center',
+      render: (text, record, index) => {
+        return <div><img src={good45} style={{width:20,marginRight:8}} alt="" />{text}</div>
+      }
   },
     {
       title: '商品分类',
@@ -265,7 +276,7 @@ function RTable () {
       align: 'center',
       dataIndex: 'status',
       render: (text, record, index) => {
-        const { text: t, color } = getKey(text, obj)
+        const { text: t, color } = getKey(text, GOODS_STATUS)
         return <div style={{color}}>{t}</div>
       }
   },
@@ -296,13 +307,12 @@ function RTable () {
             }
               type = "primary"
               size = "small"
-              loading={loading}
               onClick={()=>get(current)}
               className={c.searchBtn}>搜索商品</Button>
             </div>
         </div>
       </div>
-      <DropdownComponent loading={actionLoading} selectedRows={selectedRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
       <Table
         columns={columns}
         rowSelection={{
