@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Button, message } from 'antd'
+import { Input, Button, message, Breadcrumb } from 'antd'
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import good5 from '../../icons/good/good5.png'
 import auth4 from '../../icons/auth/auth4.png'
 import { password } from '../../utils/api'
 import { clear } from "../../utils/store";
+import { push } from '../../utils/util';
 
 function PassWordView () {
   const [old_password, setOld_password] = useState()
@@ -21,12 +22,13 @@ function PassWordView () {
     password(old_password, new_password).then(r => {
       setOld_password(undefined)
       setNew_password(undefined)
-      setLoading(false)
       if (!r.error) {
         message.success("操作成功")
         clear()
+      } else {
+        setLoading(false)
       }
-    }).catch(e => {
+    }).catch(() => {
       setLoading(false)
     })
   }
@@ -35,7 +37,12 @@ function PassWordView () {
     <div className={c.container} style={{marginBottom:24}}>
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
-        <div>首页 / 站点设置 / 修改密码 / <span>修改密码</span></div>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span onClick={()=>push("/main/home")}>首页</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>修改密码</Breadcrumb.Item>
+        </Breadcrumb>
       </div>
       <div className={c.main} style={{marginBottom:0}}>
         <div className={c.headerT}>

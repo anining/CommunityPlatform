@@ -32,7 +32,7 @@ function LoginView () {
     }
     setLoading(true)
     const promise = login(account, password)
-    setter([["old_password", password]])
+    setter([["old_password", password]], true)
     setPassword(undefined)
     promise.then(r => {
       setLoading(false)
@@ -43,7 +43,7 @@ function LoginView () {
         const permissions = storage.getItem("permissions");
         if (permissions) {
           setter([['permissions', permissions]]);
-          push('/guide1')
+          push('/main')
           get(role)
         } else {
           get(role, true)

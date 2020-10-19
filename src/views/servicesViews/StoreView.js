@@ -8,6 +8,7 @@ import good9 from '../../icons/good/good9.png'
 import good41 from '../../icons/good/good41.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
+import { providers } from "../../utils/api"
 
 function StoreView () {
   const data = [
@@ -47,11 +48,12 @@ function RTable () {
   }, [])
 
   function get (current) {
-    // let body = { page: current, size: pageSize }
+    let body = { page: current, size: pageSize }
+    alert("null")
     // if (id) {
     //   body = { ...body, ...{ id } }
     // }
-    // communityGoods("get", undefined, body).then(r => {
+    // providers("get", undefined, body).then(r => {
     //   if (!r.error) {
     //     const { data, total } = r
     //     setTotal(total)
@@ -60,7 +62,7 @@ function RTable () {
     // })
   }
 
-  function format (arr) {
+  function format (arr = []) {
     arr.forEach((item, index) => {
       item.key = index
     })

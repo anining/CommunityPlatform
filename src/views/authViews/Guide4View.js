@@ -9,15 +9,23 @@ import { getter } from "../../utils/store"
 
 function Guide4View () {
   const [new_password, setNew_password] = useState('')
+  const [loading, setLoading] = useState(false)
 
   function submit () {
-    if (!new_password) {
+    const { old_password } = getter(['old_password']);
+    if (!new_password || !old_password.get()) {
       message.warning("请完善信息")
       return
     }
-    const { old_password } = getter(['old_password']);
+    setLoading(true)
     password(old_password.get(), new_password).then(r => {
-      !r.error && saveSuccess(true, '/main')
+      if (r.error) {
+        setLoading(false)
+      } else {
+        saveSuccess(true, '/main')
+      }
+    }).catch(() => {
+      setLoading(false)
     })
   }
 
@@ -29,7 +37,7 @@ function Guide4View () {
         <Context new_password={new_password} setNew_password={setNew_password}/>
       </div>
       <div className={c.footer}>
-        <Button type="primary" className={c.btn} onClick={submit}>完成</Button>
+        <Button type="primary" loading={loading} className={c.btn} onClick={submit}>完成</Button>
         <div className={c.footerText} onClick={()=>push('/main')}>稍后设置</div>
         <Circle i={3}/>
       </div>

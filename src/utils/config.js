@@ -1,3 +1,7 @@
+import good42 from '../icons/good/good42.png'
+import good43 from '../icons/good/good43.png'
+import good44 from '../icons/good/good44.png'
+
 const DEVELOPER = "Production"
 const API_URL = DEVELOPER === "Production" ? "https://test-omnivstore.prismslight.com/mng" : "http://192.168.1.36:8000/mng"
 const JUMP_DELAY = 500
@@ -35,4 +39,22 @@ const PERMISSIONS = {
   commbiz: '社区业务',
   cardbiz: '卡密业务'
 }
-export { API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }
+const GOODS_STATUS = {
+  available: {
+    color: "#2C68FF",
+    text: '已上架',
+    src: good43
+  },
+  unavailable: {
+    color: "#FF8D30",
+    text: '已关闭订单',
+    src: good44
+  },
+  paused: {
+    color: "#FF4D4F",
+    text: '已下架',
+    src: good42
+  }
+}
+
+export { GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }

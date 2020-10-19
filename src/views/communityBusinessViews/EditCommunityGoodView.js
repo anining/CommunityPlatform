@@ -1,28 +1,33 @@
 import React, { useState, useEffect } from 'react'
+import * as U from 'karet.util'
 import c from '../../styles/edit.module.css'
 import { Input, Tooltip, Button, Upload, message, Radio, Checkbox, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
+import good46 from '../../icons/good/good46.png'
+import good47 from '../../icons/good/good47.png'
+import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
 import { goBack, saveSuccess, push } from "../../utils/util";
-import { communityGoods, communityGood } from "../../utils/api";
+import { communityGoods, providerSummaries, goodsSummaries } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import { MODULES } from "../../utils/config";
+import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
 
 let win
 
 function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
-  const { id, name: n, tags: tag_s = [], batch_order: b_o, category_name, weight: w, disc_price: d_p, pics: ps = [], max_order_amount: max_o_a, community_goods_category_id: c_id, community_param_template_id: t_id, min_order_amount: min_o_a, param_template_name, repeat_order: r_o, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
+  const h = useHistory()
+  const { id, name: n, tags: tag_s = [], batch_order: b_o, category_name, weight: w, introduction: i_td = "", disc_price: d_p, pics: ps = [], max_order_amount: max_o_a, community_goods_category_id: c_id, community_param_template_id: t_id, min_order_amount: min_o_a, param_template_name, repeat_order: r_o, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
   const [name, setName] = useState(n)
-  const [insert, setInsert] = useState(id)
   const [status, setStatus] = useState(s)
   const [pics, setPics] = useState(ps)
   const [community_goods_category_id, setCommunity_goods_category_id] = useState(c_id)
   const [community_param_template_id, setCommunity_param_template_id] = useState(t_id)
   const [community_goods_category_name, setCommunity_goods_category_name] = useState(category_name)
   const [community_param_template_name, setCommunity_param_template_name] = useState(param_template_name)
-  const [tag_ids, setTag_ids] = useState(tag_s.map(i=>i.id))
+  const [tag_ids, setTag_ids] = useState(tag_s.map(i => i.id))
   const [tags, setTags] = useState(tag_s)
   const [unit, setUnit] = useState(u)
   const [unit_price, setUnit_price] = useState(u_p)
@@ -34,10 +39,18 @@ function EditCommunityGoodView () {
   const [repeat_order, setRepeat_order] = useState(r_o)
   const [batch_order, setBatch_order] = useState(b_o)
   const [weight, setWeight] = useState(w)
-  const [introduction, setIntroduction] = useState("")
+  const [introduction, setIntroduction] = useState(i_td)
   const [imageUrl, setImageUrl] = useState(pics[0])
   const [loading, setLoading] = useState(false)
   const [recommended, setRecommended] = useState(false)
+  const [provider_type, setProvider_type] = useState()
+  const [providers, setProviders] = useState([])
+  const [selectedProviders, setSelectedProviders] = useState()
+  const [goods_id, setGoods_id] = useState()
+  const [goods, setGoods] = useState([])
+  const [dockingTarget, setDockingTarget] = useState()
+
+  const tooltips = goods.filter(i => i.id === goods_id)[0]
 
   window.localClick = function (type, ids) {
     switch (type) {
@@ -64,8 +77,26 @@ function EditCommunityGoodView () {
     win && win.close()
   }
 
+  useEffect(() => {
+    providerSummaries().then(r => {
+      if (!r.error) {
+        setProviders(r.data.map(i => ({ id: i.id, name: i.nickname })))
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    if (selectedProviders) {
+      goodsSummaries(selectedProviders).then(r => {
+        if (!r.error) {
+          setGoods(r.data)
+        }
+      })
+    }
+  }, [selectedProviders])
+
   function save (jump) {
-    if (!name || !pics.length || !community_param_template_id || !community_goods_category_id || !unit_price || !tag_ids.length || !unit) {
+    if (!provider_type || !goods_id || !name || !pics.length || !community_param_template_id || !community_goods_category_id || !unit_price || !tag_ids.length || !unit) {
       message.warning("请完善信息")
       return
     }
@@ -76,7 +107,7 @@ function EditCommunityGoodView () {
     let body = {
       name,
       status,
-      provider_goods: { provider_type: 'internal', goods_id: 1 },
+      provider_goods: { provider_type, goods_id },
       pics,
       community_goods_category_id,
       community_param_template_id,
@@ -94,17 +125,22 @@ function EditCommunityGoodView () {
       batch_order,
       introduction
     }
-    const promise = communityGoods(insert ? "modify" : 'add', id, undefined, body)
+    setLoading(true)
+    const promise = communityGoods(id ? "modify" : 'add', id, undefined, body)
     promise.then(r => {
-      setInsert(jump)
       setLoading(false)
       if (!r.error) {
+        if (!jump) {
+          h.replace('/main/editCommunityGood')
+        }
         saveSuccess(jump)
         setName(undefined)
         setStatus("available")
         setPics([])
         setCommunity_param_template_id(undefined)
         setCommunity_goods_category_id(undefined)
+        setCommunity_param_template_name(undefined)
+        setCommunity_goods_category_name(undefined)
         setTag_ids([])
         setTags([])
         setUnit(undefined)
@@ -120,8 +156,10 @@ function EditCommunityGoodView () {
         setIntroduction("");
         setImageUrl(undefined)
       }
-    }).catch(e => {
-      setInsert(jump)
+    }).catch(() => {
+      if (!jump) {
+        h.replace('/main/editCommunityGood')
+      }
       setLoading(false)
     })
   }
@@ -181,47 +219,56 @@ function EditCommunityGoodView () {
       </div>
       <div className={c.main}>
         <div className={c.headerT}>
-          <div style={{zIndex:1}}>新增社区商品</div>
+          <div style={{zIndex:1}}>{id?"修改":"新增"}社区商品</div>
           <div className={c.circle} />
         </div>
         <div className={c.tips}>带“ * ”的项目必须填写。</div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
-            <div className={c.itemText}>商品名称</div>
+            <div className={c.itemText}>商品来源</div>
           </div>
-          <Input maxLength={40} placeholder="请输入商品名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput}></Input>
+          <DropdownPromiseComponent placeholder="请选择商品来源" initNums={[{name:"供货商",id:"internal"}]} setValue={setProvider_type}/>
         </div>
+        {
+          U.when(provider_type==="internal",(
+            <div className={c.item}>
+              <div className={c.itemName}>
+                <span>*</span>
+                <div className={c.itemText}>供货商</div>
+              </div>
+              <DropdownPromiseComponent placeholder="请选择供货商" initNums={providers} setValue={setSelectedProviders}/>
+            </div>
+          ))
+        }
+        {
+          U.when(provider_type!=="internal" && provider_type,(
+            <div className={c.item}>
+              <div className={c.itemName}>
+                <span>*</span>
+                <div className={c.itemText}>对接目标</div>
+              </div>
+              <DropdownPromiseComponent placeholder="请选择对接目标" initNums={[]} setValue={setDockingTarget}/>
+            </div>
+          ))
+        }
+        {
+          U.when(provider_type,(
+            <div className={c.item}>
+              <div className={c.itemName}>
+                <span>*</span>
+                <div className={c.itemText}>关联商品</div>
+              </div>
+              <DropdownPromiseComponent tooltip={tooltips?tooltips.name:""} placeholder="请选择关联商品" initNums={goods} setValue={setGoods_id}/>
+            </div>
+          ))
+        }
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
-            <div className={c.itemText}>商品图片</div>
+            <div className={c.itemText}>商品名称</div>
           </div>
-          <Input onChange={e=>setImageUrl(e.target.value)} value={imageUrl} placeholder="请填写图片链接或者上传图片" className={c.itemInput}></Input>
-          <Button type="primary" className={c.itemBtn} onClick={parsing}>解析图片</Button>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span style={{color:'#fff'}}>*</span>
-          </div>
-          <Upload
-            disabled={true}
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-          >
-            {pics.length ? <img src={pics[0]} alt="avatar" style={{ width: 100 }} /> :
-              <div>
-                <img src={edit1} alt="" className={c.uploadImg}/>
-                <div className={c.uploadText}>上传图片</div>
-              </div>
-            }
-          </Upload>
-          <div className={c.uploadTips}>商品图片最多存在1张</div>
+          <Input maxLength={40} placeholder="请输入商品名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
@@ -253,6 +300,20 @@ function EditCommunityGoodView () {
               push('/main/editOrderModel')
             }}>新增模型</Button>
         </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>单价</div>
+          </div>
+          <Input type="number" onChange={e=>setUnit_price(e.target.value)} value={unit_price} placeholder="请输入商品销售单价" className={c.itemInput}></Input>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>单位</div>
+          </div>
+          <Input maxLength={20} value={unit} onChange={e=>setUnit(e.target.value)} placeholder="请输入商品的计算单位" className={c.itemInput}></Input>
+        </div>
         <div className={c.item} style={{alignItems:'flex-start'}}>
           <div className={c.itemName}>
             <span>*</span>
@@ -268,75 +329,48 @@ function EditCommunityGoodView () {
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>进价</div>
-          </div>
-          <Input type="number" onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>填写商品进价之后，系统可以核算出每日的收益毛利。</div>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
             <span>*</span>
-            <div className={c.itemText}>单价</div>
+            <div className={c.itemText}>商品图片</div>
           </div>
-          <Input type="number" onChange={e=>setUnit_price(e.target.value)} value={unit_price} placeholder="请输入商品销售单价" className={c.itemInput}></Input>
+          <Input onChange={e=>setImageUrl(e.target.value)} value={imageUrl} placeholder="请填写图片链接或者上传图片" className={c.itemInput}></Input>
+          <Button type="primary" className={c.itemBtn} onClick={parsing}>解析图片</Button>
         </div>
         <div className={c.item}>
+          <div className={c.itemName}>
+            <span style={{color:'#fff'}}>*</span>
+          </div>
+          <Upload
+            disabled={true}
+            name="avatar"
+            listType="picture-card"
+            className="avatar-uploader"
+            showUploadList={false}
+            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            beforeUpload={beforeUpload}
+            onChange={handleChange}
+          >
+            {pics.length ? <img src={pics[0]} alt="avatar" style={{ width: 100 }} /> :
+              <div>
+                <img src={edit1} alt="" className={c.uploadImg}/>
+                <div className={c.uploadText}>上传图片</div>
+              </div>
+            }
+          </Upload>
+          <div className={c.uploadTips}>
+            <div>商品图片最多存在1张；</div>
+            <div>推荐图片大小<span>100*100，200*200</span></div>
+          </div>
+          {/* <div className={c.uploadTips}>商品图片最多存在1张</div> */}
+        </div>
+        <div className={c.item} style={{alignItems:'flex-start'}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
-            <div className={c.itemText}>密价</div>
+            <div className={c.itemText}>目标描述</div>
           </div>
-          <Input type="number" onChange={e=>setDisc_price(e.target.value)} value={disc_price} placeholder="请输入商品对接密价" className={c.itemInput}></Input>
+          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={introduction} onChange={e=>setIntroduction(e)}/>
         </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>如果不填写此项目，系统将会使用售价进行对接。</div>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>单位</div>
-          </div>
-          <Input maxLength={20} value={unit} onChange={e=>setUnit(e.target.value)} placeholder="请输入商品的计算单位" className={c.itemInput}></Input>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>最低数量</div>
-          </div>
-          <Input type="number" onChange={e=>setMin_order_amount(e.target.value)} value={min_order_amount} placeholder="该商品每一单最低多少起下，默认为1" className={c.itemInput}></Input>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>最高数量</div>
-          </div>
-          <Input type="number" placeholder="该商品每一单最高多下多少个，默认为1" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput}></Input>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>重复下单</div>
-          </div>
-          <Input type="number" onChange={e=>setRepeat_order(e.target.value)} value={repeat_order} placeholder="允许重复下单的数量" className={c.itemInput}></Input>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>如果该商品不允许重复下单， 请填写0或者不填写</div>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>批量下单</div>
-          </div>
-          <Input type="number" onChange={e=>setBatch_order(e.target.value)} value={batch_order} placeholder="允许批量下单的数量" className={c.itemInput}></Input>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>如果该商品不允许批量下单， 请填写0或者不填写</div>
+        <div className={c.hasMore}>
+          <Checkbox className={c.hasMoreCheckBox} onChange={()=>{}}>更多设置</Checkbox>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
@@ -368,32 +402,151 @@ function EditCommunityGoodView () {
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>推荐</div>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>进价</div>
           </div>
-          <Radio.Group onChange={e=>setRecommended(e.target.value)} value={recommended} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-            <Radio value={false} className={c.itemRadio} style={{width:'33.333%'}}>关闭</Radio>
-            <Radio value={true} className={c.itemRadio} style={{width:'33.333%'}}>开启</Radio>
+          <Input type="number" onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>
+        </div>
+        <div className={c.itemTips}>
+          <div className={c.itemName} />
+          <div>填写商品进价之后，系统可以核算出每日的收益毛利。</div>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span style={{color:'#fff'}}>*</span>
+            <div className={c.itemText}>自动调价</div>
+          </div>
+          <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+            <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>开启</Radio>
+            <Radio value="banned" className={c.itemRadio} style={{width:'33.333%'}}>关闭</Radio>
+          </Radio.Group>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>加价模版</div>
+          </div>
+          <DropdownPromiseComponent placeholder="百分比加价模版" initNums={[]} setValue={setDockingTarget}/>
+        </div>
+        <div className={c.item} style={{alignItems:'flex-start'}}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>加价模版</div>
+          </div>
+          <div className={c.disc_price_view}>
+            <div className={c.disc_price_item}>
+              <img src={good46} alt="" />
+              <div>高级会员</div>
+              <Input placeholder="请输入密价"/>
+            </div>
+            <div className={c.disc_price_item}>
+              <img src={good48} alt="" />
+              <div>钻石会员</div>
+              <Input placeholder="请输入密价"/>
+            </div>
+            <div className={c.disc_price_item}>
+              <img src={good47} alt="" />
+              <div>至尊会员</div>
+              <Input placeholder="请输入密价"/>
+            </div>
+          </div>
+        </div>
+        <div className={c.item} style={{marginTop:0}}>
+          <div className={c.itemName}>
+            <span style={{color:'#fff'}}>*</span>
+            <div className={c.itemText}>自助退款</div>
+          </div>
+          <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="允许自助退款：用户可以对这个商品对应的订单发起一次退款申请。">
+              <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>允许自助退款</Radio>
+            </Tooltip>
+            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="不允许自助退款：用户不可以对这个商品对应的订单发起退款申请。">
+              <Radio value="banned" className={c.itemRadio} style={{width:'33.333%'}}>不允许自助退款</Radio>
+            </Tooltip>
           </Radio.Group>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
-            <div className={c.itemText}>用户权限</div>
+            <div className={c.itemText}>最低下单</div>
           </div>
-          <div className={c.itemCheckView}>
-            <Checkbox onChange={e=>{
-              setRefundable(e.target.checked)
-            }} checked={refundable} className={c.checkbox}>退单</Checkbox>
-          </div>
+          <Input type="number" onChange={e=>setMin_order_amount(e.target.value)} value={min_order_amount} placeholder="该商品每一单最低多少起下，默认为1" className={c.itemInput}></Input>
         </div>
-        <div className={c.item} style={{alignItems:'flex-start'}}>
+        <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
-            <div className={c.itemText}>目标描述</div>
+            <div className={c.itemText}>最高下单</div>
           </div>
-          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={introduction} onChange={e=>setIntroduction(e)}/>
+          <Input type="number" placeholder="该商品每一单最高多下多少个，默认为1" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput}></Input>
         </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>重复下单</div>
+          </div>
+          <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+            <Radio value="normal" className={c.itemRadio}>不允许重复下单</Radio>
+            <Radio value="banned" className={c.itemRadio} style={{marginLeft:71}}>
+              最多允许重复下
+              <Input className={c.item_grop_view_input} placeholder="1"/>
+              单
+            </Radio>
+          </Radio.Group>
+        </div>
+        <div className={c.itemTips}>
+          <div className={c.itemName} />
+          <div>重复订单指用户在下单模型内填写的所有数据都相同。</div>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>批量下单</div>
+          </div>
+          <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+            <Radio value="normal" className={c.itemRadio}>不允许批量下单</Radio>
+            <Radio value="banned" className={c.itemRadio} style={{marginLeft:71}}>
+              最多允许批量下
+              <Input className={c.item_grop_view_input} placeholder="1"/>
+              单
+            </Radio>
+          </Radio.Group>
+        </div>
+        <div className={c.itemTips}>
+          <div className={c.itemName} />
+          <div>单次批量下单上限50。</div>
+        </div>
+        {/* <div className={c.item}> */}
+        {/*   <div className={c.itemName}> */}
+        {/*     <span>*</span> */}
+        {/*     <div className={c.itemText}>推荐</div> */}
+        {/*   </div> */}
+        {/*   <Radio.Group onChange={e=>setRecommended(e.target.value)} value={recommended} className={c.itemGrop} style={{justifyContent:'flex-start'}}> */}
+        {/*     <Radio value={false} className={c.itemRadio} style={{width:'33.333%'}}>关闭</Radio> */}
+        {/*     <Radio value={true} className={c.itemRadio} style={{width:'33.333%'}}>开启</Radio> */}
+        {/*   </Radio.Group> */}
+        {/* </div> */}
+        {/* <div className={c.item}> */}
+        {/*   <div className={c.itemName}> */}
+        {/*     <span className={c.white}>*</span> */}
+        {/*     <div className={c.itemText}>用户权限</div> */}
+        {/*   </div> */}
+        {/*   <div className={c.itemCheckView}> */}
+        {/*     <Checkbox onChange={e=>{ */}
+        {/*       setRefundable(e.target.checked) */}
+        {/*     }} checked={refundable} className={c.checkbox}>退单</Checkbox> */}
+        {/*   </div> */}
+        {/* </div> */}
+        {/* <div className={c.item}> */}
+        {/*   <div className={c.itemName}> */}
+        {/*     <span className={c.white}>*</span> */}
+        {/*     <div className={c.itemText}>密价</div> */}
+        {/*   </div> */}
+        {/*   <Input type="number" onChange={e=>setDisc_price(e.target.value)} value={disc_price} placeholder="请输入商品对接密价" className={c.itemInput}></Input> */}
+        {/* </div> */}
+        {/* <div className={c.itemTips}> */}
+        {/*   <div className={c.itemName} /> */}
+        {/*   <div>如果不填写此项目，系统将会使用售价进行对接。</div> */}
+        {/* </div> */}
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
           </div>

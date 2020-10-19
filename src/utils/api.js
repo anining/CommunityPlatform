@@ -29,13 +29,8 @@ export function managers (type, mid, body) {
   }
 }
 
-// 管理员权限列表
-// export function managersPermissions (manager_id) {
-//   return transformFetch("GET", `/managers/${manager_id}/permissions`, { manager_id })
-// }
-
 // 当前管理员信息
-export function currentManager() {
+export function currentManager () {
   return transformFetch("GET", "/current-manager");
 }
 
@@ -269,4 +264,28 @@ export function usersPricingType (uid, community_pricing, card_pricing) {
 // 获取价格历史列表
 export function priceHistories (goods_type, goods_id) {
   return transformFetch("GET", "/price-histories")
+}
+
+// 供货商
+export function providers (type, id, table, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/providers", table)
+    case "add":
+      return transformFetch("POST", "/providers", body);
+    case "modify":
+      return transformFetch("PUT", `/providers/${id}`, body);
+    default:
+      // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
+  }
+}
+
+// 供货商摘要
+export function providerSummaries () {
+  return transformFetch("GET", "/provider-summaries")
+}
+
+// 供货商商品摘要
+export function goodsSummaries (id) {
+  return transformFetch("GET", `/providers/${id}/goods-summaries`)
 }

@@ -91,6 +91,11 @@
   white-space: nowrap;
 }
 
+.DropdownPromise {
+  width: 29.25%;
+  height: 40px;
+}
+
 .itemInput {
   width: 29.25%;
   height: 40px;
@@ -145,10 +150,14 @@
 }
 
 .uploadTips {
-  color: #FF5730;
+  color: #8C8C8C;
   align-self: flex-end;
   margin-left: 6px;
   margin-bottom: 8px;
+}
+
+.uploadTips span {
+  color: #FF5730;
 }
 
 .hiddenText {
@@ -526,4 +535,96 @@
 .orderNull img {
   width: 100px;
   margin-bottom: 8px;
+}
+
+.hasMore {
+  height: 50px;
+  width: 100%;
+  background-color: #F1F5FF;
+  border-radius: 2px;
+  padding: 0 0 0 28px;
+  display: flex;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.hasMoreCheckBox {
+  font-weight: 500;
+  color: #2C68FF;
+  font-size: 1.285rem;
+}
+
+.disc_price_item {
+  display: flex;
+  align-items: center;
+  margin: 0 35px 24px 0;
+}
+
+.disc_price_item img {
+  width: 14px;
+}
+
+.disc_price_item div {
+  font-weight: 500;
+  margin: 0 10px 0 4px;
+  color: #333333;
+}
+
+.disc_price_item input {
+  width: 94px;
+  height: 40px;
+}
+
+.disc_price_view {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 29.25%;
+}
+
+.item_grop_view_input {
+  width: 64px;
+  height: 40px;
+  margin: 0 4px 0 8px;
+}
+
+.table_header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 2px;
+  font-size: 1.785rem;
+  color: #34374A;
+  font-weight: 500;
+  padding: 0 0 0 37px;
+  position: relative;
+}
+
+.table_header_btn_view {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  font-size: 0.857rem;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.table_btn {
+  background-color: #FF8E32;
+  color: #fff;
+  margin: 0 0 10px 0;
+  border-color: #ff8E32;
+  width: 112px;
+  height: 32px;
+}
+
+.table_circle {
+  position: absolute;
+  top: 15px;
+  left: 30px;
+  height: 14px;
+  width: 14px;
+  background: linear-gradient(144deg, #B4C9FF 0%, #1657FF 100%);
+  border-radius: 14px;
 }

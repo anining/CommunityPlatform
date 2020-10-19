@@ -65,9 +65,10 @@ function RTable () {
   function get (current) {
     balanceChanges(current, pageSize, date[0], date[1]).then(r => {
       if (!r.error) {
-        const { data, total } = r
-        setTotal(total)
-        setData(format(data))
+        alert("暂无数据")
+        // const { data, total } = r
+        // setTotal(total)
+        // setData(format(data))
       }
     })
   }

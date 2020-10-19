@@ -9,16 +9,16 @@ import { useHistory } from "react-router-dom"
 import DropdownComponent from "../../components/DropdownComponent"
 
 function EditOrderModelView () {
+  const h = useHistory()
   const { state = {} } = useHistory().location
   const { id, name: n, params: p = [], weight: w } = state
-  const [insert, setInsert] = useState(id)
   const [name, setName] = useState(n)
   const [weight, setWeight] = useState(w)
   const [params, setParams] = useState(p)
   const [loading, setLoading] = useState(false)
 
   function save (jump) {
-    if (!name || !weight) {
+    if (!name) {
       message.warning("请完善信息")
       return
     }
@@ -26,28 +26,26 @@ function EditOrderModelView () {
       message.warning("权重值超出范围")
       return
     }
-    console.log(params)
     if (params.filter(i => i.type).length === 0) {
       message.warning("请完善信息")
       return
     }
-    let body = {};
-    body = { ...body, ...{ name } }
-    body = { ...body, ...{ weight } }
-    body = { ...body, ...{ params } }
     setLoading(true)
-    communityParamTemplates(insert ? 'modify' : 'add', id, undefined, body).then(r => {
-      setInsert(jump)
+    communityParamTemplates(id ? 'modify' : 'add', id, undefined, { name, weight: weight || 1, params }).then(r => {
       setLoading(false)
+      if (!jump) {
+        h.replace('/main/editOrderModel')
+      }
       if (!r.error) {
-        setLoading(false)
         saveSuccess(jump)
         setName(undefined)
         setWeight(undefined)
         setParams([])
       }
-    }).catch(e => {
-      setInsert(jump)
+    }).catch(() => {
+      if (!jump) {
+        h.replace('/main/editOrderModel')
+      }
       setLoading(false)
     })
   }
@@ -63,12 +61,12 @@ function EditOrderModelView () {
           <Breadcrumb.Item>
             <span onClick={()=>push("/main/orderModel")}>下单模型</span>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>新增模型</Breadcrumb.Item>
+          <Breadcrumb.Item>{id?"修改":"新增"}模型</Breadcrumb.Item>
         </Breadcrumb>
       </div>
       <div className={c.main}>
         <div className={c.headerT}>
-          <div style={{zIndex:1}}>新增下单模型</div>
+          <div style={{zIndex:1}}>{id?"修改":"新增"}下单模型</div>
           <div className={c.circle} />
         </div>
         <div className={c.tips}>带“ * ”的项目必须填写。</div>

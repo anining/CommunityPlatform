@@ -24,18 +24,23 @@ function RTable () {
   const [manager_id, setManager_id] = useState()
   const [date, setDate] = useState([])
   const [moment, setMoment] = useState()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     get(current)
   }, [])
 
   function get (current) {
+    setLoading(true)
     loginlogs(current, pageSize, manager_id, date[0], date[1]).then(r => {
+      setLoading(false)
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
       }
+    }).catch(() => {
+      setLoading(false)
     })
   }
 
@@ -58,7 +63,7 @@ function RTable () {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page) {
     setCurrent(page)
     get(page)
   }
@@ -113,6 +118,7 @@ function RTable () {
               <img src={good9} alt="" style={{width:14,marginRight:6}} />
             }
               type = "primary"
+              loading={loading}
               size = "small"
               onClick={()=>get(current)}
               className={c.searchBtn}>搜索记录</Button>

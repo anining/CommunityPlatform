@@ -1,7 +1,7 @@
 import { API_URL, DEVELOPER } from './config'
 import { message } from 'antd'
 import { getter } from '../utils/store'
-import {push} from './util';
+import { push } from './util';
 
 const ERROR_MSG = {
   "incorrect_user_or_password": "账号或者密码错误",
@@ -46,7 +46,7 @@ async function transformFetch (method, url, data = {}) {
             } else {
               message.error(localDate.msg || error || "请求错误")
             }
-            if(error === "token_expired") {
+            if (error === "token_expired") {
               push('/login')
             }
           }
