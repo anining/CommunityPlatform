@@ -5,7 +5,8 @@ import good38 from '../../icons/good/good38.png'
 import good39 from '../../icons/good/good39.png'
 import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
-import good41 from '../../icons/good/good41.png'
+import good57 from '../../icons/good/good57.png'
+import good58 from '../../icons/good/good58.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { providers } from "../../utils/api"
@@ -23,6 +24,18 @@ function StoreView () {
       number: '10,111',
       icon: good39,
       id: 222,
+    },
+    {
+      label: '关闭供货',
+      number: '3',
+      icon: good57,
+      id: 333,
+    },
+    {
+      label: '申请结算',
+      number: '3',
+      icon: good58,
+      id: 444,
     },
   ]
 
@@ -74,19 +87,29 @@ function RTable () {
     get(page)
   }
 
-  // const obj = [
-  //   {
-  //     text: '暂停',
-  //     color: '#FF8D30',
-  //   },
-  //   {
-  //     text: '正常',
-  //     color: '#000'
-  //   }
-  // ]
+  const obj = [
+    {
+      text: '关闭',
+      color: '#FF5F5F',
+    },
+    {
+      text: '正常',
+      color: 'rgba(0, 0, 0, 0.65)'
+    }
+  ]
+  const obj1 = [
+    {
+      text: '是',
+      color: '#2C67FF',
+    },
+    {
+      text: '否',
+      color: '#FF5F5F'
+    }
+  ]
   const columns = [
     {
-      title: '供货商ID',
+      title: '供货商编号',
       dataIndex: 'id',
       align: 'center',
   },
@@ -96,22 +119,27 @@ function RTable () {
       align: 'center',
   },
     {
-      title: '供货商账户',
+      title: '供货商账号',
       align: 'center',
       dataIndex: 'number',
   },
     {
-      title: '总收益',
+      title: '供货商商品数',
+      dataIndex: 'num',
+      align: 'center',
+  },
+    {
+      title: '总消耗',
       dataIndex: 'price',
       align: 'center',
   },
     {
-      title: '待结算收益',
+      title: '待结算',
       dataIndex: 'in_price',
       align: 'center',
   },
     {
-      title: '状态',
+      title: '申请结算',
       dataIndex: 'status',
       align: 'center',
       // render: (text, record, index) => {
@@ -121,14 +149,14 @@ function RTable () {
       // }
   },
     {
-      title: '供货商商品数',
-      dataIndex: 'num',
+      title: '供货状态',
+      dataIndex: 'status',
       align: 'center',
-  },
-    {
-      title: '对接时间',
-      align: 'center',
-      dataIndex: 'time',
+      // render: (text, record, index) => {
+      // const { text: t, color } = getKey(text, obj)
+      //   const { text: t, color } =
+      //   return <div style={{color}}>{t}</div>
+      // }
   },
     {
       title: '操作',

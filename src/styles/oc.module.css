@@ -1,0 +1,198 @@
+.title {
+  color: #333333;
+  font-size: 1.142rem;
+  border-bottom: 1px solid #CCCED6;
+  line-height: 22px;
+  padding: 13px 0;
+  margin: 0 0 34px 0;
+}
+
+.limit_view {
+  padding: 0 0 0 112px;
+}
+
+.limit_item {
+  color: rgba(0, 0, 0, 0.45);
+  margin-bottom: 22px;
+}
+
+.limit_item span {
+  margin-left: 80px;
+  color: #333;
+}
+
+.time {
+  font-weight: 800;
+  color: #333333;
+  margin-bottom: 5px;
+}
+
+.time_line {
+  color: rgba(52, 55, 74, 1);
+}
+
+.time_line span {
+  color: #34374A;
+}
+
+.time_line span:nth-child(1) {
+  color: rgba(44, 104, 255, 1);
+}
+
+.time_line span:nth-child(2) {
+  color: rgba(255, 95, 95, 1);
+}
+
+.introduction {
+  background-color: rgba(244, 244, 244, 1);
+  padding: 20px 30px;
+  color: #333333;
+}
+
+.closeBtn {
+  margin-top: 32px;
+  border-color: #2C68FF;
+  color: #2C68FF;
+}
+
+.btnView {
+  width: 100%;
+  text-align: center;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 32px;
+}
+
+.item input {
+  width: 370px;
+  height: 40px;
+}
+
+.item div:first-child {
+  font-weight: 500;
+  color: #34374A;
+  width: 148px;
+  flex-shrink: 0;
+}
+
+.item_vip {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.item_vip img {
+  width: 14px;
+}
+
+.item_vip div {
+  margin: 0 10px 0 4px;
+  font-weight: 500;
+  color: #333333;
+  flex-shrink: 0;
+}
+
+.item_vip input {
+  width: 94px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.vip_view {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.change_btn_view {
+  width: 100%;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.change_btn_cancel {
+  border-color: #DBDEE5;
+  width: 180px;
+  margin-right: 60px;
+  height: 44px;
+  color: #C0C2CB;
+}
+
+.change_btn_ok {
+  width: 180px;
+  height: 44px;
+}
+
+.desc_item {
+  display: flex;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.45);
+  margin-bottom: 22px;
+}
+
+.desc_item img {
+  width: 15px;
+  margin-right: 7px;
+}
+
+.desc_item span {
+  color: #333333;
+  margin-left: 80px;
+}
+
+.remark {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.remark input {
+  width: 370px;
+  height: 40px;
+  margin: 0 0 0 14px;
+}
+
+.remark div {
+  color: #34374A;
+  font-weight: 500;
+}
+
+.remark_tips {
+  margin-left: 84px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.25);
+}
+
+.remark_tips span {
+  color: #34374A;
+  font-weight: 500;
+}
+
+.user_tips {
+  color: rgba(0, 0, 0, 0.25);
+  margin: 13px 0 5px 0;
+}
+
+.user_setting {
+  padding: 0 50px;
+}
+
+.selects {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.user_sel {
+  width: 102px;
+  height: 34px;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.25);
+  margin-bottom: 9px;
+}

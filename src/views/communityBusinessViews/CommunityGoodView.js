@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Input } from 'antd'
+import { Button, Timeline, Space, Table, Input } from 'antd'
+import good46 from '../../icons/good/good46.png'
+import good47 from '../../icons/good/good47.png'
+import good48 from '../../icons/good/good48.png'
 import good1 from '../../icons/good/good1.png'
 import c from '../../styles/view.module.css'
+import oc from '../../styles/oc.module.css'
 import good2 from '../../icons/good/good2.png'
 import good3 from '../../icons/good/good3.png'
 import good4 from '../../icons/good/good4.png'
@@ -14,11 +18,17 @@ import TableHeaderComponent from "../../components/TableHeaderComponent"
 import { communityGoods } from "../../utils/api"
 import SelectComponent from "../../components/SelectComponent"
 import { GOODS_STATUS } from "../../utils/config"
+import ModalPopComponent from "../../components/ModalPopComponent"
 
 let win
 
 function CommunityGoodView () {
   const [visible, setVisible] = useState(false)
+  const [visible_limit, setVisibleLimit] = useState(false)
+  const [visible_his, setVisibleHis] = useState(false)
+  const [visible_c, setVisibleC] = useState(false)
+  const [visible_introduction, setVisibleIntroduction] = useState(false)
+  const [visible_desc, setVisibleDesc] = useState(false)
   const [title, setTitle] = useState()
   const [selected, setSelected] = useState([])
   const [key, setKey] = useState()
@@ -105,6 +115,11 @@ function CommunityGoodView () {
 
   function onCancel () {
     setVisible(false)
+    setVisibleLimit(false)
+    setVisibleHis(false)
+    setVisibleIntroduction(false)
+    setVisibleC(false)
+    setVisibleDesc(false)
   }
 
   function onOk () {
@@ -127,22 +142,136 @@ function CommunityGoodView () {
     <div className="view">
       <div className={c.container}>
         <TableHeaderComponent path="/main/editCommunityGood" data={label} text="添加商品"/>
-        <RTable selectedRows={selectedRows} setVisible={setVisible} setSelectRows={setSelectRows} data={data} setData={setData} current={current} setCurrent={setCurrent} pageSize={pageSize} total={total} setTotal={setTotal} id={id} setId={setId} search_name={search_name} setSearch_name={setSearch_name} community_goods_category_id={community_goods_category_id} setCommunity_goods_category_id={setCommunity_goods_category_id} community_goods_category_name={community_goods_category_name} setCommunity_goods_category_name={setCommunity_goods_category_name} status={status} setStatus={setStatus} refundable={refundable} setRefundable={setRefundable} order_by={order_by} setOrder_by={setOrder_by} ordering={ordering} setOrdering={setOrdering} get={get} setTitle={setTitle} setSelected={setSelected} setSrc={setSrc} setKey={setKey} />
+        <RTable selectedRows={selectedRows} setVisibleC={setVisibleC} setVisibleIntroduction={setVisibleIntroduction} setVisibleHis={setVisibleHis} setVisible={setVisible} setVisibleLimit={setVisibleLimit} setSelectRows={setSelectRows} data={data} setData={setData} current={current} setCurrent={setCurrent} pageSize={pageSize} total={total} setTotal={setTotal} id={id} setId={setId} search_name={search_name} setSearch_name={setSearch_name} community_goods_category_id={community_goods_category_id} setCommunity_goods_category_id={setCommunity_goods_category_id} community_goods_category_name={community_goods_category_name} setCommunity_goods_category_name={setCommunity_goods_category_name} status={status} setStatus={setStatus} refundable={refundable} setRefundable={setRefundable} order_by={order_by} setOrder_by={setOrder_by} ordering={ordering} setOrdering={setOrdering} get={get} setTitle={setTitle} setSelected={setSelected} setSrc={setSrc} setKey={setKey} />
       </div>
       <ModalComponent
         src={src}
         div="当前选中商品："
         span={text.join('、')}
         title={title}
+        action={key}
         visible={visible}
         onCancel={onCancel}
         onOk={onOk}
       />
+      <ModalPopComponent
+        div={
+          <>
+            <div className={oc.introduction}>
+                    商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容商品介绍富文本内容。
+            </div> <
+    div className = { oc.btnView } >
+    <Button className={oc.closeBtn} onClick={onCancel}>关闭窗口</Button> <
+    /div> < / >
+  }
+  title = "商品介绍"
+  visible = { visible_introduction }
+  onCancel = { onCancel }
+  /> <
+  ModalPopComponent
+  div = {
+    <div>
+            <div className={oc.item}>
+              <div>进价</div>
+              <Input placeholder="百分比加价模版"/>
+            </div>
+            <div className={oc.item}>
+              <div>加价模版</div>
+              <Input placeholder="百分比加价模版"/>
+            </div>
+            <div className={oc.item}>
+              <div>单价</div>
+              <Input placeholder="百分比加价模版"/>
+            </div>
+            <div className={oc.item} style={{alignItems:'flex-start'}}>
+              <div>统一密价</div>
+              <div className={oc.vip_view}>
+                <div className={oc.item_vip}>
+                  <img src={good46} alt="" />
+                  <div>高级会员</div>
+                  <Input placeholder="请输入密价"/>
+                </div>
+                <div className={oc.item_vip}>
+                  <img src={good48} alt="" />
+                  <div>钻石会员</div>
+                  <Input placeholder="请输入密价"/>
+                </div>
+                <div className={oc.item_vip}>
+                  <img src={good47} alt="" />
+                  <div>至尊会员</div>
+                  <Input placeholder="请输入密价"/>
+                </div>
+              </div>
+            </div>
+            <div className={oc.change_btn_view}>
+              <Button className={oc.change_btn_cancel}>取消</Button>
+              <Button type="primary" className={oc.change_btn_ok}>确定</Button>
+            </div>
+          </div>
+  }
+  title = "修改商品价格"
+  visible = { visible_c }
+  onCancel = { onCancel }
+  /> <
+  ModalPopComponent
+  div = {
+    <div className={oc.limit_view}>
+            <div className={oc.limit_item}>最低下单：<span>10</span></div>
+            <div className={oc.limit_item}>最高下单：<span>100000</span></div>
+            <div className={oc.limit_item}>重复下单：<span style={{color:"#FF5F5F"}}>不允许重复下单</span></div>
+            <div className={oc.limit_item}>批量下单：<span>允许批量下单</span></div>
+          </div>
+  }
+  title = "下单限制"
+  visible = { visible_limit }
+  onCancel = { onCancel }
+  /> <
+  ModalPopComponent
+  div = {
+    <div className={oc.limit_view}>
+      <div className={oc.desc_item}>
+        <img src={good46} alt="" />
+        <div>高级会员</div>
+        <span>0.22</span>
+      </div>
+      <div className={oc.desc_item}>
+        <img src={good48} alt="" />
+        <div>钻石会员</div>
+        <span>0.22</span>
+      </div>
+      <div className={oc.desc_item}>
+        <img src={good47} alt="" />
+        <div>至尊会员</div>
+        <span>0.22</span>
+      </div>
     </div>
-  )
+  }
+  title = "统一密价"
+  visible = { visible_desc }
+  onCancel = { onCancel }
+  /> <
+  ModalPopComponent
+  div = {
+    <Timeline>
+            <Timeline.Item color="#1890FF">
+              <div className={oc.time}>2020.01.15 15:01:04</div>
+              <div className={oc.time_line}>价格调整　进价：<span>0.05</span>、单价：<span>0.05</span>、高级会员：<span>0.05</span>、钻石会员：-、至尊会员<span>0.5</span></div>
+            </Timeline.Item>
+            <Timeline.Item color="#1890FF">
+              <div className={oc.time}>2020.01.15 15:01:04</div>
+              <div className={oc.time_line}>价格调整　进价：<span>0.05</span>、单价：<span>0.05</span>、高级会员：<span>0.05</span>、钻石会员：-、至尊会员<span>0.5</span></div>
+            </Timeline.Item>
+          </Timeline>
+  }
+  title = "调价历史"
+  visible = { visible_his }
+  onCancel = { onCancel }
+  /> < /
+  div >
+)
 }
 
-function RTable ({ selectedRows, setSelectRows, data, setData, current, setCurrent, pageSize, total, setTotal, id, setId, search_name, setSearch_name, community_goods_category_id, setCommunity_goods_category_id, community_goods_category_name, setCommunity_goods_category_name, status, setStatus, refundable, setRefundable, order_by, setOrder_by, ordering, setOrdering, get, setVisible, setTitle, setSelected, setSrc, setKey }) {
+function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibleC, setData, setVisibleHis, setVisibleIntroduction, current, setCurrent, pageSize, total, setTotal, id, setId, search_name, setSearch_name, community_goods_category_id, setCommunity_goods_category_id, community_goods_category_name, setCommunity_goods_category_name, status, setStatus, refundable, setRefundable, order_by, setOrder_by, ordering, setOrdering, get, setVisible, setTitle, setSelected, setSrc, setKey }) {
   window.localClick = function (type, ids) {
     setCommunity_goods_category_id(ids.id)
     setCommunity_goods_category_name(ids.name)
@@ -170,7 +299,22 @@ function RTable ({ selectedRows, setSelectRows, data, setData, current, setCurre
   };
 
   function submit (key) {
-    setTitle(`修改商品状态为${GOODS_STATUS[key].text}`)
+    let title = ""
+    switch (key) {
+      case "c":
+        title = "您确定要推荐这些商品吗？";
+        break;
+      case "d":
+        title = "您确定要取消推荐这些商品吗？";
+        break;
+      case "e":
+        title = "您确定要删除选中的商品吗?";
+        break;
+      default:
+        title = `修改商品状态为${GOODS_STATUS[key].text}`
+    }
+
+    setTitle(title)
     setSelected(selectedRows.map(i => data[i]))
     setSrc(GOODS_STATUS[key].src)
     setKey(key)
@@ -189,11 +333,6 @@ function RTable ({ selectedRows, setSelectRows, data, setData, current, setCurre
 
   const columns = [
     {
-      title: '商品编号',
-      dataIndex: 'id',
-      align: 'center',
-  },
-    {
       title: '商品名称',
       dataIndex: 'name',
       align: 'center',
@@ -210,6 +349,17 @@ function RTable ({ selectedRows, setSelectRows, data, setData, current, setCurre
       title: '下单模型',
       dataIndex: 'param_template_name',
       align: 'center',
+      render: (text, record, index) => {
+        return <div>(0815) {text}</div>
+      }
+  },
+    {
+      title: '商品来源',
+      dataIndex: 'unit_cost',
+      align: 'center',
+      render: (text, record, index) => {
+        return '-'
+      }
   },
     {
       title: '进价',
@@ -217,60 +367,54 @@ function RTable ({ selectedRows, setSelectRows, data, setData, current, setCurre
       align: 'center',
       render: (text, record, index) => {
         return '-'
+      },
+      sorter: {
+        compare: (a, b) => {
+          console.log(a, b)
+        },
+        multiple: 1,
       }
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // }
   },
     {
-      title: '售价',
+      title: '单价',
       dataIndex: 'unit_price',
       align: 'center',
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // }
+      sorter: {
+        compare: (a, b) => {
+          console.log(a, b)
+        },
+        multiple: 1,
+      }
   },
     {
-      title: '密价',
+      title: '统一密价',
       align: 'center',
       dataIndex: 'disc_price',
       render: (text, record, index) => {
-        return '-'
+        return <div>查看</div>
       }
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // }
   },
     {
       title: '单位',
       dataIndex: 'unit',
       align: 'center',
   },
-    {
-      title: '下单限制',
-      align: 'center',
-      dataIndex: 'text',
-      render: (text, record, index) => {
-        const { repeat_order, batch_order } = record
-        const repeat = repeat_order > 0 ? { text: "开启", color: "#52C41A" } : { text: "关闭", color: "#C8C8C8" }
-        const batch = batch_order > 0 ? { text: "开启", color: "#52C41A" } : { text: "关闭", color: "#C8C8C8" }
-        return (
-          <div>
-            <div>批量下单: <span style={{color:repeat.color}}>{repeat.text}</span></div>
-            <div>重复下单: <span style={{color:batch.color}}>{batch.text}</span></div>
-          </div>
-        )
-      }
-  },
+    // {
+    //   title: '下单限制',
+    //   align: 'center',
+    //   dataIndex: 'text',
+    //   render: (text, record, index) => {
+    //     const { repeat_order, batch_order } = record
+    //     const repeat = repeat_order > 0 ? { text: "开启", color: "#52C41A" } : { text: "关闭", color: "#C8C8C8" }
+    //     const batch = batch_order > 0 ? { text: "开启", color: "#52C41A" } : { text: "关闭", color: "#C8C8C8" }
+    //     return (
+    //       <div>
+    //         <div>批量下单: <span style={{color:repeat.color}}>{repeat.text}</span></div>
+    //         <div>重复下单: <span style={{color:batch.color}}>{batch.text}</span></div>
+    //       </div>
+    //     )
+    //   }
+  // },
     {
       title: '状态',
       align: 'center',
@@ -281,12 +425,58 @@ function RTable ({ selectedRows, setSelectRows, data, setData, current, setCurre
       }
   },
     {
+      title: '自助退款',
+      dataIndex: 'unit_cost',
+      align: 'center',
+      render: (text, record, index) => {
+        return '-'
+      }
+  },
+    {
+      title: '下单限制',
+      align: 'center',
+      dataIndex: 'disc_price',
+      render: (text, record, index) => {
+        return <div onClick={()=>setVisibleLimit(true)}>查看</div>
+      }
+  },
+    {
+      title: '商品标签',
+      align: 'center',
+      dataIndex: 'disc_price',
+      render: (text, record, index) => {
+        return <div>查看</div>
+      }
+  },
+    {
+      title: '调价历史',
+      align: 'center',
+      dataIndex: 'disc_price',
+      render: (text, record, index) => {
+        return <div>查看</div>
+      }
+  },
+    {
+      title: '商品介绍',
+      align: 'center',
+      dataIndex: 'disc_price',
+      render: (text, record, index) => {
+        return <div>查看</div>
+      }
+  },
+    {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <div className={c.clickText} onClick={()=>push('/main/editCommunityGood',record)}>编辑商品</div>
+        <Space size="small">
+          <div className={c.clickText} onClick={()=>push('/main/editCommunityGood',record)}>修改商品</div>
+          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div style={{cursor:'wait'}} className={c.clickText}>修改状态</div>
+          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div style={{cursor:'wait'}} className={c.clickText}>修改价格</div>
+        </Space>
       )
-    },
+    }
   ];
 
   return (
@@ -312,7 +502,7 @@ function RTable ({ selectedRows, setSelectRows, data, setData, current, setCurre
             </div>
         </div>
       </div>
-      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量允许退款",key:"a"},{name:"批量不允许退款",key:"b"},{name:"批量置为推荐商品",key:"c"},{name:"批量删除推荐商品",key:"d"},{name:"批量删除",key:"e"},{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
       <Table
         columns={columns}
         rowSelection={{

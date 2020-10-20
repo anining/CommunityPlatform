@@ -11,8 +11,15 @@ import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import DropdownComponent from "../../components/DropdownComponent"
+import ModalComponent from "../../components/ModalComponent"
+import { CARDS_STATUS } from "../../utils/config"
 
 function CardManageView () {
+  const [title, setTitle] = useState()
+  const [key, setKey] = useState()
+  const [selected, setSelected] = useState([])
+  const [src, setSrc] = useState()
+  const [visible, setVisible] = useState(false)
   const data = [
     {
       label: '卡密总数',
@@ -52,19 +59,50 @@ function CardManageView () {
     },
   ]
 
+  function onCancel () {
+    setVisible(false)
+  }
+
+  function onOk () {
+    setVisible(false)
+    // const params = new URLSearchParams()
+    // selected.forEach(i => params.append("ids", i.id))
+    // communityGoods("modifys", undefined, params.toString(), { status: key }).then(r => {
+    //   if (!r.error) {
+    //     saveSuccess(false)
+    //     setSelectRows([])
+    //     get(current)
+    //   }
+    // })
+  }
+
+
+  let text = []
+  selected.forEach(i => text.push(i.name))
+
   return (
     <div className="view">
       <div className={c.container}>
         <TableHeaderComponent path="/main/editCardManage" data={data} text="添加卡密"/>
-        <RTable />
+        <RTable setTitle={setTitle} setSelected={setSelected} setSrc={setSrc} setKey={setKey} setVisible={setVisible}/>
       </div>
+      <ModalComponent
+        src={src}
+        div="当前选中商品："
+        span={text.join('、')}
+        title={title}
+        action={key}
+        visible={visible}
+        onCancel={onCancel}
+        onOk={onOk}
+      />
     </div>
   )
 }
 
-function RTable () {
+function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
   const [selectedRows, setSelectRows] = useState([]);
-  const [data, setData] = useState([])
+  const [data, setData] = useState([{ id: 1, name: 'name' }])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
@@ -161,7 +199,7 @@ function RTable () {
       // render: (text, record, index) => (
       //   <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} onClick={()=>{
       //     const history = h.get()
-      //     history.push("/main/editCardManage")
+      //     history.push("/main/editCardMan")
       //   }}>修改</div>
       // )
     },
@@ -174,13 +212,26 @@ function RTable () {
   };
 
   function submit (key) {
+    let title = ""
     switch (key) {
-      case "delete":
-        message.success('批量删除操作');
-        break
+      case "a":
+        title = "您确定要将卡密状态修改为已出售吗？";
+        break;
+      case "d":
+        title = "您确定要取消推荐这些商品吗？";
+        break;
+      case "e":
+        title = "您确定要删除选中的商品吗?";
+        break;
       default:
-        ;
+        title = `修改商品状态为${CARDS_STATUS[key].text}`
     }
+
+    setTitle(title)
+    setSelected(selectedRows.map(i => data[i]))
+    setSrc(CARDS_STATUS[key].src)
+    setKey(key)
+    setVisible(true)
   }
 
   function reset () {
@@ -211,7 +262,7 @@ function RTable () {
           </div>
         </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量设置已售出",key:"a"}]}/>
       <Table
         columns={columns}
         rowSelection={{

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Table, Input } from 'antd'
 import c from '../../styles/view.module.css'
-import good31 from '../../icons/good/good31.png'
+import cs from '../../styles/edit.module.css'
+import good9 from '../../icons/good/good9.png'
 import { communityGoodsCategories } from '../../utils/api'
 import { transformTime } from "../../utils/util";
 
@@ -55,17 +56,17 @@ function RTable () {
   }
 
   const columns = [
-    {
-      title: '分类编号',
-      dataIndex: 'id',
-      align: 'center',
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // }
-  },
+    // {
+    //   title: '分类编号',
+    //   dataIndex: 'id',
+    //   align: 'center',
+    //   // sorter: {
+    //   //   compare: (a, b) => {
+    //   //     console.log(a, b)
+    //   //   },
+    //   //   multiple: 1,
+    //   // }
+  // },
     {
       title: '分类名称',
       dataIndex: 'name',
@@ -76,11 +77,11 @@ function RTable () {
       align: 'center',
       dataIndex: 'used_by',
   },
-    {
-      title: '创建时间',
-      dataIndex: 'time',
-      align: 'center',
-  },
+    // {
+    //   title: '创建时间',
+    //   dataIndex: 'time',
+    //   align: 'center',
+  // },
     {
       title: '操作',
       align: 'center',
@@ -91,18 +92,23 @@ function RTable () {
   ];
 
   return (
-    <div className={c.main}>
+    <div className={c.main} style={{marginBottom:24}}>
+      <div style={{marginTop:33}} className={cs.table_header}>
+        <div style={{zIndex:1}}>选择分类</div>
+        <div style={{top:0}} className={cs.table_circle} />
+        <Button className={cs.table_btn} style={{marginBottom:0}}>新增分类</Button>
+      </div>
       <div className={c.searchView}>
           <div className={c.search}>
-            <div className={c.searchL}>
-              <Input onPressEnter={()=>get(current)} placeholder="请输入分类名称" value={search_name} onChange={e=>setSearch_name(e.target.value)} size="small" className={c.searchInput} />
+            <div className={c.searchL} style={{justifyContent:'space-between',width:'100%'}}>
+              <Input onPressEnter={()=>get(current)} placeholder="请输入商品分类" value={search_name} onChange={e=>setSearch_name(e.target.value)} size="small" className={c.searchInput} />
               <Button
                 icon={
-                  <img src={good31} alt="" style={{width:14,marginRight:6}} />
+                  <img src={good9} alt="" style={{width:14,marginRight:6}} />
                 }
                 size = "small"
                 onClick={()=>get(current)}
-                className={c.searchBtn}>搜索分类</Button>
+                className={c.select_searchBtn}>搜索分类</Button>
             </div>
           </div>
       </div>

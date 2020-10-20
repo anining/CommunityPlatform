@@ -81,20 +81,21 @@ function SiderComponent ({ collapsed, toggle }) {
               <Menu.Item key="communityGood">社区商品</Menu.Item>
               <Menu.Item key="goodCategory">商品分类</Menu.Item>
               <Menu.Item key="orderModel">下单模型</Menu.Item>
+              <Menu.Item key="markupTem">加价模版</Menu.Item>
             </Menu.SubMenu>
         )) }
-        {/* { U.when(R.includes('cardbiz',permissions), ( */}
-        {/*     <Menu.SubMenu onTitleClick={onTitleClick} key="cardBusiness" icon={<Icon keys="cardBusiness" />} title="卡密业务"> */}
-        {/*       <Menu.Item key="cardGood">卡密商品</Menu.Item> */}
-        {/*       <Menu.Item key="cardManage">卡密管理</Menu.Item> */}
-        {/*       <Menu.Item key="cardCategory">卡密分类</Menu.Item> */}
-        {/*     </Menu.SubMenu> */}
-        {/* )) } */}
+        { U.when(R.includes('cardbiz',permissions), (
+            <Menu.SubMenu onTitleClick={onTitleClick} key="cardBusiness" icon={<Icon keys="cardBusiness" />} title="卡密业务">
+              <Menu.Item key="cardGood">卡密商品</Menu.Item>
+              <Menu.Item key="cardManage">卡密管理</Menu.Item>
+              <Menu.Item key="cardCategory">卡密分类</Menu.Item>
+            </Menu.SubMenu>
+        )) }
         { U.when(R.includes('valueaddedsrv',permissions), (
             <Menu.SubMenu onTitleClick={onTitleClick} key="services" icon={<Icon keys="services" />} title="增值服务">
-              {/* <Menu.Item key="docking">对接</Menu.Item> */}
+              <Menu.Item key="docking">对接</Menu.Item>
               <Menu.Item key="store">供货商</Menu.Item>
-              {/* <Menu.Item key="subService">开通服务</Menu.Item> */}
+              <Menu.Item key="subService">开通服务</Menu.Item>
             </Menu.SubMenu>
         )) }
         { U.when(R.includes('tagmng', permissions), (
@@ -105,12 +106,12 @@ function SiderComponent ({ collapsed, toggle }) {
         { U.when(R.includes('orderlog',permissions), (
             <Menu.SubMenu onTitleClick={onTitleClick} key="orderRecording" icon={<Icon keys="orderRecording" />} title="订单记录">
               <Menu.Item key="communityOrder">社区订单</Menu.Item>
-              {/* <Menu.Item key="cardOrder">卡密订单</Menu.Item> */}
+              <Menu.Item key="cardOrder">卡密订单</Menu.Item>
             </Menu.SubMenu>
         )) }
         { U.when(R.includes('capitalflow',permissions), (
             <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" />}>
-              资金流水
+              资金记录
             </Menu.Item>
         )) }
         { U.when(R.includes('usermng',permissions), (
@@ -118,11 +119,11 @@ function SiderComponent ({ collapsed, toggle }) {
               用户管理
             </Menu.Item>
         )) }
-        {/* { U.when(R.includes('subcitemng',permissions), ( */}
-        {/*     <Menu.SubMenu onTitleClick={onTitleClick} key="childWeb" icon={<Icon keys="childWeb" />} title="分站管理"> */}
-        {/*       <Menu.Item key="childWebList">分站列表</Menu.Item> */}
-        {/*     </Menu.SubMenu> */}
-        {/* )) } */}
+        { U.when(R.includes('subcitemng',permissions), (
+            <Menu.SubMenu onTitleClick={onTitleClick} key="childWeb" icon={<Icon keys="childWeb" />} title="分站管理">
+              <Menu.Item key="childWebList">分站列表</Menu.Item>
+            </Menu.SubMenu>
+        )) }
         { U.when(R.includes('citecfg',permissions), (
             <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" icon={<Icon keys="webSetting" />} title="站点设置">
               <Menu.Item key="storeSetting">店铺设置</Menu.Item>

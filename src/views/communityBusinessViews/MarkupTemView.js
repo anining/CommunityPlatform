@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Input,Modal } from 'antd'
+import { Button, Table, Input, Modal } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
@@ -7,9 +7,9 @@ import good31 from '../../icons/good/good31.png'
 import { communityGoodsCategories } from '../../utils/api'
 import { push, transformTime, saveSuccess } from "../../utils/util";
 import DropdownComponent from '../../components/DropdownComponent'
-import {styles} from "../../styles/modal"
+import { styles } from "../../styles/modal"
 
-function GoodCategoryView () {
+function MarkupTemView () {
   const [visible, setVisible] = useState(false)
   const [actionId, setActionId] = useState(2)
 
@@ -109,36 +109,52 @@ function RTable () {
 
   const columns = [
     {
-      title: '分类编号',
+      title: '模版编号',
       dataIndex: 'id',
       align: 'center',
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // }
+      sorter: {
+        compare: (a, b) => {
+          console.log(a, b)
+        },
+        multiple: 1,
+      },
+      render: (text, record, index) => '-'
   },
     {
-      title: '分类名称',
+      title: '模版名称',
       dataIndex: 'name',
       align: 'center',
+      render: (text, record, index) => '-'
   },
     {
-      title: '包含商品数量',
+      title: '包含商品',
       align: 'center',
       dataIndex: 'used_by',
+      render: (text, record, index) => '-'
+  },
+    {
+      title: '模版类型',
+      dataIndex: 'time',
+      align: 'center',
+      render: (text, record, index) => '-'
   },
     {
       title: '创建时间',
       dataIndex: 'time',
       align: 'center',
+      render: (text, record, index) => '-'
+  },
+    {
+      title: '修改时间',
+      dataIndex: 'time',
+      align: 'center',
+      render: (text, record, index) => '-'
   },
     {
       title: '操作',
       align: 'center',
       render: (text, record, index) => (
-        <div className={c.clickText} onClick={()=>push("/main/editGoodCategory",record)}>编辑分类</div>
+        <div className={c.clickText} onClick={()=>push("/main/editMarkupTem",record)}>修改加价模版</div>
       )
   },
 ];
@@ -177,7 +193,7 @@ function RTable () {
       <div className={c.searchView}>
           <div className={c.search}>
             <div className={c.searchL}>
-              <Input onPressEnter={()=>get(current)} placeholder="请输入分类名称" value={search_name} onChange={e=>setSearch_name(e.target.value)} size="small" className={c.searchInput} />
+              <Input onPressEnter={()=>get(current)} placeholder="请输入加价模版关键字" value={search_name} onChange={e=>setSearch_name(e.target.value)} size="small" className={c.searchInput} />
               <Button
                 icon={
                   <img src={good31} alt="" style={{width:14,marginRight:6}} />
@@ -185,7 +201,7 @@ function RTable () {
                 size = "small"
                 onClick={()=>get(current)}
                 loading={loading}
-                className={c.searchBtn}>搜索分类</Button>
+                className={c.searchBtn}>搜索模版</Button>
             </div>
             <div className={c.searchR}>
               <Button
@@ -194,8 +210,8 @@ function RTable () {
                 }
                 type = "primary"
                 size = "small"
-                onClick={()=>push('/main/editGoodCategory')}
-                className={c.searchBtn}>新增分类</Button>
+                onClick={()=>push('/main/editMarkupTem')}
+                className={c.searchBtn}>新增模版</Button>
             </div>
           </div>
       </div>
@@ -220,4 +236,4 @@ function RTable () {
   )
 }
 
-export default GoodCategoryView
+export default MarkupTemView

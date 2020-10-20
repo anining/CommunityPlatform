@@ -1,10 +1,11 @@
 import React from 'react'
 import { Button } from 'antd'
+import * as U from 'karet.util'
 import good7 from '../icons/good/good7.png'
 import c from '../styles/view.module.css'
 import { push } from "../utils/util";
 
-function TableHeaderComponent ({ data, path, text }) {
+function TableHeaderComponent ({small_btn, data, path, text }) {
   const views = [];
 
   data.forEach(item => {
@@ -26,7 +27,14 @@ function TableHeaderComponent ({ data, path, text }) {
       <div className={c.headerL}>
         {views}
       </div>
-      <Rbtn path={path} text={text}/>
+      <div>
+        {
+          U.when(small_btn,
+            <Button className={c.small_btn}>{small_btn}</Button>
+          )
+        }
+        <Rbtn path={path} text={text}/>
+      </div>
     </div>
   )
 }

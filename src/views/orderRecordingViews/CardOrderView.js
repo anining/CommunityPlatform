@@ -4,7 +4,7 @@ import c from '../../styles/view.module.css'
 import good19 from '../../icons/good/good19.png'
 import good20 from '../../icons/good/good20.png'
 import good9 from '../../icons/good/good9.png'
-import good32 from '../../icons/good/good32.png'
+import good62 from '../../icons/good/good62.png'
 import good34 from '../../icons/good/good34.png'
 import good35 from '../../icons/good/good35.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
@@ -20,9 +20,9 @@ function CardOrderView () {
       id: 111,
     },
     {
-      label: '异常订单',
-      number: '1',
-      icon: good20,
+      label: '待发货订单',
+      number: '12',
+      icon: good62,
       id: 555,
     },
   ]
@@ -97,24 +97,9 @@ function RTable ({ setVisible }) {
       align: 'center',
   },
     {
-      title: '商品信息',
+      title: '商品名称',
       dataIndex: 'text',
       align: 'center',
-  },
-    {
-      title: '预留方式',
-      dataIndex: 'msg',
-      align: 'center',
-      // render: (text, record, index) => {
-      // const { text: t, color } = getKey(text, obj)
-      //   const { type, number } = text;
-      //   return (
-      //     <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-      //       <img src={} alt="" style={{width:20,marginRight:12}}/>
-      //       <div>{number}</div>
-      //     </div>
-      //   )
-      // }
   },
     {
       title: '商品分类',
@@ -122,13 +107,13 @@ function RTable ({ setVisible }) {
       dataIndex: 'category',
   },
     {
-      title: '对应卡密',
+      title: '卡密编号',
       dataIndex: 'number',
       align: 'center',
   },
     {
-      title: '供货商',
-      dataIndex: 'store',
+      title: '下单用户',
+      dataIndex: 'msg',
       align: 'center',
   },
     {
@@ -142,10 +127,15 @@ function RTable ({ setVisible }) {
       // }
   },
     {
+      title: '下单时间',
+      dataIndex: 'msg',
+      align: 'center',
+  },
+    {
       title: '操作',
       align: 'center',
       // render: (text, record, index) => (
-      //   <div style={{color:'#2c68ff',cursor:'pointer'}}>修改状态</div>
+      //   <div style={{color:'#2c68ff',cursor:'pointer'}}>置为已完成</div>
       // )
     },
   ];
@@ -182,10 +172,10 @@ function RTable ({ setVisible }) {
           <div className={c.searchL}>
             <Input placeholder="请输入订单编号" size="small" className={c.searchInput}/>
             <Input placeholder="请输入商品名称" size="small" className={c.searchInput}/>
-            <Input placeholder="请输入预留方式" size="small" className={c.searchInput}/>
+            <Input placeholder="请输入下单用户" size="small" className={c.searchInput}/>
+            <Input placeholder="请输入卡密编号" size="small" className={c.searchInput}/>
             <DropdownComponent keys={[]} placeholder="请选择商品分类" style={{width:186}}/>
             <DropdownComponent keys={[]} placeholder="请选择订单状态" style={{width:186}}/>
-            <DropdownComponent keys={[]} placeholder="请选择供货商" style={{width:186}}/>
             <DatePicker.RangePicker
               format="YYYY-MM-DD"
               onChange={dateChange}

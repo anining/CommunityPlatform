@@ -147,11 +147,6 @@ function EditChildWebView () {
           </div>
           <div className={c.btnView}>
             <Button type="primary" className={c.submit}>保存</Button>
-            <div className={c.btnTipsView}>
-              <div className={c.quitBtn}>放弃编辑</div>
-              <div className={c.quitBorder}/>
-              <div className={c.saveBtn}>保存并新增</div>
-            </div>
           </div>
         </div>
       </div>

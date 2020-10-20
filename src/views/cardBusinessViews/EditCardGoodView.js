@@ -1,23 +1,55 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Menu, Button, Upload, message, Radio, Breadcrumb } from 'antd'
+import * as U from 'karet.util'
+import { Input, Checkbox, Menu, Button, Upload, Tooltip, message, Radio, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
+import good46 from '../../icons/good/good46.png'
+import good47 from '../../icons/good/good47.png'
+import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
 import { MODULES } from "../../utils/config";
 import DropdownComponent from "../../components/DropdownComponent";
-import {push} from "../../utils/util";
+import { push } from "../../utils/util";
+
+let win
 
 function EditCardGoodView () {
   const [imageUrl, setImageUrl] = useState()
   const [loading, setLoading] = useState()
   const [value, setValue] = useState()
   const [quillValue, setQuillValue] = useState("")
+  const [has_more, setHasMore] = useState(false)
 
   function getBase64 (img, callback) {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
+  }
+
+  window.localClick = function (type, ids) {
+    // switch (type) {
+    //   case 'tables':
+    //     setTags(ids)
+    //     setTag_ids(ids.map(i => i.id))
+    //     break
+    //   case 'good_category_id':
+    //     setCommunity_goods_category_id(ids.id)
+    //     setCommunity_goods_category_name(ids.name)
+    //     break
+    //   case 'order-model-id':
+    //     setCommunity_param_template_id(ids.id)
+    //     setCommunity_param_template_name(ids.name)
+    //     break
+    //   default:
+    //     ;
+    // }
+    win && win.close()
+  }
+
+  window.localJump = function () {
+    push("/main/table")
+    win && win.close()
   }
 
   function handleChange (info) {
@@ -95,7 +127,7 @@ function EditCardGoodView () {
         <div className={c.tips}>带“ * ”的项目必须填写。</div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span style={{color:'#fff'}}>*</span>
+            <span>*</span>
             <div className={c.itemText}>商品名称</div>
           </div>
           <Input placeholder="请输入商品名称" className={c.itemInput}></Input>
@@ -103,6 +135,93 @@ function EditCardGoodView () {
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
+            <div className={c.itemText}>商品分类</div>
+          </div>
+            <DropdownComponent keys={[]} placeholder="请设置商品分类" style={{
+              width:"29.25%",
+              height:40,
+              marginTop:0,
+              marginBottom:0,
+              marginLeft:0,
+              marginRight:0,
+              color:'rgba(0,0,0,0.25)'
+            }}/>
+            <Button type="primary" className={c.itemBtn}>新增分类</Button>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>下单模型</div>
+          </div>
+            <DropdownComponent keys={[]} placeholder="请设置下单模型" style={{
+              width:"29.25%",
+              height:40,
+              marginTop:0,
+              marginBottom:0,
+              marginLeft:0,
+              marginRight:0,
+              color:'rgba(0,0,0,0.25)'
+            }}/>
+            <Button type="primary" className={c.itemBtn}>新增模型</Button>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>单价</div>
+          </div>
+          <Input type="number" placeholder="请输入商品销售单价" className={c.itemInput}></Input>
+        </div>
+        {/* <div className={c.item}> */}
+        {/*   <div className={c.itemName}> */}
+        {/*     <span>*</span> */}
+        {/*     <div className={c.itemText}>密价</div> */}
+        {/*   </div> */}
+        {/*   <Input type="number" placeholder="请输入商品对接密价" className={c.itemInput}></Input> */}
+        {/* </div> */}
+        {/* <div className={c.itemTips}> */}
+        {/*   <div className={c.itemName} /> */}
+        {/*   <div>如果不填写此项目，系统将会使用售价进行对接。</div> */}
+        {/* </div> */}
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>库存预警</div>
+          </div>
+          <Input placeholder="请输入预警值" className={c.itemInput}></Input>
+        </div>
+        <div className={c.itemTips}>
+          <div className={c.itemName} />
+          <div>为商品添加标签可以帮助用户快速找到想要下单的商品</div>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>卡密类型</div>
+          </div>
+          <Radio.Group onChange={onChange} value={value} className={c.itemGrop}>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="常规卡 ： 可以添加多条卡密，每条卡密只能出售一次。">
+                    <Radio value={1} className={c.itemRadio}>常规卡</Radio>
+                  </Tooltip>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="循环卡 ： 可以添加多条卡密，每条卡密只能出售一次。">
+                    <Radio value={2} className={c.itemRadio}>循环卡</Radio>
+                  </Tooltip>
+          </Radio.Group>
+        </div>
+        <div className={c.item} style={{alignItems:'flex-start'}}>
+          <div className={c.itemName}>
+            <div className={c.itemText}>商品标签</div>
+          </div>
+          <div className={c.tableView}>
+            <RTable tags={[]}/>
+          </div>
+        </div>
+        <div className={c.itemTips}>
+          <div className={c.itemName} />
+          <div>为商品添加标签可以帮助用户快速找到想要下单的商品</div>
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span style={{color:'#fff'}}>*</span>
             <div className={c.itemText}>商品图片</div>
           </div>
           <Input placeholder="请填写图片链接或者上传图片" className={c.itemInput}></Input>
@@ -110,8 +229,6 @@ function EditCardGoodView () {
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span style={{color:'#fff'}}>*</span>
-            <div className={c.itemText}>商品图片</div>
           </div>
           <Upload
             name="avatar"
@@ -129,152 +246,110 @@ function EditCardGoodView () {
               </div>
             }
           </Upload>
-          <div className={c.uploadTips}>商品图片最多存在1张</div>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>商品分类</div>
-          </div>
-            <DropdownComponent keys={[]} placeholder="请设置商品分类" style={{
-              width:"29.25%",
-              height:40,
-              marginTop:0,
-              marginBottom:0,
-              marginLeft:0,
-              marginRight:0,
-              color:'rgba(0,0,0,0.25)'
-            }}/>
-            <Button type="primary" className={c.itemBtn}>新增分类</Button>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>卡密类型</div>
-          </div>
-          <Radio.Group onChange={onChange} value={value} className={c.itemGrop}>
-            <Radio value={1} className={c.itemRadio}>已上架</Radio>
-            <Radio value={2} className={c.itemRadio}>已下架</Radio>
-            <Radio value={3} className={c.itemRadio}>已上架但关闭下单</Radio>
-          </Radio.Group>
-        </div>
-        <div className={c.item} style={{alignItems:'flex-start'}}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>卡密模版</div>
-          </div>
-          <div style={{width:'80%'}}>
-            <div style={{display:'flex',alignItems:'center'}}>
-              <Button className={c.cardModel} style={{background:'#4177FE',color:'#fff'}}>卡号</Button>
-              <Button className={c.cardModel}>卡密</Button>
-              <Button className={c.cardModel}>订单号</Button>
-              <Button className={c.cardModel}>下单时间</Button>
-              <Button className={c.cardModel}>支付时间</Button>
-            </div>
-            <div style={{color:'#919191',fontSize:'0.857rem',marginTop:6,marginBottom:16}}>点击选项直接插入模版</div>
-            <Input.TextArea rows={10} style={{height:139,color:'#34374A',width:"36.562%"}}/>
+          <div className={c.uploadTips}>
+            <div>商品图片最多存在1张；</div>
+            <div>推荐图片大小<span>100*100，200*200</span></div>
           </div>
         </div>
         <div className={c.item} style={{alignItems:'flex-start'}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
-            <div className={c.itemText}>目标描述</div>
+            <div className={c.itemText}>商品介绍</div>
           </div>
           <ReactQuill className={c.quill} modules={MODULES} theme="snow" value={quillValue} onChange={setQuillValue}/>
         </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>预留方式</div>
-          </div>
-          <div style={{width:'29.25%',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-            <DropdownComponent keys={[]} placeholder="预留信息" style={{
-              width:"23.931%",
-              height:40,
-              marginTop:0,
-              marginBottom:0,
-              marginLeft:0,
-              marginRight:'1.5%',
-              color:'#34374A'
-            }}/>
-            <Input placeholder="请输入预留信息" className={c.itemInput} style={{width:'70.94%'}}></Input>
-          </div>
+        <div className={c.hasMore}>
+          <Checkbox className={c.hasMoreCheckBox} onChange={e=>setHasMore(e.target.checked)} checked={has_more}>更多设置</Checkbox>
         </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>进价</div>
-          </div>
-          <Input type="number" placeholder="请输入商品进价" className={c.itemInput}></Input>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>填写商品进价之后，系统可以核算出每日的收益毛利。</div>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>单价</div>
-          </div>
-          <Input type="number" placeholder="请输入商品销售单价" className={c.itemInput}></Input>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>密价</div>
-          </div>
-          <Input type="number" placeholder="请输入商品对接密价" className={c.itemInput}></Input>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>如果不填写此项目，系统将会使用售价进行对接。</div>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>库存预警</div>
-          </div>
-          <Input placeholder="请输入值" className={c.itemInput}></Input>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>库存展示</div>
-          </div>
-          <Radio.Group onChange={onChange} value={value} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-            <Radio value={2} className={c.itemRadio} style={{width:'33.333%'}}>真实库存</Radio>
-            <Radio value={3} className={c.itemRadio} style={{width:'33.333%'}}>虚拟库存</Radio>
-          </Radio.Group>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>状态</div>
-          </div>
-          <Radio.Group onChange={onChange} value={value} className={c.itemGrop}>
-            <Radio value={1} className={c.itemRadio} style={{width:'33.333%'}}>已上架</Radio>
-            <Radio value={2} className={c.itemRadio} style={{width:'33.333%'}}>已下架</Radio>
-            <Radio value={3} className={c.itemRadio} style={{width:'33.333%'}}>已上架但关闭下单</Radio>
-          </Radio.Group>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>排序权重</div>
-          </div>
-          <Input type="number" placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>数值越大，排序越靠前；数值相同，商品编号越大，排序越靠前</div>
-        </div>
-        <div className={c.item} style={{alignItems:"flex-start"}}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>备注</div>
-          </div>
-          <ReactQuill className={c.quill} modules={MODULES} theme="snow" value={quillValue} onChange={setQuillValue}/>
-        </div>
+        {
+          U.when(has_more,(
+            <>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span>*</span>
+                  <div className={c.itemText}>状态</div>
+                </div>
+                <Radio.Group onChange={onChange} value={value} className={c.itemGrop}>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
+                    <Radio value={1} className={c.itemRadio} style={{width:'33.333%'}}>已上架</Radio>
+                  </Tooltip>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
+                    <Radio value={2} className={c.itemRadio} style={{width:'33.333%'}}>已下架</Radio>
+                  </Tooltip>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
+                    <Radio value={3} className={c.itemRadio} style={{width:'33.333%'}}>已上架但关闭下单</Radio>
+                  </Tooltip>
+                </Radio.Group>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span>*</span>
+                  <div className={c.itemText}>库存展示</div>
+                </div>
+                <Radio.Group onChange={onChange} value={value} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+                  <Radio value={2} className={c.itemRadio} style={{width:'33.333%'}}>真实库存</Radio>
+                  <Radio value={3} className={c.itemRadio} style={{width:'33.333%'}}>虚拟库存</Radio>
+                </Radio.Group>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span className={c.white}>*</span>
+                  <div className={c.itemText}>排序权重</div>
+                </div>
+                <Input type="number" placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
+              </div>
+              <div className={c.itemTips}>
+                <div className={c.itemName} />
+                <div>数值越大，排序越靠前；数值相同，商品编号越大，排序越靠前</div>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span className={c.white}>*</span>
+                  <div className={c.itemText}>进价</div>
+                </div>
+                <Input type="number" placeholder="请输入商品进价" className={c.itemInput}></Input>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span>*</span>
+                  <div className={c.itemText}>加价模版</div>
+                </div>
+                <DropdownComponent keys={[]} placeholder="百分比加价模版" style={{
+                  width:"29.25%",
+                  height:40,
+                  marginTop:0,
+                  marginBottom:0,
+                  marginLeft:0,
+                  marginRight:0,
+                  color:'rgba(0,0,0,0.25)'
+                }}/>
+              </div>
+              <div className={c.item} style={{alignItems:'flex-start'}}>
+                <div className={c.itemName}>
+                  <span>*</span>
+                  <div className={c.itemText}>加价模版</div>
+                </div>
+                <div className={c.disc_price_view}>
+                  <div className={c.disc_price_item}>
+                    <img src={good46} alt="" />
+                    <div>高级会员</div>
+                    <Input placeholder="请输入密价"/>
+                  </div>
+                  <div className={c.disc_price_item}>
+                    <img src={good48} alt="" />
+                    <div>钻石会员</div>
+                    <Input placeholder="请输入密价"/>
+                  </div>
+                  <div className={c.disc_price_item}>
+                    <img src={good47} alt="" />
+                    <div>至尊会员</div>
+                    <Input placeholder="请输入密价"/>
+                  </div>
+                </div>
+              </div>
+            </>
+          ))
+        }
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
           </div>
@@ -287,9 +362,35 @@ function EditCardGoodView () {
             </div>
           </div>
         </div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+          </div>
+          <div className={c.btnView} style={{color:'#FF5730'}}>
+            保存商品之后请在“卡密业务 - 卡密管理”为该商品关联卡密
+          </div>
+        </div>
       </div>
     </div>
   )
+}
+
+function RTable ({ tags }) {
+  const views = []
+
+  tags.forEach((it, i) => {
+    const { id: tag_id, name } = it
+    views.push(
+      <Button key={tag_id} style={{width:'auto'}} className={c.viewTable}>{name}</Button>
+    )
+  })
+
+  views.push(
+    <Button type="primary" key="select" style={{marginLeft:0,marginBottom:28}} className={c.itemBtn} onClick={()=>{
+         win = window.open("/select-table", "_blank", "left=390,top=145,width=1200,height=700")
+    }}>{!tags.length?"选择":"重新选择"}</Button>
+  )
+
+  return views;
 }
 
 export default EditCardGoodView

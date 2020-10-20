@@ -258,9 +258,9 @@
 
 .btnView {
   width: 29.25%;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
   /* height: 40px; */
   display: flex;
   flex-direction: column;
@@ -384,7 +384,6 @@
 .selectTableOkBtn {
   width: 258px;
   height: 40px;
-  margin-right: 70px;
   background: #2C68FF;
   border-radius: 2px;
   font-size: 1.142rem;
@@ -399,17 +398,20 @@
 }
 
 .selectTableCBtn {
-  border-color: #FF8E32;
+  border-color: #DBDEE5;
   width: 258px;
   height: 40px;
-  background: #FF8E32;
+  background: #fff;
   border-radius: 2px;
+  margin-right: 40px;
   font-size: 1.142rem;
+  color: #C0C2CB;
 }
 
 .selectTableCBtn:hover {
-  background: #FF8E32;
-  border-color: #FF8E32;
+  background: #fff;
+  border-color: #DBDEE5;
+  color: #C0C2CB;
 }
 
 .user_disc_price_div {
@@ -597,7 +599,7 @@
   font-size: 1.785rem;
   color: #34374A;
   font-weight: 500;
-  padding: 0 0 0 37px;
+  padding: 0 0 0 5px;
   position: relative;
 }
 
@@ -619,12 +621,83 @@
   height: 32px;
 }
 
+.table_btn:hover {
+  background-color: #FF8E32;
+  border-color: #ff8E32;
+  color: #fff;
+}
+
 .table_circle {
   position: absolute;
   top: 15px;
-  left: 30px;
+  left: -2px;
   height: 14px;
   width: 14px;
   background: linear-gradient(144deg, #B4C9FF 0%, #1657FF 100%);
   border-radius: 14px;
+}
+
+.introductionTitle {
+  height: 80px;
+  color: #333333;
+  font-weight: 500;
+  font-size: 1.214rem;
+  border-top: 1px solid #E1E1E1;
+  line-height: 80px;
+  margin-top: 60px;
+}
+
+.tem_line {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  color: #333333;
+  font-size: 1rem;
+}
+
+.tem_line input {
+  width: 46px;
+  height: 40px;
+  margin: 0 8px;
+}
+
+.tem_line img {
+  width: 15px;
+  margin-right: 5px;
+}
+
+.tem_tips {
+  color: #FF5730;
+  font-size: 0.857rem;
+}
+
+.tem_line span {
+  color: #FF4D4F;
+}
+
+.tem_header {
+  width: 62.875%;
+  /* width: 52.875%; */
+  padding: 15px 15px 15px 0;
+  margin-top: 24px;
+  background: #FFFCEB;
+  color: #FF8D30;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.tem_header img {
+  width: 39px;
+}
+
+.item_user_radio {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.item_user_radio img {
+  width: 15px;
+  margin-right: 5px;
 }

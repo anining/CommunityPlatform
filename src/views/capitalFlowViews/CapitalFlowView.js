@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Space, Table, message, DatePicker } from 'antd'
+import { Button,Input, Space, Table, message, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import good22 from '../../icons/good/good22.png'
 import good27 from '../../icons/good/good27.png'
 import good26 from '../../icons/good/good26.png'
 import good25 from '../../icons/good/good25.png'
 import good9 from '../../icons/good/good9.png'
+import good63 from '../../icons/good/good63.png'
+import good64 from '../../icons/good/good64.png'
+import good65 from '../../icons/good/good65.png'
+import good66 from '../../icons/good/good66.png'
+import good67 from '../../icons/good/good67.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { balanceChanges } from "../../utils/api"
@@ -14,21 +19,33 @@ import { getKey, transformTime } from "../../utils/util"
 function CapitalFlowView () {
   const data = [
     {
-      label: '今日流水',
+      label: '今日下单额',
       number: '10,100',
-      icon: good22,
+      icon: good66,
       id: 111,
+    },
+    {
+      label: '今日退款额',
+      number: '10,111',
+      icon: good67,
+      id: 222,
     },
     {
       label: '今日充值',
       number: '10,111',
-      icon: good26,
-      id: 222,
+      icon: good65,
+      id: 333,
     },
     {
-      label: '今日退款',
+      label: '今日加款',
       number: '10,111',
-      icon: good25,
+      icon: good64,
+      id: 333,
+    },
+    {
+      label: '今日减款',
+      number: '10,111',
+      icon: good63,
       id: 333,
     },
   ]
@@ -37,12 +54,6 @@ function CapitalFlowView () {
     <div className="view">
       <div className={c.container}>
         <TableHeaderComponent data={data}/>
-        <div className={c.headerTips}>
-          <div className={c.headerText}>
-            <img src={good27} alt="" className={c.tipsImg}/>
-            <div>用户充值会产生流水记录，但是不会计入今日消费；今日消费只计算购买商品产生的流水总和。</div>
-          </div>
-        </div>
         <RTable />
       </div>
     </div>
@@ -65,7 +76,7 @@ function RTable () {
   function get (current) {
     balanceChanges(current, pageSize, date[0], date[1]).then(r => {
       if (!r.error) {
-        alert("暂无数据")
+        // alert("暂无数据")
         // const { data, total } = r
         // setTotal(total)
         // setData(format(data))
@@ -118,29 +129,18 @@ function RTable () {
   }
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      align: 'center',
-  },
-    {
       title: '用户账号',
       dataIndex: 'user_account',
       align: 'center',
   },
     {
-      title: '流水金额',
+      title: '变动数额',
       align: 'center',
       dataIndex: 'amount',
       render: (text, record, index) => {
         const color = Number(text) > 0 ? "#2C68FF" : "#FF4D4F"
         return <div style={{color}}>{text}</div>
       }
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // },
   },
     {
       title: '支付方式',
@@ -164,20 +164,6 @@ function RTable () {
       dataIndex: 'time',
       align: 'center',
   },
-    {
-      title: '操作',
-      align: 'center',
-      render: (text, record, index) => (
-        <Space size="small">
-          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{
-            // const history = h.get()
-            // history.push("/main/editCommunityGood")
-          }}>修改状态</div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div className={c.clickText} style={{cursor:'wait'}}>退款</div>
-        </Space>
-      )
-    },
   ];
 
   const rowSelection = {
@@ -211,10 +197,10 @@ function RTable () {
       <div className={c.searchView}>
         <div className={c.search}>
           <div className={c.searchL}>
-            {/* <Input placeholder="请输入用户账户" size="small" className={c.searchInput}/> */}
-            {/* <Input placeholder="请输入订单编号" size="small" className={c.searchInput}/> */}
-            {/* <DropdownComponent keys={[]} placeholder="请选择支付方式" style={{width:186}}/> */}
-            {/* <DropdownComponent keys={[]} placeholder="请选择消费类型" style={{width:186}}/> */}
+            <Input placeholder="请输入用户账户" size="small" className={c.searchInput}/>
+            <Input placeholder="请输入订单编号" size="small" className={c.searchInput}/>
+            <DropdownComponent keys={[]} placeholder="请选择支付方式" style={{width:186}}/>
+            <DropdownComponent keys={[]} placeholder="请选择消费类型" style={{width:186}}/>
             <DatePicker.RangePicker
               format="YYYY-MM-DD"
               onChange={dateChange}
@@ -233,7 +219,7 @@ function RTable () {
           </div>
         </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+      <Button className={c.excelBtn} type="primary">导出本页为Excel</Button>
       <Table
         columns={columns}
         rowSelection={{

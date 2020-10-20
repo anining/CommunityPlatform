@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import c from '../../styles/edit.module.css'
 import cs from '../../styles/business.module.css'
 import edit1 from '../../icons/edit/edit1.png'
+import good55 from '../../icons/good/good55.png'
 import { Button, Input, Tag, message } from 'antd'
 import { tagGroups, tags as tagsApi } from "../../utils/api"
 
@@ -42,6 +43,10 @@ function TableView () {
         <div className={c.headerT}>
           <div style={{zIndex:1}}>标签管理</div>
           <div className={c.circle} />
+        </div>
+        <div className={c.tem_header}>
+          <img src={good55} alt="" />
+          <div>请点击“添加分组”添加一个新的分组；请点击“添加标签”添加一个新的标签；修改分组或标签，请点击要修改项目，输入要修改的内容；修改完成后请点击“保存”按钮保存标签。</div>
         </div>
         <RGroup tagsGroup={tagsGroup} get={get} setTagsGroup={setTagsGroup}/>
         {inputGroupVisible && (

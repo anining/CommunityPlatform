@@ -49,6 +49,10 @@ function EditDockingView () {
             color: 'rgba(0,0,0,0.25)',
           }}/>
         </div>
+        <div className={c.itemTips}>
+          <div className={c.itemName} />
+          <div style={{color:'#FF8D30'}}>站点主域名，如https://xxx.xxxx.com</div>
+        </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
@@ -75,11 +79,6 @@ function EditDockingView () {
           </div>
           <div className={c.btnView}>
             <Button type="primary" className={c.submit}>保存</Button>
-            <div className={c.btnTipsView}>
-              <div className={c.quitBtn}>放弃编辑</div>
-              <div className={c.quitBorder}/>
-              <div className={c.saveBtn}>保存并新增</div>
-            </div>
           </div>
         </div>
       </div>

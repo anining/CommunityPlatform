@@ -1,6 +1,17 @@
 import good42 from '../icons/good/good42.png'
 import good43 from '../icons/good/good43.png'
 import good44 from '../icons/good/good44.png'
+import good49 from '../icons/good/good49.png'
+import good50 from '../icons/good/good50.png'
+import good51 from '../icons/good/good51.png'
+import good52 from '../icons/good/good52.png'
+import good53 from '../icons/good/good53.png'
+import good56 from '../icons/good/good56.png'
+import good69 from '../icons/good/good69.png'
+import good70 from '../icons/good/good70.png'
+import good71 from '../icons/good/good71.png'
+import good72 from '../icons/good/good72.png'
+import good73 from '../icons/good/good73.png'
 
 const DEVELOPER = "Production"
 const API_URL = DEVELOPER === "Production" ? "https://test-omnivstore.prismslight.com/mng" : "http://192.168.1.36:8000/mng"
@@ -48,13 +59,71 @@ const GOODS_STATUS = {
   unavailable: {
     color: "#FF8D30",
     text: '已关闭订单',
-    src: good44
+    src: good42
   },
   paused: {
     color: "#FF4D4F",
     text: '已下架',
-    src: good42
+    src: good44
+  },
+  a: {
+    color: "#353535",
+    text: '允许退款',
+    src: good49
+  },
+  b: {
+    color: "#FF4D4F",
+    text: '不允许退款',
+    src: good50
+  },
+  c: {
+    color: "#FF4D4F",
+    text: '推荐',
+    src: good51
+  },
+  d: {
+    color: "#FF4D4F",
+    text: '已下架',
+    src: good52
+  },
+  e: {
+    color: "#FF4D4F",
+    text: '已下架',
+    src: good53
+  },
+}
+
+const CARDS_STATUS = {
+  a: {
+    color: "#FF4D4F",
+    text: '已出售',
+    src: good56
   }
 }
 
-export { GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }
+const USER_STATUS = {
+  a: {
+    color: "#FF4D4F",
+    text: '封禁',
+    src: good70
+  },
+  b: {
+    color: "#FF4D4F",
+    text: '解封',
+    src: good69
+  }
+}
+
+const USER_RANK = {
+  a: {
+    src: good71
+  },
+  b: {
+    src: good72
+  },
+  c: {
+    src: good73
+  }
+}
+
+export {USER_STATUS,USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }
