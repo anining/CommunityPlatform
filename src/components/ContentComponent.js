@@ -54,6 +54,7 @@ import ErrorView from "../views/systemSettingViews/ErrorView"
 import MarkupTemView from "../views/communityBusinessViews/MarkupTemView"
 import EditMarkupTemView from "../views/communityBusinessViews/EditMarkupTemView"
 import EditCardManView from "../views/cardBusinessViews/EditCardManView"
+import StorePlugView from "../views/childWebViews/StorePlugView"
 
 function ContentComponent () {
   const { permissions, role } = getter(['permissions', 'role']);
@@ -159,6 +160,9 @@ function ContentComponent () {
         {/* 站点管理 */}
         <Route exact path="/main/storeSetting">
           { localPermissions.includes('citecfg') ? <StoreSettingView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/storePlug">
+          { localPermissions.includes('citecfg') ? <StorePlugView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/rebot">
           { localPermissions.includes('citecfg') ? <MoneyRebotView /> : <Redirect to="/main/error" /> }

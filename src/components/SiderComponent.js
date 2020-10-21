@@ -64,18 +64,18 @@ function SiderComponent ({ collapsed, toggle }) {
 
     return (
       <Menu karet-lift theme="light" mode="inline" openKeys={U.template(openKeys)} selectedKeys={U.template(selectedKeys)} onClick={menuItemClick} multiple={false}>
-        {/* <Menu.Item key="home" icon={<Icon keys="home" />}> */}
-        {/*   用户首页 */}
-        {/* </Menu.Item> */}
-        {/* { U.when(R.includes('statistics',permissions), ( */}
-        {/*   <Menu.SubMenu onTitleClick={onTitleClick} key="statistics" icon={<Icon keys="statistics" />} title="数据统计"> */}
-        {/*     <Menu.Item key="dataStatistics">数据统计</Menu.Item> */}
-        {/*     <Menu.Item key="moneyStatistics">资金统计</Menu.Item> */}
-        {/*     <Menu.Item key="userStatistics">用户统计</Menu.Item> */}
-        {/*     <Menu.Item key="webStatistics">网站访问统计</Menu.Item> */}
-        {/*     <Menu.Item key="goodStatistics">商品订单统计</Menu.Item> */}
-        {/*   </Menu.SubMenu> */}
-        {/* )) } */}
+        <Menu.Item key="home" icon={<Icon keys="home" />}>
+          用户首页
+        </Menu.Item>
+        { U.when(R.includes('statistics',permissions), (
+          <Menu.SubMenu onTitleClick={onTitleClick} key="statistics" icon={<Icon keys="statistics" />} title="数据统计">
+            <Menu.Item key="dataStatistics">数据统计</Menu.Item>
+            <Menu.Item key="moneyStatistics">资金统计</Menu.Item>
+            <Menu.Item key="userStatistics">用户统计</Menu.Item>
+            <Menu.Item key="webStatistics">网站访问统计</Menu.Item>
+            <Menu.Item key="goodStatistics">商品订单统计</Menu.Item>
+          </Menu.SubMenu>
+        )) }
         { U.when(R.includes('commbiz',permissions), (
             <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" icon={<Icon keys="communityBusiness" />} title="社区业务">
               <Menu.Item key="communityGood">社区商品</Menu.Item>
@@ -127,8 +127,9 @@ function SiderComponent ({ collapsed, toggle }) {
         { U.when(R.includes('citecfg',permissions), (
             <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" icon={<Icon keys="webSetting" />} title="站点设置">
               <Menu.Item key="storeSetting">店铺设置</Menu.Item>
-              {/* <Menu.Item key="rebot">支付配置</Menu.Item> */}
-              {/* <Menu.Item key="images">图床配置</Menu.Item> */}
+              <Menu.Item key="storePlug">店铺装饰</Menu.Item>
+              <Menu.Item key="rebot">支付配置</Menu.Item>
+              <Menu.Item key="images">图床配置</Menu.Item>
               <Menu.Item key="peopleService">客服配置</Menu.Item>
               <Menu.Item key="notice">发布公告</Menu.Item>
             </Menu.SubMenu>
@@ -139,8 +140,8 @@ function SiderComponent ({ collapsed, toggle }) {
           )) }
           <Menu.Item key="password">修改密码</Menu.Item>
           <Menu.Item key="logger">登录日志</Menu.Item>
-          {/* <Menu.Item key="about">系统信息</Menu.Item> */}
-          {/* <Menu.Item key="businessSetting">业务配置</Menu.Item> */}
+          <Menu.Item key="about">系统信息</Menu.Item>
+          <Menu.Item key="businessSetting">业务配置</Menu.Item>
         </Menu.SubMenu>
       </Menu>
     )
@@ -206,7 +207,8 @@ function Icon ({ keys }) {
     },
   }
 
-  return <>{U.ifElse(R.includes(selectedKeys, obj[keys].keys), <img src={obj[keys].icon[1]} alt="" style={{width:21,marginBottom:7,marginRight:16}} />, <img src={obj[keys].icon[0]} alt="" style={{width:21,marginBottom:7,marginRight:16}} />)}</>
+  return <>{U.ifElse(R.includes(selectedKeys, obj[keys].keys), <img src={obj[keys].icon[1]} alt="" style={{width:21,marginBottom:7,marginRight:16}} />, <img src={obj[keys].icon[0]} alt="" style={{width:21,marginBottom:7,marginRight:16}} />)
+} < />
 }
 
 export default SiderComponent

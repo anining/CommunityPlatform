@@ -1,6 +1,7 @@
 .tips {
   font-size: 0.857rem;
   color: #979BA3;
+  margin-top: 2px;
 }
 
 .orderT {
@@ -20,12 +21,12 @@
 }
 
 .orderView {
-  height: 739px;
+  /* height: 739px; */
   margin-top: 0;
   width: 100%;
   background-color: #fff;
-  padding: 0 3.349% 0 1.973%;
-  margin-bottom: 24px;
+  padding: 24px;
+  /* margin-bottom: 24px; */
 }
 
 .column {
@@ -36,8 +37,8 @@
 .title {
   color: #34374A;
   font-size: 2rem;
-  margin-bottom: 2px;
   font-weight: 500;
+  margin-bottom: 10px;
 }
 
 .data {
@@ -56,12 +57,14 @@
   height: 32px;
   width: 112px;
   color: #2C68FF;
+  border-color: #2C68FF;
 }
 
 .bViewL {
   display: flex;
   align-items: center;
   width: 31.387%;
+  margin-top: 32px;
 }
 
 .bView {

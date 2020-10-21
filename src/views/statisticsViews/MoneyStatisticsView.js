@@ -14,7 +14,7 @@ function MoneyStatisticsView () {
       <TimelineChart title="销售额" height={466} data={chartData} titleMap={{ y1: '社区订单', y2: '卡密订单' }} />
     )
     setViews2(
-      <TimelineChart title="充值/退款额" height={466} data={chartData} titleMap={{ y1: '充值', y2: '退款' }} />
+      <TimelineChart title="充值/退款额" height={466} data={chartData} titleMap={{ y1: '充值'}} />
     )
     setViews3(
       <TimelineChart title="毛利值" height={466} data={chartData} titleMap={{ y1: '充值', y2: '退款' }} />
@@ -26,7 +26,6 @@ function MoneyStatisticsView () {
     chartData.push({
       x: new Date().getTime() + 1000 * 60 * 30 * i,
       y1: Math.floor(Math.random() * 100) + 1000,
-      y2: Math.floor(Math.random() * 100) + 10,
     });
   }
 
@@ -36,8 +35,8 @@ function MoneyStatisticsView () {
         <div className={ct.orderLT}>
           <div className={ct.orderT}>
             <div>
-              <div className={ct.title}>充值/退款</div>
-              <div className={ct.tips}>统计充值记录</div>
+              <div className={ct.title}>充值</div>
+              <div className={ct.tips}>用户充值统计</div>
             </div>
             <div className={ct.data}>总计：2584.1548/245.1575</div>
           </div>
@@ -52,8 +51,9 @@ function MoneyStatisticsView () {
         <div className={ct.orderLT}>
           <div className={ct.orderT}>
             <div>
-              <div className={ct.title}>销售额统计</div>
-              <div className={ct.tips}>统计平台销售额，销售额 = 下单总额 - 退款额</div>
+              <div className={ct.title}>下单数额/退单数额</div>
+              <div className={ct.tips}>用户下单数额和退单数额统计；统计的数据依照下单/退单成功的时间计算。</div>
+              <div className={ct.tips} style={{marginTop:2}}>下单数额 = 订单对应商品下单时的单价 * 下单数量 * 时间区间内订单数量；订单对应商品下单时的单价 * 退单数量 * 时间区间内订单数量。</div>
             </div>
             <div className={ct.data}>总计：2584.1548/245.1575</div>
           </div>

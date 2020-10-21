@@ -7,11 +7,15 @@ function ModalPopComponent ({ title, div, visible, onCancel }) {
   return (
     <Modal
       visible={visible}
+      closable={false}
       footer={null}
       onCancel={onCancel}
     >
       <div>
-        <div className={c.title}>{title}</div>
+        <div className={c.header}>
+          <div className={c.title}>{title}</div>
+          <div className={c.close} onClick={onCancel}>X</div>
+        </div>
         {div}
       </div>
     </Modal>
