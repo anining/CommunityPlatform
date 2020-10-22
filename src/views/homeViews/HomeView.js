@@ -1,57 +1,30 @@
 import * as React from 'karet'
 import { useState, useEffect } from 'react'
-import { TimelineChart } from 'ant-design-pro/lib/Charts';
-import { Button, Radio, Table, Timeline } from 'antd'
+import { Button, Table, Timeline } from 'antd'
 import c from '../../styles/home.module.css'
-import home1 from '../../icons/home/home1.png'
-import home2 from '../../icons/home/home2.png'
 import home3 from '../../icons/home/home3.png'
+import home1 from '../../icons/home/home1.png'
 import home4 from '../../icons/home/home4.png'
 import home5 from '../../icons/home/home5.png'
-import home6 from '../../icons/home/home6.png'
 import home7 from '../../icons/home/home7.png'
 import home8 from '../../icons/home/home8.png'
 import home9 from '../../icons/home/home9.png'
 import { h } from '../../utils/history'
+import { Line } from '@ant-design/charts';
+import ct from '../../styles/statistics.module.css'
 import { getter } from "../../utils/store";
 
 function HomeView () {
   const { nickname } = getter(["nickname"])
-  const [views, setViews] = useState([])
-  const [views2, setViews2] = useState([])
-  const [value3, setValue3] = useState('Apple')
-
-  useEffect(() => {
-    setViews(
-      <TimelineChart title="订单数" height={316} data={chartData} titleMap={{ y1: '社区订单', y2: '卡密订单' }} />
-    )
-    setViews2(
-      <TimelineChart title="充值/退款" height={316} data={chartData} titleMap={{ y1: '充值', y2: '退款' }} />
-    )
-  }, [])
-
-  const options = [
-    { label: '周数据', value: 'apple' },
-    { label: '月数据', value: 'orange' },
-  ];
-
-  function onChange3 (e) {
-    console.log('radio3 checked', e.target.value);
-    setValue3(e.target.value)
-  }
-
-  const chartData = [];
-  for (let i = 0; i < 20; i += 1) {
-    chartData.push({
-      x: new Date().getTime() + 1000 * 60 * 30 * i,
-      y1: Math.floor(Math.random() * 100) + 1000,
-      y2: Math.floor(Math.random() * 100) + 10,
-    });
-  }
   const obj = ["#FF4D4F", "#52C41A"]
   const columns = [
     {
       title: '商品ID',
+      dataIndex: 'id',
+      align: 'center',
+  },
+    {
+      title: '业务类型',
       dataIndex: 'id',
       align: 'center',
   },
@@ -64,6 +37,9 @@ function HomeView () {
       title: '涨跌值',
       align: 'center',
       dataIndex: 'price',
+      render: (text, record, index) => {
+        return '-'
+      }
       // render: (text, record, index) => {
       //   const { text: t, color } = getKey(text, obj)
       //   const { status, t } = text
@@ -71,9 +47,12 @@ function HomeView () {
       // }
   },
     {
-      title: '涨跌值',
+      title: '新的价格',
       align: 'center',
       dataIndex: 'price',
+      render: (text, record, index) => {
+        return '-'
+      }
       // render: (text, record, index) => {
       //   const { text: t, color } = getKey(text, obj)
       //   const { status, t } = text
@@ -81,7 +60,7 @@ function HomeView () {
       // }
   },
     {
-      title: '创建时间',
+      title: '变化时间',
       align: 'center',
       dataIndex: 'time',
   },
@@ -109,8 +88,62 @@ function HomeView () {
       time: '2017-10-31  23:12:00',
     },
   ];
+  const [recharge_data, setRechargeData] = useState([]);
+  const [order_data, setOrderData] = useState([]);
 
-  for (let i = 0; i < 100; i++) {
+  useEffect(() => {
+    asyncFetch();
+    orderAsyncFetch();
+  }, []);
+
+  const asyncFetch = () => {
+    fetch('https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json')
+      .then((response) => response.json())
+      .then((json) => setRechargeData(json))
+      .catch((error) => {
+        console.log('fetch data failed', error);
+      });
+  };
+
+  const orderAsyncFetch = () => {
+    fetch('https://gw.alipayobjects.com/os/bmw-prod/55424a73-7cb8-4f79-b60d-3ab627ac5698.json')
+      .then((response) => response.json())
+      .then((json) => setOrderData(json))
+  };
+
+  const config = {
+    height: 400,
+    data:recharge_data,
+    padding: 'auto',
+    xField: 'Date',
+    yField: 'scales',
+    xAxis: { tickCount: 5 },
+    slider: {
+      start: 0.1,
+      end: 0.5,
+    },
+    color: '#2FC25B',
+  };
+
+  const orderConfig = {
+    height: 400,
+    data:order_data,
+    xField: 'year',
+    yField: 'value',
+    seriesField: 'category',
+    xAxis: { type: 'time' },
+    legend: { position: 'top-right' },
+    yAxis: {
+      tickCount: 9,
+    },
+    slider: {
+      start: 0.1,
+      end: 0.5,
+    },
+    color:['#2FC25B', '#FF8D30'],
+  };
+
+  for (let i = 0; i < 3; i++) {
     data.push({
       key: 1240,
       id: 11,
@@ -122,6 +155,29 @@ function HomeView () {
       time: '2017-10-31  23:12:00',
     })
   }
+
+  const orders = [
+    {
+      label: '待处理订单',
+      number: '6,560',
+      icon: home3,
+    },
+    {
+      label: '退款中订单',
+      number: '6,560',
+      icon: home1,
+    },
+    {
+      label: '通信失败订单',
+      number: '6,560',
+      icon: home5,
+    },
+    {
+      label: '库存预警',
+      number: '6,560',
+      icon: home4,
+    },
+  ]
 
   return (
     <div className="container">
@@ -146,47 +202,23 @@ function HomeView () {
           }}>主页看板设置</Button>
           <img src={home7} alt="" className={c.headerBg}/>
         </div>
-        {/* <div className={c.nullView}> */}
-        {/*   <img src={home9} alt="" /> */}
-        {/*   <div>暂无数据</div> */}
-        {/*   <Button size="small" type="primary" className={c.nullBtn}>主页看板设置</Button> */}
-        {/* </div> */}
-        <div className={c.dataView}>
-          <div className={c.orderViewL}>
-            <div className={c.orderViewLT}>
-              <div className={c.orderViewLTitle}>充值/退款数据</div>
-              <Radio.Group
-                options={options}
-                onChange={onChange3}
-                value={value3}
-                optionType="button"
-              />
-            </div>
-            {views2}
-          </div>
-          <div className={c.dataViewR}>
-            <div className={c.dataViewRTitle}>数据统计</div>
-            <div className={c.dataViewRMain}>
-              <Rdata />
-            </div>
-          </div>
-        </div>
-        <div className={c.orderView}>
-          <div className={c.orderViewL}>
-            <div className={c.orderViewLT}>
-              <div className={c.orderViewLTitle}>商品订单数据</div>
-              <Radio.Group
-                options={options}
-                onChange={onChange3}
-                value={value3}
-                optionType="button"
-              />
-            </div>
-            {views}
-            </div>
-          <div className={c.orderViewR}>
-            <div className={c.orderViewRHeader}>
-              <div className={c.orderViewRT}>最近动态</div>
+
+        <div className={c.message}>
+          {
+            orders.map((item, index) => {
+              const { label, number, icon } = item
+              return(
+                <div className={c.order_item}>
+                  <img src={icon} alt="" />
+                  <div>{number}</div>
+                  <span>{label}</span>
+                </div>
+              )
+            })
+          }
+          <div className={c.moving}>
+            <div className={c.moving_header}>
+              <div>最近动态</div>
               <div>更多</div>
             </div>
             <div className={c.time}>
@@ -194,86 +226,40 @@ function HomeView () {
                 <Timeline.Item color="#2C68FF">2020.01.15 15:20:05　删除 订单(2548)</Timeline.Item>
                 <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
                 <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
-                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
-                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
-                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
-                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
-                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
-                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
               </Timeline>
             </div>
           </div>
         </div>
+
         <div className={c.tableView}>
           <div className={c.tableHeader}>
-            <div className={c.tableTitle}>商品概况</div>
+            <div className={c.tableTitle}>最近进价变动表</div>
             <div className={c.tableTips}>查看全部</div>
           </div>
           <Table
             columns={columns}
             dataSource={data}
             size="small"
-            pagination={{
-              showQuickJumper:true
-            }}
+            pagination={false}
           />
         </div>
+        <div className={ct.orderView} style={{marginTop: 24}}>
+          <div className={ct.title}>充值</div>
+          <div className={ct.chart_label} style={{marginBottom:12}}>充值数额</div>
+          <Line {...config} />
+        </div>
+        <div className={ct.orderView} style={{marginTop: 24}}>
+          <div className={ct.title}>商品订单统计</div>
+          <div className={ct.chart_label} style={{marginBottom:12}}>订单数量</div>
+          <Line {...orderConfig} />
+        </div>
+        {/* <div className={c.nullView}> */}
+        {/*   <img src={home9} alt="" /> */}
+        {/*   <div>暂无数据</div> */}
+        {/*   <Button size="small" type="primary" className={c.nullBtn}>主页看板设置</Button> */}
+        {/* </div> */}
     </div>
   )
-}
-
-function Rdata () {
-  const views = []
-  const data = [
-    {
-      label: '待处理订单',
-      number: '6,560',
-      icon: home3,
-      label1: '待处理订单',
-      number1: '6,560',
-      icon1: home6,
-    },
-    {
-      label: '待处理订单',
-      number: '6,560',
-      icon: home2,
-      label1: '待处理订单',
-      number1: '6,560',
-      icon1: home5,
-    },
-    {
-      label: '待处理订单',
-      number: '6,560',
-      icon: home1,
-      label1: '待处理订单',
-      number1: '6,560',
-      icon1: home4,
-    },
-  ]
-
-  data.forEach((item, index) => {
-    const { label, number, icon, label1, number1, icon1 } = item
-    views.push(
-      <div className={c.itemView}>
-        <div className={c.dataItem}>
-          <img src={icon} alt="" />
-          <div className={c.dataItemR}>
-            <div className={c.dataItemNum}>{number}</div>
-            <div className={c.dataItemLabel}>{label}</div>
-          </div>
-        </div>
-        <div className={c.dataItem}>
-          <img src={icon1} alt="" />
-          <div className={c.dataItemR}>
-            <div className={c.dataItemNum}>{number1}</div>
-            <div className={c.dataItemLabel}>{label1}</div>
-          </div>
-        </div>
-      </div>
-    )
-  })
-
-  return views
 }
 
 export default HomeView

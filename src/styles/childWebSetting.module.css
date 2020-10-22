@@ -139,6 +139,7 @@
 }
 
 .theme_item {
+  cursor: pointer;
   flex-shrink: 0;
   width: 90px;
   height: 100px;
@@ -165,10 +166,23 @@
   place-items: center;
 }
 
-.theme_radio {
+.theme_radio_false {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 7px;
+  right: 7px;
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  opacity: 0.8;
+  border: 1px solid #FFFFFF;
+}
+
+.theme_radio_true {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 12px;
+  height: 12px;
 }
 
 .theme_look {
@@ -179,12 +193,6 @@
   border: 1px solid #E6E6E6;
   flex-shrink: 0;
   padding: 8px 8px 0 8px;
-}
-
-.theme_look_t {
-  background-color: #2C68FF;
-  width: 124px;
-  height: 124px;
 }
 
 .theme_look div:last-child {

@@ -2,6 +2,8 @@
   font-size: 0.857rem;
   color: #979BA3;
   margin-top: 2px;
+  flex-shrink: 0;
+  max-width: 80%;
 }
 
 .orderT {
@@ -25,7 +27,7 @@
   margin-top: 0;
   width: 100%;
   background-color: #fff;
-  padding: 24px;
+  padding: 24px 24px 0 24px;
   /* margin-bottom: 24px; */
 }
 
@@ -43,8 +45,9 @@
 
 .data {
   color: #34374A;
-  font-weight: 800;
+  font-weight: 400;
   font-size: 2rem;
+  flex-shrink: 0;
 }
 
 .picker {
@@ -64,7 +67,7 @@
   display: flex;
   align-items: center;
   width: 31.387%;
-  margin-top: 32px;
+  margin: 32px 0;
 }
 
 .bView {
@@ -86,4 +89,9 @@
   width: 348px;
   height: 32px;
   margin-right: 40px;
+}
+
+.chart_label {
+  color: #979BA3;
+  font-weight: 500;
 }

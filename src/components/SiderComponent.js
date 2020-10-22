@@ -73,7 +73,7 @@ function SiderComponent ({ collapsed, toggle }) {
             <Menu.Item key="moneyStatistics">资金统计</Menu.Item>
             <Menu.Item key="userStatistics">用户统计</Menu.Item>
             <Menu.Item key="webStatistics">网站访问统计</Menu.Item>
-            <Menu.Item key="goodStatistics">商品订单统计</Menu.Item>
+            <Menu.Item key="goodStatistics">订单统计</Menu.Item>
           </Menu.SubMenu>
         )) }
         { U.when(R.includes('commbiz',permissions), (

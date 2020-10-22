@@ -4,14 +4,17 @@ import cs from '../../styles/childWebSetting.module.css'
 import { Input, Switch, Button, Upload, message, Radio, Checkbox, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import edit1 from '../../icons/edit/edit1.png'
+import good76 from '../../icons/good/good76.png'
 import { goBack, saveSuccess, push } from "../../utils/util";
 import { MODULES } from "../../utils/config";
+import QRCode from 'qrcode.react'
 
 function StorePlugView () {
   const [pics, setPics] = useState([])
-  const [introduction, setIntroduction] = useState()
+  const [introduction, setIntroduction] = useState("")
   const [imageUrl, setImageUrl] = useState(pics[0])
   const [loading, setLoading] = useState(false)
+  const [selected,setSelected] = useState(1)
 
   const THEMES = [
     {
@@ -187,15 +190,19 @@ function StorePlugView () {
           <div style={{marginRight:18,flexShrink:0}}>选择配色方案：</div>
           {
             THEMES.map(i=>(
-              <div className={cs.theme_item}>
-                <Radio className={cs.theme_radio}/>
+              <div className={cs.theme_item} key={i.id} onClick={()=>setSelected(i.id)}>
+                {
+                  i.id===selected?
+                    <img src={good76} alt="" className={cs.theme_radio_true} />:
+                    <div className={cs.theme_radio_false} />
+                }
                 <div className={cs.theme_item_t} style={{borderColor:"#0A90FF",background:i.color}}></div>
                 <div className={cs.theme_item_b}>{i.label}</div>
               </div>
             ))
           }
           <div className={cs.theme_look}>
-            <div className={cs.theme_look_t}></div>
+            <QRCode bgColor="#fff" fgColor="#2C68FF" value="http://facebook.github.io/react/" size={124}/>
             <div>手机版扫码预览</div>
           </div>
         </div>
