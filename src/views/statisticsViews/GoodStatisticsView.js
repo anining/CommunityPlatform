@@ -1,127 +1,124 @@
 import React, { useState, useEffect } from 'react'
-import { TimelineChart } from 'ant-design-pro/lib/Charts';
-import { GroupedColumn } from '@ant-design/charts';
-import { Button, DatePicker, Radio, Table, Timeline } from 'antd'
+import { Line,Rose } from '@ant-design/charts';
+// import { GroupedColumn } from '@ant-design/charts';
+import { Button, DatePicker } from 'antd'
 import c from '../../styles/home.module.css'
 import ct from '../../styles/statistics.module.css'
 
 function GoodStatisticsView () {
-  const [views, setViews] = useState([])
   const [data, setData] = useState([]);
+  const salesData = [
+    {
+      type: '音符评论',
+      value: 1500,
+    },
+    {
+      type: 'B站关注',
+      value: 1800,
+    },
+    {
+      type: 'B赞评论',
+      value: 1000,
+    },
+    {
+      type: 'B站点赞',
+      value: 2200,
+    },
+    {
+      type: 'B站收藏',
+      value: 3000,
+    },
+    {
+      type: 'B站分享',
+      value: 500,
+    },
+    {
+      type: '其他订单',
+      value: 3000,
+    },
+    {
+      type: '音符关注',
+      value: 1000,
+    },
+    {
+      type: '音符点赞',
+      value: 1991,
+    },
+  ];
+
+  const salesConfig = {
+    height: 400,
+    data: salesData,
+    xField: 'type',
+    yField: 'value',
+    seriesField: 'type',
+    radius: 0.9,
+    legend: { position: 'right' },
+  };
 
   useEffect(() => {
     asyncFetch();
   }, []);
+
   const asyncFetch = () => {
-    fetch('https://gw.alipayobjects.com/os/antfincdn/NXH9bWd4MU/subsales.json')
+    fetch('https://gw.alipayobjects.com/os/bmw-prod/55424a73-7cb8-4f79-b60d-3ab627ac5698.json')
       .then((response) => response.json())
       .then((json) => setData(json))
-      .catch((error) => {
-        console.log('fetch data failed', error);
-      });
   };
+
   const config = {
-    height: 516,
-    forceFit: true,
-    description: {
-      visible: true,
-      text: '订单数',
-    },
+    height: 400,
     data,
-    xField: '城市',
-    yField: '销售额',
-    groupField: '细分',
-    color: [ '#FF8D30','#2C68FF'],
-    xAxis: {
-      visible: true,
-      label: {
-        visible: true,
-        autoHide: true,
-      },
-    },
+    xField: 'year',
+    yField: 'value',
+    seriesField: 'category',
+    xAxis: { type: 'time' },
+    legend: { position: 'top-right' },
+    color: ['#2FC25B', '#FF8D30'],
     yAxis: {
-      visible: true,
-      title: {
-        visible: false
-      }
+      tickCount: 9,
     },
-    legend: {
-      position: 'top-right'
+    slider: {
+      start: 0.1,
+      end: 0.5,
     },
-    interactions: [
-      {
-        type: 'slider',
-        cfg: {
-          start: 0.4,
-          end: 0.42,
-        },
-      },
-    ],
   };
-
-  const salesData = [];
-  for (let i = 0; i < 12; i += 1) {
-    salesData.push({
-      x: `${i + 1}月`,
-      y1: Math.floor(Math.random() * 1000) + 200,
-      y2: Math.floor(Math.random() * 1000) + 200,
-    });
-  }
-
-  useEffect(() => {
-    setViews(
-      <TimelineChart title="充值/退款额" height={466} data={chartData} titleMap={{ y1: '社区订单', y2: '卡密订单' }} />
-    )
-  }, [])
-
-  const chartData = [];
-  for (let i = 0; i < 20; i += 1) {
-    chartData.push({
-      x: new Date().getTime() + 1000 * 60 * 30 * i,
-      y1: Math.floor(Math.random() * 100) + 1000,
-      y2: Math.floor(Math.random() * 100) + 10,
-    });
-  }
 
   return (
     <div className={c.main}>
       <div className={ct.orderView}>
-        <div className={ct.orderLT}>
-          <div className={ct.orderT}>
-            <div>
-              <div className={ct.title}>商品订单统计</div>
-              <div className={ct.tips}>商品订单统计</div>
-            </div>
-            <div className={ct.data}>总计：2584.1548/245.1575</div>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+            <div className={ct.title}>订单统计</div>
+            <div className={ct.data}>社区订单数量：245.1575</div>
           </div>
-          <div className={ct.bView}>
-            <div className={ct.bViewL}>
-              <DatePicker.RangePicker className={ct.picker}/>
-              <Button size="small" className={ct.btn}>确定</Button>
-            </div>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+            <div className={ct.tips}>用户下单统计</div>
+            <div className={ct.data}>卡密订单数量：245.1575</div>
           </div>
-        </div>
-        {views}
+          <div className={ct.bViewL}>
+            <DatePicker.RangePicker className={ct.picker}/>
+            <Button size="small" className={ct.btn}>确定</Button>
+          </div>
+        <div className={ct.chart_label} style={{marginBottom:12}}>充值/退款额</div>
+        <Line {...config} />
       </div>
-      <div className={ct.orderView}>
-        <div className={ct.orderLT}>
-          <div className={ct.orderT}>
-            <div>
-              <div className={ct.title}>订单商品排行</div>
-              <div className={ct.tips}>最热销的商品前10</div>
-            </div>
-            <div className={ct.data}>总计：2584.1548/245.1575</div>
-          </div>
-          <div className={ct.bView}>
-            <div className={ct.bViewL}>
-              <DatePicker.RangePicker className={ct.picker}/>
-              <Button size="small" className={ct.btn}>确定</Button>
-            </div>
-          </div>
+      <div className={ct.orderView} style={{marginTop:24}}>
+        <div className={ct.title}>社区商品销售排行</div>
+        <div className={ct.tips}>用户下单次数最多的社区业务商品，以及占全部订单的比；默认统计最近7天排行前10的数据。</div>
+        <div className={ct.bViewL}>
+          <DatePicker.RangePicker className={ct.picker}/>
+          <Button size="small" className={ct.btn}>确定</Button>
         </div>
-        <div className={ct.column}>
-          <GroupedColumn {...config} />
+        <Rose {...salesConfig} />
+      </div>
+      <div className={ct.orderView} style={{marginTop:24}}>
+        <div className={ct.title}>卡密商品销售排行</div>
+        <div className={ct.tips}>用户下单次数最多的卡密业务商品，以及占全部订单的比；默认统计最近7天排行前10的数据。</div>
+        <div className={ct.bViewL}>
+          <DatePicker.RangePicker className={ct.picker}/>
+          <Button size="small" className={ct.btn}>确定</Button>
         </div>
+        <Rose {...salesConfig} />
       </div>
     </div>
   )

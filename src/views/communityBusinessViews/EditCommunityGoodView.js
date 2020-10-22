@@ -49,6 +49,7 @@ function EditCommunityGoodView () {
   const [goods_id, setGoods_id] = useState()
   const [goods, setGoods] = useState([])
   const [dockingTarget, setDockingTarget] = useState()
+  const [has_more, setHasMore] = useState(false)
 
   const tooltips = goods.filter(i => i.id === goods_id)[0]
 
@@ -370,183 +371,157 @@ function EditCommunityGoodView () {
           <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={introduction} onChange={e=>setIntroduction(e)}/>
         </div>
         <div className={c.hasMore}>
-          <Checkbox className={c.hasMoreCheckBox} onChange={()=>{}}>更多设置</Checkbox>
+          <Checkbox className={c.hasMoreCheckBox} onChange={e=>setHasMore(e.target.checked)} checked={has_more}>更多设置</Checkbox>
         </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>状态</div>
-          </div>
-          <Radio.Group onChange={e=>setStatus(e.target.value)} value={status} className={c.itemGrop}>
-            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
-              <Radio value="available" className={c.itemRadio}>已上架</Radio>
-            </Tooltip>
-            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已下架 ： 已下架。">
-              <Radio value="paused" className={c.itemRadio}>已下架</Radio>
-            </Tooltip>
-            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架但关闭下单 ： 已上架但关闭下单。">
-              <Radio value="unavailable" className={c.itemRadio}>已上架但关闭下单</Radio>
-            </Tooltip>
-          </Radio.Group>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>排序权重</div>
-          </div>
-          <Input type="number" onChange={e=>setWeight(e.target.value)} value={weight} placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>数值越大，排序越靠前；数值相同，商品编号越大，排序越靠前</div>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>进价</div>
-          </div>
-          <Input type="number" onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>填写商品进价之后，系统可以核算出每日的收益毛利。</div>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span style={{color:'#fff'}}>*</span>
-            <div className={c.itemText}>自动调价</div>
-          </div>
-          <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-            <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>开启</Radio>
-            <Radio value="banned" className={c.itemRadio} style={{width:'33.333%'}}>关闭</Radio>
-          </Radio.Group>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>加价模版</div>
-          </div>
-          <DropdownPromiseComponent placeholder="百分比加价模版" initNums={[]} setValue={setDockingTarget}/>
-        </div>
-        <div className={c.item} style={{alignItems:'flex-start'}}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>加价模版</div>
-          </div>
-          <div className={c.disc_price_view}>
-            <div className={c.disc_price_item}>
-              <img src={good46} alt="" />
-              <div>高级会员</div>
-              <Input placeholder="请输入密价"/>
-            </div>
-            <div className={c.disc_price_item}>
-              <img src={good48} alt="" />
-              <div>钻石会员</div>
-              <Input placeholder="请输入密价"/>
-            </div>
-            <div className={c.disc_price_item}>
-              <img src={good47} alt="" />
-              <div>至尊会员</div>
-              <Input placeholder="请输入密价"/>
-            </div>
-          </div>
-        </div>
-        <div className={c.item} style={{marginTop:0}}>
-          <div className={c.itemName}>
-            <span style={{color:'#fff'}}>*</span>
-            <div className={c.itemText}>自助退款</div>
-          </div>
-          <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="允许自助退款：用户可以对这个商品对应的订单发起一次退款申请。">
-              <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>允许自助退款</Radio>
-            </Tooltip>
-            <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="不允许自助退款：用户不可以对这个商品对应的订单发起退款申请。">
-              <Radio value="banned" className={c.itemRadio} style={{width:'33.333%'}}>不允许自助退款</Radio>
-            </Tooltip>
-          </Radio.Group>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>最低下单</div>
-          </div>
-          <Input type="number" onChange={e=>setMin_order_amount(e.target.value)} value={min_order_amount} placeholder="该商品每一单最低多少起下，默认为1" className={c.itemInput}></Input>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>最高下单</div>
-          </div>
-          <Input type="number" placeholder="该商品每一单最高多下多少个，默认为1" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput}></Input>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>重复下单</div>
-          </div>
-          <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-            <Radio value="normal" className={c.itemRadio}>不允许重复下单</Radio>
-            <Radio value="banned" className={c.itemRadio} style={{marginLeft:71}}>
-              最多允许重复下
-              <Input className={c.item_grop_view_input} placeholder="1"/>
-              单
-            </Radio>
-          </Radio.Group>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>重复订单指用户在下单模型内填写的所有数据都相同。</div>
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>批量下单</div>
-          </div>
-          <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-            <Radio value="normal" className={c.itemRadio}>不允许批量下单</Radio>
-            <Radio value="banned" className={c.itemRadio} style={{marginLeft:71}}>
-              最多允许批量下
-              <Input className={c.item_grop_view_input} placeholder="1"/>
-              单
-            </Radio>
-          </Radio.Group>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>单次批量下单上限50。</div>
-        </div>
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span>*</span> */}
-        {/*     <div className={c.itemText}>推荐</div> */}
-        {/*   </div> */}
-        {/*   <Radio.Group onChange={e=>setRecommended(e.target.value)} value={recommended} className={c.itemGrop} style={{justifyContent:'flex-start'}}> */}
-        {/*     <Radio value={false} className={c.itemRadio} style={{width:'33.333%'}}>关闭</Radio> */}
-        {/*     <Radio value={true} className={c.itemRadio} style={{width:'33.333%'}}>开启</Radio> */}
-        {/*   </Radio.Group> */}
-        {/* </div> */}
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span className={c.white}>*</span> */}
-        {/*     <div className={c.itemText}>用户权限</div> */}
-        {/*   </div> */}
-        {/*   <div className={c.itemCheckView}> */}
-        {/*     <Checkbox onChange={e=>{ */}
-        {/*       setRefundable(e.target.checked) */}
-        {/*     }} checked={refundable} className={c.checkbox}>退单</Checkbox> */}
-        {/*   </div> */}
-        {/* </div> */}
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span className={c.white}>*</span> */}
-        {/*     <div className={c.itemText}>密价</div> */}
-        {/*   </div> */}
-        {/*   <Input type="number" onChange={e=>setDisc_price(e.target.value)} value={disc_price} placeholder="请输入商品对接密价" className={c.itemInput}></Input> */}
-        {/* </div> */}
-        {/* <div className={c.itemTips}> */}
-        {/*   <div className={c.itemName} /> */}
-        {/*   <div>如果不填写此项目，系统将会使用售价进行对接。</div> */}
-        {/* </div> */}
+        {
+          U.when(has_more,(
+            <>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span className={c.white}>*</span>
+                  <div className={c.itemText}>状态</div>
+                </div>
+                <Radio.Group onChange={e=>setStatus(e.target.value)} value={status} className={c.itemGrop}>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
+                    <Radio value="available" className={c.itemRadio}>已上架</Radio>
+                  </Tooltip>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已下架 ： 已下架。">
+                    <Radio value="paused" className={c.itemRadio}>已下架</Radio>
+                  </Tooltip>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架但关闭下单 ： 已上架但关闭下单。">
+                    <Radio value="unavailable" className={c.itemRadio}>已上架但关闭下单</Radio>
+                  </Tooltip>
+                </Radio.Group>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span className={c.white}>*</span>
+                  <div className={c.itemText}>排序权重</div>
+                </div>
+                <Input type="number" onChange={e=>setWeight(e.target.value)} value={weight} placeholder="请填写权重数值，默认权重为1" className={c.itemInput}></Input>
+              </div>
+              <div className={c.itemTips}>
+                <div className={c.itemName} />
+                <div>数值越大，排序越靠前；数值相同，商品编号越大，排序越靠前</div>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span className={c.white}>*</span>
+                  <div className={c.itemText}>进价</div>
+                </div>
+                <Input type="number" onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>
+              </div>
+              <div className={c.itemTips}>
+                <div className={c.itemName} />
+                <div>填写商品进价之后，系统可以核算出每日的收益毛利。</div>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span style={{color:'#fff'}}>*</span>
+                  <div className={c.itemText}>自动调价</div>
+                </div>
+                <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+                  <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>开启</Radio>
+                  <Radio value="banned" className={c.itemRadio} style={{width:'33.333%'}}>关闭</Radio>
+                </Radio.Group>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span>*</span>
+                  <div className={c.itemText}>加价模版</div>
+                </div>
+                <DropdownPromiseComponent placeholder="百分比加价模版" initNums={[]} setValue={setDockingTarget}/>
+              </div>
+              <div className={c.item} style={{alignItems:'flex-start'}}>
+                <div className={c.itemName}>
+                  <span>*</span>
+                  <div className={c.itemText}>加价模版</div>
+                </div>
+                <div className={c.disc_price_view}>
+                  <div className={c.disc_price_item}>
+                    <img src={good46} alt="" />
+                    <div>高级会员</div>
+                    <Input placeholder="请输入密价"/>
+                  </div>
+                  <div className={c.disc_price_item}>
+                    <img src={good48} alt="" />
+                    <div>钻石会员</div>
+                    <Input placeholder="请输入密价"/>
+                  </div>
+                  <div className={c.disc_price_item}>
+                    <img src={good47} alt="" />
+                    <div>至尊会员</div>
+                    <Input placeholder="请输入密价"/>
+                  </div>
+                </div>
+              </div>
+              <div className={c.item} style={{marginTop:0}}>
+                <div className={c.itemName}>
+                  <span style={{color:'#fff'}}>*</span>
+                  <div className={c.itemText}>自助退款</div>
+                </div>
+                <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="允许自助退款：用户可以对这个商品对应的订单发起一次退款申请。">
+                    <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>允许自助退款</Radio>
+                  </Tooltip>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="不允许自助退款：用户不可以对这个商品对应的订单发起退款申请。">
+                    <Radio value="banned" className={c.itemRadio} style={{width:'33.333%'}}>不允许自助退款</Radio>
+                  </Tooltip>
+                </Radio.Group>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span className={c.white}>*</span>
+                  <div className={c.itemText}>最低下单</div>
+                </div>
+                <Input type="number" onChange={e=>setMin_order_amount(e.target.value)} value={min_order_amount} placeholder="该商品每一单最低多少起下，默认为1" className={c.itemInput}></Input>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span className={c.white}>*</span>
+                  <div className={c.itemText}>最高下单</div>
+                </div>
+                <Input type="number" placeholder="该商品每一单最高多下多少个，默认为1" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput}></Input>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span className={c.white}>*</span>
+                  <div className={c.itemText}>重复下单</div>
+                </div>
+                <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+                  <Radio value="normal" className={c.itemRadio}>不允许重复下单</Radio>
+                  <Radio value="banned" className={c.itemRadio} style={{marginLeft:71}}>
+                    最多允许重复下
+                    <Input className={c.item_grop_view_input} placeholder="1"/>
+                    单
+                  </Radio>
+                </Radio.Group>
+              </div>
+              <div className={c.itemTips}>
+                <div className={c.itemName} />
+                <div>重复订单指用户在下单模型内填写的所有数据都相同。</div>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span className={c.white}>*</span>
+                  <div className={c.itemText}>批量下单</div>
+                </div>
+                <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+                  <Radio value="normal" className={c.itemRadio}>不允许批量下单</Radio>
+                  <Radio value="banned" className={c.itemRadio} style={{marginLeft:71}}>
+                    最多允许批量下
+                    <Input className={c.item_grop_view_input} placeholder="1"/>
+                    单
+                  </Radio>
+                </Radio.Group>
+              </div>
+              <div className={c.itemTips}>
+                <div className={c.itemName} />
+                <div>单次批量下单上限50。</div>
+              </div>
+            </>
+          ))
+        }
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
           </div>

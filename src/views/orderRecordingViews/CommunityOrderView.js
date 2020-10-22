@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Space, Popconfirm, Table, message, Input, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
+import oc from '../../styles/oc.module.css'
 import good17 from '../../icons/good/good17.png'
 import good18 from '../../icons/good/good18.png'
 import good40 from '../../icons/good/good40.png'
 import good19 from '../../icons/good/good19.png'
 import good20 from '../../icons/good/good20.png'
 import good21 from '../../icons/good/good21.png'
+import good59 from '../../icons/good/good59.png'
+import good61 from '../../icons/good/good61.png'
+import good60 from '../../icons/good/good60.png'
 import good41 from '../../icons/good/good41.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
@@ -14,10 +18,15 @@ import DropdownComponent from "../../components/DropdownComponent";
 import { dateFormat, push, getKey } from "../../utils/util";
 import { communityGoodsOrders } from "../../utils/api"
 import SelectComponent from "../../components/SelectComponent"
+import ModalPopComponent from "../../components/ModalPopComponent"
+import ModalComponent from "../../components/ModalComponent"
 
 let win
 
 function CommunityOrderView () {
+  const [visible_push, setVisiblePush] = useState(false)
+  const [visible_ref, setVisibleRef] = useState(false)
+  const [visible, setVisible] = useState(false)
   const data = [
     {
       label: '订单总数',
@@ -32,24 +41,27 @@ function CommunityOrderView () {
       id: 222,
     },
     {
-      label: '申请退款',
+      label: '退款中',
       number: '10,111',
       icon: good17,
       id: 333,
     },
     {
-      label: '申请补单',
-      number: '10,111',
-      icon: good18,
+      label: '通信失败',
+      number: '1',
+      icon: good59,
       id: 444,
     },
-    {
-      label: '异常订单',
-      number: '1',
-      icon: good20,
-      id: 555,
-    },
   ]
+
+  function onOk () {
+
+  }
+
+  function onCancel () {
+    setVisible(false)
+    setVisiblePush(false)
+  }
 
   return (
     <div className="view">
@@ -57,8 +69,65 @@ function CommunityOrderView () {
         <TableHeaderComponent data={data}/>
         <RTable />
       </div>
+      <ModalComponent
+        //src={good61}
+        src={good60}
+        title="您确定要重新推送订单吗？"
+        // title="您确定要尝试重新通信吗？"
+       // child={
+        //  <div style={{color:'#BFBFBF'}}>系统将会尝试与选中的订单重新进行通信并更新通信状态，请在大约<span style={{color:"#FF6236"}}>5-10分钟</span>之后再来查看通信状态。</div>
+        // }
+        child={
+          <div style={{color:'#BFBFBF'}}>重新推送只对订单状态为<span style={{color:"#FF6236"}}>“待处理”</span>且通信状态为<span style={{color:"#FF6236"}}>“通信失败”</span>的订单有效。</div>
+        }
+        visible={visible_push}
+        onCancel={onCancel}
+        onOk={onOk}
+      />
+      <ModalPopComponent
+      div = {
+        <div>
+          <div className={oc.remark}>
+            <div>退款数量：</div>
+            <Input style={{width:370}} placeholder="请输入退款数量" addonAfter="全部数量"/>
+          </div> <
+        div className = { oc.remark_tips } >
+        当前选中订单： < span > 20200105020305(音符点赞) < /span> < /
+        div > <
+        div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
+        <Button className={oc.change_btn_cancel}>取消</Button> <
+        Button type = "primary"
+        className = { oc.change_btn_ok } > 确定 < /Button> < /
+        div > <
+        /div>
+      }
+      title = "退款"
+      visible = { visible_ref }
+      onCancel = { onCancel }
+      />
+      <ModalPopComponent
+      div = {
+        <div>
+          <div className={oc.remark}>
+            <div>备注内容：</div>
+            <Input placeholder="请输入备注内容"/>
+          </div> <
+        div className = { oc.remark_tips } >
+        当前选中订单： < span > 20200105020305(音符点赞) < /span> < /
+        div > <
+        div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
+        <Button className={oc.change_btn_cancel}>取消</Button> <
+        Button type = "primary"
+        className = { oc.change_btn_ok } > 确定 < /Button> < /
+        div > <
+        /div>
+      }
+      title = "添加备注"
+      visible = { visible }
+      onCancel = { onCancel }
+      />
     </div>
-  )
+)
 }
 
 function RTable () {
@@ -197,6 +266,30 @@ function RTable () {
       text: '已终止',
     }
   }
+  const obj1 = {
+    pending: {
+      color: "#FF4D4F",
+      text: '已退款',
+    },
+    processing: {
+      color: "#FF8D30",
+      text: '退款中',
+    },
+    completed: {
+      color: "rgba(0, 0, 0, 0.65)",
+      text: '-',
+    },
+  }
+  const obj2 = {
+    pending: {
+      color: "#2C68FF",
+      text: '通信正常',
+    },
+    processing: {
+      color: "#FF4D4F",
+      text: '通信失败',
+    },
+  }
   const columns = [
     {
       title: '订单编号',
@@ -204,76 +297,113 @@ function RTable () {
       align: 'center',
   },
     {
+      title: '商品名称',
+      dataIndex: 'id',
+      align: 'center',
+  },
+    {
+      title: '商品分类',
+      dataIndex: 'id',
+      align: 'center',
+  },
+    {
+      title: '下单用户',
+      dataIndex: 'id',
+      align: 'center',
+  },
+    {
       title: '下单信息',
       align: 'center',
       render: (text, record, index) => {
-        return '-'
-      }
-      // render: (text, record, index) => {
-      //   const { args, number, password } = record;
-      //   return (
-      //     <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-      //     <div>
-      //       <div>主页链接 :{uri}</div>
-      //       <div style={{display:'flex'}}>
-      //         <div style={{marginRight:30}}>账号: {number}</div>
-      //         <div>密码: {password}</div>
-      //       </div>
-      //     </div>
-      //   </div>
-      //   )
-      // }
-  },
-    {
-      title: '扩展信息',
-      align: 'center',
-      render: (text, record, index) => {
-        const { amount, cost } = record;
-        return (
-          <div>
-          <div>初始量 :{amount}</div>
-          <div>当前量: {cost}</div>
-        </div>
-        )
-      }
-  },
-    {
-      title: '推送状态',
-      dataIndex: 'push_status',
-      align: 'center',
-      render: (text, record, index) => {
-        return '-'
-      }
-  },
-    {
-      title: '售后状态',
-      dataIndex: 'refund_status',
-      align: 'center',
-  },
-    {
-      title: '订单状态',
-      align: 'center',
-      dataIndex: 'status',
-      render: (text, record, index) => {
-        const { text: t, color } = getKey(text, obj)
-        return <div style={{color}}>{t}</div>
-      }
-  },
-    {
-      title: '下单时间',
-      dataIndex: 'time',
-      align: 'center',
-  },
-    {
-      title: '订单历程',
-      align: 'center',
-      render: (text, record, index) => <div onClick={()=>push('/main/editCommunityOrder',record)} className={c.clickText}>点击查看</div>
-    },
-    {
-      title: '操作',
-      align: 'center',
-      render: (text, record, index) => (
-        <Space size="small">
+        return <div>查看</div>
+  }
+  // render: (text, record, index) => {
+  //   const { args, number, password } = record;
+  //   return (
+  //     <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+  //     <div>
+  //       <div>主页链接 :{uri}</div>
+  //       <div style={{display:'flex'}}>
+  //         <div style={{marginRight:30}}>账号: {number}</div>
+  //         <div>密码: {password}</div>
+  //       </div>
+  //     </div>
+  //   </div>
+  //   )
+  // }
+}, {
+  title: '拓展信息',
+  align: 'center',
+  render: (text, record, index) => {
+    return <div>查看</div>
+  }
+}, {
+  title: '下单数量',
+  dataIndex: 'id',
+  align: 'center',
+}, {
+  title: '订单数额',
+  dataIndex: 'id',
+  align: 'center',
+},
+// {
+//   title: '扩展信息',
+//   align: 'center',
+//   render: (text, record, index) => {
+//     const { amount, cost } = record;
+//     return (
+//       <div>
+//       <div>初始量 :{amount}</div>
+//       <div>当前量: {cost}</div>
+//     </div>
+//     )
+//   }
+// },
+// {
+//   title: '推送状态',
+//   dataIndex: 'push_status',
+//   align: 'center',
+//   render: (text, record, index) => {
+//     return '-'
+//   }
+// },
+{
+  title: '订单状态',
+  align: 'center',
+  dataIndex: 'status',
+  render: (text, record, index) => {
+    const { text: t, color } = getKey(text, obj)
+    return <div style={{color}}>{t}</div>
+  }
+}, {
+  title: '售后状态',
+  dataIndex: 'refund_status',
+  align: 'center',
+}, {
+  title: '通信状态',
+  dataIndex: 'refund_status',
+  align: 'center',
+}, {
+  title: '订单历程',
+  align: 'center',
+  render: (text, record, index) => <div onClick={()=>push('/main/editCommunityOrder',record)} className={c.clickText}>查看</div>
+}, {
+  title: '订单去向',
+  dataIndex: 'time',
+  align: 'center',
+}, {
+  title: '下单时间',
+  dataIndex: 'time',
+  align: 'center',
+}, {
+  title: '订单备注',
+  align: 'center',
+  render: (text, record, index) => <div className={c.clickText}>查看</div>
+}, {
+  title: '操作',
+  align: 'center',
+  render: (text, record, index) => (
+    <Space size="small">
             <Popconfirm icon={<img src="" alt="" style={{width:0,height:0}}/>
               }
               placement = "leftTop"
@@ -298,43 +428,29 @@ function RTable () {
               <div style={{color:'#FF4D4F',cursor:'wait',textDecorationColor:"#ff4d4f"}} className={c.clickText}>退款</div>
             </Popconfirm>
             <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-            <Popconfirm icon={<img src="" alt="" style={{width:0,height:0}}/>
-              }
-              placement = "leftTop"
-              title = {
-                  () => {
-                    // return (
-                    //   <div style={styles.view}>
-                    //     <div style={styles.header}>
-                    //       <img src={good41} alt="" style={styles.icon}/>
-                    //       <div>请为此订单输入备注信息</div>
-                    //     </div>
-                    //     <Input style={styles.input} placeholder="请在这里输入备注信息"/>
-                    //     <div style={styles.footer}>
-                    //       <Button size="small" style={styles.cancelBtn}>取消</Button>
-                    //       <Button size="small" type="primary" style={styles.okBtn}>确定</Button>
-                    //     </div>
-                    //   </div>
-                    // )
-                  }
-                } >
-              <div style={{cursor:'wait'}} className={c.clickText}>添加备注</div>
-            </Popconfirm>
+            <div style={{cursor:'wait'}} className={c.clickText}>添加备注</div>
+            <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+            <div style={{cursor:'wait'}} className={c.clickText}>重新通信</div>
         </Space>
-      )
-    }
-  ];
+  )
+}
+];
 
-  return (
-    <div className={c.main}>
+return (
+  <div className={c.main}>
       <div className={c.searchView}>
         <div className={c.search}>
           <div className={c.searchL}>
             <Input value={id} onChange={e=>setId(e.target.value)} onPressEnter={()=>get(current)} placeholder="请输入订单编号" size="small" className={c.searchInput}/>
-            <Input onPressEnter={()=>get(current)} value={search_user_account} onChange={e=>setSearch_user_account(e.target.value)} placeholder="请输入用户账户" size="small" className={c.searchInput}/>
             <Input onPressEnter={()=>get(current)} placeholder="请输入商品名称" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/>
+            <Input onPressEnter={()=>get(current)} placeholder="请输入下单编号" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/>
+            {/* <Input onPressEnter={()=>get(current)} value={search_user_account} onChange={e=>setSearch_user_account(e.target.value)} placeholder="请输入用户账户" size="small" className={c.searchInput}/> */}
+            {/* <SelectComponent placeholder="请选择商品分类" id={community_goods_category_id} name={community_goods_category_name} click={click}/> */}
+            <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择商品分类" style={{width:186}}/>
             <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单状态" style={{width:186}}/>
-            <SelectComponent placeholder="请选择商品分类" id={community_goods_category_id} name={community_goods_category_name} click={click}/>
+            <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择售后状态" style={{width:186}}/>
+            <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择通信状态" style={{width:186}}/>
+            <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单去向" style={{width:186}}/>
             <DatePicker.RangePicker
               format="YYYY-MM-DD"
               onChange={dateChange}
@@ -371,7 +487,7 @@ function RTable () {
         }}
       />
     </div>
-  )
+)
 }
 
 const styles = {

@@ -1,20 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Table, Input, Switch, Breadcrumb } from 'antd'
 import c from '../../styles/view.module.css'
+import oc from '../../styles/oc.module.css'
+import cs from '../../styles/edit.module.css'
 import ce from '../../styles/edit.module.css'
 import good5 from '../../icons/good/good5.png'
+import good55 from '../../icons/good/good55.png'
 import good27 from '../../icons/good/good27.png'
 import good9 from '../../icons/good/good9.png'
+import header1 from '../../icons/header/header1.png'
 import { useHistory } from "react-router-dom"
 import { communityDiscPrices, addDiscPrices, deleteDiscPrices, usersPricingType } from "../../utils/api"
 import { saveSuccess, push } from "../../utils/util";
 import SelectComponent from "../../components/SelectComponent"
+import DropdownComponent from "../../components/DropdownComponent"
+import { USER_RANK } from '../../utils/config'
+import ModalPopComponent from "../../components/ModalPopComponent"
 
 let win
 
 function EditUserPriceView () {
   const { state = {} } = useHistory().location
   const { account, id } = state
+  const [visible, setVisible] = useState(true)
   const [checked, setChecked] = useState(false)
 
   function check (e) {
@@ -24,8 +32,38 @@ function EditUserPriceView () {
     })
   }
 
+  function onCancel () {
+    setVisible(false)
+  }
+
   return (
     <div className="view">
+      <ModalPopComponent
+      div = {
+        <div>
+          <div style={{textAlign:'right',color:'#2C68FF',marginBottom:15}}>删除密价</div>
+            <div className = { oc.remark_tips } >
+        当前选中商品： < span > (音符点赞) < /span> < /
+        div >
+          <div className={oc.remark} style={{marginTop:10}}>
+            <div>用户密价：</div>
+            <Input placeholder="请输入用户密价"/>
+          </div>
+          <div className = { oc.remark_tips } style={{color:'#FF5730',fontSize:'0.857rem'}}>
+              填写的价格小于进价，这样会亏本哦。
+            < /div >
+              <
+        div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
+        <Button className={oc.change_btn_cancel}>取消</Button> <
+        Button type = "primary"
+        className = { oc.change_btn_ok } > 确定 < /Button> < /
+        div > <
+        /div>
+      }
+      title = "用户密价"
+      visible = { visible }
+      onCancel = { onCancel }
+      />
       <div className={c.container}>
         <div className={ce.header} style={{flexShrink:0}}>
           <img src={good5} alt="" className={ce.headerImg}/>
@@ -39,47 +77,23 @@ function EditUserPriceView () {
             <Breadcrumb.Item>修改用户密价</Breadcrumb.Item>
           </Breadcrumb>
         </div>
-        <div className={c.header} style={{marginTop:24,paddingLeft:24, height:188}}>
-          <div className={c.headerL} style={{
-            width:'auto',
-            flexDirection:'column',
-            alignItems:'flex-start',
-            justifyContent:'space-around'
-          }}>
-            <div style={{display:'flex',alignItems:'flex-end'}}>
-              <div style={{
-                color:'#34374A',
-                fontSize:'2rem',
-                fontWeight:500
-              }}>修改用户密价</div>
-              <div style={{color:'#6F717E',fontWeight:500,marginLeft:14}}>当前用户：<span style={{color:'#2C68FF'}}>{account}</span></div>
+        <div className={c.header} style={{marginTop:24,flexDirection:'column',paddingLeft:24}}>
+          <div className={cs.headerT} style={{marginTop:24}}>
+            <div style={{zIndex:1}}>用户商品用户密价</div>
+            <div className={cs.circle} />
+          </div>
+          <div style={{display:'flex',alignItems:'center',marginTop:38}}>
+            <img src={header1} alt="" style={{width:60,marginRight:9}}/>
+            <div>
+              <div style={{color:'#34374A',fontWeight:500,fontSize:'1.285rem',marginBottom:5}}>2346237462374627</div>
+              <img src={USER_RANK['a'].src} alt="" style={{width:100}}/>
             </div>
-            <div style={{
-              display:'flex',
-              alignItems:'flex-start',
-            }}>
-              <div style={{
-                color:'#34374A',
-                fontWeight:500,
-                fontSize:'1.142rem',
-                marginTop:12,
-              }}>是否使用密价</div>
-              <Switch checked={checked} onClick={check} style={{marginTop:14,marginLeft:32,marginRight:14}}></Switch>
-              <div style={{marginTop:16,color:'#2C68FF',fontSize:'0.857rem'}}>当前状态： 使用{checked?"密价":"单价"}</div>
-              <div className={c.headerText} style={{
-                width:457,
-                height:'auto',
-                marginLeft:10,
-                fontSize:'0.857rem',
-                display:'flex',
-                alignItems:'flex-start',
-                paddingTop:15,
-                paddingBottom:15,
-                paddingRight:15
-              }}>
-                <img src={good27} alt="" className={c.tipsImg}/>
-                <div style={{textAlign:'justify'}}>用户的密价高于所有价格类型；当用户密价被填写时，系统将会使用用户密价。当用户密价未填写时，将会根据您的配置，使用密价或者单价。如果密价未填写，用户密价也未填写，系统将会使用单价。</div>
-              </div>
+          </div>
+          <div className={cs.tem_header} style={{width:'100%'}}>
+            <img src={good55} alt="" />
+            <div>
+              <div>下单价格优先级：用户密价 > 统一密价 > 单价；用户密价未设置时，使用统一密价，统一密价未设置时使用单价。</div>
+              <div>举例：商品Z的单价为0.2，设置普通用户统一密价0.18、高级会员统一密价0.17，其他会员等级统一密价未设置；用户小A为普通用户，此时他下单Z商品的单价为0.18；用户小B为高级会员；此时他下单Z商品的单价为0.17；小C为钻石会员，此时他下单Z商品的单价为0.2；用户小D为高级会员，小D已设置Z商品的用户密价为0.15，此时小D下单Z商品的单价为0.15。</div>
             </div>
           </div>
         </div>
@@ -178,11 +192,6 @@ function RTable ({ id, checked }) {
 
   const columns = [
     {
-      title: '商品ID',
-      dataIndex: 'id',
-      align: 'center',
-  },
-    {
       title: '商品名称',
       dataIndex: 'name',
       align: 'center',
@@ -191,14 +200,6 @@ function RTable ({ id, checked }) {
       title: '商品分类',
       align: 'center',
       dataIndex: 'category_name',
-  },
-    {
-      title: '业务类型',
-      dataIndex: 'type',
-      align: 'center',
-      render: (text, record, index) => {
-        return '-'
-      }
   },
     {
       title: '进价',
@@ -215,43 +216,47 @@ function RTable ({ id, checked }) {
       }
   },
     {
-      title: '密价',
+      title: '统一密价(高级会员)',
+      dataIndex: 'unit_price',
       align: 'center',
-      dataIndex: 'disc_price',
-      render: (text, record, index) => {
-        const { disc_price, user_disc_price } = record
-        const color = (checked && user_disc_price > 0) ? "#595959" : disc_price > 0 ? "#4177FE" : "#595959"
-        return <div style={{color}}>{disc_price || '-'}</div>
-      }
+  },
+    {
+      title: '统一密价(钻石会员)',
+      dataIndex: 'unit_price',
+      align: 'center',
+  },
+    {
+      title: '统一密价(至尊会员)',
+      dataIndex: 'unit_price',
+      align: 'center',
   },
     {
       title: '用户密价',
-      align: 'left',
-      width: 219,
+      align: 'center',
       dataIndex: 'user_disc_price',
       render: (text, record, index) => {
-        const { user_disc_price, id, disc_price_id } = record
-        if (visible[index]) {
-          return (
-            <div>
-              <Input maxLength={6} value={val} onChange={e=>setVal(e.target.value)} onPressEnter={()=>insertSave(id,index,disc_price_id)} placeholder="请填写密价" className={ce.user_disc_price_input}/>
-              <Button onClick={()=>insertSave(id,index,disc_price_id)} className={ce.user_disc_price_btn} size="small" type="primary">确定</Button>
-            </div>
-          )
-        }
-        return <Button onClick={()=>insert(index, user_disc_price)} style={{color:user_disc_price?"#2C68FF":"#979BA3"}} size="small" className={ce.user_disc_price_div}>{user_disc_price || "请填写密价"}</Button>
+        // const { user_disc_price, id, disc_price_id } = record
+        return '-'
+      }
+    },
+    {
+      title: '操作',
+      align: 'center',
+      dataIndex: 'user_disc_price',
+      render: (text, record, index) => {
+        return <div className={c.clickText}>修改用户密价</div>
       }
     }
   ];
 
   return (
-    <div className={c.main}>
+    <div className={c.main} style={{marginTop:0}}>
         <div className={c.searchView}>
           <div className={c.search} style={{borderBottom:'none'}}>
             <div className={c.searchL}>
-              <Input placeholder="请输入商品ID" onChange={e=>setGoods_id(e.target.value)} value={goods_id} size="small" className={c.searchInput} onPressEnter={()=>get(current)} />
               <Input placeholder="请输入商品名称" onChange={e=>setGoods_name(e.target.value)} value={goods_name} size="small" className={c.searchInput} onPressEnter={()=>get(current)}/>
-              <SelectComponent click={click} id={good_category_id} name={good_category_name} placeholder="请选择商品类型" style={{width:186}}/>
+              {/* <SelectComponent click={click} id={good_category_id} name={good_category_name} placeholder="请选择商品类型" style={{width:186}}/> */}
+              <DropdownComponent keys={[{name:"已上架",key:"available"},{name:"已关闭订单",key:"unavailable"},{name:"已下架",key:"paused"}]} placeholder="请选择商品分类" style={{width:186}}/>
             </div>
             <div className={c.searchR}>
               <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>

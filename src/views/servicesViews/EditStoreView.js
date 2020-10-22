@@ -75,36 +75,20 @@ function EditStoreView () {
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
-          <div style={{color:'#FF8D30'}}>填写商品进价之后，系统可以核算出每日的收益毛利。</div>
+          <div style={{color:'#FF8D30'}}>供货商登录密码默认为a123456</div>
         </div>
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span>*</span> */}
-        {/*     <div className={c.itemText}>联系方式</div> */}
-        {/*   </div> */}
-        {/*   <div style={{width:'29.25%',display:'flex',alignItems:'center',justifyContent:'space-between'}}> */}
-        {/*     <DropdownComponent keys={[]} placeholder="联系信息" style={{ */}
-        {/*       width: '23.931%', */}
-        {/*       height: 40, */}
-        {/*       marginTop:0, */}
-        {/*       marginLeft:0, */}
-        {/*       marginBottom:0, */}
-        {/*       marginRight:'1.5%', */}
-        {/*       color: '#34374A', */}
-        {/*     }}/> */}
-        {/*     <Input placeholder="请输入供货商联系方式" className={c.itemInput} style={{width:'70.94%'}}></Input> */}
-        {/*   </div> */}
-        {/* </div> */}
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>备注</div>
+          </div>
+          <Input maxLength={20} value={account} onChange={e=>setAccount(e.target.value)} placeholder="请填写备注信息" className={c.itemInput}></Input>
+        </div>
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
             <Button type="primary" className={c.submit} loading={loading} onClick={()=>save(true)}>保存</Button>
-            <div className={c.btnTipsView}>
-              <div className={c.quitBtn} onClick={goBack}>放弃编辑</div>
-              <div className={c.quitBorder}/>
-              <div className={c.saveBtn} onClick={()=>save(false)}>保存并新增</div>
-            </div>
           </div>
         </div>
       </div>

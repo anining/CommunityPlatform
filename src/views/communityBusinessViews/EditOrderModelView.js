@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Button, message, Breadcrumb } from 'antd'
+import { Input,Table, Button, message, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import good8 from '../../icons/good/good8.png'
 import { communityParamTemplates } from "../../utils/api"
@@ -16,6 +16,24 @@ function EditOrderModelView () {
   const [weight, setWeight] = useState(w)
   const [params, setParams] = useState(p)
   const [loading, setLoading] = useState(false)
+
+  const columns = [
+    {
+      title: '参数类型',
+      dataIndex: 'type',
+      align: 'center',
+  },
+    {
+      title: '参数说明',
+      dataIndex: 'introduction',
+      align: 'center',
+  },
+  ]
+  const dataSource = [
+    { type: 'text', introduction: "允许输入任意文字类型内容" },
+    { type: 'number', introduction: "只允许输入数字类型内容" },
+    { type: 'url', introduction: "验证输入框内的内容必须包含至少一条链接" },
+  ]
 
   function save (jump) {
     if (!name) {
@@ -61,7 +79,7 @@ function EditOrderModelView () {
           <Breadcrumb.Item>
             <span onClick={()=>push("/main/orderModel")}>下单模型</span>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>{id?"修改":"新增"}模型</Breadcrumb.Item>
+          <Breadcrumb.Item>下单模型</Breadcrumb.Item>
         </Breadcrumb>
       </div>
       <div className={c.main}>
@@ -103,13 +121,13 @@ function EditOrderModelView () {
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
-          <div>数值越大，排序越靠前；数值相同，商品编号越大，排序越靠前</div>
+          <div>下单模型至少包含一个参数。</div>
         </div>
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
-            <Button loading={loading} type="primary" className={c.submit} onClick={()=>save(true)}>保存</Button>
+            <Button loading={loading} type="primary" className={c.submit} onClick={()=>save(true)}>保存下单模型</Button>
             <div className={c.btnTipsView}>
               <div className={c.quitBtn} onClick={goBack}>放弃编辑</div>
               <div className={c.quitBorder}/>
@@ -117,6 +135,13 @@ function EditOrderModelView () {
             </div>
           </div>
         </div>
+        <div className={c.introductionTitle}>参数类型表</div>
+        <Table
+          columns={columns}
+          dataSource={dataSource}
+          size="small"
+          pagination={false}
+        />
       </div>
     </div>
   )

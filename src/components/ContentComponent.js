@@ -51,6 +51,10 @@ import OrderView from "../views/orderRecordingViews/OrderView"
 import AddPeopleServiceView from "../views/webSettingViews/AddPeopleServiceView"
 import { getter } from "../utils/store"
 import ErrorView from "../views/systemSettingViews/ErrorView"
+import MarkupTemView from "../views/communityBusinessViews/MarkupTemView"
+import EditMarkupTemView from "../views/communityBusinessViews/EditMarkupTemView"
+import EditCardManView from "../views/cardBusinessViews/EditCardManView"
+import StorePlugView from "../views/childWebViews/StorePlugView"
 
 function ContentComponent () {
   const { permissions, role } = getter(['permissions', 'role']);
@@ -76,6 +80,12 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/editGoodCategory">
           { localPermissions.includes('commbiz') ? <EditGoodCategoryView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/markupTem">
+          { localPermissions.includes('commbiz') ? <MarkupTemView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/editMarkupTem">
+          { localPermissions.includes('commbiz') ? <EditMarkupTemView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/communityGood">
           { localPermissions.includes('commbiz') ? <CommunityGoodView /> : <Redirect to="/main/error" /> }
@@ -108,6 +118,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/cardManage">
           { localPermissions.includes('cardbiz') ? <CardManageView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/editCardMan">
+          { localPermissions.includes('cardbiz') ? <EditCardManView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editCardManage">
           { localPermissions.includes('cardbiz') ? <EditCardManageView /> : <Redirect to="/main/error" /> }
@@ -147,6 +160,9 @@ function ContentComponent () {
         {/* 站点管理 */}
         <Route exact path="/main/storeSetting">
           { localPermissions.includes('citecfg') ? <StoreSettingView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/storePlug">
+          { localPermissions.includes('citecfg') ? <StorePlugView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/rebot">
           { localPermissions.includes('citecfg') ? <MoneyRebotView /> : <Redirect to="/main/error" /> }

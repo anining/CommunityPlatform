@@ -1,11 +1,19 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
+import * as U from 'karet.util'
 import { Input, Tooltip, Button, Radio, message, Breadcrumb, } from 'antd'
 import good5 from '../../icons/good/good5.png'
+import good46 from '../../icons/good/good46.png'
+import good47 from '../../icons/good/good47.png'
+import good48 from '../../icons/good/good48.png'
+import good68 from '../../icons/good/good68.png'
+import good74 from '../../icons/good/good74.png'
 import { goBack, saveSuccess, push } from "../../utils/util";
 import { addUsers } from "../../utils/api";
+import ModalComponent from "../../components/ModalComponent"
 
 function AddUserView () {
+  const [visible, setVisible] = useState(false)
   const [value, setValue] = useState("normal")
   const [account, setAccount] = useState()
   const [password, setPassWord] = useState()
@@ -35,8 +43,27 @@ function AddUserView () {
     })
   }
 
+  function onCancel () {
+    setVisible(false)
+  }
+
+  function onOk () {
+
+  }
+
   return (
     <div className={c.container}>
+      <ModalComponent
+        src={good74}
+        div="当前选中商品："
+        title="您确定要重置登录密码吗？"
+        child={
+          <div style={{color:'#BFBFBF'}}>重置密码将会修改管理员密码为<span style={{color:"#FF5730"}}>a123456</span></div>
+        }
+        visible={visible}
+        onCancel={onCancel}
+        onOk={onOk}
+      />
       <div className={c.header}>
         <img src={good5} alt="" className={c.headerImg}/>
         <Breadcrumb>
@@ -62,23 +89,43 @@ function AddUserView () {
           </div>
           <Input maxLength={20} onChange={e=>setAccount(e.target.value)} value={account} placeholder="请输入用户账号" className={c.itemInput}></Input>
         </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div style={{color:'#FF8D30'}}>用户默认密码为a123456，为保证账户安全，请提醒用户及时修改密码。</div>
-        </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span style={{color:'#fff'}}>*</span>
-            <div className={c.itemText}>用户密码</div>
+            <div className={c.itemText}>登录密码</div>
           </div>
-          <Input placeholder="请输入用户密码" maxLength={40} onChange={e=>setPassWord(e.target.value)} value={password} className={c.itemInput}></Input>
+          <div style={{width:'29.25%'}}>
+            {
+              U.when(true,
+              <Button type="primary" style={{width:120,height:40,marginBottom:6}}>重置密码</Button>
+            )
+            }
+            <div style={{color:'#FF8D30'}}>用户登录默认密码 ： a123456；忘记密码可通过修改用户管理来重置密码。为保证账户安全，请提醒用户及时修改密码。。</div>
+          </div>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span style={{color:'#fff'}}>*</span>
-            <div className={c.itemText}>用户邮箱</div>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>统一密价</div>
           </div>
-          <Input placeholder="请输入用户邮箱" onChange={e=>setEmail(e.target.value)} value={email} className={c.itemInput}></Input>
+          <Radio.Group style={{flexWrap:'wrap'}} onChange={e=>{}} className={c.itemGrop}>
+            <Radio value="available" className={c.item_user_radio}>
+              <img src={good68} alt="" />
+              普通会员
+            </Radio>
+            <Radio value="available" className={c.item_user_radio}>
+              <img src={good46} alt="" />
+              高级会员
+            </Radio>
+            <Radio value="paused" className={c.item_user_radio}>
+              <img src={good48} alt="" />
+              钻石会员
+            </Radio>
+            <Radio value="unavailable" className={c.item_user_radio}>
+              <img src={good47} alt="" />
+              至尊会员
+            </Radio>
+          </Radio.Group>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
@@ -99,11 +146,6 @@ function AddUserView () {
           </div>
           <div className={c.btnView}>
             <Button loading={loading} type="primary" onClick={()=>save(true)} className={c.submit}>保存</Button>
-            <div className={c.btnTipsView}>
-              <div className={c.quitBtn} onClick={goBack}>放弃编辑</div>
-              <div className={c.quitBorder}/>
-              <div className={c.saveBtn} onClick={()=>save(false)}>保存并新增</div>
-            </div>
           </div>
         </div>
       </div>

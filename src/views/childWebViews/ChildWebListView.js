@@ -22,16 +22,10 @@ function ChildWebListView () {
       id: 111,
     },
     {
-      label: '分站流水总和',
+      label: '分站下单总额',
       number: '10,111',
       icon: good28,
       id: 222,
-    },
-    {
-      label: '申请开通',
-      number: '10,111',
-      icon: good29,
-      id: 333,
     },
   ]
 
@@ -111,12 +105,17 @@ function RTable ({ setVisible }) {
       align: 'center',
   },
     {
-      title: '站点版本',
+      title: '站点名称',
       align: 'center',
       dataIndex: 'version',
   },
     {
       title: '主账号',
+      dataIndex: 'number',
+      align: 'center',
+  },
+    {
+      title: '下单总额',
       dataIndex: 'number',
       align: 'center',
   },
@@ -146,14 +145,19 @@ function RTable ({ setVisible }) {
       // }
   },
     {
+      title: '备注',
+      dataIndex: 'number',
+      align: 'center',
+  },
+    {
       title: '操作',
       align: 'center',
-      // render: (text, record, index) => (
-      //   <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} onClick={()=>{
-      //       const history = h.get()
-      //       history.push("/main/editChildWeb")
-      //     }}>重置密码</div>
-      // )
+      render: (text, record, index) => (
+        <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} onClick={()=>{
+            // const history = h.get()
+            // history.push("/main/editChildWeb")
+          }}>修改</div>
+      )
     },
   ];
 

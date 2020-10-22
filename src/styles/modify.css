@@ -113,3 +113,7 @@ td.ant-table-column-sort {
 .ant-breadcrumb .ant-breadcrumb-link span:hover {
   color: #548aff;
 }
+
+.ant-modal-body {
+  padding-top: 0;
+}

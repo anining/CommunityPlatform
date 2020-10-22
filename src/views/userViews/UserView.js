@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, message, Input, Space, Popconfirm } from 'antd'
+import {Radio,DatePicker, Button, Table, message, Input, Space, Popconfirm } from 'antd'
 import c from '../../styles/view.module.css'
+import {USER_STATUS } from "../../utils/config"
+import oc from '../../styles/oc.module.css'
 import good23 from '../../icons/good/good23.png'
 import good24 from '../../icons/good/good24.png'
 import good9 from '../../icons/good/good9.png'
@@ -9,8 +11,17 @@ import { users } from "../../utils/api";
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { transformTime, push, getKey } from "../../utils/util"
+import ModalPopComponent from "../../components/ModalPopComponent"
+import ModalComponent from "../../components/ModalComponent"
 
 function UserView () {
+  const [visible, setVisible] = useState(false)
+  const [visible_action, setVisibleAction] = useState(false)
+  const [visible_balance, setVisibleBalance] = useState(false)
+  const [title, setTitle] = useState()
+  const [selected, setSelected] = useState([])
+  const [key, setKey] = useState()
+  const [src, setSrc] = useState()
   const data = [
     {
       label: '用户总数',
@@ -26,17 +37,92 @@ function UserView () {
     },
   ]
 
+  function onCancel () {
+    setVisible(false)
+    setVisibleAction(false)
+  }
+
+  let text = []
+  selected.forEach(i => text.push(i.name))
+
+  function onOk () {
+
+  }
+
   return (
     <div className="view">
       <div className={c.container}>
         <TableHeaderComponent path="/main/addUser" data={data} text="添加用户"/>
-        <RTable />
+        <RTable setTitle={setTitle} setSelected={setSelected} setSrc={setSrc} setKey={setKey} setVisibleAction={setVisibleAction}/>
       </div>
+  <ModalPopComponent
+    div = {
+      <div>
+        <div className={oc.user_setting}>
+          <div style={{color:'#333'}}>当前选中用户：18225223485</div>
+          <div className={oc.user_tips}>修改为</div>
+          <div className={oc.selects}>
+            <Button style={{color:'#fff',background:'#2C68FF'}} className={oc.user_sel}>普通用户</Button>
+            <Button className={oc.user_sel}>高级会员</Button>
+            <Button className={oc.user_sel}>钻石会员</Button>
+            <Button className={oc.user_sel}>至尊会员</Button>
+          </div>
+        </div>
+        <div className={oc.change_btn_view}>
+          <Button className={oc.change_btn_cancel}>取消</Button>
+          <Button type="primary" className={oc.change_btn_ok}>确定</Button>
+        </div>
+      </div>
+    }
+    title = "用户等级"
+    visible = { visible}
+    onCancel = { onCancel }
+  />
+      <ModalComponent
+        src={src}
+        div="当前选中用户："
+        span={text.join('、')}
+        title={title}
+        action={key}
+        visible={visible_action}
+        onCancel={onCancel}
+        onOk={onOk}
+      />
+      <ModalPopComponent
+      div = {
+        <div>
+          <div className={oc.remark}>
+            <div>余额数值：</div>
+            <Radio.Group style={{marginLeft:12}}>
+              <Radio value="normal">加款</Radio>
+              <Radio value="banned">
+                减款
+              </Radio>
+            </Radio.Group>
+          </div>
+          <div className={oc.remark} style={{marginTop:24}}>
+            <div>余额数值：</div>
+            <Input placeholder="请输入变动数值"/>
+          </div>
+            <div className = { oc.remark_tips } >
+        当前选中订单： < span > 20200105020305(音符点赞) < /span> < /
+        div > <
+        div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
+        <Button className={oc.change_btn_cancel}>取消</Button> <
+        Button type = "primary"
+        className = { oc.change_btn_ok } > 确定 < /Button> < /
+        div > <
+        /div>
+      }
+      title = "用户余额"
+      visible = { visible_balance }
+      onCancel = { onCancel }
+      />
     </div>
   )
 }
 
-function RTable ({ setVisible }) {
+function RTable ({ setVisible,setVisibleAction,setKey,setSrc,setTitle,setSelected }) {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
@@ -44,6 +130,8 @@ function RTable ({ setVisible }) {
   const [total, setTotal] = useState(0)
   const [account, setAccount] = useState()
   const [status, setStatus] = useState()
+  const [date, setDate] = useState([])
+  const [moment, setMoment] = useState()
 
   useEffect(() => {
     get(current)
@@ -79,13 +167,22 @@ function RTable ({ setVisible }) {
   };
 
   function submit (key) {
+    let title = ""
     switch (key) {
-      case "delete":
-        message.success('批量删除操作');
-        break
+      case "a":
+        title = "您确定要封禁选中用户吗？";
+        break;
+      case "b":
+        title = "您确定要解封选中用户吗？";
+        break;
       default:
-        ;
     }
+
+    setTitle(title)
+    setSelected(selectedRows.map(i => data[i]))
+    setSrc(USER_STATUS[key].src)
+    setKey(key)
+    setVisibleAction(true)
   }
 
   function reset () {
@@ -105,7 +202,7 @@ function RTable ({ setVisible }) {
   }
   const columns = [
     {
-      title: '用户ID',
+      title: '用户编号',
       dataIndex: 'id',
       align: 'center',
   },
@@ -115,26 +212,19 @@ function RTable ({ setVisible }) {
       align: 'center',
   },
     {
+      title: '用户等级',
+      dataIndex: 'account',
+      align: 'center',
+  },
+    {
       title: '消费总额',
       align: 'center',
       dataIndex: 'consumed',
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // },
   },
     {
       title: '用户余额',
       dataIndex: 'balance',
       align: 'center',
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 2,
-      // },
   },
     {
       title: '下单次数',
@@ -142,15 +232,43 @@ function RTable ({ setVisible }) {
       align: 'center',
   },
     {
+      title: '社区商品密价',
+      dataIndex: 'ordered',
+      align: 'center',
+      render: (text, record, index) => {
+        return (
+        <Space size="small">
+          <div style={{cursor:'wait'}} className={c.clickText}>查看</div>
+          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.clickText} onClick={()=>{}}>修改</div>
+        </Space>
+        )
+      }
+  },
+    {
+      title: '卡密商品密价',
+      dataIndex: 'ordered',
+      align: 'center',
+      render: (text, record, index) => {
+        return (
+        <Space size="small">
+          <div style={{cursor:'wait'}} className={c.clickText}>查看</div>
+          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.clickText} onClick={()=>{}}>修改</div>
+        </Space>
+        )
+      }
+  },
+    {
       title: '注册时间',
       align: 'center',
       dataIndex: 'time',
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 3,
-      // },
+      sorter: {
+        compare: (a, b) => {
+          console.log(a, b)
+        },
+        multiple: 3,
+      },
   },
     {
       title: '状态',
@@ -188,19 +306,32 @@ function RTable ({ setVisible }) {
             <div style={{cursor:'wait'}} className={c.clickText}>修改余额</div>
           {/* </Popconfirm> */}
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)}>修改密价</div>
+          <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)}>修改等级</div>
+          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)}>修改用户信息</div>
         </Space>
       )
     },
   ];
+
+  function dateChange (data, dataString) {
+    setDate([new Date(dataString[0]).toISOString(), new Date(dataString[1]).toISOString()])
+    setMoment(data)
+  }
 
   return (
     <div className={c.main}>
       <div className={c.searchView}>
         <div className={c.search}>
           <div className={c.searchL}>
-            <Input onPressEnter={()=>get(current)} maxLength={20} placeholder="请输入用户名" onChange={e=>setAccount(e.target.value)} value={account} size="small" className={c.searchInput} />
+            <Input onPressEnter={()=>get(current)} maxLength={20} placeholder="请输入用户账号" onChange={e=>setAccount(e.target.value)} value={account} size="small" className={c.searchInput} />
             <DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户状态" style={{width:186}}/>
+            <DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户等级" style={{width:186}}/>
+            <DatePicker.RangePicker
+              format="YYYY-MM-DD"
+              onChange={dateChange}
+              value={moment}
+              className={c.dataPicker}/>
           </div>
           <div className={c.searchR}>
             <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>
@@ -214,7 +345,7 @@ function RTable ({ setVisible }) {
           </div>
         </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量解封",key:"b"},{name:"批量封禁",key:"a"}]}/>
       <Table
         columns={columns}
         rowSelection={{

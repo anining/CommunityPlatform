@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Table, message, Input } from 'antd'
 import c from '../../styles/view.module.css'
+import oc from '../../styles/oc.module.css'
 import good36 from '../../icons/good/good36.png'
 import good37 from '../../icons/good/good37.png'
 import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import DropdownComponent from "../../components/DropdownComponent"
+import ModalPopComponent from "../../components/ModalPopComponent"
 
 function DockingView () {
+  const [visible, setVisible] = useState(true)
+
   const data = [
     {
       label: '已对接',
@@ -23,12 +27,30 @@ function DockingView () {
       id: 222,
     },
   ]
+
+  function onCancel () {
+    setVisible(false)
+  }
+
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent path="/main/editDocking" data={data} text="新增"/>
+        <TableHeaderComponent small_btn="查看已归档" path="/main/editDocking" data={data} text="新增"/>
         <RTable />
       </div>
+      <ModalPopComponent
+      div = {
+        <div className={oc.limit_view}>
+          <div className={oc.limit_item}>登录账号：<span>10</span></div>
+          <div className={oc.limit_item}>登录密码：<span>100000</span></div>
+          <div className={oc.limit_item}>&#12288;&#12288;&#12288;ID：<span>121334</span></div>
+          <div className={oc.limit_item}>&#12288;&#8194;token：<span>dsfadfasdf</span></div>
+        </div>
+      }
+      title = "对接凭证"
+      visible = { visible}
+      onCancel = { onCancel }
+      />
     </div>
   )
 }
@@ -72,12 +94,12 @@ function RTable ({ setVisible }) {
 
   const columns = [
     {
-      title: '对接ID',
+      title: '对接目标编号',
       dataIndex: 'id',
       align: 'center',
   },
     {
-      title: '名称',
+      title: '对接目标名称',
       dataIndex: 'name',
       align: 'center',
   },
@@ -87,17 +109,12 @@ function RTable ({ setVisible }) {
       dataIndex: 'platform',
   },
     {
-      title: '对接域名',
-      dataIndex: 'uri',
-      align: 'center',
-  },
-    {
       title: '对接商品',
       dataIndex: 'good',
       align: 'center',
   },
     {
-      title: '使用账户',
+      title: '对接凭证',
       dataIndex: 'number',
       align: 'center',
   },
@@ -113,7 +130,7 @@ function RTable ({ setVisible }) {
       //   <div style={{color:'#2C68FF',textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
       //         const history = h.get()
       //         history.push("/main/editDocking")
-      //   }}>修改</div>
+      //   }}>修改对接信息</div>
       // )
     },
   ];
