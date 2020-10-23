@@ -12,6 +12,7 @@ function ModalComponent ({ child, action, src, div, span, title, visible, onCanc
     <Modal
       visible={visible}
       footer={null}
+      width={550}
       onCancel={onCancel}
       bodyStyle={styles.bodyStyle}
     >

@@ -4,8 +4,8 @@
 }
 
 .close {
-  font-size: 1.5rem;
-  color: #979BA3;
+  width: 13px;
+  cursor: pointer;
 }
 
 .header {
@@ -14,10 +14,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.limit_view {
-
 }
 
 .limit_item {
@@ -54,6 +50,7 @@
 }
 
 .introduction {
+  margin-top: 32px;
   background-color: rgba(244, 244, 244, 1);
   padding: 20px 30px;
   color: #333333;

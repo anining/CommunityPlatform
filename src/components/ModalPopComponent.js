@@ -1,4 +1,5 @@
 import React from 'react'
+import home2 from '../icons/home/home2.png'
 import { Modal } from 'antd'
 import c from '../styles/oc.module.css'
 
@@ -8,13 +9,14 @@ function ModalPopComponent ({ title, div, visible, onCancel }) {
     <Modal
       visible={visible}
       closable={false}
+      width={604}
       footer={null}
       onCancel={onCancel}
     >
       <div>
         <div className={c.header}>
           <div className={c.title}>{title}</div>
-          <div className={c.close} onClick={onCancel}>X</div>
+          <img src={home2} alt="" onClick={onCancel} className={c.close}/>
         </div>
         {div}
       </div>
