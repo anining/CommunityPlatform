@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.less'
-import 'ant-design-pro/dist/ant-design-pro.css';
 import 'react-quill/dist/quill.snow.css';
 import './styles/modify.css'
 import './styles/index.css'

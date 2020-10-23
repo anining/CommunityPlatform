@@ -308,6 +308,10 @@ function EditCommunityGoodView () {
           </div>
           <Input type="number" onChange={e=>setUnit_price(e.target.value)} value={unit_price} placeholder="请输入商品销售单价" className={c.itemInput}></Input>
         </div>
+        <div className={c.itemTips}>
+          <div className={c.itemName} />
+          <div>普通会员没有配置用户密价时,使用单价下单</div>
+        </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
@@ -428,14 +432,18 @@ function EditCommunityGoodView () {
               <div className={c.item}>
                 <div className={c.itemName}>
                   <span>*</span>
-                  <div className={c.itemText}>加价模版</div>
+                  <div className={c.itemText}>调价模版</div>
                 </div>
-                <DropdownPromiseComponent placeholder="百分比加价模版" initNums={[]} setValue={setDockingTarget}/>
+                <DropdownPromiseComponent placeholder="请选择调价模版" initNums={[]} setValue={setDockingTarget}/>
+              </div>
+              <div className={c.itemTips}>
+                <div className={c.itemName} />
+                <div>当系统获取到这个商品在供应商的价格变化信息时,会根据选择的模版配置同步调整这个商品的单价和统一密价</div>
               </div>
               <div className={c.item} style={{alignItems:'flex-start'}}>
                 <div className={c.itemName}>
                   <span>*</span>
-                  <div className={c.itemText}>加价模版</div>
+                  <div className={c.itemText}>统一密价</div>
                 </div>
                 <div className={c.disc_price_view}>
                   <div className={c.disc_price_item}>
@@ -489,12 +497,8 @@ function EditCommunityGoodView () {
                   <div className={c.itemText}>重复下单</div>
                 </div>
                 <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-                  <Radio value="normal" className={c.itemRadio}>不允许重复下单</Radio>
-                  <Radio value="banned" className={c.itemRadio} style={{marginLeft:71}}>
-                    最多允许重复下
-                    <Input className={c.item_grop_view_input} placeholder="1"/>
-                    单
-                  </Radio>
+                  <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>不允许重复下单</Radio>
+                  <Radio value="banned" className={c.itemRadio} style={{width:'33.333%'}}>允许重复下单</Radio>
                 </Radio.Group>
               </div>
               <div className={c.itemTips}>
@@ -507,12 +511,8 @@ function EditCommunityGoodView () {
                   <div className={c.itemText}>批量下单</div>
                 </div>
                 <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-                  <Radio value="normal" className={c.itemRadio}>不允许批量下单</Radio>
-                  <Radio value="banned" className={c.itemRadio} style={{marginLeft:71}}>
-                    最多允许批量下
-                    <Input className={c.item_grop_view_input} placeholder="1"/>
-                    单
-                  </Radio>
+                  <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>不允许批量下单</Radio>
+                  <Radio value="banned" className={c.itemRadio} style={{width:'33.333%'}}>允许批量下单</Radio>
                 </Radio.Group>
               </div>
               <div className={c.itemTips}>

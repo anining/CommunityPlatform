@@ -149,14 +149,7 @@ function RTable () {
       dataIndex: 'time',
       align: 'center',
       render: (text, record, index) => '-'
-  },
-    {
-      title: '操作',
-      align: 'center',
-      render: (text, record, index) => (
-        <div className={c.clickText} onClick={()=>push("/main/editMarkupTem",record)}>修改加价模版</div>
-      )
-  },
+  }
 ];
 
   const rowSelection = {

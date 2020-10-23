@@ -203,3 +203,11 @@
   color: rgba(0, 0, 0, 0.25);
   margin-bottom: 9px;
 }
+
+.desc_view {
+  margin: 32px 0 0 128px;
+}
+
+.change_desc_view {
+  margin: 32px 0 0 28px;
+}

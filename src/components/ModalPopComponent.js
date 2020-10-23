@@ -3,13 +3,13 @@ import home2 from '../icons/home/home2.png'
 import { Modal } from 'antd'
 import c from '../styles/oc.module.css'
 
-function ModalPopComponent ({ title, div, visible, onCancel }) {
+function ModalPopComponent ({ width = 604, title, div, visible, onCancel }) {
 
   return (
     <Modal
       visible={visible}
       closable={false}
-      width={604}
+      width={width}
       footer={null}
       onCancel={onCancel}
     >

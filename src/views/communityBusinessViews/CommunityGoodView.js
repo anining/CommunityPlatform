@@ -170,14 +170,14 @@ function CommunityGoodView () {
   /> <
   ModalPopComponent
   div = {
-    <div>
+    <div className={oc.change_desc_view}>
             <div className={oc.item}>
               <div>进价</div>
               <Input placeholder="百分比加价模版"/>
             </div>
             <div className={oc.item}>
-              <div>加价模版</div>
-              <Input placeholder="百分比加价模版"/>
+              <div>调价模版</div>
+              <Input placeholder="百分比调价模版"/>
             </div>
             <div className={oc.item}>
               <div>单价</div>
@@ -227,8 +227,9 @@ function CommunityGoodView () {
   onCancel = { onCancel }
   /> <
   ModalPopComponent
+    width={520}
   div = {
-    <div className={oc.limit_view}>
+    <div className={oc.desc_view}>
       <div className={oc.desc_item}>
         <img src={good46} alt="" />
         <div>高级会员</div>
