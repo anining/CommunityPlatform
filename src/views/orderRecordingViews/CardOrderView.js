@@ -104,7 +104,7 @@ function RTable ({ setVisible }) {
     {
       title: '商品分类',
       align: 'center',
-      dataIndex: 'category',
+      dataIndex: 'ctg',
   },
     {
       title: '卡密编号',

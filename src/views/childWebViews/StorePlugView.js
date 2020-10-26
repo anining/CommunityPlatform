@@ -11,7 +11,7 @@ import QRCode from 'qrcode.react'
 
 function StorePlugView () {
   const [pics, setPics] = useState([])
-  const [introduction, setIntroduction] = useState("")
+  const [intro, setIntroduction] = useState("")
   const [imageUrl, setImageUrl] = useState(pics[0])
   const [loading, setLoading] = useState(false)
   const [selected,setSelected] = useState(1)
@@ -179,7 +179,7 @@ function StorePlugView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>店铺首页公告</div>
           </div>
-          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={introduction} onChange={e=>setIntroduction(e)}/>
+          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={intro} onChange={e=>setIntroduction(e)}/>
         </div>
         <div className={c.headerT} style={{marginTop:60}}>
           <div style={{zIndex:1}}>模版和主题</div>

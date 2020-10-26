@@ -19,7 +19,7 @@ let win
 function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
-  const { id, name: n, tags: tag_s = [], batch_order: b_o, category_name, weight: w, introduction: i_td = "", disc_price: d_p, pics: ps = [], max_order_amount: max_o_a, community_goods_category_id: c_id, community_param_template_id: t_id, min_order_amount: min_o_a, param_template_name, repeat_order: r_o, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
+  const { id, name: n, tags: tag_s = [], batch_order: b_o, category_name, weight: w, intro: i_td = "", disc_price: d_p, pics: ps = [], max_order_amount: max_o_a, community_goods_category_id: c_id, community_param_template_id: t_id, min_order_amount: min_o_a, param_template_name, repeat_order: r_o, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
   const [name, setName] = useState(n)
   const [status, setStatus] = useState(s)
   const [pics, setPics] = useState(ps)
@@ -39,7 +39,7 @@ function EditCommunityGoodView () {
   const [repeat_order, setRepeat_order] = useState(r_o)
   const [batch_order, setBatch_order] = useState(b_o)
   const [weight, setWeight] = useState(w)
-  const [introduction, setIntroduction] = useState(i_td)
+  const [intro, setIntroduction] = useState(i_td)
   const [imageUrl, setImageUrl] = useState(pics[0])
   const [loading, setLoading] = useState(false)
   const [recommended, setRecommended] = useState(false)
@@ -124,7 +124,7 @@ function EditCommunityGoodView () {
       disc_price,
       repeat_order,
       batch_order,
-      introduction
+      intro
     }
     setLoading(true)
     const promise = communityGoods(id ? "modify" : 'add', id, undefined, body)
@@ -372,7 +372,7 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>目标描述</div>
           </div>
-          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={introduction} onChange={e=>setIntroduction(e)}/>
+          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={intro} onChange={e=>setIntroduction(e)}/>
         </div>
         <div className={c.hasMore}>
           <Checkbox className={c.hasMoreCheckBox} onChange={e=>setHasMore(e.target.checked)} checked={has_more}>更多设置</Checkbox>

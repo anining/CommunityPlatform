@@ -166,7 +166,7 @@ function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
     {
       title: '商品类别',
       align: 'center',
-      dataIndex: 'category',
+      dataIndex: 'ctg',
   },
     {
       title: '卡密类型',

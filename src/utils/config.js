@@ -47,7 +47,7 @@ const PERMISSIONS = {
   tagmng: '标签管理',
   statistics: '统计信息',
   subcitemng: '分站管理',
-  commbiz: '社区业务',
+  cmntbiz: '社区业务',
   cardbiz: '卡密业务'
 }
 const GOODS_STATUS = {

@@ -107,7 +107,7 @@ function RTable ({ id, checked }) {
   const [data, setData] = useState([])
   const [val, setVal] = useState()
   const [visible, setVisible] = useState([])
-  // const [categorys, setCategorys] = useState([])
+  // const [ctgs, setCategorys] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
@@ -145,7 +145,7 @@ function RTable ({ id, checked }) {
   function insertSave (goods_id, index, disc_price_id) {
     setVisible(data.map((item, i) => false))
     if (val) {
-      addDiscPrices(id, goods_id, "community", val).then(r => {
+      addDiscPrices(id, goods_id, "cmnt", val).then(r => {
         if (!r.error) {
           const localData = [...data]
           localData[index].user_disc_price = val

@@ -76,7 +76,7 @@ function SiderComponent ({ collapsed, toggle }) {
             <Menu.Item key="goodStatistics">订单统计</Menu.Item>
           </Menu.SubMenu>
         )) }
-        { U.when(R.includes('commbiz',permissions), (
+        { U.when(R.includes('cmntbiz',permissions), (
             <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" icon={<Icon keys="communityBusiness" />} title="社区业务">
               <Menu.Item key="communityGood">社区商品</Menu.Item>
               <Menu.Item key="goodCategory">商品分类</Menu.Item>

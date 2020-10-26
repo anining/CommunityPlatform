@@ -59,7 +59,7 @@ function LoginView () {
       const { data, error } = r
       if (!error) {
         const { permissions, nickname } = data
-        setter([["nickname", nickname], ['permissions', role === "superuser" ? ["orderlog", "citecfg", "usermng", "capitalflow", "valueaddedsrv", "tagmng", "statistics", "subcitemng", "commbiz", "cardbiz"] : permissions]], true);
+        setter([["nickname", nickname], ['permissions', role === "superuser" ? ["orderlog", "citecfg", "usermng", "capitalflow", "valueaddedsrv", "tagmng", "statistics", "subcitemng", "cmntbiz", "cardbiz"] : permissions]], true);
         jump && push('/main')
       }
     })

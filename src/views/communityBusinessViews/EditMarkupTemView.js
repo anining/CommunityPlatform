@@ -29,14 +29,14 @@ function EditMarkupTemView () {
   },
     {
       title: '参数说明',
-      dataIndex: 'introduction',
+      dataIndex: 'intro',
       align: 'center',
   },
   ]
   const dataSource = [
-    { type: 'text', introduction: "允许输入任意文字类型内容" },
-    { type: 'number', introduction: "只允许输入数字类型内容" },
-    { type: 'url', introduction: "验证输入框内的内容必须包含至少一条链接" },
+    { type: 'text', intro: "允许输入任意文字类型内容" },
+    { type: 'number', intro: "只允许输入数字类型内容" },
+    { type: 'url', intro: "验证输入框内的内容必须包含至少一条链接" },
   ]
 
   function save (jump) {
