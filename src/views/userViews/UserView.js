@@ -13,6 +13,7 @@ import DropdownComponent from "../../components/DropdownComponent";
 import { transformTime, push, getKey, saveSuccess } from "../../utils/util"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
+import { USER_RANK } from "../../utils/config"
 
 function UserView () {
   // TODO: 三个弹窗
@@ -223,10 +224,10 @@ function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data
   },
     {
       title: '用户等级',
-      dataIndex: 'ordered',
+      dataIndex: 'lv',
       align: 'center',
       render: (text, record, index) => {
-        return '-'
+        return USER_RANK[text].label
       }
   },
     {

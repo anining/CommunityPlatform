@@ -33,6 +33,7 @@ function CommunityGoodView () {
   const [selected, setSelected] = useState([])
   const [key, setKey] = useState()
   const [src, setSrc] = useState()
+  const [sel, setSel] = useState({})
   const [label] = useState([
     {
       label: '商品总数',
@@ -140,7 +141,7 @@ function CommunityGoodView () {
     <div className="view">
       <div className={c.container}>
         <TableHeaderComponent path="/main/editCommunityGood" data={label} text="添加商品"/>
-        <RTable selectedRows={selectedRows} setVisibleC={setVisibleC} setVisibleIntroduction={setVisibleIntroduction} setVisibleHis={setVisibleHis} setVisible={setVisible} setVisibleLimit={setVisibleLimit} setSelectRows={setSelectRows} data={data} setData={setData} current={current} setCurrent={setCurrent} pageSize={pageSize} total={total} setTotal={setTotal} id={id} setId={setId} search_name={search_name} setSearch_name={setSearch_name} community_goods_category_id={community_goods_category_id} setCommunity_goods_category_id={setCommunity_goods_category_id} community_goods_category_name={community_goods_category_name} setCommunity_goods_category_name={setCommunity_goods_category_name} status={status} setStatus={setStatus} refundable={refundable} setRefundable={setRefundable} order_by={order_by} setOrder_by={setOrder_by} ordering={ordering} setOrdering={setOrdering} get={get} setTitle={setTitle} setSelected={setSelected} setSrc={setSrc} setKey={setKey} />
+        <RTable setSel={setSel} selectedRows={selectedRows} setVisibleC={setVisibleC} setVisibleIntroduction={setVisibleIntroduction} setVisibleHis={setVisibleHis} setVisible={setVisible} setVisibleLimit={setVisibleLimit} setSelectRows={setSelectRows} data={data} setData={setData} current={current} setCurrent={setCurrent} pageSize={pageSize} total={total} setTotal={setTotal} id={id} setId={setId} search_name={search_name} setSearch_name={setSearch_name} community_goods_category_id={community_goods_category_id} setCommunity_goods_category_id={setCommunity_goods_category_id} community_goods_category_name={community_goods_category_name} setCommunity_goods_category_name={setCommunity_goods_category_name} status={status} setStatus={setStatus} refundable={refundable} setRefundable={setRefundable} order_by={order_by} setOrder_by={setOrder_by} ordering={ordering} setOrdering={setOrdering} get={get} setTitle={setTitle} setSelected={setSelected} setSrc={setSrc} setKey={setKey} />
       </div>
       <ModalComponent
         src={src}
@@ -210,16 +211,16 @@ function CommunityGoodView () {
   title = "修改商品价格"
   visible = { visible_c }
   onCancel = { onCancel }
-  /> <
-  ModalPopComponent
-  div = {
-    <div className={oc.limit_view}>
-            <div className={oc.limit_item}>最低下单：<span>10</span></div>
-            <div className={oc.limit_item}>最高下单：<span>100000</span></div>
-            <div className={oc.limit_item}>重复下单：<span style={{color:"#FF5F5F"}}>不允许重复下单</span></div>
-            <div className={oc.limit_item}>批量下单：<span>允许批量下单</span></div>
-          </div>
-  }
+  />
+    <ModalPopComponent
+      div = {
+        <div className={oc.limit_view}>
+          <div className={oc.limit_item}>最低下单：<span>{sel.min_order_amount || 0}</span></div>
+          <div className={oc.limit_item}>最高下单：<span>{sel.max_order_amount || 0}</span></div>
+          <div className={oc.limit_item}>重复下单：<span style={{color:sel.repeatable?"#FF5F5F":"rgba(0, 0, 0, 0.45)"}}>{sel.repeatable?"允许重复下单":"不允许重复下单"}</span></div>
+          <div className={oc.limit_item}>批量下单：<span style={{color:sel.repeatable?"#FF5F5F":"rgba(0, 0, 0, 0.45)"}}>{sel.repeatable?"允许批量下单":"不允许批量下单"}</span></div>
+        </div>
+      }
   title = "下单限制"
   visible = { visible_limit }
   onCancel = { onCancel }
@@ -270,7 +271,7 @@ function CommunityGoodView () {
 )
 }
 
-function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibleC, setData, setVisibleHis, setVisibleIntroduction, current, setCurrent, pageSize, total, setTotal, id, setId, search_name, setSearch_name, community_goods_category_id, setCommunity_goods_category_id, community_goods_category_name, setCommunity_goods_category_name, status, setStatus, refundable, setRefundable, order_by, setOrder_by, ordering, setOrdering, get, setVisible, setTitle, setSelected, setSrc, setKey }) {
+function RTable ({ setSel, selectedRows, setSelectRows, data, setVisibleLimit, setVisibleC, setData, setVisibleHis, setVisibleIntroduction, current, setCurrent, pageSize, total, setTotal, id, setId, search_name, setSearch_name, community_goods_category_id, setCommunity_goods_category_id, community_goods_category_name, setCommunity_goods_category_name, status, setStatus, refundable, setRefundable, order_by, setOrder_by, ordering, setOrdering, get, setVisible, setTitle, setSelected, setSrc, setKey }) {
   window.localClick = function (type, ids) {
     setCommunity_goods_category_id(ids.id)
     setCommunity_goods_category_name(ids.name)
@@ -376,10 +377,10 @@ function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibl
   },
     {
       title: '单价',
-      dataIndex: 'unit_price',
+      dataIndex: 'prices',
       align: 'center',
       render: (text, record, index) => {
-        return '-'
+        return text[0] || '-'
       }
       // sorter: {
       //   compare: (a, b) => {
@@ -439,8 +440,10 @@ function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibl
       align: 'center',
       dataIndex: 'disc_price',
       render: (text, record, index) => {
-        // return <div className={c.clickText} onClick={()=>setVisibleLimit(true)}>查看</div>
-        return <div className={c.clickText}>查看</div>
+        return <div onClick={()=>{
+          setSel(record)
+          setVisibleLimit(true)
+        }} className={c.clickText}>查看</div>
       }
   },
     {

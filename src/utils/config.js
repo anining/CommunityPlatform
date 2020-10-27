@@ -127,16 +127,20 @@ const USER_STATUS = {
 
 const USER_RANK = {
   "0": {
-    src: good77
+    src: good77,
+    label:"普通用户"
   },
   "1": {
-    src: good73
+    src: good73,
+    label:"高级用户"
   },
   "2": {
-    src: good72
+    src: good72,
+    label:"钻石用户"
   },
   "3": {
-    src: good71
+    src: good71,
+    label:"至尊用户"
   }
 }
 
