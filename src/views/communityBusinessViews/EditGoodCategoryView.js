@@ -23,7 +23,7 @@ function EditGoodCategoryView () {
       message.warning("权重值超出范围")
       return
     }
-    let body = { name, weight: weight || 0 };
+    let body = { name, weight: weight || 1 };
     setLoading(true)
     communityGoodsCategories(id ? "modify" : "add", id, undefined, body).then(r => {
       setLoading(false)

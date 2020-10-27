@@ -8,21 +8,20 @@ import good47 from '../../icons/good/good47.png'
 import good48 from '../../icons/good/good48.png'
 import good68 from '../../icons/good/good68.png'
 import good74 from '../../icons/good/good74.png'
-import { goBack, saveSuccess, push } from "../../utils/util";
+import { saveSuccess, push } from "../../utils/util";
 import { addUsers } from "../../utils/api";
 import ModalComponent from "../../components/ModalComponent"
+import {useHistory} from "react-router-dom"
 
 function AddUserView () {
+  const { state = {} } = useHistory().location
+  const { id } = state
+  // TODO: 弹窗
   const [visible, setVisible] = useState(false)
-  const [value, setValue] = useState("normal")
   const [account, setAccount] = useState()
-  const [password, setPassWord] = useState()
-  const [email, setEmail] = useState()
+  const [lv, setLv] = useState(0)
+  const [status, setStatus] = useState("normal")
   const [loading, setLoading] = useState(false)
-
-  function onChange (e) {
-    setValue(e.target.value)
-  }
 
   function save (jump) {
     if (!account) {
@@ -30,13 +29,13 @@ function AddUserView () {
       return
     }
     setLoading(true)
-    addUsers(account, password, value, email).then(r => {
+    addUsers(account, lv, status).then(r => {
       setLoading(false)
       if (!r.error) {
         saveSuccess(jump)
         setAccount(undefined)
-        setPassWord(undefined)
-        setEmail(undefined)
+        setLv(0)
+        setStatus("normal")
       }
     }).catch(() => {
       setLoading(false)
@@ -96,9 +95,7 @@ function AddUserView () {
           </div>
           <div style={{width:'29.25%'}}>
             {
-              U.when(true,
-              <Button type="primary" style={{width:120,height:40,marginBottom:6}}>重置密码</Button>
-            )
+              U.when(id,<Button type="primary" style={{width:120,height:40,marginBottom:6}}>重置密码</Button>)
             }
             <div style={{color:'#FF8D30'}}>用户登录默认密码 ： a123456；忘记密码可通过修改用户管理来重置密码。为保证账户安全，请提醒用户及时修改密码。。</div>
           </div>
@@ -108,20 +105,20 @@ function AddUserView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>统一密价</div>
           </div>
-          <Radio.Group style={{flexWrap:'wrap'}} onChange={e=>{}} className={c.itemGrop}>
-            <Radio value="available" className={c.item_user_radio}>
+          <Radio.Group style={{flexWrap:'wrap'}} onChange={e=>setLv(e.target.value)} value={lv} className={c.itemGrop}>
+            <Radio value={0} className={c.item_user_radio}>
               <img src={good68} alt="" />
               普通会员
             </Radio>
-            <Radio value="available" className={c.item_user_radio}>
+            <Radio value={1} className={c.item_user_radio}>
               <img src={good46} alt="" />
               高级会员
             </Radio>
-            <Radio value="paused" className={c.item_user_radio}>
+            <Radio value={2} className={c.item_user_radio}>
               <img src={good48} alt="" />
               钻石会员
             </Radio>
-            <Radio value="unavailable" className={c.item_user_radio}>
+            <Radio value={3} className={c.item_user_radio}>
               <img src={good47} alt="" />
               至尊会员
             </Radio>
@@ -132,7 +129,7 @@ function AddUserView () {
             <span style={{color:'#fff'}}>*</span>
             <div className={c.itemText}>状态</div>
           </div>
-          <Radio.Group onChange={onChange} value={value} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+          <Radio.Group onChange={e=>setStatus(e.target.value)} value={status} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
             <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="正常的用户。">
               <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>正常</Radio>
             </Tooltip>

@@ -83,7 +83,7 @@ function RGroup ({ tagsGroup, get, setTagsGroup }) {
 
   function handleInputConfirm (index, id) {
     if (inputValue && !tagsGroup[index].tags.filter(i => i.name === inputValue).length) {
-      tagsApi('add', undefined, { name: inputValue, tag_group_id: id }).then(r => {
+      tagsApi('add', undefined, { name: inputValue, group_id: id }).then(r => {
         !r.error && get()
       })
     } else if (inputValue) {

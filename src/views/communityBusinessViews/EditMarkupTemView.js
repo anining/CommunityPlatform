@@ -1,72 +1,61 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Radio, Table, Button, message, Breadcrumb } from 'antd'
+import * as L from "partial.lenses"
+import * as R from 'kefir.ramda'
+import { Input, Radio, Button, Breadcrumb, message } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import good8 from '../../icons/good/good8.png'
 import good55 from '../../icons/good/good55.png'
 import good48 from '../../icons/good/good48.png'
 import good47 from '../../icons/good/good47.png'
 import good54 from '../../icons/good/good54.png'
-import { communityParamTemplates } from "../../utils/api"
 import { saveSuccess, goBack, push } from "../../utils/util"
 import { useHistory } from "react-router-dom"
-import DropdownComponent from "../../components/DropdownComponent"
+import { cmntPadjs } from "../../utils/api"
 
 function EditMarkupTemView () {
   const h = useHistory()
   const { state = {} } = useHistory().location
   const { id, name: n, params: p = [], weight: w } = state
-  const [name, setName] = useState(n)
-  const [weight, setWeight] = useState(w)
-  const [params, setParams] = useState(p)
+
+  const [name, setName] = useState()
+  const [type, setType] = useState("absolute")
+  const [price, setPrice] = useState()
+  const [factors, setFactors] = useState([])
   const [loading, setLoading] = useState(false)
 
-  const columns = [
-    {
-      title: '参数类型',
-      dataIndex: 'type',
-      align: 'center',
-  },
-    {
-      title: '参数说明',
-      dataIndex: 'introduction',
-      align: 'center',
-  },
-  ]
-  const dataSource = [
-    { type: 'text', introduction: "允许输入任意文字类型内容" },
-    { type: 'number', introduction: "只允许输入数字类型内容" },
-    { type: 'url', introduction: "验证输入框内的内容必须包含至少一条链接" },
-  ]
+  const setPriceAt = i => R.pipe(
+    e => L.set([i], +e.target.value, factors),
+    setFactors,
+  )
 
   function save (jump) {
     if (!name) {
       message.warning("请完善信息")
       return
     }
-    if (weight > 32767 || weight < -32768) {
-      message.warning("权重值超出范围")
-      return
-    }
-    if (params.filter(i => i.type).length === 0) {
-      message.warning("请完善信息")
-      return
+    const localFactors = [...factors]
+    if (localFactors.length !== 4) {
+      for (let i = 0; i < 4; i++) {
+        !localFactors[i] && (localFactors[i] = 0)
+      }
     }
     setLoading(true)
-    communityParamTemplates(id ? 'modify' : 'add', id, undefined, { name, weight: weight || 1, params }).then(r => {
+    cmntPadjs(id ? 'modify' : 'add', id, undefined, { name, type, factors: localFactors }).then(r => {
       setLoading(false)
       if (!jump) {
-        h.replace('/main/editOrderModel')
+        h.replace('/main/editMarkupTem')
       }
       if (!r.error) {
         saveSuccess(jump)
         setName(undefined)
-        setWeight(undefined)
-        setParams([])
+        setType("absolute")
+        setPrice()
+        setFactors([])
       }
     }).catch(() => {
       if (!jump) {
-        h.replace('/main/editOrderModel')
+        h.replace('/main/editMarkupTem')
       }
       setLoading(false)
     })
@@ -97,12 +86,19 @@ function EditMarkupTemView () {
         </div>
         <div className={c.item}>
           <div className={c.itemName} style={{width:'auto'}}>
+            <span>*</span>
+            <div className={c.itemText}>模版名称</div>
+          </div>
+          <Input maxLength={20} placeholder="请输入模版名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput} />
+        </div>
+        <div className={c.item}>
+          <div className={c.itemName} style={{width:'auto'}}>
             <span style={{color:'#fff'}}>*</span>
             <div className={c.itemText}>加价类型</div>
           </div>
-          <Radio.Group className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-            <Radio value="normal" className={c.itemRadio} style={{width:'33.333%'}}>百分比加价</Radio>
-            <Radio value="banned" className={c.itemRadio} style={{width:'33.333%'}}>固定加价</Radio>
+          <Radio.Group className={c.itemGrop} onChange={e=>setType(e.target.value)} value={type} style={{justifyContent:'flex-start'}}>
+            <Radio value="relative" className={c.itemRadio} style={{width:'33.333%'}}>百分比加价</Radio>
+            <Radio value="absolute" className={c.itemRadio} style={{width:'33.333%'}}>固定加价</Radio>
           </Radio.Group>
         </div>
         <div className={c.item} style={{alignItems:'flex-start'}}>
@@ -113,34 +109,34 @@ function EditMarkupTemView () {
           <div>
             <div className={c.tem_line}>
               <div>&#8194;假设商品进价为</div>
-              <Input placeholder="1"/>
+              <Input placeholder="0" value={price} onChange={e=>setPrice(e.target.value)}/>
             </div>
             <div className={c.tem_line}>
               <div>&#12288;&#12288;&#12288;&#8194;单价加价</div>
-              <Input placeholder="10"/>
-              <div>加价之后的单价为：</div>
-              <span>6</span>
+              <Input placeholder="0" value={factors[0]} onChange={setPriceAt(0)}/>
+              <div>{type==="relative"?'% , ':', '}加价之后的单价为：</div>
+              <span>{price?factors[0]?type==="absolute"?+price+ (+factors[0]):+price*(100+(+factors[0]))/100:price:factors[0]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good54} alt="" />
               <div>高级会员加价</div>
-              <Input placeholder="10" />
-              <div>加价之后的高级会员统一密价为：</div>
-              <span>4.5</span>
+              <Input placeholder="0" value={factors[1] } onChange={setPriceAt(1)}/>
+              <div>{type==="relative"?'% , ':', '}加价之后的高级会员统一密价为：</div>
+              <span>{price?factors[1]?type==="absolute"?+price+ (+factors[1]):+price*(100+(+factors[1]))/100:price:factors[1]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good48} alt="" />
               <div>钻石会员加价</div>
-              <Input placeholder="10"/>
-              <div>%，加价之后的高级会员统一密价为：</div>
-              <span>6</span>
+              <Input placeholder="0" value={factors[2] } onChange={setPriceAt(2)}/>
+              <div>{type==="relative"?'% , ':', '}加价之后的高级会员统一密价为：</div>
+              <span>{price?factors[2]?type==="absolute"?+price+ (+factors[2]):+price*(100+(+factors[2]))/100:price:factors[2]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good47} alt="" />
               <div>至尊会员加价</div>
-              <Input placeholder="10"/>
-              <div>%，加价之后的至尊会员统一密价为：</div>
-              <span>6</span>
+              <Input placeholder="0" value={factors[3] } onChange={setPriceAt(3)}/>
+              <div>{type==="relative"?'% , ':', '}加价之后的至尊会员统一密价为：</div>
+              <span>{price?factors[3]?type==="absolute"?+price+ (+factors[3]):+price*(100+(+factors[3]))/100:price:factors[3]||0}</span>
             </div>
             <div className={c.tem_tips}>*检测到至尊会员统一密价大于钻石会员统一密价，请确认是否填写错误。</div>
           </div>
@@ -149,7 +145,7 @@ function EditMarkupTemView () {
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
-            <Button loading={loading} type="primary" className={c.submit} onClick={()=>save(true)}>保存加价模版</Button>
+            <Button type="primary" className={c.submit} onClick={()=>save(true)}>保存加价模版</Button>
           </div>
         </div>
       </div>

@@ -4,8 +4,8 @@
 }
 
 .close {
-  font-size: 1.5rem;
-  color: #979BA3;
+  width: 13px;
+  cursor: pointer;
 }
 
 .header {
@@ -14,10 +14,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.limit_view {
-
 }
 
 .limit_item {
@@ -54,6 +50,7 @@
 }
 
 .introduction {
+  margin-top: 32px;
   background-color: rgba(244, 244, 244, 1);
   padding: 20px 30px;
   color: #333333;
@@ -188,7 +185,7 @@
 }
 
 .user_setting {
-  padding: 0 50px;
+  padding: 26px 50px;
 }
 
 .selects {
@@ -205,4 +202,12 @@
   border-color: rgba(0, 0, 0, 0.15);
   color: rgba(0, 0, 0, 0.25);
   margin-bottom: 9px;
+}
+
+.desc_view {
+  margin: 32px 0 0 128px;
+}
+
+.change_desc_view {
+  margin: 32px 0 0 28px;
 }

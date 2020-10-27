@@ -6,7 +6,7 @@ import good7 from '../../icons/good/good7.png'
 import home9 from '../../icons/home/home9.png'
 import good40 from '../../icons/good/good40.png'
 import { push, transformTime, getKey } from "../../utils/util"
-import { PERMISSIONS } from "../../utils/config"
+import { PERMISSIONS, PERMISSIONS_ARRAY } from "../../utils/config"
 
 function AdminView () {
 
@@ -31,17 +31,9 @@ function RTable () {
     })
   }, [])
 
-  function detail (permissions, index) {
-    setPurview(permissions)
-    const localVisible = []
-    data.forEach((item, i) => {
-      if (index === i) {
-        localVisible.push(true)
-      } else {
-        localVisible.push(false)
-      }
-    })
-    setVisible(localVisible)
+  function detail (permissions,role, index) {
+    setPurview(role === "superuser" ? PERMISSIONS_ARRAY : JSON.parse(permissions))
+    setVisible(data.map((item, i) => index === i))
   }
 
   function change (record) {
@@ -49,11 +41,7 @@ function RTable () {
   }
 
   function close () {
-    const localVisible = []
-    data.forEach((item, i) => {
-      localVisible.push(false)
-    })
-    setVisible(localVisible)
+    setVisible(data.map(()=>false))
   }
 
   function format (arr) {
@@ -65,70 +53,66 @@ function RTable () {
   }
 
   const columns = [
-      {
-        title: 'ID',
-        dataIndex: 'id',
-        align: 'center',
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      align: 'center',
   },
-      {
-        title: '管理员账号',
-        dataIndex: 'account',
-        align: 'center',
+    {
+      title: '管理员账号',
+      dataIndex: 'account',
+      align: 'center',
   },
-      {
-        title: '管理员名称',
-        dataIndex: 'nickname',
-        align: 'center',
+    {
+      title: '管理员名称',
+      dataIndex: 'nickname',
+      align: 'center',
   },
-      {
-        title: '管理员权限',
-        dataIndex: 'id',
-        render: (text, record, index) => {
-          const { permissions } = record
-          const views = []
-          purview.forEach((item, index) => {
-            const title = getKey(item.permission, PERMISSIONS)
-            views.push(
-              <div style={{...styles.item,...{
-              borderLeftWidth: index % 3 === 0 ? 1 : 0,
-              borderTopWidth: index < 3 ? 1 : 0
-            }}} key={index}>{title}</div>
-            )
-          })
-          views.length === 0 && views.push(
-            <div style={styles.nullView} key="permissions_null_key">
+    {
+      title: '管理员权限',
+      render: (text, record, index) => {
+        const { permissions, role } = record
+        const views = []
+        purview.forEach((item, index) => {
+          const title = getKey(item.permission, PERMISSIONS)
+          views.push(
+            <div style={{...styles.item,...{borderLeftWidth: index % 3 === 0 ? 1 : 0,borderTopWidth: index < 3 ? 1 : 0}}} key={index}>
+              {title}
+            </div>
+          )
+        })
+        views.length === 0 && views.push(
+          <div style={styles.nullView} key="permissions_null_key">
             <img src={home9} alt="" style={styles.nullImg}/>
           </div>
-          )
-          return (
-            <Popconfirm
-            icon = { <img src="" alt="" style={{width:0,height:0}}/>
-          }
-          visible = { visible[index] }
-          placement = "left"
-          title = {
-              () => {
-                return (
-                  <div style={styles.view}>
-                    <div style={styles.close} onClick={close}>
-                      <img src={good40} style={styles.closeImg} alt="" />
-                    </div>
-                    <div style={styles.header}>操作权限</div>
-                    {views}
-                  </div>
-                )
-              }
-            } >
-            <div className={c.clickText} onClick={()=>detail(permissions,index)}>查看详情</div> <
-            /Popconfirm>
+        )
+
+        return (
+          <Popconfirm
+            icon={<img src="" alt="" style={{width:0,height:0}}/>}
+            visible={ visible[index] }
+            placement="left"
+            title={()=>(
+              <div style={styles.view}>
+                <div style={styles.close} onClick={close}>
+                  <img src={good40} style={styles.closeImg} alt="" />
+                </div>
+                <div style={styles.header}>操作权限</div>
+                {views}
+              </div>
+            )
+          }>
+            <div className={c.clickText} onClick={()=>detail(permissions,role,index)}>查看详情</div>
+          </Popconfirm>
         )
       }
-    },
+  },
     {
       title: '创建时间',
       align: 'center',
-      dataIndex: 'time',
-    }, {
+      dataIndex: 'time'
+      },
+    {
       title: '操作',
       dataIndex: 'id',
       align: 'center',
@@ -141,11 +125,11 @@ function RTable () {
           <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{}}>删除</div>
         </Space>
       )
-    }
+      }
 ];
 
-return (
-  <div className={c.main} style={{marginTop:0}}>
+  return (
+    <div className={c.main} style={{marginTop:0}}>
       <div className={c.searchView}>
         <div className={c.search} style={{borderBottom:'none'}}>
           <div className={c.searchL} />
@@ -170,7 +154,7 @@ return (
         }}
       />
     </div>
-)
+  )
 }
 
 const styles = {

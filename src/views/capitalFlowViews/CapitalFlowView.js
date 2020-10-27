@@ -118,11 +118,11 @@ function RTable () {
       text: '系统减款',
       textColor: '#FF4D4F',
     },
-    consumed_by_comm_goods: {
+    consumed_by_cmnt: {
       color: "#2C68FF",
       text: '购买社区商品',
     },
-    consumed_by_card_goods: {
+    consumed_by_card: {
       color: "#2C68FF",
       text: '购买卡密商品',
     },

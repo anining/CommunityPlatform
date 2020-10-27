@@ -20,33 +20,27 @@ function OrderModelView () {
 
 function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
-  const [search_name, setSearch_name] = useState()
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [actionLoading, setActionLoading] = useState(false)
+  const [search_name, setSearch_name] = useState()
 
   useEffect(() => {
     get(current)
   }, [])
 
   function get (current) {
-    setLoading(true)
     let body = { page: current, size: pageSize }
     if (search_name) {
-      body = { ...body, ...{ search_name } }
+      body = { ...body, ...{ name: search_name } }
     }
     communityParamTemplates("get", undefined, body).then(r => {
-      setLoading(false)
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
       }
-    }).catch(() => {
-      setLoading(false)
     })
   }
 
@@ -107,20 +101,14 @@ function RTable () {
   };
 
   function submit (key) {
-    setActionLoading(true)
     switch (key) {
       case "delete":
-        const params = new URLSearchParams()
-        selectedRows.forEach(i => params.append("ids", data[i].id))
-        communityParamTemplates("delete", undefined, undefined, params.toString()).then(r => {
-          setActionLoading(false)
+        communityParamTemplates("delete", undefined, undefined, "ids=" + selectedRows.map(i => data[i].id).toString()).then(r => {
           if (!r.error) {
             saveSuccess(false)
             setSelectRows([])
             get(current)
           }
-        }).catch(() => {
-          setActionLoading(false)
         })
         break
       default:
@@ -138,7 +126,6 @@ function RTable () {
                 <img src={good31} alt="" style={{width:14,marginRight:6}} />
               }
                 size = "small"
-                loading={loading}
                 onClick={()=>get(current)}
                 className={c.searchBtn}>搜索模型</Button>
             </div>
@@ -153,7 +140,7 @@ function RTable () {
             </div>
           </div>
       </div>
-      <DropdownComponent loading={actionLoading} selectedRows={selectedRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
       <Table
         columns={columns}
         rowSelection={{

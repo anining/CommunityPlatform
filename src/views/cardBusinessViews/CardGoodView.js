@@ -134,7 +134,7 @@ function RTable ({ setVisible }) {
     {
       title: '商品类别',
       align: 'center',
-      dataIndex: 'category',
+      dataIndex: 'ctg',
   },
     {
       title: '卡密类型',

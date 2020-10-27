@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Input,Modal } from 'antd'
+import { Button, Table, Input, Modal } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
@@ -7,9 +7,10 @@ import good31 from '../../icons/good/good31.png'
 import { communityGoodsCategories } from '../../utils/api'
 import { push, transformTime, saveSuccess } from "../../utils/util";
 import DropdownComponent from '../../components/DropdownComponent'
-import {styles} from "../../styles/modal"
+import { styles } from "../../styles/modal"
 
 function GoodCategoryView () {
+  // TODO: 两个删除弹窗
   const [visible, setVisible] = useState(false)
   const [actionId, setActionId] = useState(2)
 
@@ -64,13 +65,11 @@ function GoodCategoryView () {
 
 function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
-  const [search_name, setSearch_name] = useState()
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [actionLoading, setActionLoading] = useState(false)
+  const [search_name, setSearch_name] = useState()
 
   useEffect(() => {
     get(current)
@@ -79,18 +78,14 @@ function RTable () {
   function get (current) {
     let body = { page: current, size: pageSize }
     if (search_name) {
-      body = { ...body, search_name }
+      body = { ...body, name: search_name }
     }
-    setLoading(true)
     communityGoodsCategories("get", undefined, body).then(r => {
-      setLoading(false)
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
       }
-    }).catch(() => {
-      setLoading(false)
     })
   }
 
@@ -151,20 +146,14 @@ function RTable () {
   };
 
   function submit (key) {
-    setActionLoading(true)
     switch (key) {
       case "delete":
-        const params = new URLSearchParams()
-        selectedRows.forEach(i => params.append("ids", data[i].id))
-        communityGoodsCategories("delete", undefined, undefined, params.toString()).then(r => {
-          setActionLoading(false)
+        communityGoodsCategories("delete", undefined, undefined, "ids=" + selectedRows.map(i => data[i].id).toString()).then(r => {
           if (!r.error) {
             saveSuccess(false)
             setSelectRows([])
             get(current)
           }
-        }).catch(() => {
-          setActionLoading(false)
         })
         break
       default:
@@ -184,7 +173,6 @@ function RTable () {
                 }
                 size = "small"
                 onClick={()=>get(current)}
-                loading={loading}
                 className={c.searchBtn}>搜索分类</Button>
             </div>
             <div className={c.searchR}>
@@ -199,7 +187,7 @@ function RTable () {
             </div>
           </div>
       </div>
-      <DropdownComponent loading={actionLoading} selectedRows={selectedRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
       <Table
         columns={columns}
         rowSelection={{

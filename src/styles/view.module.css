@@ -151,16 +151,6 @@
   color: #979BA3;
 }
 
-.dropdownPromise {
-  width: 29.25%;
-  height: 40px;
-  padding: 4px 11px;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .dropItem {
   padding: 5px 12px;
   color: rgba(0, 0, 0, 0.85);
@@ -300,4 +290,25 @@
   width: 132px;
   margin: 24px 0;
   height: 32px;
+}
+
+.dropdownPromise {
+  width: 29.25%;
+  height: 40px;
+  padding: 4px 11px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown_view {
+  width: 186px;
+  height: 32px;
+  padding: 4px 11px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 40px 24px 0;
 }

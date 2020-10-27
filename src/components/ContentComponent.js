@@ -76,28 +76,28 @@ function ContentComponent () {
         </Route>
         {/* 社区业务 */}
         <Route exact path="/main/goodCategory">
-          { localPermissions.includes('commbiz') ? <GoodCategoryView /> : <Redirect to="/main/error" /> }
+          { localPermissions.includes('cmntbiz') ? <GoodCategoryView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editGoodCategory">
-          { localPermissions.includes('commbiz') ? <EditGoodCategoryView /> : <Redirect to="/main/error" /> }
+          { localPermissions.includes('cmntbiz') ? <EditGoodCategoryView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/markupTem">
-          { localPermissions.includes('commbiz') ? <MarkupTemView /> : <Redirect to="/main/error" /> }
+          { localPermissions.includes('cmntbiz') ? <MarkupTemView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editMarkupTem">
-          { localPermissions.includes('commbiz') ? <EditMarkupTemView /> : <Redirect to="/main/error" /> }
+          { localPermissions.includes('cmntbiz') ? <EditMarkupTemView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/communityGood">
-          { localPermissions.includes('commbiz') ? <CommunityGoodView /> : <Redirect to="/main/error" /> }
+          { localPermissions.includes('cmntbiz') ? <CommunityGoodView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editCommunityGood">
-          { localPermissions.includes('commbiz') ? <EditCommunityGoodView /> : <Redirect to="/main/error" /> }
+          { localPermissions.includes('cmntbiz') ? <EditCommunityGoodView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/orderModel">
-          { localPermissions.includes('commbiz') ? <OrderModelView /> : <Redirect to="/main/error" /> }
+          { localPermissions.includes('cmntbiz') ? <OrderModelView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/editOrderModel">
-          { localPermissions.includes('commbiz') ? <EditOrderModelView /> : <Redirect to="/main/error" /> }
+          { localPermissions.includes('cmntbiz') ? <EditOrderModelView /> : <Redirect to="/main/error" /> }
         </Route>
         {/* 分站管理 */}
         <Route exact path="/main/childWebList">
