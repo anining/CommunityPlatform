@@ -8,6 +8,7 @@ import { login, currentManager } from '../../utils/api'
 import { setter } from '../../utils/store'
 import { push } from "../../utils/util";
 import { storage } from "../../utils/storage";
+import { PERMISSION } from "../../utils/config"
 
 function LoginView () {
   const [account, setAccount] = useState()
@@ -44,9 +45,9 @@ function LoginView () {
         if (permissions) {
           setter([['permissions', permissions]]);
           push('/main')
-          get(role)
+          get()
         } else {
-          get(role, true)
+          get(true)
         }
       }
     }).catch(e => {
@@ -54,12 +55,12 @@ function LoginView () {
     })
   }
 
-  function get (role, jump = false) {
+  function get (jump) {
     currentManager().then(r => {
       const { data, error } = r
       if (!error) {
-        const { permissions, nickname } = data
-        setter([["nickname", nickname], ['permissions', role === "superuser" ? ["orderlog", "citecfg", "usermng", "capitalflow", "valueaddedsrv", "tagmng", "statistics", "subcitemng", "cmntbiz", "cardbiz"] : permissions]], true);
+        const { permissions, nickname, role } = data
+        setter([["nickname", nickname], ['permissions', role === "superuser" ? PERMISSION : permissions]], true);
         jump && push('/main')
       }
     })

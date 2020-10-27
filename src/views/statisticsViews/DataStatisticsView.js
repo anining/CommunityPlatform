@@ -16,6 +16,7 @@ import statistics17 from '../../icons/edit/edit17.png'
 import statistics18 from '../../icons/edit/edit18.png'
 import statistics19 from '../../icons/edit/edit19.png'
 import statistics20 from '../../icons/edit/edit20.png'
+import {message} from "antd"
 
 function DataStatisticsView () {
   const views = []
@@ -189,7 +190,7 @@ function DataStatisticsView () {
     views.push(
       <div key={Math.random()} className={cs.bView}>
       {items}
-      <div className={cs.bDetail}>查看详情</div>
+      <div style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")} className={cs.bDetail}>查看详情</div>
       </div>
     )
   })

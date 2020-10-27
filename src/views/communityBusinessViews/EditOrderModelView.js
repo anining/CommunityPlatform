@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input,Table, Button, message, Breadcrumb } from 'antd'
+import { Input, Table, Button, message, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import good8 from '../../icons/good/good8.png'
 import { communityParamTemplates } from "../../utils/api"
@@ -11,10 +11,11 @@ import DropdownComponent from "../../components/DropdownComponent"
 function EditOrderModelView () {
   const h = useHistory()
   const { state = {} } = useHistory().location
-  const { id, name: n, params: p = [], weight: w } = state
+  const { id, name: n, params: p, weight: w } = state
+  const initParams = p ? JSON.parse(p) : []
   const [name, setName] = useState(n)
   const [weight, setWeight] = useState(w)
-  const [params, setParams] = useState(p)
+  const [params, setParams] = useState(initParams)
   const [loading, setLoading] = useState(false)
 
   const columns = [
@@ -49,7 +50,7 @@ function EditOrderModelView () {
       return
     }
     setLoading(true)
-    communityParamTemplates(id ? 'modify' : 'add', id, undefined, { name, weight: weight || 1, params }).then(r => {
+    communityParamTemplates(id ? 'modify' : 'add', id, undefined, { name, weight: weight || 1, params: JSON.stringify(params) }).then(r => {
       setLoading(false)
       if (!jump) {
         h.replace('/main/editOrderModel')
@@ -113,7 +114,7 @@ function EditOrderModelView () {
           </div>
           <div className={c.orderModelView}>
             <RModel params={params} setParams={setParams}/>
-            <div onClick={()=>setParams([...params,...[{name:'',placeholder:'',type:''}]])} className={c.orderModelAdd}>
+            <div onClick={()=>setParams([...params,...[{name:'',field:'',placeholder:'',type:''}]])} className={c.orderModelAdd}>
               <img src={good8} alt="" className={c.orderModelAddImg}/>
               <div className={c.orderModelAddText}>添加</div>
             </div>
@@ -163,12 +164,13 @@ function RModel ({ params = [], setParams }) {
   }
 
   params.forEach((item, index) => {
-    const { name, placeholder, type } = item
+    const { name, placeholder, type, field } = item
     views.push(
       <div className={c.orderInputView} key={index}>
+        <Input maxLength={20} onChange={e=>onChange(e,index,"field")} value={field} placeholder="字段名称，如：ziduan" className={c.orderInput} style={{fontSize:'1rem'}} />
         <Input maxLength={20} onChange={e=>onChange(e,index,"name")} value={name} placeholder="参数名称，如：数量" className={c.orderInput} style={{fontSize:'1rem'}}></Input>
         <Input maxLength={20} onChange={e=>onChange(e,index,'placeholder')} value={placeholder} placeholder="参数提示语，如：请输入数量" style={{fontSize:'1rem'}} className={c.orderInput}></Input>
-        <DropdownComponent action={type} style={{width:'27.372%',height:40,marginBottom:0}} placeholder="参数类型，如：text" setAction={e=>onChange(e,index,"type")} keys={[{key:'text',name:'文本'},{key:'number',name:'数字'},{key:'url',name:'链接'}]}/>
+        <DropdownComponent action={type} style={{width:'20.529%',height:40,marginBottom:0}} placeholder="参数类型，如：text" setAction={e=>onChange(e,index,"type")} keys={[{key:'text',name:'文本'},{key:'number',name:'数字'},{key:'url',name:'链接'}]}/>
         <Button size="small" danger className={c.orderBtn} onClick={()=>deleteI(index)}>删除</Button>
       </div>
     )

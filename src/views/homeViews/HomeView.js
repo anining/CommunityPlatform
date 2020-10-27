@@ -1,6 +1,6 @@
 import * as React from 'karet'
 import { useState, useEffect } from 'react'
-import { Button, Table, Timeline } from 'antd'
+import { Button, Table, Timeline, message } from 'antd'
 import c from '../../styles/home.module.css'
 import home3 from '../../icons/home/home3.png'
 import home1 from '../../icons/home/home1.png'
@@ -13,6 +13,7 @@ import { h } from '../../utils/history'
 import { Line } from '@ant-design/charts';
 import ct from '../../styles/statistics.module.css'
 import { getter } from "../../utils/store";
+import {push} from "../../utils/util"
 
 function HomeView () {
   const { nickname } = getter(["nickname"])
@@ -113,7 +114,7 @@ function HomeView () {
 
   const config = {
     height: 400,
-    data:recharge_data,
+    data: recharge_data,
     padding: 'auto',
     xField: 'Date',
     yField: 'scales',
@@ -127,7 +128,7 @@ function HomeView () {
 
   const orderConfig = {
     height: 400,
-    data:order_data,
+    data: order_data,
     xField: 'year',
     yField: 'value',
     seriesField: 'category',
@@ -140,7 +141,7 @@ function HomeView () {
       start: 0.1,
       end: 0.5,
     },
-    color:['#2FC25B', '#FF8D30'],
+    color: ['#2FC25B', '#FF8D30'],
   };
 
   for (let i = 0; i < 3; i++) {
@@ -188,7 +189,7 @@ function HomeView () {
               <div>欢迎您，{nickname}，祝您开心每一天！</div>
               <div className={c.headerUNTips}>旗舰版</div>
             </div>
-            <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>2021.01.01 01:15:23</div>　<span>续费</span></div>
+            <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>2021.01.01 01:15:23</div>　<span style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")}>续费</span></div>
           </div>
           <div className={c.line}/>
           <div className={c.headerL}>
@@ -196,10 +197,7 @@ function HomeView () {
             <div className={c.headerLPath}>127.0.0.1/重庆市</div>
             <div className={c.headerLTime}>2020.01.15 15:15:23</div>
           </div>
-          <Button size="small" type="primary" className={c.headerBtn} onClick={()=>{
-              const history = h.get()
-              history.push("/main/dataSetting")
-          }}>主页看板设置</Button>
+          <Button size="small" type="primary" className={c.headerBtn} onClick={()=>push('/main/dataSetting')}>主页看板设置</Button>
           <img src={home7} alt="" className={c.headerBg}/>
         </div>
 
@@ -219,7 +217,7 @@ function HomeView () {
           <div className={c.moving}>
             <div className={c.moving_header}>
               <div>最近动态</div>
-              <div>更多</div>
+              <div style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")}>更多</div>
             </div>
             <div className={c.time}>
               <Timeline>
@@ -234,7 +232,7 @@ function HomeView () {
         <div className={c.tableView}>
           <div className={c.tableHeader}>
             <div className={c.tableTitle}>最近进价变动表</div>
-            <div className={c.tableTips}>查看全部</div>
+            <div style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")} className={c.tableTips}>查看全部</div>
           </div>
           <Table
             columns={columns}

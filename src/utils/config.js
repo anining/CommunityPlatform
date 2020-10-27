@@ -12,9 +12,10 @@ import good70 from '../icons/good/good70.png'
 import good71 from '../icons/good/good71.png'
 import good72 from '../icons/good/good72.png'
 import good73 from '../icons/good/good73.png'
+import good77 from '../icons/good/good77.png'
 
 const DEVELOPER = "Production"
-const API_URL = DEVELOPER === "Production" ? "https://test-omnivstore.prismslight.com/mng" : "http://192.168.1.36:8000/mng"
+const API_URL = DEVELOPER === "test" ? "https://test-omnivstore.prismslight.com/mng" : "http://192.168.1.36:8000/mng"
 const JUMP_DELAY = 500
 const MODULES = {
   toolbar: [
@@ -50,6 +51,16 @@ const PERMISSIONS = {
   cmntbiz: '社区业务',
   cardbiz: '卡密业务'
 }
+const TEM_TYPE = {
+  "absolute": {
+    label: '固定加价',
+  },
+  "relative": {
+    label: '百分比加价',
+  }
+}
+const PERMISSIONS_ARRAY = [{ "permission": "orderlog" }, { "permission": "citecfg" }, { "permission": "usermng" }, { "permission": "capitalflow" }, { "permission": "valueaddedsrv" }, { "permission": "tagmng" }, { "permission": "statistics" }, { "permission": "subcitemng" }, { "permission": "cmntbiz" }, { "permission": "cardbiz" }];
+const PERMISSION = ["orderlog", "citecfg", "usermng", "capitalflow", "valueaddedsrv", "tagmng", "statistics", "subcitemng", "cmntbiz", "cardbiz"];
 const GOODS_STATUS = {
   available: {
     color: "#2C68FF",
@@ -115,15 +126,18 @@ const USER_STATUS = {
 }
 
 const USER_RANK = {
-  a: {
-    src: good71
+  "0": {
+    src: good77
   },
-  b: {
+  "1": {
+    src: good73
+  },
+  "2": {
     src: good72
   },
-  c: {
-    src: good73
+  "3": {
+    src: good71
   }
 }
 
-export {USER_STATUS,USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }
+export { PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }

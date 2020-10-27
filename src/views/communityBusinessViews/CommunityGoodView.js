@@ -16,9 +16,9 @@ import ModalComponent from "../../components/ModalComponent";
 import { push, getKey, saveSuccess } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import { communityGoods } from "../../utils/api"
-import SelectComponent from "../../components/SelectComponent"
 import { GOODS_STATUS } from "../../utils/config"
 import ModalPopComponent from "../../components/ModalPopComponent"
+import DropdownPromiseComponent from "../../components/DropdownPromiseComponent"
 
 let win
 
@@ -80,10 +80,10 @@ function CommunityGoodView () {
       body = { ...body, ...{ id } }
     }
     if (search_name) {
-      body = { ...body, ...{ search_name } }
+      body = { ...body, ...{ name: search_name } }
     }
     if (community_goods_category_id) {
-      body = { ...body, ...{ community_goods_category_id } }
+      body = { ...body, ...{ ctg_id: community_goods_category_id } }
     }
     if (status) {
       body = { ...body, ...{ status } }
@@ -124,9 +124,7 @@ function CommunityGoodView () {
 
   function onOk () {
     setVisible(false)
-    const params = new URLSearchParams()
-    selected.forEach(i => params.append("ids", i.id))
-    communityGoods("modifys", undefined, params.toString(), { status: key }).then(r => {
+    communityGoods("modifys", undefined, "ids=" + selected.map(i => i.id).toString(), { status: key }).then(r => {
       if (!r.error) {
         saveSuccess(false)
         setSelectRows([])
@@ -227,7 +225,7 @@ function CommunityGoodView () {
   onCancel = { onCancel }
   /> <
   ModalPopComponent
-    width={520}
+  width = { 520 }
   div = {
     <div className={oc.desc_view}>
       <div className={oc.desc_item}>
@@ -301,19 +299,19 @@ function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibl
 
   function submit (key) {
     let title = ""
-    switch (key) {
-      case "c":
-        title = "您确定要推荐这些商品吗？";
-        break;
-      case "d":
-        title = "您确定要取消推荐这些商品吗？";
-        break;
-      case "e":
-        title = "您确定要删除选中的商品吗?";
-        break;
-      default:
+    // switch (key) {
+      // case "c":
+      //   title = "您确定要推荐这些商品吗？";
+      //   break;
+      // case "d":
+      //   title = "您确定要取消推荐这些商品吗？";
+      //   break;
+      // case "e":
+      //   title = "您确定要删除选中的商品吗?";
+      //   break;
+      // default:
         title = `修改商品状态为${GOODS_STATUS[key].text}`
-    }
+    // }
 
     setTitle(title)
     setSelected(selectedRows.map(i => data[i]))
@@ -344,55 +342,58 @@ function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibl
     {
       title: '商品分类',
       align: 'center',
-      dataIndex: 'category_name',
+      dataIndex: 'ctg_name',
   },
     {
       title: '下单模型',
       dataIndex: 'param_template_name',
       align: 'center',
       render: (text, record, index) => {
-        return <div>(0815) {text}</div>
-      }
+        return '-'
+      },
+      // render: (text, record, index) => {
+      //   return <div>(0815) {text}</div>
+      // }
   },
     {
       title: '商品来源',
-      dataIndex: 'unit_cost',
+      dataIndex: 'provider_type',
       align: 'center',
-      render: (text, record, index) => {
-        return '-'
-      }
   },
     {
       title: '进价',
       dataIndex: 'unit_cost',
       align: 'center',
       render: (text, record, index) => {
-        return '-'
+        return text || '-'
       },
-      sorter: {
-        compare: (a, b) => {
-          console.log(a, b)
-        },
-        multiple: 1,
-      }
+      // sorter: {
+      //   compare: (a, b) => {
+      //     console.log(a, b)
+      //   },
+      //   multiple: 1,
+      // }
   },
     {
       title: '单价',
       dataIndex: 'unit_price',
       align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          console.log(a, b)
-        },
-        multiple: 1,
+      render: (text, record, index) => {
+        return '-'
       }
+      // sorter: {
+      //   compare: (a, b) => {
+      //     console.log(a, b)
+      //   },
+      //   multiple: 1,
+      // }
   },
     {
       title: '统一密价',
       align: 'center',
       dataIndex: 'disc_price',
       render: (text, record, index) => {
-        return <div>查看</div>
+        return <div className={c.clickText}>查看</div>
       }
   },
     {
@@ -438,7 +439,8 @@ function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibl
       align: 'center',
       dataIndex: 'disc_price',
       render: (text, record, index) => {
-        return <div onClick={()=>setVisibleLimit(true)}>查看</div>
+        // return <div className={c.clickText} onClick={()=>setVisibleLimit(true)}>查看</div>
+        return <div className={c.clickText}>查看</div>
       }
   },
     {
@@ -446,7 +448,7 @@ function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibl
       align: 'center',
       dataIndex: 'disc_price',
       render: (text, record, index) => {
-        return <div>查看</div>
+        return <div className={c.clickText}>查看</div>
       }
   },
     {
@@ -454,7 +456,7 @@ function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibl
       align: 'center',
       dataIndex: 'disc_price',
       render: (text, record, index) => {
-        return <div>查看</div>
+        return <div className={c.clickText}>查看</div>
       }
   },
     {
@@ -462,7 +464,7 @@ function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibl
       align: 'center',
       dataIndex: 'disc_price',
       render: (text, record, index) => {
-        return <div>查看</div>
+        return <div className={c.clickText}>查看</div>
       }
   },
     {
@@ -489,7 +491,8 @@ function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibl
             <Input value={search_name} onPressEnter={()=>get(current)} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入商品名称" size="small" className={c.searchInput}/>
             <DropdownComponent action={status} setAction={setStatus} keys={[{name:"已上架",key:"available"},{name:"已关闭订单",key:"unavailable"},{name:"已下架",key:"paused"}]} placeholder="请选择商品状态" style={{width:186}}/>
             <DropdownComponent keys={[{name:"可退单",key:"refundable"},{name:"不可退单",key:"no_refundable"},{name:"全部",key:"un_refundable"}]} action={refundable} setAction={setRefundable} placeholder="请选择是否可退单" style={{width:186}}/>
-            <SelectComponent placeholder="请选择商品分类" id={community_goods_category_id} name={community_goods_category_name} click={click}/>
+            <DropdownPromiseComponent view placeholder="请选择商品分类"/>
+            {/* <SelectComponent placeholder="请选择商品分类" id={community_goods_category_id} name={community_goods_category_name} click={click}/> */}
           </div>
           <div className={c.searchR}>
             <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>
@@ -503,7 +506,8 @@ function RTable ({ selectedRows, setSelectRows, data, setVisibleLimit, setVisibl
             </div>
         </div>
       </div>
-      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量允许退款",key:"a"},{name:"批量不允许退款",key:"b"},{name:"批量置为推荐商品",key:"c"},{name:"批量删除推荐商品",key:"d"},{name:"批量删除",key:"e"},{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
+      {/* <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量允许退款",key:"a"},{name:"批量不允许退款",key:"b"},{name:"批量置为推荐商品",key:"c"},{name:"批量删除推荐商品",key:"d"},{name:"批量删除",key:"e"},{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/> */}
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
       <Table
         columns={columns}
         rowSelection={{

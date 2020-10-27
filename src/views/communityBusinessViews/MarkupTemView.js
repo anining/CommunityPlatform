@@ -4,12 +4,14 @@ import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
-import { communityGoodsCategories } from '../../utils/api'
+import { cmntPadjs } from '../../utils/api'
 import { push, transformTime, saveSuccess } from "../../utils/util";
 import DropdownComponent from '../../components/DropdownComponent'
 import { styles } from "../../styles/modal"
+import { TEM_TYPE } from "../../utils/config"
 
 function MarkupTemView () {
+  // TODO: 两个弹窗
   const [visible, setVisible] = useState(false)
   const [actionId, setActionId] = useState(2)
 
@@ -64,13 +66,11 @@ function MarkupTemView () {
 
 function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
-  const [search_name, setSearch_name] = useState()
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [actionLoading, setActionLoading] = useState(false)
+  const [search_name, setSearch_name] = useState()
 
   useEffect(() => {
     get(current)
@@ -79,18 +79,14 @@ function RTable () {
   function get (current) {
     let body = { page: current, size: pageSize }
     if (search_name) {
-      body = { ...body, search_name }
+      body = { ...body, name: search_name }
     }
-    setLoading(true)
-    communityGoodsCategories("get", undefined, body).then(r => {
-      setLoading(false)
+    cmntPadjs("get", undefined, body).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
       }
-    }).catch(() => {
-      setLoading(false)
     })
   }
 
@@ -98,6 +94,7 @@ function RTable () {
     arr.forEach((item, index) => {
       item.key = index
       item.time = transformTime(item.created_at)
+      item.updateTime = transformTime(item.updated_at)
     })
     return arr
   }
@@ -112,43 +109,38 @@ function RTable () {
       title: '模版编号',
       dataIndex: 'id',
       align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          console.log(a, b)
-        },
-        multiple: 1,
-      },
-      render: (text, record, index) => '-'
+      // sorter: {
+      //   compare: (a, b) => {
+      //     console.log(a, b)
+      //   },
+      //   multiple: 1,
+      // },
   },
     {
       title: '模版名称',
       dataIndex: 'name',
       align: 'center',
-      render: (text, record, index) => '-'
   },
     {
       title: '包含商品',
       align: 'center',
       dataIndex: 'used_by',
-      render: (text, record, index) => '-'
   },
     {
       title: '模版类型',
-      dataIndex: 'time',
+      dataIndex: 'type',
       align: 'center',
-      render: (text, record, index) => '-'
+      render: (text, record, index) => TEM_TYPE[text].label
   },
     {
       title: '创建时间',
       dataIndex: 'time',
       align: 'center',
-      render: (text, record, index) => '-'
   },
     {
       title: '修改时间',
-      dataIndex: 'time',
+      dataIndex: 'updateTime',
       align: 'center',
-      render: (text, record, index) => '-'
   }
 ];
 
@@ -160,20 +152,16 @@ function RTable () {
   };
 
   function submit (key) {
-    setActionLoading(true)
     switch (key) {
       case "delete":
         const params = new URLSearchParams()
         selectedRows.forEach(i => params.append("ids", data[i].id))
-        communityGoodsCategories("delete", undefined, undefined, params.toString()).then(r => {
-          setActionLoading(false)
+        cmntPadjs("delete", undefined, undefined, params.toString()).then(r => {
           if (!r.error) {
             saveSuccess(false)
             setSelectRows([])
             get(current)
           }
-        }).catch(() => {
-          setActionLoading(false)
         })
         break
       default:
@@ -193,7 +181,6 @@ function RTable () {
                 }
                 size = "small"
                 onClick={()=>get(current)}
-                loading={loading}
                 className={c.searchBtn}>搜索模版</Button>
             </div>
             <div className={c.searchR}>
@@ -208,7 +195,7 @@ function RTable () {
             </div>
           </div>
       </div>
-      <DropdownComponent loading={actionLoading} selectedRows={selectedRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[]}/>
       <Table
         columns={columns}
         rowSelection={{

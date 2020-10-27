@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import {Radio,DatePicker, Button, Table, message, Input, Space, Popconfirm } from 'antd'
+import { Radio, DatePicker, Button, Table, message, Input, Space, Popconfirm } from 'antd'
 import c from '../../styles/view.module.css'
-import {USER_STATUS } from "../../utils/config"
+import { USER_STATUS } from "../../utils/config"
 import oc from '../../styles/oc.module.css'
 import good23 from '../../icons/good/good23.png'
 import good24 from '../../icons/good/good24.png'
 import good9 from '../../icons/good/good9.png'
 import good41 from '../../icons/good/good41.png'
-import { users } from "../../utils/api";
+import { users, updateUsers } from "../../utils/api";
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
-import { transformTime, push, getKey } from "../../utils/util"
+import { transformTime, push, getKey, saveSuccess } from "../../utils/util"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 
 function UserView () {
+  // TODO: 三个弹窗
   const [visible, setVisible] = useState(false)
   const [visible_action, setVisibleAction] = useState(false)
   const [visible_balance, setVisibleBalance] = useState(false)
@@ -22,7 +23,18 @@ function UserView () {
   const [selected, setSelected] = useState([])
   const [key, setKey] = useState()
   const [src, setSrc] = useState()
-  const data = [
+  const [data, setData] = useState([])
+  const [current, setCurrent] = useState(1)
+  const [pageSize] = useState(10)
+  const [total, setTotal] = useState(0)
+  const [sel, setSel] = useState({})
+  const [seled, setSeled] = useState(0)
+  const [account, setAccount] = useState()
+  const [status, setStatus] = useState()
+  const [date, setDate] = useState([])
+  const [moment, setMoment] = useState()
+  const [selectedRows, setSelectRows] = useState([]);
+  const labels = [
     {
       label: '用户总数',
       number: '10,100',
@@ -37,6 +49,24 @@ function UserView () {
     },
   ]
 
+  function get (current) {
+    users(current, pageSize, account, status).then(r => {
+      if (!r.error) {
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
+  }
+
+  function format (arr) {
+    arr.forEach((item, index) => {
+      item.key = index
+      item.time = transformTime(item.created_at)
+    })
+    return arr
+  }
+
   function onCancel () {
     setVisible(false)
     setVisibleAction(false)
@@ -46,51 +76,58 @@ function UserView () {
   selected.forEach(i => text.push(i.name))
 
   function onOk () {
-
+    setVisible(false)
+    updateUsers(seled,"ids=" + sel.id).then(r => {
+      if (!r.error) {
+        saveSuccess(false)
+        setSelectRows([])
+        get(current)
+      }
+    })
   }
 
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent path="/main/addUser" data={data} text="添加用户"/>
-        <RTable setTitle={setTitle} setSelected={setSelected} setSrc={setSrc} setKey={setKey} setVisibleAction={setVisibleAction}/>
+        <TableHeaderComponent path="/main/addUser" data={labels} text="添加用户"/>
+        <RTable selectedRows={selectedRows} setSelectRows={setSelectRows} setSel={setSel} setVisible={setVisible} setTitle={setTitle} get={get} current={current} setCurrent={setCurrent} data={data} setAccount={setAccount} setStatus={setStatus} setDate={setDate} account={account} pageSize={pageSize} total={total} status={status} setMoment={setMoment} setSelected={setSelected} setSrc={setSrc} setKey={setKey} setVisibleAction={setVisibleAction}/>
       </div>
   <ModalPopComponent
     div = {
       <div>
         <div className={oc.user_setting}>
-          <div style={{color:'#333'}}>当前选中用户：18225223485</div>
+          <div style={{color:'#333'}}>当前选中用户：{sel.account||''}</div>
           <div className={oc.user_tips}>修改为</div>
           <div className={oc.selects}>
-            <Button style={{color:'#fff',background:'#2C68FF'}} className={oc.user_sel}>普通用户</Button>
-            <Button className={oc.user_sel}>高级会员</Button>
-            <Button className={oc.user_sel}>钻石会员</Button>
-            <Button className={oc.user_sel}>至尊会员</Button>
+            {
+              [{id:0,label:"普通用户"},{id:1,label:"高级用户"},{id:2,label:"钻石用户"},{id:3,label:"至尊用户"}].map(i=><Button style={{color:seled===i.id?'#fff':'rgba(0, 0, 0, 0.25)',background:seled===i.id?'#2C68FF':"#fff"}} onClick={()=>setSeled(i.id)} className={oc.user_sel}>{i.label}</Button>)
+            }
           </div>
-        </div>
-        <div className={oc.change_btn_view}>
-          <Button className={oc.change_btn_cancel}>取消</Button>
-          <Button type="primary" className={oc.change_btn_ok}>确定</Button>
-        </div>
-      </div>
-    }
-    title = "用户等级"
-    visible = { visible}
-    onCancel = { onCancel }
-  />
-      <ModalComponent
-        src={src}
-        div="当前选中用户："
-        span={text.join('、')}
-        title={title}
-        action={key}
-        visible={visible_action}
-        onCancel={onCancel}
-        onOk={onOk}
-      />
-      <ModalPopComponent
-      div = {
-        <div>
+        </div> <
+    div className = { oc.change_btn_view } >
+    <Button className={oc.change_btn_cancel}>取消</Button> <
+    Button type = "primary"
+    className = { oc.change_btn_ok } onClick={onOk}> 确定 < /Button> <
+    /div> <
+    /div>
+  }
+  title = "用户等级"
+  visible = { visible }
+  onCancel = { onCancel }
+  /> <
+  ModalComponent
+  src = { src }
+  div = "当前选中用户："
+  span = { text.join('、') }
+  title = { title }
+  action = { key }
+  visible = { visible_action }
+  onCancel = { onCancel }
+  onOk = { onOk }
+  /> <
+  ModalPopComponent
+  div = {
+      <div>
           <div className={oc.remark}>
             <div>余额数值：</div>
             <Radio.Group style={{marginLeft:12}}>
@@ -122,38 +159,11 @@ function UserView () {
   )
 }
 
-function RTable ({ setVisible,setVisibleAction,setKey,setSrc,setTitle,setSelected }) {
-  const [selectedRows, setSelectRows] = useState([]);
-  const [data, setData] = useState([])
-  const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
-  const [total, setTotal] = useState(0)
-  const [account, setAccount] = useState()
-  const [status, setStatus] = useState()
-  const [date, setDate] = useState([])
-  const [moment, setMoment] = useState()
+function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data,setAccount,setStatus,setDate,setMoment,account,pageSize,total,status,setVisible,setVisibleAction,setKey,setSrc,setTitle,setSelected }) {
 
   useEffect(() => {
     get(current)
   }, [])
-
-  function get (current) {
-    users(current, pageSize, account, status).then(r => {
-      if (!r.error) {
-        const { data, total } = r
-        setTotal(total)
-        setData(format(data))
-      }
-    })
-  }
-
-  function format (arr) {
-    arr.forEach((item, index) => {
-      item.key = index
-      item.time = transformTime(item.created_at)
-    })
-    return arr
-  }
 
   function onChange (page, pageSize) {
     setCurrent(page)
@@ -213,8 +223,11 @@ function RTable ({ setVisible,setVisibleAction,setKey,setSrc,setTitle,setSelecte
   },
     {
       title: '用户等级',
-      dataIndex: 'account',
+      dataIndex: 'ordered',
       align: 'center',
+      render: (text, record, index) => {
+        return '-'
+      }
   },
     {
       title: '消费总额',
@@ -233,14 +246,13 @@ function RTable ({ setVisible,setVisibleAction,setKey,setSrc,setTitle,setSelecte
   },
     {
       title: '社区商品密价',
-      dataIndex: 'ordered',
       align: 'center',
       render: (text, record, index) => {
         return (
         <Space size="small">
-          <div style={{cursor:'wait'}} className={c.clickText}>查看</div>
+          <div onClick={()=>push('/main/editUserPrice',record)} className={c.clickText}>查看</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div className={c.clickText} onClick={()=>{}}>修改</div>
+          <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)} >修改</div>
         </Space>
         )
       }
@@ -254,7 +266,7 @@ function RTable ({ setVisible,setVisibleAction,setKey,setSrc,setTitle,setSelecte
         <Space size="small">
           <div style={{cursor:'wait'}} className={c.clickText}>查看</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div className={c.clickText} onClick={()=>{}}>修改</div>
+          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{}}>修改</div>
         </Space>
         )
       }
@@ -306,9 +318,14 @@ function RTable ({ setVisible,setVisibleAction,setKey,setSrc,setTitle,setSelecte
             <div style={{cursor:'wait'}} className={c.clickText}>修改余额</div>
           {/* </Popconfirm> */}
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)}>修改等级</div>
+          {/* <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)}>修改等级</div> */}
+          <div className={c.clickText} onClick={()=>{
+            setSel(record)
+            setVisible(true)
+          }}>修改等级</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)}>修改用户信息</div>
+          {/* <div className={c.clickText} onClick={()=>push('/main/addUser',record)}>修改用户信息</div> */}
+          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{}}>修改用户信息</div>
         </Space>
       )
     },
@@ -326,12 +343,14 @@ function RTable ({ setVisible,setVisibleAction,setKey,setSrc,setTitle,setSelecte
           <div className={c.searchL}>
             <Input onPressEnter={()=>get(current)} maxLength={20} placeholder="请输入用户账号" onChange={e=>setAccount(e.target.value)} value={account} size="small" className={c.searchInput} />
             <DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户状态" style={{width:186}}/>
-            <DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户等级" style={{width:186}}/>
-            <DatePicker.RangePicker
-              format="YYYY-MM-DD"
-              onChange={dateChange}
-              value={moment}
-              className={c.dataPicker}/>
+            {/* <DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户等级" style={{width:186}}/> */}
+            {/* { */}
+            {/*   <DatePicker.RangePicker */}
+            {/*     format="YYYY-MM-DD" */}
+            {/*     onChange={dateChange} */}
+            {/*     value={moment} */}
+            {/*     className={c.dataPicker}/> */}
+            {/* } */}
           </div>
           <div className={c.searchR}>
             <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>
@@ -345,7 +364,8 @@ function RTable ({ setVisible,setVisibleAction,setKey,setSrc,setTitle,setSelecte
           </div>
         </div>
       </div>
-      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量解封",key:"b"},{name:"批量封禁",key:"a"}]}/>
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[]}/>
+      {/* <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量解封",key:"b"},{name:"批量封禁",key:"a"}]}/> */}
       <Table
         columns={columns}
         rowSelection={{

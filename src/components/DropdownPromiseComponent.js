@@ -6,11 +6,11 @@ import { styles } from '../styles/modal'
 import { DownOutlined } from '@ant-design/icons';
 import c from '../styles/view.module.css'
 
-function DropdownPromiseComponent ({ tooltip = "", fetchName, setValue, initNums = [], placeholder = "请选择" }) {
+function DropdownPromiseComponent ({ value, view, tooltip = "", fetchName, setValue, initNums = [], placeholder = "请选择" }) {
   const size = 10
   const [visible, setVisible] = useState(false)
   const [page, setPage] = useState(1)
-  const [id, setId] = useState()
+  const [id, setId] = useState(value)
   const [nums, setNums] = useState([])
   const [hasMore, setHasMore] = useState(true)
 
@@ -60,7 +60,7 @@ function DropdownPromiseComponent ({ tooltip = "", fetchName, setValue, initNums
   return (
     <Dropdown overlay={menu} visible={visible}>
       <Tooltip placement="bottomLeft" color="#F7FAFF" title={tooltip}>
-        <Button size="small" onClick={()=>setVisible(true)} className={c.dropdownPromise}>
+        <Button size="small" onClick={()=>setVisible(true)} className={view?c.dropdown_view:c.dropdownPromise}>
           <div className={c.hiddenText} style={{color:selected.length?"#34374A":"#C4C4C4"}}>
             { selected.length ? selected[0].name : placeholder }
           </div>

@@ -3,7 +3,7 @@ import c from '../../styles/edit.module.css'
 import { Input, Button, Breadcrumb, message } from 'antd'
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
-import { push, goBack, saveSuccess } from "../../utils/util";
+import { push, saveSuccess } from "../../utils/util";
 import { useHistory } from "react-router-dom";
 import { providers } from "../../utils/api";
 
@@ -11,6 +11,7 @@ function EditStoreView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
   const { id, nickname: n, account: a } = state
+
   const [loading, setLoading] = useState(false)
   const [nickname, setNickname] = useState(n)
   const [account, setAccount] = useState(a)
@@ -77,13 +78,13 @@ function EditStoreView () {
           <div className={c.itemName} />
           <div style={{color:'#FF8D30'}}>供货商登录密码默认为a123456</div>
         </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>备注</div>
-          </div>
-          <Input maxLength={20} value={account} onChange={e=>setAccount(e.target.value)} placeholder="请填写备注信息" className={c.itemInput}></Input>
-        </div>
+        {/* <div className={c.item}> */}
+        {/*   <div className={c.itemName}> */}
+        {/*     <span className={c.white}>*</span> */}
+        {/*     <div className={c.itemText}>备注</div> */}
+        {/*   </div> */}
+        {/*   <Input maxLength={20} value={account} onChange={e=>setAccount(e.target.value)} placeholder="请填写备注信息" className={c.itemInput}></Input> */}
+        {/* </div> */}
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
           </div>

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Table, Input, Switch, Breadcrumb } from 'antd'
+import * as React from 'karet'
+import { useState, useEffect } from 'react'
+import { Button, Table, Input, Breadcrumb } from 'antd'
 import c from '../../styles/view.module.css'
 import oc from '../../styles/oc.module.css'
 import cs from '../../styles/edit.module.css'
@@ -12,53 +13,97 @@ import header1 from '../../icons/header/header1.png'
 import { useHistory } from "react-router-dom"
 import { communityDiscPrices, addDiscPrices, deleteDiscPrices, usersPricingType } from "../../utils/api"
 import { saveSuccess, push } from "../../utils/util";
-import SelectComponent from "../../components/SelectComponent"
-import DropdownComponent from "../../components/DropdownComponent"
 import { USER_RANK } from '../../utils/config'
 import ModalPopComponent from "../../components/ModalPopComponent"
 
-let win
-
 function EditUserPriceView () {
   const { state = {} } = useHistory().location
-  const { account, id } = state
-  const [visible, setVisible] = useState(true)
-  const [checked, setChecked] = useState(false)
+  const { account, ordered, id } = state
 
-  function check (e) {
-    setChecked(e)
-    usersPricingType(id, e ? "disc" : "normal").then(r => {
-      !r.error && saveSuccess(false)
-    })
-  }
+  const [data, setData] = useState([])
+  const [current, setCurrent] = useState(1)
+  const [pageSize] = useState(10)
+  const [total, setTotal] = useState(0)
+
+  const [goods_id, setGoods_id] = useState()
+  const [goods_name, setGoods_name] = useState()
+  const [good_category_id, setGood_category_id] = useState()
+
+  const [visible, setVisible] = useState(false)
+  const [checked, setChecked] = useState(false)
+  const [selected,setSelected] = useState({})
+  const [discPrice,setDisePrice] = useState()
+
+  useEffect(() => {
+    if (selected.id) {
+      setDisePrice(selected.user_price)
+    }
+  }, [selected])
 
   function onCancel () {
     setVisible(false)
   }
 
+  function get (current) {
+    communityDiscPrices(current, pageSize, id, goods_id, goods_name, good_category_id).then(r => {
+      if (!r.error) {
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
+  }
+
+  function format (arr) {
+    arr.forEach((item, index) => {
+      item.key = index
+    })
+    return arr
+  }
+
+  function updateDiscPrice () {
+    addDiscPrices(id, selected.id, discPrice).then(r => {
+      if (!r.error) {
+        setVisible(false)
+        get(current)
+        saveSuccess(false)
+      }
+    })
+  }
+
+  function delDiscPrice () {
+    deleteDiscPrices(selected.cmnt_user_price_id).then(r => {
+      if (!r.error) {
+        saveSuccess(false)
+        setVisible(false)
+        get(current)
+      }
+    })
+  }
+
   return (
     <div className="view">
       <ModalPopComponent
-      div = {
-        <div>
-          <div style={{textAlign:'right',color:'#2C68FF',marginBottom:15}}>删除密价</div>
-            <div className = { oc.remark_tips } >
-        当前选中商品： < span > (音符点赞) < /span> < /
-        div >
-          <div className={oc.remark} style={{marginTop:10}}>
-            <div>用户密价：</div>
-            <Input placeholder="请输入用户密价"/>
+        div = {
+          <div>
+            <div onClick={delDiscPrice} style={{cursor:'pointer',textAlign:'right',color:'#2C68FF',marginBottom:15}}>删除密价</div>
+              <div className={oc.remark_tips}>
+                当前选中商品： <span>( {selected.name || ''} )</span>
+              </div>
+                <div className={oc.remark} style={{marginTop:10}}>
+                  <div>用户密价：</div>
+                  <Input placeholder="请输入用户密价" value={discPrice} onChange={e=>setDisePrice(e.target.value)}/>
+                </div>
+                {/* <div className = { oc.remark_tips } style={{color:'#FF5730',fontSize:'0.857rem'}}> */}
+                {/*   填写的价格小于进价，这样会亏本哦。 */}
+                {/* </div> */}
+                <div className={oc.change_btn_view} style={{ marginTop: 70}}>
+                  <Button onClick={onCancel} className={oc.change_btn_cancel}>
+                    取消
+                  </Button>
+                  <Button type="primary" onClick={updateDiscPrice} className={oc.change_btn_ok}>确定</Button>
+                </div>
           </div>
-          <div className = { oc.remark_tips } style={{color:'#FF5730',fontSize:'0.857rem'}}>
-              填写的价格小于进价，这样会亏本哦。
-            < /div >
-              <
-        div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
-        <Button className={oc.change_btn_cancel}>取消</Button> <
-        Button type = "primary"
-        className = { oc.change_btn_ok } > 确定 < /Button> < /
-        div > <
-        /div>
       }
       title = "用户密价"
       visible = { visible }
@@ -85,8 +130,8 @@ function EditUserPriceView () {
           <div style={{display:'flex',alignItems:'center',marginTop:38}}>
             <img src={header1} alt="" style={{width:60,marginRight:9}}/>
             <div>
-              <div style={{color:'#34374A',fontWeight:500,fontSize:'1.285rem',marginBottom:5}}>2346237462374627</div>
-              <img src={USER_RANK['a'].src} alt="" style={{width:100}}/>
+              <div style={{color:'#34374A',fontWeight:500,fontSize:'1.285rem',marginBottom:5}}>{account}</div>
+              <img src={USER_RANK[ordered].src} alt="" style={{width:100}}/>
             </div>
           </div>
           <div className={cs.tem_header} style={{width:'100%'}}>
@@ -97,81 +142,41 @@ function EditUserPriceView () {
             </div>
           </div>
         </div>
-        <RTable id={id} checked={checked}/>
+        <RTable setCurrent={setCurrent} get={get} setGoods_name={setGoods_name} current={current} goods_name={goods_name} data={data} pageSize={pageSize} total={total} setSelected={setSelected} setVisible={setVisible} id={id} checked={checked}/>
       </div>
     </div>
   )
 }
 
-function RTable ({ id, checked }) {
-  const [data, setData] = useState([])
-  const [val, setVal] = useState()
-  const [visible, setVisible] = useState([])
-  // const [ctgs, setCategorys] = useState([])
-  const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
-  const [total, setTotal] = useState(0)
-
-  const [goods_id, setGoods_id] = useState()
-  const [goods_name, setGoods_name] = useState()
-  const [good_category_id, setGood_category_id] = useState()
-  const [good_category_name, setGood_category_name] = useState()
-
-  window.localClick = function (type, ids) {
-    setGood_category_id(ids.id)
-    setGood_category_name(ids.name)
-    win && win.close()
-  }
+function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total, goods_name, setVisible, id, setSelected, checked }) {
 
   useEffect(() => {
     get(current)
   }, [])
 
-  function get (current) {
-    communityDiscPrices(current, pageSize, id, goods_id, goods_name, good_category_id).then(r => {
-      if (!r.error) {
-        const { data, total } = r
-        setTotal(total)
-        setData(format(data))
-      }
-    })
-  }
-
-  function insert (index, user_disc_price) {
-    setVal(user_disc_price)
-    setVisible(data.map((item, i) => i === index))
-  }
-
   function insertSave (goods_id, index, disc_price_id) {
-    setVisible(data.map((item, i) => false))
-    if (val) {
-      addDiscPrices(id, goods_id, "cmnt", val).then(r => {
-        if (!r.error) {
-          const localData = [...data]
-          localData[index].user_disc_price = val
-          setData(localData)
-          setVal(undefined);
-          saveSuccess(false)
-        }
-      })
-    } else {
-      deleteDiscPrices(disc_price_id).then(r => {
-        if (!r.error) {
-          const localData = [...data]
-          localData[index].user_disc_price = val
-          setData(localData)
-          setVal(undefined);
-          saveSuccess(false)
-        }
-      })
-    }
-  }
-
-  function format (arr) {
-    arr.forEach((item, index) => {
-      item.key = index
-    })
-    return arr
+    // setVisible(data.map((item, i) => false))
+    // if (val) {
+    //   addDiscPrices(id, goods_id, "cmnt", val).then(r => {
+    //     if (!r.error) {
+    //       const localData = [...data]
+    //       localData[index].user_disc_price = val
+    //       setData(localData)
+    //       setVal(undefined);
+    //       saveSuccess(false)
+    //     }
+    //   })
+    // } else {
+    //   deleteDiscPrices(disc_price_id).then(r => {
+    //     if (!r.error) {
+    //       const localData = [...data]
+    //       localData[index].user_disc_price = val
+    //       setData(localData)
+    //       setVal(undefined);
+    //       saveSuccess(false)
+    //     }
+    //   })
+    // }
   }
 
   function onChange (page, pageSize) {
@@ -181,13 +186,13 @@ function RTable ({ id, checked }) {
 
   function reset () {
     setGoods_name(undefined)
-    setGoods_id(undefined)
-    setGood_category_id(undefined)
-    setGood_category_name(undefined)
+    // setGoods_id(undefined)
+    // setGood_category_id(undefined)
+    // setGood_category_name(undefined)
   }
 
   function click () {
-    win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
+    // win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
   }
 
   const columns = [
@@ -199,44 +204,54 @@ function RTable ({ id, checked }) {
     {
       title: '商品分类',
       align: 'center',
-      dataIndex: 'category_name',
+      dataIndex: 'ctg_name',
   },
     {
       title: '进价',
-      dataIndex: 'unit_price',
+      dataIndex: 'unit_cost',
       align: 'center',
+      render: (text, record, index) => text || '-'
   },
     {
       title: '单价',
       align: 'center',
-      render: (text, record, index) => {
-        const { unit_cost, disc_price, user_disc_price } = record
-        const color = (checked && user_disc_price > 0) ? "#595959" : disc_price > 0 ? "#595959" : "#4177FE"
-        return <div style={{color}}>{unit_cost || '-'}</div>
-      }
+      render: (text, record, index) => '-'
   },
     {
       title: '统一密价(高级会员)',
-      dataIndex: 'unit_price',
+      dataIndex: 'prices',
       align: 'center',
+      render: (text, record, index) => {
+        const color = (text[1] > 0 && !text[0] && !text[3] && !text[2]) ? "#4177FE" : "#595959"
+        return <div style={{color}}>{text[1] || '-'}</div>
+      }
   },
     {
       title: '统一密价(钻石会员)',
-      dataIndex: 'unit_price',
+      dataIndex: 'prices',
       align: 'center',
+      render: (text, record, index) => {
+        const color = (text[2] > 0 && !text[0] && !text[3]) ? "#4177FE" : "#595959"
+        return <div style={{color}}>{text[2] || '-'}</div>
+      }
   },
     {
       title: '统一密价(至尊会员)',
-      dataIndex: 'unit_price',
+      dataIndex: 'prices',
       align: 'center',
+      render: (text, record, index) => {
+        const { user_price } = record
+        const color = (text[3] > 0 && !user_price) ? "#4177FE" : "#595959"
+        return <div style={{color}}>{text[3] || '-'}</div>
+      }
   },
     {
       title: '用户密价',
       align: 'center',
-      dataIndex: 'user_disc_price',
+      dataIndex: 'user_price',
       render: (text, record, index) => {
-        // const { user_disc_price, id, disc_price_id } = record
-        return '-'
+        const color = text > 0 ? "#4177FE" : "#595959"
+        return <div style={{color}}>{text || '-'}</div>
       }
     },
     {
@@ -244,7 +259,10 @@ function RTable ({ id, checked }) {
       align: 'center',
       dataIndex: 'user_disc_price',
       render: (text, record, index) => {
-        return <div className={c.clickText}>修改用户密价</div>
+        return <div onClick={()=>{
+          setSelected(record)
+          setVisible(true)
+        }} className={c.clickText}>修改用户密价</div>
       }
     }
   ];
@@ -255,8 +273,7 @@ function RTable ({ id, checked }) {
           <div className={c.search} style={{borderBottom:'none'}}>
             <div className={c.searchL}>
               <Input placeholder="请输入商品名称" onChange={e=>setGoods_name(e.target.value)} value={goods_name} size="small" className={c.searchInput} onPressEnter={()=>get(current)}/>
-              {/* <SelectComponent click={click} id={good_category_id} name={good_category_name} placeholder="请选择商品类型" style={{width:186}}/> */}
-              <DropdownComponent keys={[{name:"已上架",key:"available"},{name:"已关闭订单",key:"unavailable"},{name:"已下架",key:"paused"}]} placeholder="请选择商品分类" style={{width:186}}/>
+              {/* <SelectComponent click={click} id={good_category_id} name={good_category_name} placeholder="请选择商品分类" style={{width:186}}/> */}
             </div>
             <div className={c.searchR}>
               <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>

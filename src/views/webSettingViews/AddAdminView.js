@@ -18,31 +18,29 @@ function AddAdminView () {
   const [loading, setLoading] = useState(false)
 
   function format (arr) {
-    const localArr = [];
-    arr.forEach((item, index) => {
+    return arr.map((item, index) => {
       const title = getKey(item, PERMISSIONS)
-      localArr.push({
+      return {
         title,
         val: item,
         key: index
-      })
+      }
     })
-    return localArr
   }
 
   useEffect(() => {
     permissions().then(r => {
       const { error, data } = r;
-      let localIndex = []
-      p.forEach(i => {
-        data.forEach((item, index) => {
-          if (i.permission === item) {
-            localIndex = [...localIndex, index]
-          }
+      if (!error) {
+        let localIndex = []
+        p && JSON.parse(p).forEach(i => {
+          data.forEach((item, index) => {
+            i.permission === item && (localIndex = [...localIndex, index])
+          })
         })
-      })
-      setTargetKeys(localIndex);
-      !error && setPurview(format(data))
+        setTargetKeys(localIndex);
+        setPurview(format(data))
+      }
     })
   }, [])
 
@@ -52,11 +50,7 @@ function AddAdminView () {
       return;
     }
     setLoading(true)
-    const localPurview = []
-    targetKeys.forEach(item => {
-      localPurview.push(purview[item].val)
-    })
-    let body = { account: number, nickname: name, permissions: localPurview }
+    let body = { account: number, nickname: name, permissions: targetKeys.map(i => purview[i].val) }
     managers(id ? "modify" : "add", id, body).then(r => {
       setLoading(false)
       setNumber(undefined)
