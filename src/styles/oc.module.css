@@ -79,10 +79,10 @@
   height: 40px;
 }
 
-.item div:first-child {
+.item_label {
   font-weight: 500;
   color: #34374A;
-  width: 148px;
+  width: 120px;
   flex-shrink: 0;
 }
 
@@ -90,10 +90,12 @@
   display: flex;
   align-items: center;
   margin-bottom: 24px;
+  flex-shrink: 0;
 }
 
 .item_vip img {
   width: 14px;
+  flex-shrink: 0;
 }
 
 .item_vip div {
@@ -110,8 +112,10 @@
 }
 
 .vip_view {
+  width: 370px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -152,6 +156,7 @@
 }
 
 .remark {
+  padding-top: 62px;
   display: flex;
   align-items: center;
   margin-bottom: 10px;
@@ -210,4 +215,11 @@
 
 .change_desc_view {
   margin: 32px 0 0 28px;
+}
+
+.tags_btn {
+  margin: 20px 20px 0 0;
+  border-color: #2C67FF;
+  color: #2C67FF;
+  background-color: #EDF2FF;
 }

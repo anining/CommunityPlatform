@@ -255,6 +255,12 @@ export function goodsSummaries (id) {
   return transformFetch("GET", `/supps/${id}/goods-summaries`)
 }
 
+// 获取社区订单历程
+export function orderHis (order_id) {
+  return transformFetch("GET", "/cmnt-order-histories", { order_id })
+}
+
+
 
 
 

@@ -110,7 +110,7 @@ function EditCommunityGoodView () {
     if (dockingTarget) {
       const values = marks.filter(i => i.id === dockingTarget)
       const { type, factors } = values[0]
-      let localValues = [0, 0, 0];
+      let localValues = [0, 0, 0, 0];
       for (let j = 0; j < 4; j++) {
         if (type === "absolute") {
           localValues[j] = (+factors[j] || 0) + (+unit_cost || 0)
@@ -118,6 +118,7 @@ function EditCommunityGoodView () {
           localValues[j] = ((+factors[j] || 0) + 100) / 100 * (+unit_cost || 0)
         }
       }
+      localValues[0]= unit_price || 0
       setFactors(localValues)
     }
   }, [dockingTarget])
@@ -158,7 +159,7 @@ function EditCommunityGoodView () {
       unit_cost,
       batch_order,
       intro,
-      prices: prices ? factors : [0, 0, 0, 0],
+      prices: prices ? factors : [(unit_price||0), 0, 0, 0],
       supp_goods: { provider_type, goods_id },
       repeatable: repeat_order,
       // community_param_template_id,
@@ -342,17 +343,17 @@ function EditCommunityGoodView () {
         {/*       push('/main/editOrderModel') */}
         {/*     }}>新增模型</Button> */}
         {/* </div> */}
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span>*</span> */}
-        {/*     <div className={c.itemText}>单价</div> */}
-        {/*   </div> */}
-        {/*   <Input type="number" onChange={e=>setUnit_price(e.target.value)} value={unit_price} placeholder="请输入商品销售单价" className={c.itemInput}></Input> */}
-        {/* </div> */}
-        {/* <div className={c.itemTips}> */}
-        {/*   <div className={c.itemName} /> */}
-        {/*   <div>普通会员没有配置用户密价时,使用单价下单</div> */}
-        {/* </div> */}
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>单价</div>
+          </div>
+          <Input type="number" onChange={e=>setUnit_price(e.target.value)} value={unit_price} placeholder="请输入商品销售单价" className={c.itemInput}></Input>
+        </div>
+        <div className={c.itemTips}>
+          <div className={c.itemName} />
+          <div>普通会员没有配置用户密价时,使用单价下单</div>
+        </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
@@ -375,7 +376,7 @@ function EditCommunityGoodView () {
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span>*</span>
+            <span className={c.white}>*</span>
             <div className={c.itemText}>商品图片</div>
           </div>
           <Input onChange={e=>setImageUrl(e.target.value)} value={imageUrl} placeholder="请填写图片链接或者上传图片" className={c.itemInput}></Input>
