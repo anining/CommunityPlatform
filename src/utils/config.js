@@ -15,7 +15,7 @@ import good73 from '../icons/good/good73.png'
 import good77 from '../icons/good/good77.png'
 
 const DEVELOPER = "Production"
-const API_URL = DEVELOPER === "test" ? "https://test-omnivstore.prismslight.com/mng" : "http://192.168.1.36:8000/mng"
+const API_URL = DEVELOPER === "Production" ? "https://test-omnivstore.prismslight.com/mng" : "http://192.168.1.36:8000/mng"
 const JUMP_DELAY = 500
 const MODULES = {
   toolbar: [
@@ -128,19 +128,19 @@ const USER_STATUS = {
 const USER_RANK = {
   "0": {
     src: good77,
-    label:"普通用户"
+    label: "普通用户"
   },
   "1": {
     src: good73,
-    label:"高级用户"
+    label: "高级用户"
   },
   "2": {
     src: good72,
-    label:"钻石用户"
+    label: "钻石用户"
   },
   "3": {
     src: good71,
-    label:"至尊用户"
+    label: "至尊用户"
   }
 }
 

@@ -27,7 +27,11 @@ function CommunityOrderView () {
   const [visible_push, setVisiblePush] = useState(false)
   const [visible_ref, setVisibleRef] = useState(false)
   const [visible, setVisible] = useState(false)
-  const data = [
+  const [remark, setRemark] = useState()
+  const [visibleMsg, setVisibleMsg] = useState(false)
+  const [visibleOther, setVisibleOther] = useState(false)
+  const [sel, setSel] = useState({})
+  const label = [
     {
       label: '订单总数',
       number: '10,100',
@@ -53,84 +57,6 @@ function CommunityOrderView () {
       id: 444,
     },
   ]
-
-  function onOk () {
-
-  }
-
-  function onCancel () {
-    setVisible(false)
-    setVisiblePush(false)
-  }
-
-  return (
-    <div className="view">
-      <div className={c.container}>
-        <TableHeaderComponent data={data}/>
-        <RTable />
-      </div>
-      <ModalComponent
-        //src={good61}
-        src={good60}
-        title="您确定要重新推送订单吗？"
-        // title="您确定要尝试重新通信吗？"
-       // child={
-        //  <div style={{color:'#BFBFBF'}}>系统将会尝试与选中的订单重新进行通信并更新通信状态，请在大约<span style={{color:"#FF6236"}}>5-10分钟</span>之后再来查看通信状态。</div>
-        // }
-        child={
-          <div style={{color:'#BFBFBF'}}>重新推送只对订单状态为<span style={{color:"#FF6236"}}>“待处理”</span>且通信状态为<span style={{color:"#FF6236"}}>“通信失败”</span>的订单有效。</div>
-        }
-        visible={visible_push}
-        onCancel={onCancel}
-        onOk={onOk}
-      />
-      <ModalPopComponent
-      div = {
-        <div>
-          <div className={oc.remark}>
-            <div>退款数量：</div>
-            <Input style={{width:370}} placeholder="请输入退款数量" addonAfter="全部数量"/>
-          </div> <
-        div className = { oc.remark_tips } >
-        当前选中订单： < span > 20200105020305(音符点赞) < /span> < /
-        div > <
-        div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
-        <Button className={oc.change_btn_cancel}>取消</Button> <
-        Button type = "primary"
-        className = { oc.change_btn_ok } > 确定 < /Button> < /
-        div > <
-        /div>
-      }
-      title = "退款"
-      visible = { visible_ref }
-      onCancel = { onCancel }
-      />
-      <ModalPopComponent
-      div = {
-        <div>
-          <div className={oc.remark}>
-            <div>备注内容：</div>
-            <Input placeholder="请输入备注内容"/>
-          </div> <
-        div className = { oc.remark_tips } >
-        当前选中订单： < span > 20200105020305(音符点赞) < /span> < /
-        div > <
-        div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
-        <Button className={oc.change_btn_cancel}>取消</Button> <
-        Button type = "primary"
-        className = { oc.change_btn_ok } > 确定 < /Button> < /
-        div > <
-        /div>
-      }
-      title = "添加备注"
-      visible = { visible }
-      onCancel = { onCancel }
-      />
-    </div>
-)
-}
-
-function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
@@ -151,9 +77,15 @@ function RTable () {
     win && win.close()
   }
 
+  console.log(sel)
+
   useEffect(() => {
     get(current)
   }, [])
+
+  function addRemark () {
+    setVisible(false)
+  }
 
   function dateChange (data, dataString) {
     setDate([new Date(dataString[0]).toISOString(), new Date(dataString[1]).toISOString()])
@@ -318,7 +250,10 @@ function RTable () {
       title: '下单信息',
       align: 'center',
       render: (text, record, index) => {
-        return <div className={c.clickText}>查看</div>
+        return <div onClick={()=>{
+          setSel(record)
+          setVisibleMsg(true)
+        }} className={c.clickText}>查看</div>
   }
   // render: (text, record, index) => {
   //   const { args, number, password } = record;
@@ -338,7 +273,10 @@ function RTable () {
   title: '拓展信息',
   align: 'center',
   render: (text, record, index) => {
-    return <div className={c.clickText}>查看</div>
+    return <div onClick={()=>{
+      setSel(record)
+      setVisibleOther(true)
+    }} className={c.clickText}>查看</div>
   }
 }, {
   title: '下单数量',
@@ -374,8 +312,7 @@ function RTable () {
 }, {
   title: '订单历程',
   align: 'center',
-  // render: (text, record, index) => <div onClick={()=>push('/main/editCommunityOrder',record)} className={c.clickText}>查看</div>
-  render: (text, record, index) => <div onClick={()=>{}} className={c.clickText}>查看</div>
+  render: (text, record, index) => <div onClick={()=>push('/main/editCommunityOrder',record)} className={c.clickText}>查看</div>
 }, {
   title: '订单去向',
   dataIndex: 'time',
@@ -390,7 +327,13 @@ function RTable () {
 }, {
   title: '订单备注',
   align: 'center',
-  render: (text, record, index) => <div className={c.clickText}>查看</div>
+  render: (text, record, index) => {
+    return <div onClick={()=>{
+      setSel(record)
+      setRemark(sel.comment)
+      setVisible(true)
+    }} className={c.clickText}>查看</div>
+  }
 }, {
   title: '操作',
   align: 'center',
@@ -431,55 +374,151 @@ function RTable () {
 }
 ];
 
-return (
-  <div className={c.main}>
-      <div className={c.searchView}>
-        <div className={c.search}>
-          <div className={c.searchL}>
-            <Input value={id} onChange={e=>setId(e.target.value)} onPressEnter={()=>get(current)} placeholder="请输入订单编号" size="small" className={c.searchInput}/>
-            <Input onPressEnter={()=>get(current)} placeholder="请输入商品名称" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/>
-            {/* <Input onPressEnter={()=>get(current)} placeholder="请输入下单编号" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/> */}
-            <Input onPressEnter={()=>get(current)} value={search_user_account} onChange={e=>setSearch_user_account(e.target.value)} placeholder="请输入用户账户" size="small" className={c.searchInput}/>
-            <SelectComponent placeholder="请选择商品分类" id={community_goods_category_id} name={community_goods_category_name} click={click}/>
-            {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择商品分类" style={{width:186}}/> */}
-            {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单状态" style={{width:186}}/> */}
-            {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择售后状态" style={{width:186}}/> */}
-            {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择通信状态" style={{width:186}}/> */}
-            <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单去向" style={{width:186}}/>
-            <DatePicker.RangePicker
-              format="YYYY-MM-DD"
-              onChange={dateChange}
-              value={moment}
-              className={c.dataPicker}/>
+  function onOk () {
+
+  }
+
+  function onCancel () {
+    setVisible(false)
+    setVisiblePush(false)
+    setVisibleMsg(false)
+    setVisibleOther(false)
+  }
+
+  return (
+    <div className="view">
+      <div className={c.container}>
+        <TableHeaderComponent data={label}/>
+        <div className={c.main}>
+          <div className={c.searchView}>
+            <div className={c.search}>
+              <div className={c.searchL}>
+                <Input value={id} onChange={e=>setId(e.target.value)} onPressEnter={()=>get(current)} placeholder="请输入订单编号" size="small" className={c.searchInput}/>
+                <Input onPressEnter={()=>get(current)} placeholder="请输入商品名称" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/>
+                {/* <Input onPressEnter={()=>get(current)} placeholder="请输入下单编号" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/> */}
+                <Input onPressEnter={()=>get(current)} value={search_user_account} onChange={e=>setSearch_user_account(e.target.value)} placeholder="请输入用户账户" size="small" className={c.searchInput}/>
+                <SelectComponent placeholder="请选择商品分类" id={community_goods_category_id} name={community_goods_category_name} click={click}/>
+                {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择商品分类" style={{width:186}}/> */}
+                {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单状态" style={{width:186}}/> */}
+                {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择售后状态" style={{width:186}}/> */}
+                {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择通信状态" style={{width:186}}/> */}
+                <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单去向" style={{width:186}}/>
+                <DatePicker.RangePicker
+                  format="YYYY-MM-DD"
+                  onChange={dateChange}
+                  value={moment}
+                  className={c.dataPicker}/>
+              </div>
+              <div className={c.searchR}>
+                <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>
+                <Button icon={
+                    <img src={good9} alt="" style={{width:14,marginRight:6}} />
+                  }
+                  type = "primary"
+                  size = "small"
+                  onClick={()=>get(current)}
+                  className={c.searchBtn}>搜索订单</Button>
+              </div>
+            </div>
           </div>
-          <div className={c.searchR}>
-            <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>
-            <Button icon={
-                <img src={good9} alt="" style={{width:14,marginRight:6}} />
-              }
-              type = "primary"
-              size = "small"
-              onClick={()=>get(current)}
-              className={c.searchBtn}>搜索订单</Button>
-          </div>
+          <DropdownComponent submit={submit} keys={[]}/>
+          <Table
+            columns={columns}
+            rowSelection={{
+              ...rowSelection
+            }}
+            dataSource={data}
+            size="small"
+            pagination={{
+              showQuickJumper:true,
+              current,
+              pageSize,
+              showLessItems:true,
+              total,
+              onChange
+            }}
+          />
         </div>
-      </div>
-      <DropdownComponent submit={submit} keys={[]}/>
-      <Table
-        columns={columns}
-        rowSelection={{
-          ...rowSelection
-        }}
-        dataSource={data}
-        size="small"
-        pagination={{
-          showQuickJumper:true,
-          current,
-          pageSize,
-          showLessItems:true,
-          total,
-          onChange
-        }}
+    </div>
+      <ModalPopComponent
+        div = {
+          <div className={oc.limit_view}>
+            {
+              sel.args ? Object.keys(JSON.parse(sel.args || "{}")).map(i=><div key={i} className={oc.limit_item}>{i}：<span>{JSON.parse(sel.args || "{}")[i]}</span></div>) : <div className={oc.limit_item} style={{paddingLeft:0}}>暂无</div>
+            }
+          </div>
+        }
+        title="下单信息"
+        visible={visibleMsg}
+        onCancel = {onCancel}
+      />
+      <ModalPopComponent
+        div = {
+          <div className={oc.limit_view}>
+            {
+              sel.extras ? Object.keys(JSON.parse(sel.extras || "{}")).map(i=><div key={i} className={oc.limit_item}>{i}：<span>{JSON.parse(sel.extras || "{}")[i]}</span></div>) : <div className={oc.limit_item} style={{paddingLeft:0}}>暂无</div>
+            }
+          </div>
+        }
+        title="扩展信息"
+        visible={visibleOther}
+        onCancel = {onCancel}
+      />
+      <ModalComponent
+        //src={good61}
+        src={good60}
+        title="您确定要重新推送订单吗？"
+        // title="您确定要尝试重新通信吗？"
+       // child={
+        //  <div style={{color:'#BFBFBF'}}>系统将会尝试与选中的订单重新进行通信并更新通信状态，请在大约<span style={{color:"#FF6236"}}>5-10分钟</span>之后再来查看通信状态。</div>
+        // }
+        child={
+          <div style={{color:'#BFBFBF'}}>重新推送只对订单状态为<span style={{color:"#FF6236"}}>“待处理”</span>且通信状态为<span style={{color:"#FF6236"}}>“通信失败”</span>的订单有效。</div>
+        }
+        visible={visible_push}
+        onCancel={onCancel}
+        onOk={onOk}
+      />
+      <ModalPopComponent
+      div = {
+        <div>
+          <div className={oc.remark}>
+            <div>退款数量：</div>
+            <Input style={{width:370}} placeholder="请输入退款数量" addonAfter="全部数量"/>
+          </div> <
+        div className = { oc.remark_tips } >
+        当前选中订单： < span > 20200105020305(音符点赞) < /span> < /
+        div > <
+        div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
+        <Button className={oc.change_btn_cancel}>取消</Button> <
+        Button type = "primary"
+        className = { oc.change_btn_ok } > 确定 < /Button> < /
+        div > <
+        /div>
+      }
+      title = "退款"
+      visible = { visible_ref }
+      onCancel = { onCancel }
+      />
+      <ModalPopComponent
+        div={
+          <div>
+            <div className={oc.remark}>
+              <div>备注内容：</div>
+              <Input placeholder="请输入备注内容" value={remark} onChange={e=>setRemark(e.target.value)}/>
+            </div>
+            <div className={oc.remark_tips}>
+              当前选中订单： <span> {sel.id}( {sel.goods_name} ) </span>
+            </div>
+            <div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
+              <Button className={oc.change_btn_cancel} onClick={()=>setVisible(false)}>取消</Button>
+              <Button type="primary" className={oc.change_btn_ok} onClick={addRemark}>确定</Button>
+            </div>
+          </div>
+        }
+        title = "添加备注"
+        visible = { visible }
+        onCancel = { onCancel }
       />
     </div>
 )

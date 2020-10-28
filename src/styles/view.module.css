@@ -312,3 +312,19 @@
   justify-content: space-between;
   margin: 0 40px 24px 0;
 }
+
+.statusBtn {
+  width: 102px;
+  height: 34px;
+  margin-right: 32px;
+}
+
+.statusModelTitle {
+  color: rgba(0, 0, 0, 0.25);
+  margin: 24px 0 5px 0;
+}
+
+.statusModelTips {
+  margin-top: 32px;
+  color: #333333;
+}

@@ -51,7 +51,35 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start'
-  }
+  },
+  view: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusLabel: {
+    color: 'rgba(0, 0, 0, 0.65)',
+    marginTop: 32,
+    fontWeight: 500,
+    fontSize: '1.142rem'
+  },
+  inputImg: {
+    width: 14,
+    marginRight: 4
+  },
+  okBtn: {
+    height: 40,
+    width: 170,
+    marginLeft: 70,
+    marginTop: 31,
+  },
+  cancelBtn: {
+    height: 40,
+    width: 170,
+    color:'#C0C2CB',
+    marginTop: 31,
+  },
 }
 
 export { styles }
