@@ -108,11 +108,11 @@ function RLine ({ orders = [] }) {
         const { provider_name, provider_id, amount, cost } = payload
         Msg=<div>在 {provider_name} (供应商或对接/串货目标)下单成功，下单数量<span style={{color:"#FF4D4F"}}> {amount} </span>，消耗 <span style={{color:"#FF4D4F"}}> {cost} </span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#2C68FF"}}>进行中</span></div>
       };break;
-      case "pushClosed": {
+      case "push_closed": {
         const { provider_name, provider_id, reason } = payload
-        Msg=<div>在{ provider_name }(供应商或对接/串货目标)下单失败，失败原因：<span>{ reason }</span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#74C041"}}>已终止</span></div>
+        Msg=<div>在 {provider_name} (供应商或对接/串货目标)下单失败，失败原因：<span>{ reason }</span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#74C041"}}>已终止</span></div>
       };break;
-      case "pushFailed": {
+      case "push_failed": {
         const { provider_name, provider_id, reason } = payload
         Msg=<div>在{ provider_name }(供应商或对接/串货目标)下单失败，失败原因：<span> {reason} </span> 您可以通过点击“重新推送”按钮来重新推送订单</div>
       };break;
@@ -120,11 +120,11 @@ function RLine ({ orders = [] }) {
         const { amount, cost, manager_nickname, manager_id } = payload
         Msg=<div>重新推送成功，下单数量 <span> {amount} </span>，消耗 <span>{cost}</span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#2C68FF"}}>进行中</span>，操作人：<span>{manager_nickname}</span></div>
       };break;
-      case "repushClosed": {
+      case "repush_closed": {
         const { reason, manager_nickname, manager_id } = payload
         Msg=<div>重新推送失败，失败原因：<span>{reason}</span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#74C041"}}>已终止</span>。操作人：<span>{manager_nickname}</span></div>
       };break;
-      case "repushFailed": {
+      case "repush_failed": {
         const { reason, manager_nickname, manager_id } = payload
         Msg=<div>重新推送失败，失败原因：<span>{reason}</span>操作人：<span>{manager_nickname}</span></div>
       };break;
@@ -136,11 +136,11 @@ function RLine ({ orders = [] }) {
         const { reason, manager_nickname, manager_id } = payload
         Msg=<div>订单被终止，订单状态 <span style={{color:"#2C68FF"}}>进行中</span> => <span style={{color:"#74C041"}}>已终止</span>，终止原因：<span>{reason}</span></div>
       };break;
-      case "refundRequested": {
+      case "refund_requested": {
         const { user_account, user_id } = payload
         Msg=<div>用户<span>{user_account}</span>发起退款申请，售后状态变为<span style={{color:'#74C041'}}>退款中</span></div>
       };break;
-      case "Refunded": {
+      case "refunded": {
         const { provider_name, provider_id, amount, provider_refund_value, refund_value, closed } = payload
         Msg=<div><span>{provider_name}</span>退款您，退款<span>{provider_refund_value}</span>(退款数量<span>{refund_value}</span>)，您退款给用户<span>{provider_name}</span>(退款数量<span>{amount}</span>)，售后状态 <span style={{color:'#74C041'}}>退款中</span> => <span style={{color:"#74C041"}}>已退款</span>，订单状态 <span>XXX</span> => <span style={{color:"#74C041"}}>已终止</span>。 *如果初始订单状态为已完成或者一种，则不会出现改变订单状态一栏*</div>
         };break;

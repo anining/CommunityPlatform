@@ -16,12 +16,11 @@ import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { dateFormat, push, getKey } from "../../utils/util";
-import { communityGoodsOrders } from "../../utils/api"
+import { communityGoodsOrders, communityGoodsCategories } from "../../utils/api"
 import SelectComponent from "../../components/SelectComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
-
-let win
+import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
 
 function CommunityOrderView () {
   const [visible_push, setVisiblePush] = useState(false)
@@ -68,13 +67,15 @@ function CommunityOrderView () {
   const [search_user_account, setSearch_user_account] = useState()
   const [search_goods_name, setSearch_goods_name] = useState()
   const [community_goods_category_id, setCommunity_goods_category_id] = useState()
-  const [community_goods_category_name, setCommunity_goods_category_name] = useState()
   const [status, setStatus] = useState()
 
-  window.localClick = function (type, ids) {
-    setCommunity_goods_category_id(ids.id)
-    setCommunity_goods_category_name(ids.name)
-    win && win.close()
+  function getGoodsSummaries(page,size) {
+    return communityGoodsCategories("get",undefined,{page,size}).then(r => {
+      if (!r.error) {
+        return r.data
+      }
+      return []
+    }).catch(()=>[])
   }
 
   console.log(sel)
@@ -139,10 +140,6 @@ function CommunityOrderView () {
     // setVisible(localVisible)
   }
 
-  function click () {
-    win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
-  }
-
   const rowSelection = {
     onChange: (selectedRowKeys, rows) => {
       setSelectRows(selectedRowKeys)
@@ -170,7 +167,6 @@ function CommunityOrderView () {
     setSearch_user_account(undefined)
     setSearch_goods_name(undefined)
     setCommunity_goods_category_id(undefined)
-    setCommunity_goods_category_name(undefined)
     setStatus(undefined)
     setDate([])
     setMoment()
@@ -397,7 +393,7 @@ function CommunityOrderView () {
                 <Input onPressEnter={()=>get(current)} placeholder="请输入商品名称" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/>
                 {/* <Input onPressEnter={()=>get(current)} placeholder="请输入下单编号" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/> */}
                 <Input onPressEnter={()=>get(current)} value={search_user_account} onChange={e=>setSearch_user_account(e.target.value)} placeholder="请输入用户账户" size="small" className={c.searchInput}/>
-                <SelectComponent placeholder="请选择商品分类" id={community_goods_category_id} name={community_goods_category_name} click={click}/>
+                <DropdownPromiseComponent view placeholder="请选择商品分类" value={community_goods_category_id} setValue={setCommunity_goods_category_id} fetchName={getGoodsSummaries}/>
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择商品分类" style={{width:186}}/> */}
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单状态" style={{width:186}}/> */}
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择售后状态" style={{width:186}}/> */}

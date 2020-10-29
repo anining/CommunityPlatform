@@ -11,7 +11,7 @@ import good47 from '../../icons/good/good47.png'
 import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
 import { goBack, saveSuccess, push } from "../../utils/util";
-import { communityGoods, providerSummaries, goodsSummaries, cmntPadjs } from "../../utils/api";
+import { communityGoods, providerSummaries, goodsSummaries, cmntPadjs, communityGoodsCategories } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import { MODULES } from "../../utils/config";
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
@@ -21,8 +21,7 @@ let win
 function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
-  console.log(state)
-  const { id, provider_type:p_t, name: n, tags: tag_s = [], batch_order: b_o=false, ctg_name:category_name, weight: w, intro: i_td = "", disc_price: d_p, pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id, community_param_template_id: t_id, min_order_amount: min_o_a, param_template_name, repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
+  const { id, provider_type:p_t, name: n, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "", disc_price: d_p, pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
 
   const [name, setName] = useState(n)
   const [status, setStatus] = useState(s)
@@ -31,9 +30,6 @@ function EditCommunityGoodView () {
   const [factors, setFactors] = useState([])
   const [marks, setMarks] = useState([])
   const [community_goods_category_id, setCommunity_goods_category_id] = useState(c_id)
-  const [community_param_template_id, setCommunity_param_template_id] = useState(t_id)
-  const [community_goods_category_name, setCommunity_goods_category_name] = useState(category_name)
-  const [community_param_template_name, setCommunity_param_template_name] = useState(param_template_name)
   const [tag_ids, setTag_ids] = useState(tag_s.map(i => i.id))
   const [tags, setTags] = useState(tag_s)
   const [unit, setUnit] = useState(u)
@@ -51,10 +47,8 @@ function EditCommunityGoodView () {
   const [loading, setLoading] = useState(false)
   const [recommended, setRecommended] = useState(false)
   const [provider_type, setProvider_type] = useState(p_t)
-  const [providers, setProviders] = useState([])
   const [selectedProviders, setSelectedProviders] = useState()
   const [goods_id, setGoods_id] = useState()
-  const [goods, setGoods] = useState([])
   const [dockingTarget, setDockingTarget] = useState()
   const [has_more, setHasMore] = useState(false)
 
@@ -71,14 +65,6 @@ function EditCommunityGoodView () {
         setTags(ids)
         setTag_ids(ids.map(i => i.id))
         break
-      case 'good_category_id':
-        setCommunity_goods_category_id(ids.id)
-        setCommunity_goods_category_name(ids.name)
-        break
-      case 'order-model-id':
-        setCommunity_param_template_id(ids.id)
-        setCommunity_param_template_name(ids.name)
-        break
       default:
         ;
     }
@@ -90,21 +76,24 @@ function EditCommunityGoodView () {
     win && win.close()
   }
 
-  useEffect(() => {
-    providerSummaries().then(r => {
+  function getProviders (page,size) {
+    return providerSummaries(page,size).then(r => {
       if (!r.error) {
-        setProviders(r.data.map(i => ({ id: i.id, name: i.nickname })))
+        return r.data.map(i => ({ id: i.id, name: i.nickname }))
       }
-    })
-  }, [])
+      return []
+    }).catch(()=> [])
+  }
 
-  useEffect(() => {
-    cmntPadjs("get", undefined, { page: 1, size: 50 }).then(r => {
+  function getCmntPadjs (page,size) {
+    return cmntPadjs("get", undefined, {page, size}).then(r => {
       if (!r.error) {
         setMarks(r.data)
+        return r.data
       }
-    })
-  }, [])
+      return []
+    }).catch(()=> [])
+  }
 
   useEffect(() => {
     if (dockingTarget) {
@@ -123,15 +112,26 @@ function EditCommunityGoodView () {
     }
   }, [dockingTarget])
 
-  useEffect(() => {
+  function getGoodsSummaries(page,size) {
+    return communityGoodsCategories("get",undefined,{page,size}).then(r => {
+      if (!r.error) {
+        return r.data
+      }
+      return []
+    }).catch(()=>[])
+  }
+
+  function getGoodCategories(page,size) {
     if (selectedProviders) {
-      goodsSummaries(selectedProviders).then(r => {
+      return goodsSummaries(selectedProviders,page,size).then(r => {
         if (!r.error) {
-          setGoods(r.data)
+          return r.data
         }
-      })
+        return []
+      }).catch(()=>[])
     }
-  }, [selectedProviders])
+    return new Promise((resolve,reject)=>resolve([]))
+  }
 
   function save (jump) {
     // if (!provider_type || !goods_id || !name || !pics.length || !community_param_template_id || !community_goods_category_id || !unit_price || !tag_ids.length || !unit) {
@@ -181,7 +181,6 @@ function EditCommunityGoodView () {
         // setPics([])
         // setCommunity_param_template_id(undefined)
         // setCommunity_goods_category_id(undefined)
-        // setCommunity_param_template_name(undefined)
         // setCommunity_goods_category_name(undefined)
         // setTag_ids([])
         // setTags([])
@@ -279,7 +278,7 @@ function EditCommunityGoodView () {
                 <span>*</span>
                 <div className={c.itemText}>供货商</div>
               </div>
-              <DropdownPromiseComponent placeholder="请选择供货商" value={selectedProviders} initNums={providers} setValue={setSelectedProviders}/>
+              <DropdownPromiseComponent placeholder="请选择供货商" value={selectedProviders} fetchName={getProviders} setValue={setSelectedProviders}/>
             </div>
           ))
         }
@@ -301,7 +300,7 @@ function EditCommunityGoodView () {
                 <span>*</span>
                 <div className={c.itemText}>关联商品</div>
               </div>
-              <DropdownPromiseComponent placeholder="请选择关联商品" initNums={goods} value={goods_id} setValue={setGoods_id}/>
+              <DropdownPromiseComponent placeholder="请选择关联商品" fetchName={getGoodsSummaries} value={goods_id} refresh={[selectedProviders]} setValue={setGoods_id}/>
               {/* <DropdownPromiseComponent tooltip={tooltips?tooltips.name:""} placeholder="请选择关联商品" initNums={goods} setValue={setGoods_id}/> */}
             </div>
           ))
@@ -318,12 +317,7 @@ function EditCommunityGoodView () {
             <span>*</span>
             <div className={c.itemText}>商品分类</div>
           </div>
-            <div onClick={()=>{
-               win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
-            }} className={c.itemSelect}>
-              <div className={c.itemSelectP} style={{color:community_goods_category_name?"rgba(0, 0, 0, 0.85)":"rgba(0,0,0,0.25)"}}>{community_goods_category_name?community_goods_category_name:'请设置商品分类'}</div>
-              <div>选择</div>
-            </div>
+          <DropdownPromiseComponent placeholder="请选择商品分类" fetchName={getGoodsSummaries} value={community_goods_category_id} setValue={setCommunity_goods_category_id}/>
             <Button type="primary" className={c.itemBtn} onClick={()=>{
               push('/main/editGoodCategory')
             }}>新增分类</Button>
@@ -479,7 +473,7 @@ function EditCommunityGoodView () {
                         <span>*</span>
                         <div className={c.itemText}>调价模版</div>
                       </div>
-                      <DropdownPromiseComponent placeholder="请选择调价模版" initNums={marks} setValue={setDockingTarget}/>
+                      <DropdownPromiseComponent placeholder="请选择调价模版" value={dockingTarget} fetchName={getCmntPadjs} setValue={setDockingTarget}/>
                     </div>
                     <div className={c.itemTips}>
                       <div className={c.itemName} />
