@@ -11,6 +11,7 @@ import good21 from '../../icons/good/good21.png'
 import good59 from '../../icons/good/good59.png'
 import good61 from '../../icons/good/good61.png'
 import good60 from '../../icons/good/good60.png'
+import { styles as ms } from '../../styles/modal'
 import good41 from '../../icons/good/good41.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
@@ -21,6 +22,7 @@ import SelectComponent from "../../components/SelectComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
+import { REFUND_STATUS } from '../../utils/config'
 
 function CommunityOrderView () {
   const [visible_push, setVisiblePush] = useState(false)
@@ -289,6 +291,28 @@ function CommunityOrderView () {
   dataIndex: 'status',
   render: (text, record, index) => {
     const { text: t, color } = getKey(text, obj)
+    return <div style={{color}}>{t}</div>
+  }
+},{
+  title: '售后状态',
+  align: 'center',
+  dataIndex: 'status',
+  render: (text, record, index) => {
+    const { text: t, color } = getKey(text, REFUND_STATUS)
+    if(true){
+      return (
+        <div style={{position:'relative'}}>
+          <div style={{color}}>{t}</div>
+          <Popconfirm
+            icon={<img src="" alt="" style={ms.popConfirmIcon}/>}
+            placement="bottomRight"
+            title={() => <div style={{color:'#999',fontSize:'0.857rem',paddingTop:8}}>暂无</div>}
+          >
+            <div className={c.refundCircle}>!</div>
+          </Popconfirm>
+        </div>
+      )
+    }
     return <div style={{color}}>{t}</div>
   }
 }, {

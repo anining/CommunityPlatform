@@ -11,6 +11,11 @@ const styles = {
   icon: {
     width: 103
   },
+  popConfirmIcon: {
+    width: 0,
+    height: 0,
+    display: 'none',
+  },
   label: {
     color: '#353535',
     marginTop: 32,

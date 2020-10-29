@@ -334,3 +334,23 @@
   margin-top: 32px;
   color: #333333;
 }
+
+.refundCircle {
+  height: 14px;
+  width: 14px;
+  border: 2px solid #BFBFBF;
+  color: #BFBFBF;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  font-size: 0.857rem;
+  top: 20%;
+  right: -5px;
+}
+
+.refundCircle:hover {
+  border-color: #FF8D30;
+  color: #FF8D30;
+}
