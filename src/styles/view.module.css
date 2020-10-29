@@ -152,9 +152,15 @@
 }
 
 .dropItem {
+  clear: both;
+  margin: 0;
   padding: 5px 12px;
   color: rgba(0, 0, 0, 0.85);
   cursor: pointer;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 22px;
+  white-space: nowrap;
   transform: all 0.3s;
 }
 
@@ -327,4 +333,24 @@
 .statusModelTips {
   margin-top: 32px;
   color: #333333;
+}
+
+.refundCircle {
+  height: 14px;
+  width: 14px;
+  border: 2px solid #BFBFBF;
+  color: #BFBFBF;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  font-size: 0.857rem;
+  top: 20%;
+  right: -5px;
+}
+
+.refundCircle:hover {
+  border-color: #FF8D30;
+  color: #FF8D30;
 }

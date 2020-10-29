@@ -17,12 +17,10 @@ import DropdownComponent from "../../components/DropdownComponent";
 import ModalComponent from "../../components/ModalComponent";
 import { push, getKey, saveSuccess, getSimpleText } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
-import { communityGoods } from "../../utils/api"
+import { communityGoods, communityGoodsCategories } from "../../utils/api"
 import { GOODS_STATUS } from "../../utils/config"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import DropdownPromiseComponent from "../../components/DropdownPromiseComponent"
-
-let win
 
 function CommunityGoodView () {
   const [visible, setVisible] = useState(false)
@@ -74,7 +72,6 @@ function CommunityGoodView () {
   const [id, setId] = useState()
   const [search_name, setSearch_name] = useState()
   const [community_goods_category_id, setCommunity_goods_category_id] = useState()
-  const [community_goods_category_name, setCommunity_goods_category_name] = useState()
   const [status, setStatus] = useState()
   const [refundable, setRefundable] = useState()
   const [order_by, setOrder_by] = useState()
@@ -112,6 +109,15 @@ function CommunityGoodView () {
     })
   }
 
+  function getGoodsSummaries(page,size) {
+    return communityGoodsCategories("get",undefined,{page,size}).then(r => {
+      if (!r.error) {
+        return r.data
+      }
+      return []
+    }).catch(()=>[])
+  }
+
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
@@ -119,19 +125,9 @@ function CommunityGoodView () {
     return arr
   }
 
-  window.localClick = function (type, ids) {
-    setCommunity_goods_category_id(ids.id)
-    setCommunity_goods_category_name(ids.name)
-    win && win.close()
-  }
-
   useEffect(() => {
     get(current)
   }, [])
-
-  function click () {
-    win = window.open("/select-good-category", "_blank", "left=390,top=145,width=1200,height=700")
-  }
 
   function onChange (page, pageSize) {
     setCurrent(page)
@@ -171,7 +167,6 @@ function CommunityGoodView () {
   function reset () {
     setId(undefined)
     setSearch_name(undefined)
-    setCommunity_goods_category_name(undefined)
     setCommunity_goods_category_id(undefined)
     setStatus(undefined)
     setRefundable(undefined)
@@ -404,8 +399,7 @@ function CommunityGoodView () {
                 <Input value={search_name} onPressEnter={()=>get(current)} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入商品名称" size="small" className={c.searchInput}/>
                 <DropdownComponent action={status} setAction={setStatus} keys={[{name:"已上架",key:"available"},{name:"已关闭订单",key:"unavailable"},{name:"已下架",key:"paused"}]} placeholder="请选择商品状态" style={{width:186}}/>
                 <DropdownComponent keys={[{name:"可退单",key:"refundable"},{name:"不可退单",key:"no_refundable"},{name:"全部",key:"un_refundable"}]} action={refundable} setAction={setRefundable} placeholder="请选择是否可退单" style={{width:186}}/>
-                <DropdownPromiseComponent view placeholder="请选择商品分类"/>
-                {/* <SelectComponent placeholder="请选择商品分类" id={community_goods_category_id} name={community_goods_category_name} click={click}/> */}
+                <DropdownPromiseComponent view placeholder="请选择商品分类" value={community_goods_category_id} setValue={setCommunity_goods_category_id} fetchName={getGoodsSummaries}/>
               </div>
               <div className={c.searchR}>
                 <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>

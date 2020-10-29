@@ -144,4 +144,23 @@ const USER_RANK = {
   }
 }
 
-export { PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }
+const REFUND_STATUS = {
+  "a": {
+    color: "rgba(0, 0, 0, 0.65)",
+    text: '-',
+  },
+  closed: {
+    color: "#FF8D30",
+    text: '退款中',
+  },
+  completed: {
+    color: "#565759",
+    text: '已退款',
+  },
+  processing: {
+    color: "#FF4D4F",
+    text: '已拒绝',
+  },
+}
+
+export { REFUND_STATUS, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }

@@ -10,7 +10,6 @@ import { proxyRouter } from "../utils/history"
 import { storage } from '../utils/storage'
 import { setter, getter } from '../utils/store'
 import SelectTableView from "../views/tableViews/SelectTableView"
-import SelectGoodCategoryView from "../views/communityBusinessViews/SelectGoodCategoryView"
 import SelectOrderModelView from "../views/communityBusinessViews/SelectOrderModelView"
 import { push } from '../utils/util'
 
@@ -55,9 +54,6 @@ function Router () {
       </Route>
       <Route exact path="/select-table">
         <SelectTableView />
-      </Route>
-      <Route exact path="/select-good-category">
-        <SelectGoodCategoryView />
       </Route>
       <Route exact path="/select-order-model">
         <SelectOrderModelView />

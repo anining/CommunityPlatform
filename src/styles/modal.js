@@ -11,6 +11,11 @@ const styles = {
   icon: {
     width: 103
   },
+  popConfirmIcon: {
+    width: 0,
+    height: 0,
+    display: 'none',
+  },
   label: {
     color: '#353535',
     marginTop: 32,
@@ -45,6 +50,8 @@ const styles = {
   infiniteScroll: {
     background: '#fff',
     boxShadow: "0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
+    paddingTop: 4,
+    paddingBottom: 4
   },
   bodyStyle: {
     display: 'flex',

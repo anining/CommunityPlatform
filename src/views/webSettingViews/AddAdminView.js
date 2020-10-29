@@ -10,7 +10,8 @@ import { PERMISSIONS } from "../../utils/config";
 
 function AddAdminView () {
   const { state = {} } = useHistory().location
-  const { account, id, nickname, permissions: p = [] } = state
+  const { account, id, nickname, permissions: p } = state
+  const initPermissions = p ? JSON.parse(p) : []
   const [number, setNumber] = useState(account) // 管理员账号
   const [name, setName] = useState(nickname) // 管理员名称
   const [purview, setPurview] = useState([]) // 权限列表
@@ -33,7 +34,7 @@ function AddAdminView () {
       const { error, data } = r;
       if (!error) {
         let localIndex = []
-        p && JSON.parse(p).forEach(i => {
+        initPermissions.forEach(i => {
           data.forEach((item, index) => {
             i.permission === item && (localIndex = [...localIndex, index])
           })

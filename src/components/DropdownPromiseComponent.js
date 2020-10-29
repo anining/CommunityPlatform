@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import * as U from 'karet.util'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Button, Menu, Tooltip, Dropdown } from 'antd'
@@ -6,13 +6,12 @@ import { styles } from '../styles/modal'
 import { DownOutlined } from '@ant-design/icons';
 import c from '../styles/view.module.css'
 
-function DropdownPromiseComponent ({ value, view, tooltip = "", fetchName, setValue, initNums = [], placeholder = "请选择" }) {
-  const size = 10
-  const [visible, setVisible] = useState(false)
+function DropdownPromiseComponent ({refresh=[], value, view, tooltip = "", fetchName, setValue, initNums = [], placeholder = "请选择" }) {
+  const size = 50
   const [page, setPage] = useState(1)
-  const [id, setId] = useState()
-  const [nums, setNums] = useState([])
+  const [nums, setNums] = useState(initNums)
   const [hasMore, setHasMore] = useState(true)
+  const myRef = useRef(null)
 
   useEffect(() => {
     if (!fetchName) {
@@ -22,40 +21,54 @@ function DropdownPromiseComponent ({ value, view, tooltip = "", fetchName, setVa
     fetchData()
   }, [])
 
-  function fetchData () {
-    // fetchData({page,size})
-    // fetchName("get", undefined, { page, size }).then(r => {
-    //   if (!r.error) {
-    //     setData([...data, ...r.data])
-    //     setPage(page + 1)
-    //     if (r.data.length !== size) {
-    //       setHasMore(false)
-    //     }
-    //   }
-    // })
+  useEffect(()=>{
+    if (fetchName) {
+      setPage(1)
+      fetchData(1,true)
+    }
+  },refresh)
+
+  function fetchData (current = page,clear = false) {
+    fetchName(current,size).then(r=>{
+      if(clear) {
+        setNums([...r])
+      }else {
+        setNums([...nums, ...r])
+      }
+      setPage(page + 1)
+      if (r.length !== size) {
+        setHasMore(false)
+      }
+    })
   }
 
   const menu = (
-    <Menu onClick={e=>{
-      setId(e.key)
-      setValue(e.key)
-    }}>
-      {
-        initNums.map(i => (
-          <Menu.Item key={i.id}>
-            {i.name}
-          </Menu.Item>
-        ))
-      }
-    </Menu>
+    <InfiniteScroll
+      style={styles.infiniteScroll}
+      next={fetchData}
+      dataLength={nums.length}
+      hasMore={hasMore}
+    >
+        {
+          nums.map(i => (
+            <div key={i.id} onClick={()=>{
+              setValue(i.id)
+              const ref = document.querySelectorAll(".ant-dropdown")
+              for (let i = 0; i < ref.length; i++) { ref[i].className = 'ant-dropdown ant-dropdown-placement-bottomLeft ant-dropdown-hidden' }
+          }} className={c.dropItem}>
+              {i.name}
+            </div>
+          ))
+        }
+    </InfiniteScroll>
   );
 
-  const selected = initNums.filter(i => i.id == id)
+  const selected = nums.filter(i => i.id == value)
 
   return (
     <Dropdown overlay={menu}>
       <Tooltip placement="bottomLeft" color="#F7FAFF" title={tooltip}>
-        <Button size="small" onClick={()=>setVisible(true)} className={view?c.dropdown_view:c.dropdownPromise}>
+        <Button size="small" ref={myRef} className={view?c.dropdown_view:c.dropdownPromise}>
           <div className={c.hiddenText} style={{color:selected.length?"#34374A":"#C4C4C4"}}>
             { selected.length ? selected[0].name : placeholder }
           </div>
