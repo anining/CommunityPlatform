@@ -300,7 +300,7 @@ function EditCommunityGoodView () {
                 <span>*</span>
                 <div className={c.itemText}>关联商品</div>
               </div>
-              <DropdownPromiseComponent placeholder="请选择关联商品" fetchName={getGoodsSummaries} value={goods_id} refresh={[selectedProviders]} setValue={setGoods_id}/>
+              <DropdownPromiseComponent placeholder="请选择关联商品" fetchName={getGoodCategories} value={goods_id} refresh={[selectedProviders]} setValue={setGoods_id}/>
               {/* <DropdownPromiseComponent tooltip={tooltips?tooltips.name:""} placeholder="请选择关联商品" initNums={goods} setValue={setGoods_id}/> */}
             </div>
           ))
@@ -310,7 +310,7 @@ function EditCommunityGoodView () {
             <span>*</span>
             <div className={c.itemText}>商品名称</div>
           </div>
-          <Input maxLength={40} placeholder="请输入商品名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput}></Input>
+          <Input maxLength={40} placeholder="请输入商品名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput}/>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
