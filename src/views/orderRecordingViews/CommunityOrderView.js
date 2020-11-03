@@ -16,8 +16,8 @@ import good41 from '../../icons/good/good41.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
-import { dateFormat, push, getKey } from "../../utils/util";
-import { communityGoodsOrders, communityGoodsCategories } from "../../utils/api"
+import { dateFormat, push, getKey, saveSuccess } from "../../utils/util";
+import { refundAccept, communityGoodsOrders, communityGoodsCategories } from "../../utils/api"
 import SelectComponent from "../../components/SelectComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
@@ -29,6 +29,7 @@ function CommunityOrderView () {
   const [visible_ref, setVisibleRef] = useState(false)
   const [visible, setVisible] = useState(false)
   const [remark, setRemark] = useState()
+  const [refundNum, setRefundNum] = useState()
   const [visibleMsg, setVisibleMsg] = useState(false)
   const [visibleOther, setVisibleOther] = useState(false)
   const [sel, setSel] = useState({})
@@ -81,6 +82,17 @@ function CommunityOrderView () {
   }
 
   console.log(sel)
+
+  function refund () {
+    setVisibleRef(false)
+    refundAccept(sel.id,refundNum).then(r=>{
+      if (!r.error) {
+        saveSuccess(false)
+        setRefundNum(undefined)
+        get(current)
+      }
+    })
+  }
 
   useEffect(() => {
     get(current)
@@ -293,35 +305,26 @@ function CommunityOrderView () {
     const { text: t, color } = getKey(text, obj)
     return <div style={{color}}>{t}</div>
   }
-},{
-  title: '售后状态',
-  align: 'center',
-  dataIndex: 'status',
-  render: (text, record, index) => {
-    const { text: t, color } = getKey(text, REFUND_STATUS)
-    if(true){
-      return (
-        <div style={{position:'relative'}}>
-          <div style={{color}}>{t}</div>
-          <Popconfirm
-            icon={<img src="" alt="" style={ms.popConfirmIcon}/>}
-            placement="bottomRight"
-            title={() => <div style={{color:'#999',fontSize:'0.857rem',paddingTop:8}}>暂无</div>}
-          >
-            <div className={c.refundCircle}>!</div>
-          </Popconfirm>
-        </div>
-      )
-    }
-    return <div style={{color}}>{t}</div>
-  }
 }, {
   title: '售后状态',
   dataIndex: 'refund_status',
   align: 'center',
   render: (text, record, index) => {
-    return '-'
-}
+    const { reason="暂无" } = record
+    const { text: t, color } = getKey(text, REFUND_STATUS)
+    return (
+      <div style={{display:'flex',alignItems:'center',paddingLeft:19}}>
+        <div style={{color,flexShrink:0}}>{t}</div>
+        <Popconfirm
+          icon={<img src="" alt="" style={ms.popConfirmIcon}/>}
+          placement="bottomRight"
+          title={() => <div style={{color:'#999',fontSize:'0.857rem',paddingTop:8}}>{reason}</div>}
+        >
+          <div style={{opacity:text==="rejected"?1:0}} className={c.refundCircle}>!</div>
+        </Popconfirm>
+      </div>
+    )
+  }
 }, {
   title: '通信状态',
   dataIndex: 'refund_status',
@@ -357,40 +360,18 @@ function CommunityOrderView () {
 }, {
   title: '操作',
   align: 'center',
-  render: (text, record, index) => {
-    return '-'
-}
-  // render: (text, record, index) => (
-  //   <Space size="small">
-  //           <Popconfirm icon={<img src="" alt="" style={{width:0,height:0}}/>
-  //             }
-  //             placement = "leftTop"
-  //             title = {
-  //                 () => {
-  //                   // return (
-  //                   //   // {/* <div style={styles.view}> */}
-  //                   //   // {/*   <div style={styles.header}> */}
-  //                   //   // {/*     <img src={good41} alt="" style={styles.icon}/> */}
-  //                   //   // {/*     <div>请输入需要退款的数量</div> */}
-  //                   //   // {/*   </div> */}
-  //                   //   // {/*   <Input style={styles.input} placeholder="请在这里输入退款数量"/> */}
-  //                   //   // {/*   <div style={styles.tips}>全部退款</div> */}
-  //                   //   // {/*   <div style={styles.footer}> */}
-  //                   //   // {/*     <Button size="small" style={styles.cancelBtn}>取消</Button> */}
-  //                   //   // {/*     <Button size="small" type="primary" style={styles.okBtn}>确定</Button> */}
-  //                   //   // {/*   </div> */}
-  //                   //   // {/* </div> */}
-  //                   // )
-  //                 }
-  //               } >
-  //             <div style={{color:'#FF4D4F',cursor:'wait',textDecorationColor:"#ff4d4f"}} className={c.clickText}>退款</div>
-  //           </Popconfirm>
-  //           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-  //           <div style={{cursor:'wait'}} className={c.clickText}>添加备注</div>
-  //           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-  //           <div style={{cursor:'wait'}} className={c.clickText}>重新通信</div>
-  //       </Space>
-  // )
+  render: (text, record, index) => (
+    <Space size="small">
+      <div style={{color:'#FF4D4F',textDecorationColor:"#ff4d4f"}} onClick={()=>{
+        setSel(record)
+        setVisibleRef(true)
+      }} className={c.clickText}>退款</div>
+      <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+      <div style={{cursor:'wait'}} className={c.clickText}>添加备注</div>
+      <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+      <div style={{cursor:'wait'}} className={c.clickText}>重新通信</div>
+    </Space>
+  )
 }
 ];
 
@@ -500,25 +481,24 @@ function CommunityOrderView () {
         onOk={onOk}
       />
       <ModalPopComponent
-      div = {
-        <div>
-          <div className={oc.remark}>
-            <div>退款数量：</div>
-            <Input style={{width:370}} placeholder="请输入退款数量" addonAfter="全部数量"/>
-          </div> <
-        div className = { oc.remark_tips } >
-        当前选中订单： < span > 20200105020305(音符点赞) < /span> < /
-        div > <
-        div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
-        <Button className={oc.change_btn_cancel}>取消</Button> <
-        Button type = "primary"
-        className = { oc.change_btn_ok } > 确定 < /Button> < /
-        div > <
-        /div>
-      }
-      title = "退款"
-      visible = { visible_ref }
-      onCancel = { onCancel }
+        div={
+          <div className={oc.center_view}>
+            <div className={oc.remark}>
+              <div>退款数量：</div>
+              <Input style={{width:370}} value={refundNum} onChange={e=>setRefundNum(e.target.value)} placeholder="请输入退款数量"/>
+            </div>
+            <div className={oc.remark_tips}>
+              当前选中订单： <span> {sel.id}({ sel.goods_name }) </span>
+            </div>
+            <div className = {oc.change_btn_view} style={{marginTop: 70}}>
+              <Button className={oc.change_btn_cancel} onClick={()=>setVisibleRef(false)}>取消</Button>
+              <Button type="primary" className={oc.change_btn_ok} onClick={refund}>确定</Button>
+            </div>
+          </div>
+        }
+        title="退款"
+        visible={visible_ref}
+        onCancel={()=>setVisibleRef(false)}
       />
       <ModalPopComponent
         div={

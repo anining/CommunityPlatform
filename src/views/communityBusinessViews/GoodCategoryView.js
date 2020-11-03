@@ -92,7 +92,7 @@ function RTable () {
   function format (arr = []) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = transformTime(item.created_at)
+      // item.time = transformTime(item.created_at)
     })
     return arr
   }

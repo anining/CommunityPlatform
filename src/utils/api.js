@@ -260,6 +260,10 @@ export function orderHis (order_id) {
   return transformFetch("GET", "/cmnt-order-histories", { order_id })
 }
 
+// 商户主动退款
+export function refundAccept (id,amount) {
+  return transformFetch("PUT", `/cmnt-orders/${id}/refund/accept`, { amount })
+}
 
 
 

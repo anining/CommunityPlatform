@@ -145,19 +145,19 @@ const USER_RANK = {
 }
 
 const REFUND_STATUS = {
-  "a": {
+  "-": {
     color: "rgba(0, 0, 0, 0.65)",
     text: '-',
   },
-  closed: {
+  refunding: {
     color: "#FF8D30",
     text: '退款中',
   },
-  completed: {
+  refunded: {
     color: "#565759",
     text: '已退款',
   },
-  processing: {
+  rejected: {
     color: "#FF4D4F",
     text: '已拒绝',
   },

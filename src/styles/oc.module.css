@@ -174,7 +174,8 @@
 }
 
 .remark_tips {
-  margin-left: 84px;
+  margin-left: 135px;
+  align-self: flex-start;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.25);
 }
@@ -222,4 +223,11 @@
   border-color: #2C67FF;
   color: #2C67FF;
   background-color: #EDF2FF;
+}
+
+.center_view {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }

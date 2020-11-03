@@ -11,7 +11,7 @@ import good47 from '../../icons/good/good47.png'
 import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
 import { goBack, saveSuccess, push } from "../../utils/util";
-import { communityGoods, providerSummaries, goodsSummaries, cmntPadjs, communityGoodsCategories } from "../../utils/api";
+import { communityGoods, providerSummaries, goodsSummaries, cmntPadjs, communityGoodsCategories, communityParamTemplates } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import { MODULES } from "../../utils/config";
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
@@ -21,7 +21,7 @@ let win
 function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
-  const { id, provider_type:p_t, name: n, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "", disc_price: d_p, pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
+  const { id, provider_type:p_t, name: n, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "", pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
 
   const [name, setName] = useState(n)
   const [status, setStatus] = useState(s)
@@ -30,13 +30,13 @@ function EditCommunityGoodView () {
   const [factors, setFactors] = useState([])
   const [marks, setMarks] = useState([])
   const [community_goods_category_id, setCommunity_goods_category_id] = useState(c_id)
+  const [community_param_template_id, setCommunity_param_template_id] = useState()
   const [tag_ids, setTag_ids] = useState(tag_s.map(i => i.id))
   const [tags, setTags] = useState(tag_s)
   const [unit, setUnit] = useState(u)
   const [unit_price, setUnit_price] = useState(u_p)
   const [refundable, setRefundable] = useState(true)
   const [unit_cost, setUnit_cost] = useState(u_c)
-  const [disc_price, setDisc_price] = useState(d_p)
   const [min_order_amount, setMin_order_amount] = useState(min_o_a)
   const [max_order_amount, setMax_order_amount] = useState(max_o_a)
   const [repeat_order, setRepeat_order] = useState(r_o)
@@ -112,6 +112,15 @@ function EditCommunityGoodView () {
     }
   }, [dockingTarget])
 
+  function getParamTemplates(page,size) {
+    return communityParamTemplates("get",undefined,{page,size}).then(r => {
+      if (!r.error) {
+        return r.data
+      }
+      return []
+    }).catch(()=>[])
+  }
+
   function getGoodsSummaries(page,size) {
     return communityGoodsCategories("get",undefined,{page,size}).then(r => {
       if (!r.error) {
@@ -153,7 +162,7 @@ function EditCommunityGoodView () {
       refundable,
       recommended,
       min_order_amount: min_order_amount || 1,
-      max_order_amount: max_order_amount || 1,
+      max_order_amount: max_order_amount || 10000,
       weight: weight || 1,
       pics,
       unit_cost,
@@ -164,7 +173,6 @@ function EditCommunityGoodView () {
       repeatable: repeat_order,
       // community_param_template_id,
       // unit_price,
-      // disc_price,
       // repeat_order,
     }
     setLoading(true)
@@ -188,7 +196,6 @@ function EditCommunityGoodView () {
         // setUnit_price(undefined)
         // setRefundable(true)
         // setUnit_cost(undefined)
-        // setDisc_price(undefined)
         // setMax_order_amount(undefined)
         // setMin_order_amount(undefined)
         // setRepeat_order(undefined)
@@ -300,7 +307,7 @@ function EditCommunityGoodView () {
                 <span>*</span>
                 <div className={c.itemText}>关联商品</div>
               </div>
-              <DropdownPromiseComponent placeholder="请选择关联商品" fetchName={getGoodsSummaries} value={goods_id} refresh={[selectedProviders]} setValue={setGoods_id}/>
+              <DropdownPromiseComponent placeholder="请选择关联商品" fetchName={getGoodCategories} value={goods_id} refresh={[selectedProviders]} setValue={setGoods_id}/>
               {/* <DropdownPromiseComponent tooltip={tooltips?tooltips.name:""} placeholder="请选择关联商品" initNums={goods} setValue={setGoods_id}/> */}
             </div>
           ))
@@ -322,21 +329,16 @@ function EditCommunityGoodView () {
               push('/main/editGoodCategory')
             }}>新增分类</Button>
         </div>
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span>*</span> */}
-        {/*     <div className={c.itemText}>下单模型</div> */}
-        {/*   </div> */}
-        {/*     <div onClick={()=>{ */}
-        {/*        win = window.open("/select-order-model", "_blank", "left=390,top=145,width=1200,height=700") */}
-        {/*     }} className={c.itemSelect}> */}
-        {/*       <div className={c.itemSelectP} style={{color:community_param_template_name?"rgba(0, 0, 0, 0.85)":"rgba(0,0,0,0.25)"}}>{community_param_template_name?community_param_template_name:'请设置下单模型'}</div> */}
-        {/*       <div>选择</div> */}
-        {/*     </div> */}
-        {/*     <Button type="primary" className={c.itemBtn} onClick={()=>{ */}
-        {/*       push('/main/editOrderModel') */}
-        {/*     }}>新增模型</Button> */}
-        {/* </div> */}
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>下单模型</div>
+          </div>
+          <DropdownPromiseComponent placeholder="请选择下单模型" fetchName={getParamTemplates} value={community_param_template_id} setValue={setCommunity_param_template_id}/>
+            <Button type="primary" className={c.itemBtn} onClick={()=>{
+              push('/main/editOrderModel')
+            }}>新增模型</Button>
+        </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
@@ -531,7 +533,7 @@ function EditCommunityGoodView () {
                   <span className={c.white}>*</span>
                   <div className={c.itemText}>最高下单</div>
                 </div>
-                <Input type="number" placeholder="该商品每一单最高多下多少个，默认为1" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput}></Input>
+                <Input type="number" placeholder="该商品每一单最高多下多少个，默认为10000" onChange={e=>setMax_order_amount(e.target.value)} value={max_order_amount} className={c.itemInput}></Input>
               </div>
               <div className={c.item}>
                 <div className={c.itemName}>
