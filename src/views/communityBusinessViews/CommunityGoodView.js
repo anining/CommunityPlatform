@@ -15,10 +15,10 @@ import good9 from '../../icons/good/good9.png'
 import good45 from '../../icons/good/good45.png'
 import DropdownComponent from "../../components/DropdownComponent";
 import ModalComponent from "../../components/ModalComponent";
-import { push, getKey, saveSuccess, getSimpleText } from "../../utils/util"
+import { push, getKey, saveSuccess, getSimpleText, transformTime } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
-import { communityGoods, communityGoodsCategories } from "../../utils/api"
-import { GOODS_STATUS } from "../../utils/config"
+import { communityGoods, communityGoodsCategories, priceHistories } from "../../utils/api"
+import { GOODS_STATUS, PROVIDER_TYPE } from "../../utils/config"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import DropdownPromiseComponent from "../../components/DropdownPromiseComponent"
 
@@ -33,6 +33,7 @@ function CommunityGoodView () {
   const [visible_desc, setVisibleDesc] = useState(false)
   const [visibleTag, setVisibleTag] = useState(false)
   const [title, setTitle] = useState()
+  const [his, setHis] = useState([])
   const [selected, setSelected] = useState([])
   const [key, setKey] = useState()
   const [src, setSrc] = useState()
@@ -118,6 +119,16 @@ function CommunityGoodView () {
     }).catch(()=>[])
   }
 
+  function getHis (record) {
+    const { id } = record
+    priceHistories("cmnt", id).then(r=>{
+      if (!r.error) {
+        setHis(r.data)
+        setVisibleHis(true)
+      }
+    })
+  }
+
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
@@ -189,19 +200,23 @@ function CommunityGoodView () {
   },
     {
       title: '下单模型',
-      dataIndex: 'param_template_name',
       align: 'center',
       render: (text, record, index) => {
-        return '-'
-      },
-      // render: (text, record, index) => {
-      //   return <div>(0815) {text}</div>
-      // }
+        const { ptpl_id, ptpl_name } = record
+        if(!ptpl_name && !ptpl_id) {
+          return "-"
+        }
+        return <div>({ptpl_id}) {ptpl_name}</div>
+      }
   },
     {
       title: '商品来源',
       dataIndex: 'provider_type',
       align: 'center',
+      render: (text, record, index) => {
+        const { text: t, color } = getKey(text, PROVIDER_TYPE)
+        return <div style={{color}}>{t}</div>
+      }
   },
     {
       title: '进价',
@@ -210,26 +225,12 @@ function CommunityGoodView () {
       render: (text, record, index) => {
         return text || '-'
       },
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // }
   },
     {
       title: '单价',
       dataIndex: 'prices',
       align: 'center',
-      render: (text, record, index) => {
-        return text[0]
-      }
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // }
+      render: (text, record, index) => text[0]
   },
     {
       title: '统一密价',
@@ -247,22 +248,6 @@ function CommunityGoodView () {
       dataIndex: 'unit',
       align: 'center',
   },
-    // {
-    //   title: '下单限制',
-    //   align: 'center',
-    //   dataIndex: 'text',
-    //   render: (text, record, index) => {
-    //     const { repeat_order, batch_order } = record
-    //     const repeat = repeat_order > 0 ? { text: "开启", color: "#52C41A" } : { text: "关闭", color: "#C8C8C8" }
-    //     const batch = batch_order > 0 ? { text: "开启", color: "#52C41A" } : { text: "关闭", color: "#C8C8C8" }
-    //     return (
-    //       <div>
-    //         <div>批量下单: <span style={{color:repeat.color}}>{repeat.text}</span></div>
-    //         <div>重复下单: <span style={{color:batch.color}}>{batch.text}</span></div>
-    //       </div>
-    //     )
-    //   }
-  // },
     {
       title: '状态',
       align: 'center',
@@ -274,11 +259,9 @@ function CommunityGoodView () {
   },
     {
       title: '自助退款',
-      dataIndex: 'unit_cost',
+      dataIndex: 'refundable',
       align: 'center',
-      render: (text, record, index) => {
-        return '-'
-      }
+      render: (text, record, index) => <div style={{color:text?"#2C68FF":"#BFBFBF"}}>{text?"允许退款":"不允许退款"}</div>
   },
     {
       title: '下单限制',
@@ -307,10 +290,7 @@ function CommunityGoodView () {
       align: 'center',
       dataIndex: 'disc_price',
       render: (text, record, index) => {
-        return <div onClick={()=>{
-          setSel(record)
-          setVisibleHis(true)
-        }} className={c.clickText}>查看</div>
+        return <div onClick={()=>getHis(record)} className={c.clickText}>查看</div>
       }
   },
     {
@@ -540,21 +520,24 @@ function CommunityGoodView () {
     onCancel = { onCancel }
   />
   <ModalPopComponent
-    div = {
+    div={
       <Timeline style={{paddingTop:34}}>
-        <Timeline.Item color="#1890FF">
-          <div className={oc.time}>2020.01.15 15:01:04</div>
-          <div className={oc.time_line}>价格调整　进价：<span>0.05</span>、单价：<span>0.05</span>、高级会员：<span>0.05</span>、钻石会员：-、至尊会员<span>0.5</span></div>
-        </Timeline.Item>
-        <Timeline.Item color="#1890FF">
-          <div className={oc.time}>2020.01.15 15:01:04</div>
-          <div className={oc.time_line}>价格调整　进价：<span>0.05</span>、单价：<span>0.05</span>、高级会员：<span>0.05</span>、钻石会员：-、至尊会员<span>0.5</span></div>
-        </Timeline.Item>
+        {
+          his.map(i=>{
+            const { created_at, prices, unit_cost } = i
+            return (
+              <Timeline.Item color="#1890FF" key={created_at}>
+                <div className={oc.time}>{transformTime(created_at)}</div>
+                <div className={oc.time_line}>价格调整　进价：<span style={{color:"rgba(255, 95, 95, 1)"}}>{unit_cost}</span>、单价：<span style={{color:"rgba(255, 95, 95, 1)"}}>{prices[0]}</span>、高级会员：<span style={{color:"rgba(255, 95, 95, 1)"}}>{prices[1]}</span>、钻石会员：<span style={{color:"rgba(255, 95, 95, 1)"}}>{prices[2]}</span>、至尊会员<span style={{color:"rgba(255, 95, 95, 1)"}}>{prices[3]}</span> 。</div>
+              </Timeline.Item>
+            )
+        })
+        }
       </Timeline>
     }
-    title = "调价历史"
-    visible = { visible_his }
-    onCancel = { onCancel }
+    title="调价历史"
+    visible={visible_his}
+    onCancel = {onCancel}
   />
   <ModalPopComponent
     div={

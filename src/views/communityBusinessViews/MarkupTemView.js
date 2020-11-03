@@ -109,12 +109,6 @@ function RTable () {
       title: '模版编号',
       dataIndex: 'id',
       align: 'center',
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // },
   },
     {
       title: '模版名称',

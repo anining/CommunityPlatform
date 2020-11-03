@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Radio, DatePicker, Button, Table, message, Input, Space, Popconfirm } from 'antd'
+import { Radio, Button, Table, Input, Space } from 'antd'
 import c from '../../styles/view.module.css'
 import { USER_STATUS } from "../../utils/config"
 import oc from '../../styles/oc.module.css'
@@ -74,11 +74,22 @@ function UserView () {
   }
 
   let text = []
-  selected.forEach(i => text.push(i.name))
+  selected.forEach(i => text.push(i.account))
 
   function onOk () {
     setVisible(false)
-    updateUsers(seled,"ids=" + sel.id).then(r => {
+    updateUsers({lv:seled},"ids=" + sel.id).then(r => {
+      if (!r.error) {
+        saveSuccess(false)
+        setSelectRows([])
+        get(current)
+      }
+    })
+  }
+
+  function updateStatus () {
+    setVisibleAction(false)
+    updateUsers({status:key},"ids=" + selected.map(i => i.id).toString()).then(r => {
       if (!r.error) {
         saveSuccess(false)
         setSelectRows([])
@@ -93,68 +104,64 @@ function UserView () {
         <TableHeaderComponent path="/main/addUser" data={labels} text="添加用户"/>
         <RTable selectedRows={selectedRows} setSelectRows={setSelectRows} setSel={setSel} setVisible={setVisible} setTitle={setTitle} get={get} current={current} setCurrent={setCurrent} data={data} setAccount={setAccount} setStatus={setStatus} setDate={setDate} account={account} pageSize={pageSize} total={total} status={status} setMoment={setMoment} setSelected={setSelected} setSrc={setSrc} setKey={setKey} setVisibleAction={setVisibleAction}/>
       </div>
-  <ModalPopComponent
-    div = {
-      <div>
-        <div className={oc.user_setting}>
-          <div style={{color:'#333'}}>当前选中用户：{sel.account||''}</div>
-          <div className={oc.user_tips}>修改为</div>
-          <div className={oc.selects}>
-            {
-              [{id:0,label:"普通用户"},{id:1,label:"高级用户"},{id:2,label:"钻石用户"},{id:3,label:"至尊用户"}].map(i=><Button style={{color:seled===i.id?'#fff':'rgba(0, 0, 0, 0.25)',background:seled===i.id?'#2C68FF':"#fff"}} onClick={()=>setSeled(i.id)} className={oc.user_sel}>{i.label}</Button>)
-            }
+      <ModalPopComponent
+        div={
+          <div>
+            <div className={oc.user_setting}>
+              <div style={{color:'#333'}}>当前选中用户：{sel.account||''}</div>
+              <div className={oc.user_tips}>修改为</div>
+              <div className={oc.selects}>
+                {
+                  [{id:0,label:"普通用户"},{id:1,label:"高级用户"},{id:2,label:"钻石用户"},{id:3,label:"至尊用户"}].map(i=><Button style={{color:seled===i.id?'#fff':'rgba(0, 0, 0, 0.25)',background:seled===i.id?'#2C68FF':"#fff"}} onClick={()=>setSeled(i.id)} className={oc.user_sel}>{i.label}</Button>)
+                }
+              </div>
+            </div>
+            <div className={oc.change_btn_view}>
+              <Button onClick={()=>setVisible(false)} className={oc.change_btn_cancel}>取消</Button>
+              <Button type = "primary" className = { oc.change_btn_ok } onClick={onOk}> 确定 < /Button>
+            </div>
           </div>
-        </div> <
-    div className = { oc.change_btn_view } >
-    <Button className={oc.change_btn_cancel}>取消</Button> <
-    Button type = "primary"
-    className = { oc.change_btn_ok } onClick={onOk}> 确定 < /Button> <
-    /div> <
-    /div>
-  }
-  title = "用户等级"
-  visible = { visible }
-  onCancel = { onCancel }
-  /> <
-  ModalComponent
-  src = { src }
-  div = "当前选中用户："
-  span = { text.join('、') }
-  title = { title }
-  action = { key }
-  visible = { visible_action }
-  onCancel = { onCancel }
-  onOk = { onOk }
-  /> <
-  ModalPopComponent
-  div = {
-      <div>
-          <div className={oc.remark}>
-            <div>余额数值：</div>
-            <Radio.Group style={{marginLeft:12}}>
-              <Radio value="normal">加款</Radio>
-              <Radio value="banned">
-                减款
-              </Radio>
-            </Radio.Group>
+        }
+        title="用户等级"
+        visible={visible}
+        onCancel={onCancel}
+      />
+      <ModalComponent
+        src={src}
+        div="当前选中用户："
+        span={text.join('、')}
+        title={title}
+        action={key}
+        visible={visible_action}
+        onCancel={onCancel}
+        onOk={updateStatus}
+      />
+      <ModalPopComponent
+        div={
+          <div>
+            <div className={oc.remark}>
+              <div>余额数值：</div>
+              <Radio.Group style={{marginLeft:12}}>
+                <Radio value="normal">加款</Radio>
+                <Radio value="banned">
+                  减款
+                </Radio>
+              </Radio.Group>
+            </div>
+            <div className={oc.remark} style={{marginTop:24}}>
+              <div>余额数值：</div>
+              <Input placeholder="请输入变动数值"/>
+            </div>
+            <div className={oc.remark_tips}>当前选中订单： <span> 20200105020305(音符点赞) </span></div>
+              <div className = { oc.change_btn_view } style={{marginTop: 70}}>
+                <Button className={oc.change_btn_cancel}>取消</Button>
+                <Button type = "primary" className={oc.change_btn_ok}>确定</Button>
+              </div>
           </div>
-          <div className={oc.remark} style={{marginTop:24}}>
-            <div>余额数值：</div>
-            <Input placeholder="请输入变动数值"/>
-          </div>
-            <div className = { oc.remark_tips } >
-        当前选中订单： < span > 20200105020305(音符点赞) < /span> < /
-        div > <
-        div className = { oc.change_btn_view } style = { { marginTop: 70 } } >
-        <Button className={oc.change_btn_cancel}>取消</Button> <
-        Button type = "primary"
-        className = { oc.change_btn_ok } > 确定 < /Button> < /
-        div > <
-        /div>
-      }
-      title = "用户余额"
-      visible = { visible_balance }
-      onCancel = { onCancel }
+        }
+        title = "用户余额"
+        visible = { visible_balance }
+        onCancel = { onCancel }
       />
     </div>
   )
@@ -174,16 +181,17 @@ function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data
   const rowSelection = {
     onChange: (selectedRowKeys, rows) => {
       setSelectRows(selectedRowKeys)
-    }
+    },
+    selectedRowKeys: selectedRows
   };
 
   function submit (key) {
     let title = ""
     switch (key) {
-      case "a":
+      case "banned":
         title = "您确定要封禁选中用户吗？";
         break;
-      case "b":
+      case "normal":
         title = "您确定要解封选中用户吗？";
         break;
       default:
@@ -365,8 +373,7 @@ function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data
           </div>
         </div>
       </div>
-      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[]}/>
-      {/* <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量解封",key:"b"},{name:"批量封禁",key:"a"}]}/> */}
+      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/>
       <Table
         columns={columns}
         rowSelection={{

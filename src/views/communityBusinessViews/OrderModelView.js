@@ -62,12 +62,6 @@ function RTable () {
       title: '模型编号',
       dataIndex: 'id',
       align: 'center',
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // }
   },
     {
       title: '模型名称',
@@ -90,7 +84,7 @@ function RTable () {
       render: (text, record, index) => (
         <div className={c.clickText} onClick={()=>push('/main/editOrderModel',record)}>编辑模型</div>
       )
-    },
+    }
   ];
 
   const rowSelection = {

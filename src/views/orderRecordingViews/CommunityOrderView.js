@@ -16,7 +16,7 @@ import good41 from '../../icons/good/good41.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
-import { dateFormat, push, getKey, saveSuccess } from "../../utils/util";
+import { dateFormat, push, getKey, saveSuccess, transformTime } from "../../utils/util";
 import { refundAccept, communityGoodsOrders, communityGoodsCategories } from "../../utils/api"
 import SelectComponent from "../../components/SelectComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
@@ -120,8 +120,7 @@ function CommunityOrderView () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      // item.time = dateFormat(item.created_at, "yyyy-MM-dd HH:mm:ss")
-      // item.refund_status = item.refund_status || '-'
+      item.time = transformTime(item.created_at)
     })
     return arr
   }
@@ -250,11 +249,8 @@ function CommunityOrderView () {
   },
     {
       title: '下单用户',
-      dataIndex: 'id',
+      dataIndex: 'user_account',
       align: 'center',
-      render: (text, record, index) => {
-        return '-'
-    }
   },
     {
       title: '下单信息',
@@ -265,20 +261,6 @@ function CommunityOrderView () {
           setVisibleMsg(true)
         }} className={c.clickText}>查看</div>
   }
-  // render: (text, record, index) => {
-  //   const { args, number, password } = record;
-  //   return (
-  //     <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-  //     <div>
-  //       <div>主页链接 :{uri}</div>
-  //       <div style={{display:'flex'}}>
-  //         <div style={{marginRight:30}}>账号: {number}</div>
-  //         <div>密码: {password}</div>
-  //       </div>
-  //     </div>
-  //   </div>
-  //   )
-  // }
 }, {
   title: '拓展信息',
   align: 'center',
@@ -294,7 +276,7 @@ function CommunityOrderView () {
   align: 'center',
 }, {
   title: '订单数额',
-  dataIndex: 'cost',
+  dataIndex: 'h_price',
   align: 'center',
 },
 {
@@ -362,11 +344,16 @@ function CommunityOrderView () {
   align: 'center',
   render: (text, record, index) => (
     <Space size="small">
-      <div style={{color:'#FF4D4F',textDecorationColor:"#ff4d4f"}} onClick={()=>{
-        setSel(record)
-        setVisibleRef(true)
-      }} className={c.clickText}>退款</div>
-      <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+      {
+        record.refund_status === "refunding" ?
+          <div style={{display:'flex',alignItems:'center'}}>
+            <div style={{color:'#FF4D4F',textDecorationColor:"#ff4d4f"}} onClick={()=>{
+              setSel(record)
+              setVisibleRef(true)
+            }} className={c.clickText}>退款</div>
+            <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          </div>:null
+      }
       <div style={{cursor:'wait'}} className={c.clickText}>添加备注</div>
       <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
       <div style={{cursor:'wait'}} className={c.clickText}>重新通信</div>
@@ -403,7 +390,7 @@ function CommunityOrderView () {
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单状态" style={{width:186}}/> */}
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择售后状态" style={{width:186}}/> */}
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择通信状态" style={{width:186}}/> */}
-                <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单去向" style={{width:186}}/>
+                <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已终止",key:"closed"}]} placeholder="请选择订单去向" style={{width:186}}/>
                 <DatePicker.RangePicker
                   format="YYYY-MM-DD"
                   onChange={dateChange}

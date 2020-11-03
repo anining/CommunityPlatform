@@ -113,12 +113,12 @@ const CARDS_STATUS = {
 }
 
 const USER_STATUS = {
-  a: {
+  banned: {
     color: "#FF4D4F",
     text: '封禁',
     src: good70
   },
-  b: {
+  normal: {
     color: "#FF4D4F",
     text: '解封',
     src: good69
@@ -162,5 +162,11 @@ const REFUND_STATUS = {
     text: '已拒绝',
   },
 }
+const PROVIDER_TYPE = {
+  supplier: {
+    color: "#FF4D4F",
+    text: '供货商',
+  }
+}
 
-export { REFUND_STATUS, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }
+export { REFUND_STATUS, PROVIDER_TYPE, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }

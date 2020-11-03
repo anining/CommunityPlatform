@@ -6,7 +6,6 @@ import { styles } from "../styles/modal"
 
 function ModalComponent ({ child, action, src, div, span, title, visible, onCancel, onOk }) {
   const is_delete = action === "e"
-  console.log(action)
 
   return (
     <Modal

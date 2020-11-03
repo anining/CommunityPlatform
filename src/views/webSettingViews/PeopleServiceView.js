@@ -59,9 +59,7 @@ function RTable () {
         <Space size="small">
           <div className={c.clickText} style={{cursor:'wait'}} onClick={()=>{}}>修改</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div style={{cursor:'wait',color:'#FF4D4F',textDecorationColor:"#FF4D4F"}} className={c.clickText} onClick={()=>{
-
-          }}>删除</div>
+          <div style={{cursor:'wait',color:'#FF4D4F',textDecorationColor:"#FF4D4F"}} className={c.clickText} onClick={()=>{}}>删除</div>
         </Space>
       )
     },

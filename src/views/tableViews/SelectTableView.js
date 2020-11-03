@@ -48,7 +48,7 @@ function SelectTableView () {
         </div>
         <RGroup tagsGroup={tagsGroup} setTagsGroup={setTagsGroup} selects={selects} setSelects={setSelects}/>
         <div className={c.selectTabBtnV} style={{marginTop:50,marginBottom:50}}>
-          <Button size="small" type="primary" className={c.selectTableCBtn} onClick={okSave}>取消</Button>
+          <Button size="small" type="primary" className={c.selectTableCBtn} onClick={()=>window.opener.localClick('tables', [])}>取消</Button>
           <Button className={c.selectTableOkBtn} size="small" type="primary" onClick={okSave}>确定</Button>
         </div>
       </div>

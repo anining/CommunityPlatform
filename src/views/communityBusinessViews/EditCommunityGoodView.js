@@ -21,38 +21,37 @@ let win
 function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
-  const { id, provider_type:p_t, name: n, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "", pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c, unit_price: u_p } = state
-
+  const { id, provider_type:p_t, padj_id, name: n, prices: pr_s = [], supp_goods_id, refundable: re = false, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "", ptpl_id, pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c } = state
   const [name, setName] = useState(n)
   const [status, setStatus] = useState(s)
   const [pics, setPics] = useState(ps)
-  const [prices, setPrices] = useState(false)
-  const [factors, setFactors] = useState([])
-  const [marks, setMarks] = useState([])
-  const [community_goods_category_id, setCommunity_goods_category_id] = useState(c_id)
-  const [community_param_template_id, setCommunity_param_template_id] = useState()
+  const [ctg_id, setCtgId] = useState(c_id)
+  const [community_param_template_id, setCommunity_param_template_id] = useState(ptpl_id)
   const [tag_ids, setTag_ids] = useState(tag_s.map(i => i.id))
-  const [tags, setTags] = useState(tag_s)
-  const [unit, setUnit] = useState(u)
-  const [unit_price, setUnit_price] = useState(u_p)
-  const [refundable, setRefundable] = useState(true)
-  const [unit_cost, setUnit_cost] = useState(u_c)
   const [min_order_amount, setMin_order_amount] = useState(min_o_a)
   const [max_order_amount, setMax_order_amount] = useState(max_o_a)
-  const [repeat_order, setRepeat_order] = useState(r_o)
-  const [batch_order, setBatch_order] = useState(b_o)
   const [weight, setWeight] = useState(w)
   const [intro, setIntroduction] = useState(i_td)
-  const [imageUrl, setImageUrl] = useState(pics[0])
-  const [loading, setLoading] = useState(false)
+  const [repeatable, setRepeatable] = useState(r_o)
+  const [batch_order, setBatch_order] = useState(Boolean(b_o))
   const [recommended, setRecommended] = useState(false)
   const [provider_type, setProvider_type] = useState(p_t)
-  const [selectedProviders, setSelectedProviders] = useState()
-  const [goods_id, setGoods_id] = useState()
-  const [dockingTarget, setDockingTarget] = useState()
-  const [has_more, setHasMore] = useState(false)
+  const [goods_id, setGoods_id] = useState(supp_goods_id)
+  const [refundable, setRefundable] = useState(re)
+  const [unit_cost, setUnit_cost] = useState(u_c)
+  const [unit, setUnit] = useState(u)
+  const [prices, setPrices] = useState(Boolean(padj_id))
+  const [unit_price, setUnit_price] = useState(pr_s[0])
+  const [factors, setFactors] = useState(pr_s)
 
-  // const tooltips = goods.filter(i => i.id === goods_id)[0]
+  const [loading, setLoading] = useState(false)
+  const [imageUrl, setImageUrl] = useState(pics[0])
+  const [tags, setTags] = useState(tag_s)
+  const [has_more, setHasMore] = useState(false)
+  const [dockingTarget, setDockingTarget] = useState(padj_id)
+
+  const [marks, setMarks] = useState([])
+  const [selectedProviders, setSelectedProviders] = useState()
 
   const setPriceAt = i => R.pipe(
     e => L.set([i], +e.target.value, factors),
@@ -143,37 +142,36 @@ function EditCommunityGoodView () {
   }
 
   function save (jump) {
-    // if (!provider_type || !goods_id || !name || !pics.length || !community_param_template_id || !community_goods_category_id || !unit_price || !tag_ids.length || !unit) {
-    //   message.warning("请完善信息")
-    //   return
-    // }
+    if (!provider_type || !goods_id || !name || !ctg_id || !unit_price || !tag_ids.length || !unit) {
+      message.warning("请完善信息")
+      return
+    }
     if (weight > 32767 || weight < -32768) {
       message.warning("权重值超出范围")
       return
     }
     let body = {
-      // ptpl_id
-      // padj_id
+      supp_goods: { provider_type, goods_id },
       name,
-      status,
-      ctg_id: community_goods_category_id,
-      tag_ids,
+      ctg_id,
+      ptpl_id: community_param_template_id,
+      prices: prices ? factors : [(unit_price||0), 0, 0, 0],
       unit,
+      tag_ids,
+      pics,
+      intro,
+      status,
+      weight: weight || 1,
+      unit_cost,
       refundable,
-      recommended,
       min_order_amount: min_order_amount || 1,
       max_order_amount: max_order_amount || 10000,
-      weight: weight || 1,
-      pics,
-      unit_cost,
+      recommended,
+      repeatable,
       batch_order,
-      intro,
-      prices: prices ? factors : [(unit_price||0), 0, 0, 0],
-      supp_goods: { provider_type, goods_id },
-      repeatable: repeat_order,
-      // community_param_template_id,
-      // unit_price,
-      // repeat_order,
+    }
+    if( prices ) {
+      body = {...body,...{padj_id: dockingTarget}}
     }
     setLoading(true)
     const promise = communityGoods(id ? "modify" : 'add', id, undefined, body)
@@ -188,7 +186,7 @@ function EditCommunityGoodView () {
         // setStatus("available")
         // setPics([])
         // setCommunity_param_template_id(undefined)
-        // setCommunity_goods_category_id(undefined)
+        // setCtgId(undefined)
         // setCommunity_goods_category_name(undefined)
         // setTag_ids([])
         // setTags([])
@@ -198,7 +196,7 @@ function EditCommunityGoodView () {
         // setUnit_cost(undefined)
         // setMax_order_amount(undefined)
         // setMin_order_amount(undefined)
-        // setRepeat_order(undefined)
+        // setRepeatable(undefined)
         // setBatch_order(undefined)
         // setWeight(undefined)
         // setIntroduction("");
@@ -324,7 +322,7 @@ function EditCommunityGoodView () {
             <span>*</span>
             <div className={c.itemText}>商品分类</div>
           </div>
-          <DropdownPromiseComponent placeholder="请选择商品分类" fetchName={getGoodsSummaries} value={community_goods_category_id} setValue={setCommunity_goods_category_id}/>
+          <DropdownPromiseComponent placeholder="请选择商品分类" fetchName={getGoodsSummaries} value={ctg_id} setValue={setCtgId}/>
             <Button type="primary" className={c.itemBtn} onClick={()=>{
               push('/main/editGoodCategory')
             }}>新增分类</Button>
@@ -540,7 +538,7 @@ function EditCommunityGoodView () {
                   <span className={c.white}>*</span>
                   <div className={c.itemText}>重复下单</div>
                 </div>
-                <Radio.Group value={repeat_order} onChange={e=>setRepeat_order(e.target.value)} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+                <Radio.Group value={repeatable} onChange={e=>setRepeatable(e.target.value)} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
                   <Radio value={false} className={c.itemRadio} style={{width:'33.333%'}}>不允许重复下单</Radio>
                   <Radio value={true} className={c.itemRadio} style={{width:'33.333%'}}>允许重复下单</Radio>
                 </Radio.Group>
@@ -557,6 +555,16 @@ function EditCommunityGoodView () {
                 <Radio.Group value={batch_order} onChange={e=>setBatch_order(e.target.value)} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
                   <Radio value={false} className={c.itemRadio} style={{width:'33.333%'}}>不允许批量下单</Radio>
                   <Radio value={true} className={c.itemRadio} style={{width:'33.333%'}}>允许批量下单</Radio>
+                </Radio.Group>
+              </div>
+              <div className={c.item}>
+                <div className={c.itemName}>
+                  <span className={c.white}>*</span>
+                  <div className={c.itemText}>重复下单</div>
+                </div>
+                <Radio.Group value={recommended} onChange={e=>setRecommended(e.target.value)} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+                  <Radio value={false} className={c.itemRadio} style={{width:'33.333%'}}>关闭推荐</Radio>
+                  <Radio value={true} className={c.itemRadio} style={{width:'33.333%'}}>开启推荐</Radio>
                 </Radio.Group>
               </div>
               <div className={c.itemTips}>

@@ -76,10 +76,9 @@ function RTable () {
   function get (current) {
     balanceChanges(current, pageSize, date[0], date[1]).then(r => {
       if (!r.error) {
-        // alert("暂无数据")
-        // const { data, total } = r
-        // setTotal(total)
-        // setData(format(data))
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
       }
     })
   }
@@ -197,10 +196,10 @@ function RTable () {
       <div className={c.searchView}>
         <div className={c.search}>
           <div className={c.searchL}>
-            <Input placeholder="请输入用户账户" size="small" className={c.searchInput}/>
-            <Input placeholder="请输入订单编号" size="small" className={c.searchInput}/>
-            <DropdownComponent keys={[]} placeholder="请选择支付方式" style={{width:186}}/>
-            <DropdownComponent keys={[]} placeholder="请选择消费类型" style={{width:186}}/>
+            {/* <Input placeholder="请输入用户账户" size="small" className={c.searchInput}/> */}
+            {/* <Input placeholder="请输入订单编号" size="small" className={c.searchInput}/> */}
+            {/* <DropdownComponent keys={[]} placeholder="请选择支付方式" style={{width:186}}/> */}
+            {/* <DropdownComponent keys={[]} placeholder="请选择消费类型" style={{width:186}}/> */}
             <DatePicker.RangePicker
               format="YYYY-MM-DD"
               onChange={dateChange}
@@ -219,7 +218,7 @@ function RTable () {
           </div>
         </div>
       </div>
-      <Button className={c.excelBtn} type="primary">导出本页为Excel</Button>
+      <Button className={c.excelBtn} disabled={true} type="primary">导出本页为Excel</Button>
       <Table
         columns={columns}
         rowSelection={{

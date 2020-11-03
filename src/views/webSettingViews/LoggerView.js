@@ -76,17 +76,10 @@ function RTable () {
       align: 'center',
   },
     {
-      title: '操作内容',
-      dataIndex: 'text',
+      title: '登录IP',
+      dataIndex: 'data',
       align: 'center',
-      render: (text, record, index) => {
-        return '-'
-        // const { text: t, color } = getKey(text, obj)
-        // const { status, t } = text;
-        // return (
-        //   <div style={{color}}>{t}</div>
-        // )
-      }
+      render: (text, record, index) => JSON.parse(text).ip
   },
     {
       title: '登录时间',

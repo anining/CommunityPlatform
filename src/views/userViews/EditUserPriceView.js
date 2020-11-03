@@ -18,7 +18,7 @@ import ModalPopComponent from "../../components/ModalPopComponent"
 
 function EditUserPriceView () {
   const { state = {} } = useHistory().location
-  const { account, ordered, id } = state
+  const { account, lv, id } = state
 
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
@@ -131,7 +131,7 @@ function EditUserPriceView () {
             <img src={header1} alt="" style={{width:60,marginRight:9}}/>
             <div>
               <div style={{color:'#34374A',fontWeight:500,fontSize:'1.285rem',marginBottom:5}}>{account}</div>
-              <img src={USER_RANK[ordered].src} alt="" style={{width:100}}/>
+              <img src={USER_RANK[lv].src} alt="" style={{width:100}}/>
             </div>
           </div>
           <div className={cs.tem_header} style={{width:'100%'}}>
@@ -214,15 +214,21 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
   },
     {
       title: '单价',
+      dataIndex: 'prices',
       align: 'center',
-      render: (text, record, index) => '-'
+      render: (text, record, index) => {
+        const { user_price } = record
+        const color = (text[0] > 0 && !user_price && !text[3] && !text[2] && !text[1]) ? "#4177FE" : "#595959"
+        return <div style={{color}}>{text[0] || '-'}</div>
+      }
   },
     {
       title: '统一密价(高级会员)',
       dataIndex: 'prices',
       align: 'center',
       render: (text, record, index) => {
-        const color = (text[1] > 0 && !text[0] && !text[3] && !text[2]) ? "#4177FE" : "#595959"
+        const { user_price } = record
+        const color = (text[1] > 0 && !user_price && !text[3] && !text[2]) ? "#4177FE" : "#595959"
         return <div style={{color}}>{text[1] || '-'}</div>
       }
   },
@@ -231,7 +237,8 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
       dataIndex: 'prices',
       align: 'center',
       render: (text, record, index) => {
-        const color = (text[2] > 0 && !text[0] && !text[3]) ? "#4177FE" : "#595959"
+        const { user_price } = record
+        const color = (text[2] > 0 && !user_price && !text[3]) ? "#4177FE" : "#595959"
         return <div style={{color}}>{text[2] || '-'}</div>
       }
   },
@@ -257,7 +264,6 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
     {
       title: '操作',
       align: 'center',
-      dataIndex: 'user_disc_price',
       render: (text, record, index) => {
         return <div onClick={()=>{
           setSelected(record)

@@ -7,12 +7,13 @@ import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
 import good57 from '../../icons/good/good57.png'
 import good58 from '../../icons/good/good58.png'
+import good41 from '../../icons/good/good41.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import {paySettle, providers} from "../../utils/api"
 import Popconfirm from "antd/es/popconfirm"
 import Space from "antd/es/space"
-import {getPath} from "../../utils/util"
+import {getPath, saveSuccess, push} from "../../utils/util"
 
 function StoreView() {
   const data = [
@@ -55,6 +56,7 @@ function StoreView() {
 function RTable() {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
+  const [nickname, setNickname] = useState()
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
@@ -65,9 +67,9 @@ function RTable() {
 
   function get(current) {
     let body = {page: current, size: pageSize}
-    // if (id) {
-    //   body = { ...body, ...{ id } }
-    // }
+    if (nickname) {
+      body = { ...body, ...{ nickname } }
+    }
     providers("get", undefined, body).then(r => {
       if (!r.error) {
         const {data, total} = r
@@ -121,11 +123,6 @@ function RTable() {
       align: 'center',
     },
     {
-      // account: "luoyukun3"
-      // id: 5
-      // nickname: "luoyukun3"
-      // providing_amount: 2
-      // value_stlreqed: null
       title: '供货商账号',
       align: 'center',
       dataIndex: 'account',
@@ -135,80 +132,67 @@ function RTable() {
       dataIndex: 'providing_amount',
       align: 'center',
     },
-    // {
-    //   title: '总消耗',
-    //   dataIndex: 'price',
-    //   align: 'center',
-    // },
-    // {
-    //   title: '待结算',
-    //   dataIndex: 'value_stlreqed',
-    //   align: 'center',
-    // },
+    {
+      title: '总消耗',
+      dataIndex: 'price',
+      align: 'center',
+      render: (text, record, index) => {
+        return '-'
+      }
+    },
+    {
+      title: '待结算',
+      dataIndex: 'value_stlreqed',
+      align: 'center',
+      render: (text, record, index) => {
+        return '-'
+      }
+    },
     {
       title: '申请结算',
       dataIndex: 'value_stlreqed',
       align: 'center',
+      render: (text, record, index) => {
+        return <div>{text || 0}</div>
+      }
+    },
+    {
+      title: '供货状态',
+      dataIndex: 'status',
+      align: 'center',
+      render: (text, record, index) => {
+        return '-'
+      }
       // render: (text, record, index) => {
       // const { text: t, color } = getKey(text, obj)
       //   const { text: t, color } =
       //   return <div style={{color}}>{t}</div>
       // }
     },
-    // {
-    //   title: '供货状态',
-    //   dataIndex: 'status',
-    //   align: 'center',
-    //   // render: (text, record, index) => {
-    //   // const { text: t, color } = getKey(text, obj)
-    //   //   const { text: t, color } =
-    //   //   return <div style={{color}}>{t}</div>
-    //   // }
-    // },
     {
       title: '操作',
       align: 'center',
       render: (...arg) => (
         <Space size="small" style={{color: '#2C68FF'}}>
-          <div style={{textDecoration: "underline", textDecorationColor: '#2C68FF'}} onClick={async () => {
+          <div className={c.clickText} onClick={() => {
             if(!getPath(['0', 'value_stlreqed'], arg)) {
               message.info('暂无可结算金额');
               return false;
             }
-            console.log(arg)
-            const ret = await paySettle(arg[0]['id']);
-            if (ret && !ret.error) {
-              console.log(ret, '//')
-            }
-          }}>结算
+            paySettle(arg[0]['id']).then(r=>{
+              if (!r.error) {
+                saveSuccess(false)
+                get(current)
+              }
+            })
+          }}>
+            结算
           </div>
-          {/*<div style={{height:14,width:1,background:'#D8D8D8'}}></div>*/}
-          {/*<Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>*/}
-          {/*  }*/}
-          {/*  placement = "left"*/}
-          {/*  title = {*/}
-          {/*      () => {*/}
-          {/*        return (*/}
-          {/*          <div style={styles.view}>*/}
-          {/*            <div style={styles.header}>*/}
-          {/*              <img src={good41} alt="" style={styles.icon}/>*/}
-          {/*              <div>请输入结算金额</div>*/}
-          {/*            </div>*/}
-          {/*            <Input style={styles.input} placeholder="请在这里输入结算金额"/>*/}
-          {/*            <div style={styles.tips}>全部结算</div>*/}
-          {/*            <div style={styles.footer}>*/}
-          {/*              <Button size="small" style={styles.cancelBtn}>取消</Button>*/}
-          {/*              <Button size="small" type="primary" style={styles.okBtn}>确定</Button>*/}
-          {/*            </div>*/}
-          {/*          </div>*/}
-          {/*        )*/}
-          {/*      }*/}
-          {/*    } >*/}
-          {/*  <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">结算</div>*/}
-          {/*</Popconfirm>*/}
+          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.clickText} onClick={()=>push("/main/editStore",arg[1])}>修改</div>
         </Space>
       )
-    },
+    }
   ];
 
   const rowSelection = {
@@ -222,12 +206,12 @@ function RTable() {
       case "delete":
         message.success('批量删除操作');
         break
-      // default:
+      default:
     }
   }
 
   function reset() {
-    // setId(undefined)
+    setNickname(undefined)
   }
 
   return (
@@ -235,17 +219,18 @@ function RTable() {
       <div className={c.searchView}>
         <div className={c.search}>
           <div className={c.searchL}>
-            <Input placeholder="请输入名称" size="small" className={c.searchInput}/>
+            <Input placeholder="请输入名称" value={nickname} onChange={e=>setNickname(e.target.value)} onPressEnter={()=>get(current)} size="small" className={c.searchInput}/>
           </div>
           <div className={c.searchR}>
             <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>
-            <Button icon={
-              <img src={good9} alt="" style={{width: 14, marginRight: 6}}/>
-            }
-                    type="primary"
-                    size="small"
-                    onClick={() => get(current)}
-                    className={c.searchBtn}>搜索</Button>
+            <Button icon={<img src={good9} alt="" style={{width: 14, marginRight: 6}}/>}
+              type="primary"
+              size="small"
+              onClick={() => get(current)}
+              className={c.searchBtn}
+            >
+              搜索
+            </Button>
           </div>
         </div>
       </div>

@@ -92,7 +92,7 @@ function RTable () {
   function format (arr = []) {
     arr.forEach((item, index) => {
       item.key = index
-      // item.time = transformTime(item.created_at)
+      item.time = transformTime(item.created_at)
     })
     return arr
   }
@@ -107,12 +107,6 @@ function RTable () {
       title: '分类编号',
       dataIndex: 'id',
       align: 'center',
-      // sorter: {
-      //   compare: (a, b) => {
-      //     console.log(a, b)
-      //   },
-      //   multiple: 1,
-      // }
   },
     {
       title: '分类名称',
@@ -135,7 +129,7 @@ function RTable () {
       render: (text, record, index) => (
         <div className={c.clickText} onClick={()=>push("/main/editGoodCategory",record)}>编辑分类</div>
       )
-  },
+  }
 ];
 
   const rowSelection = {

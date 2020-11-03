@@ -5,9 +5,9 @@ export function login (account, password) {
   return transformFetch("POST", "/login", { account, password })
 }
 
-// 权限列表
-export function permissions () {
-  return transformFetch("GET", "/permissions")
+// 当前管理员信息
+export function currentManager () {
+  return transformFetch("GET", "/current-manager");
 }
 
 // 修改密码
@@ -29,9 +29,9 @@ export function managers (type, mid, body) {
   }
 }
 
-// 当前管理员信息
-export function currentManager () {
-  return transformFetch("GET", "/current-manager");
+// 权限列表
+export function permissions () {
+  return transformFetch("GET", "/permissions")
 }
 
 // 获取登录日志
@@ -77,6 +77,32 @@ export function communityParamTemplates (type, pid, table, body) {
   }
 }
 
+// 供货商摘要
+export function providerSummaries () {
+  return transformFetch("GET", "/supp-summaries")
+}
+
+// 供货商商品摘要
+export function goodsSummaries (id) {
+  return transformFetch("GET", `/supps/${id}/goods-summaries`)
+}
+
+// 社区商品
+export function communityGoods (type, gid, table, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/cmnt-goods", table)
+    case "add":
+      return transformFetch("POST", "/cmnt-goods", body);
+    case "modify":
+      return transformFetch("PUT", `/cmnt-goods/${gid}`, body);
+    case "modifys":
+      return transformFetch("PATCH", `/cmnt-goods?${table}`, body);
+    default:
+      //   return transformFetch("DELETE", `/community-goods?${body}`);
+  }
+}
+
 // 社区调价模板
 export function cmntPadjs (type, pid, table, body) {
   switch (type) {
@@ -85,7 +111,7 @@ export function cmntPadjs (type, pid, table, body) {
     case "add":
       return transformFetch("POST", "/cmnt-padjs", body)
     default:
-      return transformFetch("PUT", `/cmnt-padjs/${pid}`, body)
+      // return transformFetch("PUT", `/cmnt-padjs/${pid}`, body)
   }
 }
 
@@ -130,7 +156,32 @@ export function addUsers (account, lv, status) {
 
 // 批量修改用户信息
 export function updateUsers (lv, body) {
-  return transformFetch("PATCH", "/users?" + body, { lv })
+  return transformFetch("PATCH", "/users?" + body, lv)
+}
+
+// 获取用户的社区商品密价列表
+export function communityDiscPrices (page, size, uid, goods_id, goods_name, goods_category_id) {
+  let data = { page, size }
+  if (goods_id) {
+    data = { ...data, ...{ goods_id } }
+  }
+  if (goods_name) {
+    data = { ...data, ...{ goods_name } }
+  }
+  if (goods_category_id) {
+    data = { ...data, ...{ ctg_id: goods_category_id } }
+  }
+  return transformFetch("GET", `/users/${uid}/cmnt-user-prices`, data)
+}
+
+// 设置用户的商品密价(社区/卡密)
+export function addDiscPrices (user_id, goods_id, price) {
+  return transformFetch("PUT", `/cmnt-user-prices`, { user_id, goods_id, price })
+}
+
+// 删除用户的商品密价(社区/卡密)
+export function deleteDiscPrices (did) {
+  return transformFetch("DELETE", `/cmnt-user-prices/${did}`)
 }
 
 // 店铺设置
@@ -163,45 +214,6 @@ export function customerServices (type, cid, table, body) {
   }
 }
 
-// 供货商
-export function providers (type, id, table, body) {
-  switch (type) {
-    case "get":
-      return transformFetch("GET", "/supps", table);
-    case "add":
-      return transformFetch("POST", "/supps", body);
-    case "modify":
-      return transformFetch("PUT", `/supps/${id}`, body);
-    default:
-      // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
-  }
-}
-
-// 获取用户的社区商品密价列表
-export function communityDiscPrices (page, size, uid, goods_id, goods_name, goods_category_id) {
-  let data = { page, size }
-  if (goods_id) {
-    data = { ...data, ...{ goods_id } }
-  }
-  if (goods_name) {
-    data = { ...data, ...{ goods_name } }
-  }
-  if (goods_category_id) {
-    data = { ...data, ...{ ctg_id: goods_category_id } }
-  }
-  return transformFetch("GET", `/users/${uid}/cmnt-user-prices`, data)
-}
-
-// 设置用户的商品密价(社区/卡密)
-export function addDiscPrices (user_id, goods_id, price) {
-  return transformFetch("PUT", `/cmnt-user-prices`, { user_id, goods_id, price })
-}
-
-// 删除用户的商品密价(社区/卡密)
-export function deleteDiscPrices (did) {
-  return transformFetch("DELETE", `/cmnt-user-prices/${did}`)
-}
-
 // 获取社区订单列表
 export function communityGoodsOrders (page, size, id, search_user_account, search_goods_name, community_goods_category_id, status, start_from, end_with) {
   let data = { page, size }
@@ -229,32 +241,6 @@ export function communityGoodsOrders (page, size, id, search_user_account, searc
   return transformFetch("GET", "/cmnt-orders", data)
 }
 
-// 社区商品
-export function communityGoods (type, gid, table, body) {
-  switch (type) {
-    case "get":
-      return transformFetch("GET", "/cmnt-goods", table)
-    case "add":
-      return transformFetch("POST", "/cmnt-goods", body);
-    case "modify":
-      return transformFetch("PUT", `/cmnt-goods/${gid}`, body);
-    case "modifys":
-      return transformFetch("PATCH", `/cmnt-goods?${table}`, body);
-    default:
-      //   return transformFetch("DELETE", `/community-goods?${body}`);
-  }
-}
-
-// 供货商摘要
-export function providerSummaries () {
-  return transformFetch("GET", "/supp-summaries")
-}
-
-// 供货商商品摘要
-export function goodsSummaries (id) {
-  return transformFetch("GET", `/supps/${id}/goods-summaries`)
-}
-
 // 获取社区订单历程
 export function orderHis (order_id) {
   return transformFetch("GET", "/cmnt-order-histories", { order_id })
@@ -265,44 +251,24 @@ export function refundAccept (id,amount) {
   return transformFetch("PUT", `/cmnt-orders/${id}/refund/accept`, { amount })
 }
 
-//结算供货商
+// 供货商
+export function providers (type, id, table, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/supps", table);
+    case "add":
+      return transformFetch("POST", "/supps", body);
+    case "modify":
+      return transformFetch("PUT", `/supps/${id}`, body);
+    default:
+      // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
+  }
+}
+
+//供货商结算
 export function paySettle (id) {
   return transformFetch("PUT", `/supps/${id}/settle`)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // 获取用户资金流水列表
 export function balanceChanges (page, size, start_from, end_with) {
@@ -316,9 +282,7 @@ export function balanceChanges (page, size, start_from, end_with) {
   return transformFetch("GET", "/balance-changes", data)
 }
 
-
 // 获取价格历史列表
 export function priceHistories (goods_type, goods_id) {
-  return transformFetch("GET", "/price-histories")
+  return transformFetch("GET", "/price-histories", {goods_id, goods_type})
 }
-
