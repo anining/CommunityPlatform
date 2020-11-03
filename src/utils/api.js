@@ -167,7 +167,7 @@ export function customerServices (type, cid, table, body) {
 export function providers (type, id, table, body) {
   switch (type) {
     case "get":
-      // return transformFetch("GET", "/supps", table)
+      return transformFetch("GET", "/supps", table);
     case "add":
       return transformFetch("POST", "/supps", body);
     case "modify":
@@ -265,7 +265,10 @@ export function refundAccept (id,amount) {
   return transformFetch("PUT", `/cmnt-orders/${id}/refund/accept`, { amount })
 }
 
-
+//结算供货商
+export function paySettle (id) {
+  return transformFetch("PUT", `/supps/${id}/settle`)
+}
 
 
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Table, message, Input } from 'antd'
+import React, {useState, useEffect} from 'react'
+import {Button, Table, message, Input} from 'antd'
 import c from '../../styles/view.module.css'
 import good38 from '../../icons/good/good38.png'
 import good39 from '../../icons/good/good39.png'
@@ -9,9 +9,12 @@ import good57 from '../../icons/good/good57.png'
 import good58 from '../../icons/good/good58.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
-import { providers } from "../../utils/api"
+import {paySettle, providers} from "../../utils/api"
+import Popconfirm from "antd/es/popconfirm"
+import Space from "antd/es/space"
+import {getPath} from "../../utils/util"
 
-function StoreView () {
+function StoreView() {
   const data = [
     {
       label: '供货商',
@@ -43,13 +46,13 @@ function StoreView () {
     <div className="view">
       <div className={c.container}>
         <TableHeaderComponent path="/main/editStore" data={data} text="新增"/>
-        <RTable />
+        <RTable/>
       </div>
     </div>
   )
 }
 
-function RTable () {
+function RTable() {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
@@ -60,29 +63,28 @@ function RTable () {
     get(current)
   }, [])
 
-  function get (current) {
-    let body = { page: current, size: pageSize }
-    alert("null")
+  function get(current) {
+    let body = {page: current, size: pageSize}
     // if (id) {
     //   body = { ...body, ...{ id } }
     // }
-    // providers("get", undefined, body).then(r => {
-    //   if (!r.error) {
-    //     const { data, total } = r
-    //     setTotal(total)
-    //     setData(format(data))
-    //   }
-    // })
+    providers("get", undefined, body).then(r => {
+      if (!r.error) {
+        const {data, total} = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
   }
 
-  function format (arr = []) {
+  function format(arr = []) {
     arr.forEach((item, index) => {
       item.key = index
     })
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange(page, pageSize) {
     setCurrent(page)
     get(page)
   }
@@ -112,87 +114,100 @@ function RTable () {
       title: '供货商编号',
       dataIndex: 'id',
       align: 'center',
-  },
+    },
     {
       title: '供货商名称',
-      dataIndex: 'name',
+      dataIndex: 'nickname',
       align: 'center',
-  },
+    },
     {
+      // account: "luoyukun3"
+      // id: 5
+      // nickname: "luoyukun3"
+      // providing_amount: 2
+      // value_stlreqed: null
       title: '供货商账号',
       align: 'center',
-      dataIndex: 'number',
-  },
+      dataIndex: 'account',
+    },
     {
       title: '供货商商品数',
-      dataIndex: 'num',
+      dataIndex: 'providing_amount',
       align: 'center',
-  },
-    {
-      title: '总消耗',
-      dataIndex: 'price',
-      align: 'center',
-  },
-    {
-      title: '待结算',
-      dataIndex: 'in_price',
-      align: 'center',
-  },
+    },
+    // {
+    //   title: '总消耗',
+    //   dataIndex: 'price',
+    //   align: 'center',
+    // },
+    // {
+    //   title: '待结算',
+    //   dataIndex: 'value_stlreqed',
+    //   align: 'center',
+    // },
     {
       title: '申请结算',
-      dataIndex: 'status',
+      dataIndex: 'value_stlreqed',
       align: 'center',
       // render: (text, record, index) => {
       // const { text: t, color } = getKey(text, obj)
       //   const { text: t, color } =
       //   return <div style={{color}}>{t}</div>
       // }
-  },
-    {
-      title: '供货状态',
-      dataIndex: 'status',
-      align: 'center',
-      // render: (text, record, index) => {
-      // const { text: t, color } = getKey(text, obj)
-      //   const { text: t, color } =
-      //   return <div style={{color}}>{t}</div>
-      // }
-  },
+    },
+    // {
+    //   title: '供货状态',
+    //   dataIndex: 'status',
+    //   align: 'center',
+    //   // render: (text, record, index) => {
+    //   // const { text: t, color } = getKey(text, obj)
+    //   //   const { text: t, color } =
+    //   //   return <div style={{color}}>{t}</div>
+    //   // }
+    // },
     {
       title: '操作',
       align: 'center',
-      // render: (text, record, index) => (
-      //   <Space size="small" style={{color:'#2C68FF'}}>
-      //     <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
-      //       const history = h.get()
-      //       history.push("/main/editStore")
-      //     }}>修改</div>
-      //     <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-      //       <Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>
-      //         }
-      //         placement = "left"
-      //         title = {
-      //             () => {
-      //               return (
-      //                 <div style={styles.view}>
-      //                   <div style={styles.header}>
-      //                     <img src={good41} alt="" style={styles.icon}/>
-      //                     <div>请输入结算金额</div>
-      //                   </div>
-      //                   <Input style={styles.input} placeholder="请在这里输入结算金额"/>
-      //                   <div style={styles.tips}>全部结算</div>
-      //                   <div style={styles.footer}>
-      //                     <Button size="small" style={styles.cancelBtn}>取消</Button>
-      //                     <Button size="small" type="primary" style={styles.okBtn}>确定</Button>
-      //                   </div>
-      //                 </div>
-      //               )
-      //             }
-      //           } >
-      //         <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">结算</div>
-      //       </Popconfirm>
-      //   </Space>
-      // )
+      render: (...arg) => (
+        <Space size="small" style={{color: '#2C68FF'}}>
+          <div style={{textDecoration: "underline", textDecorationColor: '#2C68FF'}} onClick={async () => {
+            if(!getPath(['0', 'value_stlreqed'], arg)) {
+              message.info('暂无可结算金额');
+              return false;
+            }
+            console.log(arg)
+            const ret = await paySettle(arg[0]['id']);
+            if (ret && !ret.error) {
+              console.log(ret, '//')
+            }
+          }}>结算
+          </div>
+          {/*<div style={{height:14,width:1,background:'#D8D8D8'}}></div>*/}
+          {/*<Popconfirm icon={()=><img src="" alt="" style={{width:0,height:0}}/>*/}
+          {/*  }*/}
+          {/*  placement = "left"*/}
+          {/*  title = {*/}
+          {/*      () => {*/}
+          {/*        return (*/}
+          {/*          <div style={styles.view}>*/}
+          {/*            <div style={styles.header}>*/}
+          {/*              <img src={good41} alt="" style={styles.icon}/>*/}
+          {/*              <div>请输入结算金额</div>*/}
+          {/*            </div>*/}
+          {/*            <Input style={styles.input} placeholder="请在这里输入结算金额"/>*/}
+          {/*            <div style={styles.tips}>全部结算</div>*/}
+          {/*            <div style={styles.footer}>*/}
+          {/*              <Button size="small" style={styles.cancelBtn}>取消</Button>*/}
+          {/*              <Button size="small" type="primary" style={styles.okBtn}>确定</Button>*/}
+          {/*            </div>*/}
+          {/*          </div>*/}
+          {/*        )*/}
+          {/*      }*/}
+          {/*    } >*/}
+          {/*  <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">结算</div>*/}
+          {/*</Popconfirm>*/}
+        </Space>
+      )
     },
   ];
 
@@ -202,17 +217,16 @@ function RTable () {
     }
   };
 
-  function submit (key) {
+  function submit(key) {
     switch (key) {
       case "delete":
         message.success('批量删除操作');
         break
-      default:
-        ;
+      // default:
     }
   }
 
-  function reset () {
+  function reset() {
     // setId(undefined)
   }
 
@@ -226,12 +240,12 @@ function RTable () {
           <div className={c.searchR}>
             <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>
             <Button icon={
-                <img src={good9} alt="" style={{width:14,marginRight:6}} />
-              }
-              type = "primary"
-              size = "small"
-              onClick={()=>get(current)}
-              className={c.searchBtn}>搜索</Button>
+              <img src={good9} alt="" style={{width: 14, marginRight: 6}}/>
+            }
+                    type="primary"
+                    size="small"
+                    onClick={() => get(current)}
+                    className={c.searchBtn}>搜索</Button>
           </div>
         </div>
       </div>
@@ -244,10 +258,10 @@ function RTable () {
         dataSource={data}
         size="small"
         pagination={{
-          showQuickJumper:true,
+          showQuickJumper: true,
           current,
           pageSize,
-          showLessItems:true,
+          showLessItems: true,
           total,
           onChange
         }}

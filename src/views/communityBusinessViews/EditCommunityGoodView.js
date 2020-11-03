@@ -317,7 +317,7 @@ function EditCommunityGoodView () {
             <span>*</span>
             <div className={c.itemText}>商品名称</div>
           </div>
-          <Input maxLength={40} placeholder="请输入商品名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput}></Input>
+          <Input maxLength={40} placeholder="请输入商品名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput}/>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
