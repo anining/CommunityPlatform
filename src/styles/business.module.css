@@ -143,23 +143,17 @@
 
 .tItemView {
   width: 866px;
-  border-bottom: 1px solid #CCCED6;
-  padding-top: 40px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+  padding-top: 18px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
 
-.tInput {
-  width: 105px;
-  height: 32px;
-  margin-bottom: 24px;
-}
-
 .tagTitle {
   height: 32px;
   color: #FF8D30;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   border-color: #FF8D30;
 }
 
@@ -176,7 +170,8 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin: 0 20px 24px 0;
+  /* margin: 0 20px 24px 0; */
+  margin-right: 20px;
 }
 
 .tItem {
@@ -219,7 +214,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
+  /* margin-bottom: 24px; */
+}
+
+.tInput {
+  /* box-sizing: border-box; */
+  width: 105px;
+  height: 32px;
+  /* margin-bottom: 24px; */
 }
 
 .tAdd div:first-child {

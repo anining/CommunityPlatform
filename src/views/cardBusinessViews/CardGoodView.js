@@ -10,6 +10,8 @@ import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import DropdownComponent from "../../components/DropdownComponent"
+import ActionComponent from '../../components/ActionComponent'
+import {SCROLL} from '../../utils/config'
 
 function CardGoodView () {
   const data = [
@@ -123,28 +125,28 @@ function RTable ({ setVisible }) {
   const columns = [
     {
       title: '商品编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '商品名称',
+			ellipsis: true,
       dataIndex: 'name',
-      align: 'center',
   },
     {
       title: '商品类别',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'ctg',
   },
     {
       title: '卡密类型',
+			ellipsis: true,
       dataIndex: 'card_category',
-      align: 'center',
   },
     {
       title: '进价',
+			ellipsis: true,
       dataIndex: 'in_price',
-      align: 'center',
       // sorter: {
       //   compare: (a, b) => {
       //     console.log(a, b)
@@ -154,8 +156,8 @@ function RTable ({ setVisible }) {
   },
     {
       title: '售价',
+			ellipsis: true,
       dataIndex: 'out_price',
-      align: 'center',
       // sorter: {
       //   compare: (a, b) => {
       //     console.log(a, b)
@@ -165,7 +167,7 @@ function RTable ({ setVisible }) {
   },
     {
       title: '密价',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'price',
       // sorter: {
       //   compare: (a, b) => {
@@ -176,20 +178,20 @@ function RTable ({ setVisible }) {
   },
     {
       title: '卡密详情',
+			ellipsis: true,
       dataIndex: 'msg',
-      align: 'center',
       // render: (text, record, index) => (
       //   <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} href="/main/editCommunityGood">共 {text} 条</div>
       // )
   },
     {
       title: '库存',
+			ellipsis: true,
       dataIndex: 'num',
-      align: 'center',
   },
     {
       title: '库存状态',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'status',
       // render: (text, record, index) => {
       // const { text: t, color } = getKey(text, obj)
@@ -199,7 +201,7 @@ function RTable ({ setVisible }) {
   },
     {
       title: '商品状态',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'status',
       // render: (text, record, index) => {
       // const { text: t, color } = getKey(text, obj)
@@ -208,8 +210,9 @@ function RTable ({ setVisible }) {
       // }
   },
     {
-      title: '操作',
-      align: 'center',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 136,
+			fixed: 'right',
       // render: (text, record, index) => (
       //   <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} onClick={()=>{
       //     const history = h.get()
@@ -262,13 +265,14 @@ function RTable ({ setVisible }) {
           </div>
         </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
       <Table
         columns={columns}
         rowSelection={{
           ...rowSelection
         }}
         dataSource={data}
+				scroll={SCROLL}
         size="small"
         pagination={{
           showQuickJumper:true,

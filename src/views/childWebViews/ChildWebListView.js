@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, message, Input } from 'antd'
+import { Button, Table, message, Input, Space } from 'antd'
 import good1 from '../../icons/good/good1.png'
 import c from '../../styles/view.module.css'
 import good28 from '../../icons/good/good28.png'
@@ -12,6 +12,8 @@ import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent"
+import {SCROLL} from '../../utils/config'
+import ActionComponent from '../../components/ActionComponent'
 
 function ChildWebListView () {
   const data = [
@@ -96,32 +98,32 @@ function RTable ({ setVisible }) {
   const columns = [
     {
       title: '站点编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '站点域名',
+			ellipsis: true,
       dataIndex: 'uri',
-      align: 'center',
   },
     {
       title: '站点名称',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'version',
   },
     {
       title: '主账号',
+			ellipsis: true,
       dataIndex: 'number',
-      align: 'center',
   },
     {
       title: '下单总额',
+			ellipsis: true,
       dataIndex: 'number',
-      align: 'center',
   },
     {
       title: '联系方式',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'text',
       // render: (text, record, index) => {
       //   const { status, t } = text
@@ -136,7 +138,7 @@ function RTable ({ setVisible }) {
   },
     {
       title: '状态',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'status',
       // const { text: t, color } = getKey(text, obj)
       // render: (text, record, index) => {
@@ -146,17 +148,20 @@ function RTable ({ setVisible }) {
   },
     {
       title: '备注',
+			ellipsis: true,
       dataIndex: 'number',
-      align: 'center',
   },
     {
-      title: '操作',
-      align: 'center',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 136,
+			fixed: 'right',
       render: (text, record, index) => (
-        <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} onClick={()=>{
-            // const history = h.get()
-            // history.push("/main/editChildWeb")
-          }}>修改</div>
+				<Space size="small" className={c.space}>
+					<div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} onClick={()=>{
+							// const history = h.get()
+							// history.push("/main/editChildWeb")
+						}}>修改</div>
+				</Space>
       )
     },
   ];
@@ -203,8 +208,9 @@ function RTable ({ setVisible }) {
           </div>
         </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
       <Table
+				scroll={SCROLL}
         columns={columns}
         rowSelection={{
           ...rowSelection

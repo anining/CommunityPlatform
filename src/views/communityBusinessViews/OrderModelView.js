@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Input } from 'antd'
+import { Button, Table, Input, Space } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good31 from '../../icons/good/good31.png'
 import { communityParamTemplates } from "../../utils/api";
 import DropdownComponent from '../../components/DropdownComponent'
 import { push, transformTime, saveSuccess } from "../../utils/util";
+import ActionComponent from '../../components/ActionComponent'
+import {SCROLL} from '../../utils/config'
 
 function OrderModelView () {
 
@@ -60,29 +62,32 @@ function RTable () {
   const columns = [
     {
       title: '模型编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '模型名称',
+			ellipsis: true,
       dataIndex: 'name',
-      align: 'center',
   },
     {
       title: '包含参数',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'used_by',
   },
     {
       title: '创建时间',
+			ellipsis: true,
       dataIndex: 'time',
-      align: 'center',
   },
     {
-      title: '操作',
-      align: 'center',
-      render: (text, record, index) => (
-        <div className={c.clickText} onClick={()=>push('/main/editOrderModel',record)}>编辑模型</div>
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 136,
+			fixed: 'right',
+      render: (record) => (
+				<Space size="small" className={c.space}>
+					<div className={c.clickText} onClick={()=>push('/main/editOrderModel',record)}>编辑模型</div>
+				</Space>
       )
     }
   ];
@@ -134,8 +139,9 @@ function RTable () {
             </div>
           </div>
       </div>
-      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
       <Table
+				scroll={SCROLL}
         columns={columns}
         rowSelection={{
           ...rowSelection

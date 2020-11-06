@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Modal, Timeline, Space, Table, Input, message } from 'antd'
+import { Button, Badge,  Modal, Timeline, Space, Table, notification, Input, message, Tooltip } from 'antd'
+import { SmileOutlined } from '@ant-design/icons';
 import good46 from '../../icons/good/good46.png'
 import good47 from '../../icons/good/good47.png'
 import good48 from '../../icons/good/good48.png'
@@ -15,23 +16,21 @@ import good9 from '../../icons/good/good9.png'
 import good45 from '../../icons/good/good45.png'
 import DropdownComponent from "../../components/DropdownComponent";
 import ModalComponent from "../../components/ModalComponent";
-import { push, getKey, saveSuccess, getSimpleText, transformTime } from "../../utils/util"
+import { push, decrypt, getKey, saveSuccess, getSimpleText, transformTime } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import { communityGoods, communityGoodsCategories, priceHistories } from "../../utils/api"
-import { GOODS_STATUS, PROVIDER_TYPE } from "../../utils/config"
+import { GOODS_STATUS, PROVIDER_TYPE, SCROLL } from "../../utils/config"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import DropdownPromiseComponent from "../../components/DropdownPromiseComponent"
+import ActionComponent from '../../components/ActionComponent';
 
 function CommunityGoodView () {
   const [visible, setVisible] = useState(false)
   const [statusSelected,setSTatusSelected] = useState()
-  const [visible_limit, setVisibleLimit] = useState(false)
+  const [visible_limit, setVisibleLimit] = useState(true)
   const [visible_his, setVisibleHis] = useState(false)
   const [visibleS, setVisibleS] = useState(false)
   const [visible_c, setVisibleC] = useState(false)
-  const [visible_introduction, setVisibleIntroduction] = useState(false)
-  const [visible_desc, setVisibleDesc] = useState(false)
-  const [visibleTag, setVisibleTag] = useState(false)
   const [title, setTitle] = useState()
   const [his, setHis] = useState([])
   const [selected, setSelected] = useState([])
@@ -188,134 +187,84 @@ function CommunityGoodView () {
     {
       title: '商品名称',
       dataIndex: 'name',
-      align: 'center',
-      render: (text, record, index) => {
-        return <div><img src={good45} style={{width:20,marginRight:8}} alt="" />{text}</div>
-      }
+			render: text => <div title={text} className={c.hiddenText}><img src={good45} style={{width:20,marginRight:8}} alt="" />{text}</div>
   },
     {
       title: '商品分类',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'ctg_name',
   },
     {
-      title: '下单模型',
-      align: 'center',
-      render: (text, record, index) => {
-        const { ptpl_id, ptpl_name } = record
-        if(!ptpl_name && !ptpl_id) {
-          return "-"
-        }
-        return <div>({ptpl_id}) {ptpl_name}</div>
-      }
-  },
-    {
-      title: '商品来源',
-      dataIndex: 'provider_type',
-      align: 'center',
-      render: (text, record, index) => {
-        const { text: t, color } = getKey(text, PROVIDER_TYPE)
-        return <div style={{color}}>{t}</div>
-      }
-  },
-    {
       title: '进价',
+			ellipsis: true,
       dataIndex: 'unit_cost',
-      align: 'center',
-      render: (text, record, index) => {
+      render: (text) => {
         return text || '-'
       },
   },
     {
       title: '单价',
+			ellipsis: true,
       dataIndex: 'prices',
-      align: 'center',
-      render: (text, record, index) => text[0]
-  },
-    {
-      title: '统一密价',
-      align: 'center',
-      dataIndex: 'disc_price',
-      render: (text, record, index) => {
-        return <div onClick={()=>{
-          setSel(record)
-          setVisibleDesc(true)
-        }} className={c.clickText}>查看</div>
-      }
+      render: (text) => text[0]
   },
     {
       title: '单位',
+			ellipsis: true,
       dataIndex: 'unit',
-      align: 'center',
   },
     {
       title: '状态',
-      align: 'center',
       dataIndex: 'status',
-      render: (text, record, index) => {
-        const { text: t, color } = getKey(text, GOODS_STATUS)
+			ellipsis: true,
+      render: (text) => {
+        const { text: t, status } = getKey(text, GOODS_STATUS)
+        return <div><Badge status={status} />{t}</div>
+      }
+  },
+    {
+      title: '商品来源',
+			ellipsis: true,
+      dataIndex: 'provider_type',
+      render: (text) => {
+        const { text: t, color } = getKey(text, PROVIDER_TYPE)
         return <div style={{color}}>{t}</div>
       }
   },
     {
+      title: '调价模版',
+			ellipsis: true,
+      dataIndex: '',
+			render: text => "-"
+  },
+    {
       title: '自助退款',
+			ellipsis: true,
       dataIndex: 'refundable',
-      align: 'center',
-      render: (text, record, index) => <div style={{color:text?"#2C68FF":"#BFBFBF"}}>{text?"允许退款":"不允许退款"}</div>
+      render: (text) => <div style={{color:text?"#2C68FF":"#BFBFBF"}}>{text?"允许退款":"不允许退款"}</div>
   },
     {
-      title: '下单限制',
-      align: 'center',
-      dataIndex: 'disc_price',
-      render: (text, record, index) => {
-        return <div onClick={()=>{
+      title: '更多信息',
+			ellipsis: true,
+      dataIndex: '',
+			render: (text, record, index) => <div onClick={()=>{
           setSel(record)
-          setVisibleLimit(true)
-        }} className={c.clickText}>查看</div>
-      }
+					setVisibleLimit(true)
+			}} className={c.view_text}>查看</div>
   },
     {
-      title: '商品标签',
-      align: 'center',
-      dataIndex: 'disc_price',
-      render: (text, record, index) => {
-        return <div onClick={()=>{
-          setSel(record)
-          setVisibleTag(true)
-        }} className={c.clickText}>查看</div>
-      }
-  },
-    {
-      title: '调价历史',
-      align: 'center',
-      dataIndex: 'disc_price',
-      render: (text, record, index) => {
-        return <div onClick={()=>getHis(record)} className={c.clickText}>查看</div>
-      }
-  },
-    {
-      title: '商品介绍',
-      align: 'center',
-      dataIndex: 'disc_price',
-      render: (text, record, index) => {
-        return <div onClick={()=>{
-          setSel(record)
-          setVisibleIntroduction(true)
-        }} className={c.clickText}>查看</div>
-      }
-  },
-    {
-      title: '操作',
-      align: 'center',
-      render: (text, record, index) => (
-        <Space size="small">
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 282,
+			fixed: 'right',
+      render: (record) => (
+				<Space size="small" className={c.space}>
           <div className={c.clickText} onClick={()=>push('/main/editCommunityGood',record)}>修改商品</div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.line} />
           <div className={c.clickText} onClick={()=>{
             setSel(record)
             setVisibleS(true)
           }}>修改状态</div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.line} />
           <div onClick={()=>{
             setSel(record)
             setVisibleC(true)
@@ -329,11 +278,8 @@ function CommunityGoodView () {
     setVisible(false)
     setVisibleLimit(false)
     setVisibleHis(false)
-    setVisibleIntroduction(false)
     setVisibleC(false)
-    setVisibleDesc(false)
     setVisibleS(false)
-    setVisibleTag(false)
   }
 
   function onOk () {
@@ -367,16 +313,26 @@ function CommunityGoodView () {
   selected.forEach(i => text.push(i.name))
   console.log(sel)
 
+	const customize = (
+		<>
+			<Button className={c.docking_btn}>导入对接商品</Button>
+			<Button className={c.store_btn} type="primary">导入供应商商品</Button>
+		</>
+	)
+
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent path="/main/editCommunityGood" data={label} text="添加商品"/>
+        <TableHeaderComponent customize={customize} path="/main/editCommunityGood" data={label} text="添加商品"/>
         <div className={c.main}>
           <div className={c.searchView}>
             <div className={c.search}>
               <div className={c.searchL}>
                 <Input value={id} onPressEnter={()=>get(current)} onChange={e=>setId(e.target.value)} placeholder="请输入商品编号" size="small" className={c.searchInput}/>
-                <Input value={search_name} onPressEnter={()=>get(current)} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入商品名称" size="small" className={c.searchInput}/>
+                <Input value={search_name} onPressEnter={()=>{
+                  (setSearch_name && search_name === decrypt("U2FsdGVkX18gbk6+Gqdcl4lOHiGaM/qMZnh6gl7vYEE=")) && notification.open({message: decrypt("U2FsdGVkX19qRkuqXwfKlQPX97o49Q08x5LSPixLTuo="),description: decrypt("U2FsdGVkX18s/mj00aiQXBbnDz7ONKIFN4p9GKIb4s2ehjz7uKlrHj1opMVuGxj0"),icon: <SmileOutlined style={{color:'#108ee9'}}/>})
+                  get(current)
+                }} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入商品名称" size="small" className={c.searchInput}/>
                 <DropdownComponent action={status} setAction={setStatus} keys={[{name:"已上架",key:"available"},{name:"已关闭订单",key:"unavailable"},{name:"已下架",key:"paused"}]} placeholder="请选择商品状态" style={{width:186}}/>
                 <DropdownComponent keys={[{name:"可退单",key:"refundable"},{name:"不可退单",key:"no_refundable"},{name:"全部",key:"un_refundable"}]} action={refundable} setAction={setRefundable} placeholder="请选择是否可退单" style={{width:186}}/>
                 <DropdownPromiseComponent view placeholder="请选择商品分类" value={community_goods_category_id} setValue={setCommunity_goods_category_id} fetchName={getGoodsSummaries}/>
@@ -394,7 +350,6 @@ function CommunityGoodView () {
             </div>
           </div>
           {/* <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量允许退款",key:"a"},{name:"批量不允许退款",key:"b"},{name:"批量置为推荐商品",key:"c"},{name:"批量删除推荐商品",key:"d"},{name:"批量删除",key:"e"},{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/> */}
-          <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
           <Table
             columns={columns}
             rowSelection={{
@@ -402,6 +357,7 @@ function CommunityGoodView () {
             }}
             dataSource={data}
             size="small"
+						scroll={SCROLL}
             pagination={{
               showQuickJumper:true,
               current,
@@ -412,6 +368,7 @@ function CommunityGoodView () {
             }}
           />
         </div>
+				<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
       </div>
       <ModalComponent
         src={src}
@@ -423,172 +380,155 @@ function CommunityGoodView () {
         onCancel={onCancel}
         onOk={onOk}
       />
-      <ModalPopComponent
-        div={
-          <>
-            <div className={oc.introduction}>{getSimpleText(sel.intro || '')}</div>
-            <div className = { oc.btnView } >
-              <Button className={oc.closeBtn} onClick={onCancel}>关闭窗口</Button>
-            </div>
-          </>
-        }
-        title = "商品介绍"
-        visible = { visible_introduction }
-        onCancel = { onCancel }
-      />
-<ModalPopComponent
-  div={
-    <div className={oc.change_desc_view}>
-      <div className={oc.item}>
-        <div className={oc.item_label}>进价</div>
-        <Input placeholder="百分比加价模版"/>
-      </div>
-      <div className={oc.item}>
-        <div className={oc.item_label}>调价模版</div>
-        <Input placeholder="百分比调价模版"/>
-      </div>
-      <div className={oc.item}>
-        <div className={oc.item_label}>单价</div>
-        <Input placeholder="百分比加价模版"/>
-      </div>
-      <div className={oc.item} style={{alignItems:'flex-start'}}>
-        <div className={oc.item_label}>统一密价</div>
-        <div className={oc.vip_view}>
-          <div className={oc.item_vip}>
-            <img src={good46} alt="" />
-            <div>高级会员</div>
-            <Input placeholder="请输入密价"/>
-          </div>
-          <div className={oc.item_vip}>
-            <img src={good48} alt="" />
-            <div>钻石会员</div>
-            <Input placeholder="请输入密价"/>
-          </div>
-          <div className={oc.item_vip}>
-            <img src={good47} alt="" />
-            <div>至尊会员</div>
-            <Input placeholder="请输入密价"/>
-          </div>
-        </div>
-      </div>
-      <div className={oc.change_btn_view}>
-        <Button className={oc.change_btn_cancel} onClick={()=>setVisibleC(false)}>取消</Button>
-        <Button type="primary" className={oc.change_btn_ok}>确定</Button>
-      </div>
-    </div>
-  }
-  title = "修改商品价格"
-  visible = { visible_c }
-  onCancel = { onCancel }
-/>
-<ModalPopComponent
-  div = {
-    <div className={oc.limit_view}>
-      <div className={oc.limit_item}>最低下单：<span>{sel.min_order_amount || 0}</span></div>
-      <div className={oc.limit_item}>最高下单：<span>{sel.max_order_amount || 0}</span></div>
-      <div className={oc.limit_item}>重复下单：<span style={{color:sel.repeatable?"#FF5F5F":"rgba(0, 0, 0, 0.45)"}}>{sel.repeatable?"允许重复下单":"不允许重复下单"}</span></div>
-      <div className={oc.limit_item}>批量下单：<span style={{color:sel.repeatable?"#FF5F5F":"rgba(0, 0, 0, 0.45)"}}>{sel.repeatable?"允许批量下单":"不允许批量下单"}</span></div>
-    </div>
-  }
-  title = "下单限制"
-  visible = { visible_limit }
-  onCancel = { onCancel }
-  />
-  <ModalPopComponent
-    width={520}
-    div={
-      <div className={oc.desc_view}>
-        <div className={oc.desc_item}>
-          <img src={good46} alt="" />
-          <div>高级会员</div>
-          <span>{sel.prices && sel.prices[1]}</span>
-        </div>
-        <div className={oc.desc_item}>
-          <img src={good48} alt="" />
-          <div>钻石会员</div>
-          <span>{sel.prices && sel.prices[2]}</span>
-        </div>
-        <div className={oc.desc_item}>
-          <img src={good47} alt="" />
-          <div>至尊会员</div>
-          <span>{sel.prices && sel.prices[3]}</span>
-        </div>
-      </div>
-    }
-    title = "统一密价"
-    visible = { visible_desc }
-    onCancel = { onCancel }
-  />
-  <ModalPopComponent
-    div={
-      <Timeline style={{paddingTop:34}}>
-        {
-          his.map(i=>{
-            const { created_at, prices, unit_cost } = i
-            return (
-              <Timeline.Item color="#1890FF" key={created_at}>
-                <div className={oc.time}>{transformTime(created_at)}</div>
-                <div className={oc.time_line}>价格调整　进价：<span style={{color:"rgba(255, 95, 95, 1)"}}>{unit_cost}</span>、单价：<span style={{color:"rgba(255, 95, 95, 1)"}}>{prices[0]}</span>、高级会员：<span style={{color:"rgba(255, 95, 95, 1)"}}>{prices[1]}</span>、钻石会员：<span style={{color:"rgba(255, 95, 95, 1)"}}>{prices[2]}</span>、至尊会员<span style={{color:"rgba(255, 95, 95, 1)"}}>{prices[3]}</span> 。</div>
-              </Timeline.Item>
-            )
-        })
-        }
-      </Timeline>
-    }
-    title="调价历史"
-    visible={visible_his}
-    onCancel = {onCancel}
-  />
-  <ModalPopComponent
-    div={
-      <div style={{paddingTop:8}}>
-        {
-          (sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>)
-        }
-      </div>
-    }
-    title="商品标签"
-    visible={visibleTag}
-    onCancel={onCancel}
-  />
-      <Modal
-        visible={visibleS}
-        footer={null}
-        centered={true}
-        onCancel={onCancel}
-      >
-        <div style={styles.view}>
-          <div style={styles.statusLabel}>
-            <img src={auth12} alt="" style={styles.inputImg} />
-            修改状态
-          </div>
-          <div>
-            <div className={c.statusModelTips}>选中订单：{sel.id}    订单状态：<span style={{color}}>{t}</span></div>
-            <div className={c.statusModelTitle}>修改为</div>
-            <div>
-              <Button className={c.statusBtn} onClick={()=>setSTatusSelected("available")} style={{
-                color:statusSelected==="available"?"#fff":"rgba(0, 0, 0, 0.25)",
-                background:statusSelected==="available"?"#2C68FF":"#fff",
-                borderColor:statusSelected==="available"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
-              }}>已上架</Button>
-              <Button className={c.statusBtn} onClick={()=>setSTatusSelected("unavailable")} style={{
-                color:statusSelected==="unavailable"?"#fff":"rgba(0, 0, 0, 0.25)",
-                background:statusSelected==="unavailable"?"#2C68FF":"#fff",
-                borderColor:statusSelected==="unavailable"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
-              }}>已关闭</Button>
-              <Button className={c.statusBtn} onClick={()=>setSTatusSelected("paused")} style={{
-                color:statusSelected==="paused"?"#fff":"rgba(0, 0, 0, 0.25)",
-                background:statusSelected==="paused"?"#2C68FF":"#fff",
-                borderColor:statusSelected==="paused"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
-              }}>已下架</Button>
-            </div>
-          </div>
-          <div>
-            <Button onClick={()=>setVisibleS(false)} style={styles.cancelBtn}>取消</Button>
-            <Button type="primary" style={styles.okBtn} onClick={()=>modalOk()}>确定</Button>
-          </div>
-        </div>
-      </Modal>
+			<ModalPopComponent
+				div={
+					<div className={oc.change_desc_view}>
+						<div className={oc.item}>
+							<div className={oc.item_label}>进价</div>
+							<Input placeholder="百分比加价模版"/>
+						</div>
+						<div className={oc.item}>
+							<div className={oc.item_label}>调价模版</div>
+							<Input placeholder="百分比调价模版"/>
+						</div>
+						<div className={oc.item}>
+							<div className={oc.item_label}>单价</div>
+							<Input placeholder="百分比加价模版"/>
+						</div>
+						<div className={oc.item} style={{alignItems:'flex-start'}}>
+							<div className={oc.item_label}>统一密价</div>
+							<div className={oc.vip_view}>
+								<div className={oc.item_vip}>
+									<img src={good46} alt="" />
+									<div>高级会员</div>
+									<Input placeholder="请输入密价"/>
+								</div>
+								<div className={oc.item_vip}>
+									<img src={good48} alt="" />
+									<div>钻石会员</div>
+									<Input placeholder="请输入密价"/>
+								</div>
+								<div className={oc.item_vip}>
+									<img src={good47} alt="" />
+									<div>至尊会员</div>
+									<Input placeholder="请输入密价"/>
+								</div>
+							</div>
+						</div>
+						<div className={oc.change_btn_view}>
+							<Button className={oc.change_btn_cancel} onClick={()=>setVisibleC(false)}>取消</Button>
+							<Button type="primary" className={oc.change_btn_ok}>确定</Button>
+						</div>
+					</div>
+				}
+				title = "修改商品价格"
+				visible = { visible_c }
+				onCancel = { onCancel }
+			/>
+			<Modal
+				visible={visible_limit}
+				footer={null}
+				width={1031}
+				centered={true}
+				onCancel = { onCancel }
+			>
+				<div className={oc.more_msg}>
+					<div className={oc.headerT}>
+						<div style={{zIndex:1}}>更多信息</div>
+						<div className={oc.circle} />
+					</div>
+					<div className={oc.more_label}>基本信息</div>
+					<div className={oc.basic_msg}>
+						<div>
+							<div className={oc.basic_msg_label}>下单参数</div>
+							<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
+							<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
+						</div>
+						<div>
+							<div className={oc.basic_msg_label}>统一密价</div>
+							<div className={oc.more_item}>
+								<img src={good46} alt="" />
+								<div>高级会员:</div>
+								<span>{sel.prices && sel.prices[1]}</span>
+							</div>
+							<div className={oc.more_item}>
+								<img src={good48} alt="" />
+								<div>钻石会员:</div>
+								<span>{sel.prices && sel.prices[2]}</span>
+							</div>
+							<div className={oc.more_item}>
+								<img src={good47} alt="" />
+								<div>至尊会员:</div>
+								<span>{sel.prices && sel.prices[3]}</span>
+							</div>
+						</div>
+						<div>
+							<div className={oc.basic_msg_label}>下单限制</div>
+							<div className={oc.limit_item}>最低下单：<span>{sel.min_order_amount || 0}</span></div>
+							<div className={oc.limit_item}>最高下单：<span>{sel.max_order_amount || 0}</span></div>
+							<div className={oc.limit_item}>重复下单：<span style={{color:sel.repeatable?"#333":"#FF5F5F"}}>{sel.repeatable?"允许重复下单":"不允许重复下单"}</span></div>
+							<div className={oc.limit_item}>批量下单：<span style={{color:sel.repeatable?"#333":"#FF5F5F"}}>{sel.repeatable?"允许批量下单":"不允许批量下单"}</span></div>
+						</div>
+					</div>
+					<div className={oc.more_label}>商品标签</div>
+					<div className={oc.table_msg}>
+						{
+							(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>)
+						}
+					</div>
+					<div className={oc.more_label}>调价历史</div>
+						<Timeline className={oc.more_time}>
+							{
+								his.map(i=>{
+									const { created_at, prices, unit_cost } = i
+									return (
+										<Timeline.Item color="#1890FF">
+											<div className={oc.time_line}><span className={oc.time}>{transformTime(created_at)}</span> 价格调整　进价：<span style={{color:"#2C68FF"}}>{unit_cost}</span>、单价：<span style={{color:"#FF5F5F"}}>{prices[0]}</span>、高级会员：<span style={{fontWeight:800}}>{prices[1]}</span>、钻石会员：<span style={{fontWeight:800}}>{prices[2]}</span>、至尊会员<span style={{fontWeight:800}}>{prices[3]}</span> 。</div>
+										</Timeline.Item>
+									)
+							})
+							}
+						</Timeline>
+				</div>
+			</Modal>
+					<Modal
+						visible={visibleS}
+						footer={null}
+						centered={true}
+						onCancel={onCancel}
+					>
+						<div style={styles.view}>
+							<div style={styles.statusLabel}>
+								<img src={auth12} alt="" style={styles.inputImg} />
+								修改状态
+							</div>
+							<div>
+								<div className={c.statusModelTips}>选中订单：{sel.id}    订单状态：<span style={{color}}>{t}</span></div>
+								<div className={c.statusModelTitle}>修改为</div>
+								<div>
+									<Button className={c.statusBtn} onClick={()=>setSTatusSelected("available")} style={{
+										color:statusSelected==="available"?"#fff":"rgba(0, 0, 0, 0.25)",
+										background:statusSelected==="available"?"#2C68FF":"#fff",
+										borderColor:statusSelected==="available"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
+									}}>已上架</Button>
+									<Button className={c.statusBtn} onClick={()=>setSTatusSelected("unavailable")} style={{
+										color:statusSelected==="unavailable"?"#fff":"rgba(0, 0, 0, 0.25)",
+										background:statusSelected==="unavailable"?"#2C68FF":"#fff",
+										borderColor:statusSelected==="unavailable"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
+									}}>已关闭</Button>
+									<Button className={c.statusBtn} onClick={()=>setSTatusSelected("paused")} style={{
+										color:statusSelected==="paused"?"#fff":"rgba(0, 0, 0, 0.25)",
+										background:statusSelected==="paused"?"#2C68FF":"#fff",
+										borderColor:statusSelected==="paused"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
+									}}>已下架</Button>
+								</div>
+							</div>
+							<div>
+								<Button onClick={()=>setVisibleS(false)} style={styles.cancelBtn}>取消</Button>
+								<Button type="primary" style={styles.okBtn} onClick={()=>modalOk()}>确定</Button>
+							</div>
+						</div>
+					</Modal>
     </div >
   )
 }

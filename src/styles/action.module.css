@@ -1,0 +1,83 @@
+.view {
+	position: fixed;
+	background: #FFFFFF;
+	z-index: 999;
+	box-shadow: 0px -8px 14px 0px rgba(0, 0, 0, 0.05), 0px -1px 2px 0px rgba(0, 0, 0, 0.03);
+	filter: blur(0px);
+	bottom: 0;
+	right: 0;
+	height: 60px;
+	width: calc(100% - 200px);
+	padding: 0 23px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.selected_view {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.selected {
+	margin-left: 50px;
+	width: 16px;
+	height: 16px;
+	box-shadow: 0px -8px 14px 0px rgba(0, 0, 0, 0.05);
+	border-radius: 2px;
+	border: 1px solid rgba(44, 104, 255, 0.51);
+	display: grid;
+	place-items: center;
+}
+
+.selected_in {
+	width: 8px;
+	height: 8px;
+	background: #2C68FF;
+	box-shadow: 0px -8px 14px 0px rgba(0, 0, 0, 0.05);
+}
+
+.selected_text {
+	color: #646464;
+	margin-left: 14px;
+}
+
+.selected_text span {
+	color: #2C68FF;
+}
+
+.actionView {
+  display: flex;
+  align-items: center;
+}
+
+.actionBtnDelete {
+  height: 32px;
+  width: 123px;
+	background: #fff;
+	box-shadow: 0px -8px 14px 0px rgba(0, 0, 0, 0.05);
+	border-radius: 2px;
+	border: 1px solid #D9D9D9;
+  color: #979BA3;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hiddenText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action {
+	width: 88px;
+	height: 32px;
+	background: #2C67FF;
+	box-shadow: 0px -8px 14px 0px rgba(0, 0, 0, 0.05);
+	border-radius: 2px;
+	color: #fff;
+	margin-left: 15px;
+}

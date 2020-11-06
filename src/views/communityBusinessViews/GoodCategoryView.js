@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Input, Modal } from 'antd'
+import { Button, Table, Input, Modal, Space } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
@@ -8,6 +8,8 @@ import { communityGoodsCategories } from '../../utils/api'
 import { push, transformTime, saveSuccess } from "../../utils/util";
 import DropdownComponent from '../../components/DropdownComponent'
 import { styles } from "../../styles/modal"
+import ActionComponent from '../../components/ActionComponent'
+import {SCROLL} from '../../utils/config'
 
 function GoodCategoryView () {
   // TODO: 两个删除弹窗
@@ -105,29 +107,32 @@ function RTable () {
   const columns = [
     {
       title: '分类编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '分类名称',
+			ellipsis: true,
       dataIndex: 'name',
-      align: 'center',
   },
     {
       title: '包含商品数量',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'used_by',
   },
     {
       title: '创建时间',
+			ellipsis: true,
       dataIndex: 'time',
-      align: 'center',
   },
     {
-      title: '操作',
-      align: 'center',
-      render: (text, record, index) => (
-        <div className={c.clickText} onClick={()=>push("/main/editGoodCategory",record)}>编辑分类</div>
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 136,
+			fixed: 'right',
+      render: (record) => (
+				<Space size="small" className={c.space}>
+					<div className={c.clickText} onClick={()=>push("/main/editGoodCategory",record)}>编辑分类</div>
+				</Space>
       )
   }
 ];
@@ -181,8 +186,8 @@ function RTable () {
             </div>
           </div>
       </div>
-      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
       <Table
+				scroll={SCROLL}
         columns={columns}
         rowSelection={{
           ...rowSelection
@@ -198,6 +203,7 @@ function RTable () {
           onChange
         }}
       />
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
     </div>
   )
 }

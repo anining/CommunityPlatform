@@ -9,6 +9,7 @@ import { push, transformTime, saveSuccess } from "../../utils/util";
 import DropdownComponent from '../../components/DropdownComponent'
 import { styles } from "../../styles/modal"
 import { TEM_TYPE } from "../../utils/config"
+import ActionComponent from '../../components/ActionComponent'
 
 function MarkupTemView () {
   // TODO: 两个弹窗
@@ -107,34 +108,34 @@ function RTable () {
   const columns = [
     {
       title: '模版编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '模版名称',
+			ellipsis: true,
       dataIndex: 'name',
-      align: 'center',
   },
     {
       title: '包含商品',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'used_by',
   },
     {
       title: '模版类型',
+			ellipsis: true,
       dataIndex: 'type',
-      align: 'center',
-      render: (text, record, index) => TEM_TYPE[text].label
+      render: (text) => TEM_TYPE[text].label
   },
     {
       title: '创建时间',
+			ellipsis: true,
       dataIndex: 'time',
-      align: 'center',
   },
     {
       title: '修改时间',
+			ellipsis: true,
       dataIndex: 'updateTime',
-      align: 'center',
   }
 ];
 
@@ -189,7 +190,7 @@ function RTable () {
             </div>
           </div>
       </div>
-      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
       <Table
         columns={columns}
         rowSelection={{

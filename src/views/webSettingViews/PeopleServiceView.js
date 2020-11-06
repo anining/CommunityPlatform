@@ -4,6 +4,7 @@ import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import { transformTime, push } from "../../utils/util"
 import { customerServices } from "../../utils/api"
+import {SCROLL} from '../../utils/config'
 
 function PeopleServiceView () {
 
@@ -29,36 +30,37 @@ function RTable () {
   const columns = [
     {
       title: 'ID',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '客服名称',
+			ellipsis: true,
       dataIndex: 'name',
-      align: 'center',
   },
     {
       title: '客服QQ',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'contact',
   },
     {
       title: '备注',
+			ellipsis: true,
       dataIndex: 'comment',
-      align: 'center',
   },
     {
       title: '创建时间',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'time',
   },
     {
-      title: '操作',
-      align: 'center',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 153,
+			fixed: 'right',
       render: (text, record, index) => (
-        <Space size="small">
+				<Space size="small" className={c.space}>
           <div className={c.clickText} style={{cursor:'wait'}} onClick={()=>{}}>修改</div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.line} />
           <div style={{cursor:'wait',color:'#FF4D4F',textDecorationColor:"#FF4D4F"}} className={c.clickText} onClick={()=>{}}>删除</div>
         </Space>
       )
@@ -91,6 +93,7 @@ function RTable () {
         </div>
       </div>
       <Table
+				scroll={SCROLL}
         columns={columns}
         dataSource={data}
         size="small"

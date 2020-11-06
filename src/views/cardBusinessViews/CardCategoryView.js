@@ -5,6 +5,8 @@ import good7 from '../../icons/good/good7.png'
 import good31 from '../../icons/good/good31.png'
 import { push, transformTime } from "../../utils/util"
 import DropdownComponent from "../../components/DropdownComponent"
+import {SCROLL} from '../../utils/config'
+import ActionComponent from '../../components/ActionComponent'
 
 function CardCategoryView () {
   return (
@@ -58,8 +60,8 @@ function RTable ({ setVisible }) {
   const columns = [
     {
       title: '分类编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
       // sorter: {
       //   compare: (a, b) => {
       //     console.log(a, b)
@@ -69,22 +71,23 @@ function RTable ({ setVisible }) {
   },
     {
       title: '分类名称',
+			ellipsis: true,
       dataIndex: 'name',
-      align: 'center',
   },
     {
       title: '包含商品数量',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'number',
   },
     {
       title: '创建时间',
+			ellipsis: true,
       dataIndex: 'time',
-      align: 'center',
   },
     {
-      title: '操作',
-      align: 'center',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 136,
+			fixed: 'right',
       // render: (text, record, index) => (
       //   <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>{
       //     const history = h.get()
@@ -134,9 +137,10 @@ function RTable ({ setVisible }) {
             </div>
           </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
       <Table
         columns={columns}
+				scroll={SCROLL}
         rowSelection={{
           ...rowSelection
         }}

@@ -64,16 +64,19 @@ const PERMISSION = ["orderlog", "citecfg", "usermng", "capitalflow", "valueadded
 const GOODS_STATUS = {
   available: {
     color: "#2C68FF",
+    status: "processing",
     text: '已上架',
     src: good43
   },
   unavailable: {
     color: "#FF8D30",
-    text: '已关闭订单',
+    status: "warning",
+    text: '维护中',
     src: good42
   },
   paused: {
     color: "#FF4D4F",
+    status: "default",
     text: '已下架',
     src: good44
   },
@@ -168,5 +171,6 @@ const PROVIDER_TYPE = {
     text: '供货商',
   }
 }
+const SCROLL = {x:"120%"}
 
-export { REFUND_STATUS, PROVIDER_TYPE, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }
+export { REFUND_STATUS, SCROLL, PROVIDER_TYPE, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }

@@ -18,23 +18,20 @@
 
 .limit_item {
   color: rgba(0, 0, 0, 0.45);
-  margin-top: 22px;
-  padding-left: 112px;
+  margin-top: 16px;
 }
 
 .limit_item span {
-  margin-left: 80px;
+  margin-left: 8px;
   color: #333;
 }
 
 .time {
   font-weight: 800;
-  color: #333333;
-  margin-bottom: 5px;
 }
 
 .time_line {
-  color: rgba(52, 55, 74, 1);
+	color: #34374A;
 }
 
 .time_line span {
@@ -219,7 +216,7 @@
 }
 
 .tags_btn {
-  margin: 20px 20px 0 0;
+  margin: 0 24px 24px 0;
   border-color: #2C67FF;
   color: #2C67FF;
   background-color: #EDF2FF;
@@ -230,4 +227,110 @@
   align-items: center;
   flex-direction: column;
   justify-content: center;
+}
+
+.basic_msg {
+  width: 100%;
+	background: #FAFAFA;
+	border-radius: 2px;
+	display: flex;
+	padding: 24px;
+	justify-content: space-between;
+	margin-bottom: 40px;
+}
+
+.table_msg {
+	padding: 24px 0 0 24px;
+	width: 100%;
+	background: #FAFAFA;
+	border-radius: 2px;
+	margin-bottom: 40px;
+}
+
+.more_label {
+	font-size: 1.28rem;
+	font-weight: 500;
+	color: #333333;
+	margin-bottom: 10px;
+}
+
+.more_msg {
+	padding-top: 40px;
+}
+
+.headerT {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 1.571rem;
+  color: #34374A;
+  font-weight: 500;
+  position: relative;
+	margin-bottom: 40px;
+}
+
+.circle {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 14px;
+  width: 14px;
+  background: linear-gradient(144deg, #B4C9FF 0%, #1657FF 100%);
+  border-radius: 14px;
+}
+
+.basic_msg_label {
+	color: #333;
+	font-size: 1.142rem;
+	margin-bottom: 4px;
+}
+
+.basic_msg_text {
+	color: #333333;
+	display: flex;
+	align-items: center;
+	margin-top: 15px;
+}
+
+.basic_msg_text div:first-child {
+	width: 38px;
+	color: #fff;
+	height: 16px;
+	background: #FF8D30;
+	margin-right: 8px;
+	border-radius: 2px;
+	line-height: 16px;
+	font-size: 0.857rem;
+	text-align: center;
+}
+
+.basic_msg_text div:last-child {
+	color: rgba(0, 0, 0, 0.45);
+	margin-right: 8px;
+}
+
+.more_item {
+	margin-top: 12px;
+	display: flex;
+	align-items: center;
+}
+
+.more_item img {
+	width: 12px;
+}
+
+.more_item div {
+	margin: 0 9px 0 4px;
+	color: rgba(0, 0, 0, 0.45);
+}
+
+.more_item span {
+	color: #333;
+}
+
+.more_time {
+	width: 100%;
+	background: #FAFAFA;
+	border-radius: 2px;
+	padding: 24px;
 }

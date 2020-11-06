@@ -7,6 +7,7 @@ import c from '../styles/header.module.css'
 import sider1 from '../icons/sider/sider1.png'
 import sider2 from '../icons/sider/sider2.png'
 import sider3 from '../icons/sider/sider3.png'
+import sider17 from '../icons/sider/sider17.png'
 import sider4 from '../icons/sider/sider4.png'
 import sider5 from '../icons/sider/sider5.png'
 import sider6 from '../icons/sider/sider6.png'
@@ -20,7 +21,6 @@ import sider13 from '../icons/sider/sider13.png'
 import sider14 from '../icons/sider/sider14.png'
 import sider15 from '../icons/sider/sider15.png'
 import sider16 from '../icons/sider/sider16.png'
-import sider17 from '../icons/sider/sider17.png'
 import sider18 from '../icons/sider/sider18.png'
 import sider19 from '../icons/sider/sider19.png'
 import sider20 from '../icons/sider/sider20.png'
@@ -30,6 +30,8 @@ import sider23 from '../icons/sider/sider23.png'
 import sider24 from '../icons/sider/sider24.png'
 import sider25 from '../icons/sider/sider25.png'
 import sider26 from '../icons/sider/sider26.png'
+import sider27 from '../icons/sider/sider27.png'
+import sider28 from '../icons/sider/sider28.png'
 import { getter, setter } from "../utils/store"
 import { push } from "../utils/util"
 
@@ -194,7 +196,7 @@ function Icon ({ keys }) {
       keys: ["docking"]
     },
     "store": {
-      icon: [sider25, sider26],
+      icon: [sider27, sider28],
       keys: ["store"]
     },
     "orderRecording": {

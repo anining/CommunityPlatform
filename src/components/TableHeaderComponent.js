@@ -5,7 +5,7 @@ import good7 from '../icons/good/good7.png'
 import c from '../styles/view.module.css'
 import { push } from "../utils/util";
 
-function TableHeaderComponent ({small_btn, data, path, text }) {
+function TableHeaderComponent ({small_btn, data, path, text, customize}) {
   const views = [];
 
   data.forEach(item => {
@@ -28,12 +28,17 @@ function TableHeaderComponent ({small_btn, data, path, text }) {
         {views}
       </div>
       <div>
-        {
-          U.when(small_btn,
-            <Button className={c.small_btn}>{small_btn}</Button>
-          )
-        }
-        <Rbtn path={path} text={text}/>
+				{
+					customize ? customize:
+					<>
+						{
+							U.when(small_btn,
+								<Button className={c.small_btn}>{small_btn}</Button>
+							)
+						}
+						<Rbtn path={path} text={text}/>
+					</>
+				}
       </div>
     </div>
   )
@@ -52,7 +57,7 @@ function Rbtn ({ path, text }) {
   onClick = {
     () => push(path)
   }
-  className = { c.headerAddBtn } > { text }
+  className={c.headerAddBtn}>{text}
   </Button>
 )
 }

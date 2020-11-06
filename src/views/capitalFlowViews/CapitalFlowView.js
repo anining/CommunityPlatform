@@ -15,6 +15,7 @@ import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { balanceChanges } from "../../utils/api"
 import { getKey, transformTime } from "../../utils/util"
+import {SCROLL} from '../../utils/config'
 
 function CapitalFlowView () {
   const data = [
@@ -129,12 +130,12 @@ function RTable () {
   const columns = [
     {
       title: '用户账号',
+			ellipsis: true,
       dataIndex: 'user_account',
-      align: 'center',
   },
     {
       title: '变动数额',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'amount',
       render: (text, record, index) => {
         const color = Number(text) > 0 ? "#2C68FF" : "#FF4D4F"
@@ -143,16 +144,16 @@ function RTable () {
   },
     {
       title: '支付方式',
+			ellipsis: true,
       dataIndex: 'pay_type',
-      align: 'center',
       render: (text, record, index) => {
         return '-'
       }
     },
     {
       title: '消费类型',
+			ellipsis: true,
       dataIndex: 'type',
-      align: 'center',
       render: (text, record, index) => {
         const { text: t, color } = getKey(text, obj)
         return <div style={{color}}>{t}</div>
@@ -160,8 +161,8 @@ function RTable () {
   },
     {
       title: '时间',
+			ellipsis: true,
       dataIndex: 'time',
-      align: 'center',
   },
   ];
 
@@ -193,7 +194,7 @@ function RTable () {
 
   return (
     <div className={c.main}>
-      <div className={c.searchView}>
+			<div className={c.searchView} style={{marginBottom:0}}>
         <div className={c.search}>
           <div className={c.searchL}>
             {/* <Input placeholder="请输入用户账户" size="small" className={c.searchInput}/> */}

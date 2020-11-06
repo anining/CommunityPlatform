@@ -9,6 +9,8 @@ import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import DropdownComponent from "../../components/DropdownComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
+import {SCROLL} from '../../utils/config'
+import ActionComponent from '../../components/ActionComponent'
 
 function DockingView () {
   const [visible, setVisible] = useState(true)
@@ -95,37 +97,38 @@ function RTable ({ setVisible }) {
   const columns = [
     {
       title: '对接目标编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '对接目标名称',
+			ellipsis: true,
       dataIndex: 'name',
-      align: 'center',
   },
     {
       title: '对接平台',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'platform',
   },
     {
       title: '对接商品',
+			ellipsis: true,
       dataIndex: 'good',
-      align: 'center',
   },
     {
       title: '对接凭证',
+			ellipsis: true,
       dataIndex: 'number',
-      align: 'center',
   },
     {
       title: '对接时间',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'time',
   },
     {
-      title: '操作',
-      align: 'center',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 136,
+			fixed: 'right',
       // render: (text, record, index) => (
       //   <div style={{color:'#2C68FF',textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
       //         const history = h.get()
@@ -175,9 +178,10 @@ function RTable ({ setVisible }) {
           </div>
         </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
       <Table
         columns={columns}
+				scroll={SCROLL}
         rowSelection={{
           ...rowSelection
         }}

@@ -6,7 +6,7 @@ import good7 from '../../icons/good/good7.png'
 import home9 from '../../icons/home/home9.png'
 import good40 from '../../icons/good/good40.png'
 import { push, transformTime, getKey } from "../../utils/util"
-import { PERMISSIONS, PERMISSIONS_ARRAY } from "../../utils/config"
+import { PERMISSIONS, PERMISSIONS_ARRAY, SCROLL } from "../../utils/config"
 
 function AdminView () {
 
@@ -55,21 +55,22 @@ function RTable () {
   const columns = [
     {
       title: 'ID',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '管理员账号',
+			ellipsis: true,
       dataIndex: 'account',
-      align: 'center',
   },
     {
       title: '管理员名称',
+			ellipsis: true,
       dataIndex: 'nickname',
-      align: 'center',
   },
     {
       title: '管理员权限',
+			ellipsis: true,
       render: (text, record, index) => {
         const { permissions, role } = record
         const views = []
@@ -102,26 +103,27 @@ function RTable () {
               </div>
             )
           }>
-            <div className={c.clickText} onClick={()=>detail(permissions,role,index)}>查看详情</div>
+            <div className={c.view_text} onClick={()=>detail(permissions,role,index)}>查看详情</div>
           </Popconfirm>
         )
       }
   },
     {
       title: '创建时间',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'time'
       },
     {
-      title: '操作',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 226,
+			fixed: 'right',
       dataIndex: 'id',
-      align: 'center',
       render: (text, record, index) => (
-        <Space size="small">
+				<Space size="small" className={c.space}>
           <div className={c.clickText} onClick={()=>change(record)}>修改</div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.line} />
           <div className={c.clickText} style={{cursor:'wait'}} onClick={()=>{}}>重置密码</div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.line} />
           <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{}}>删除</div>
         </Space>
       )
@@ -130,7 +132,7 @@ function RTable () {
 
   return (
     <div className={c.main} style={{marginTop:0}}>
-      <div className={c.searchView}>
+			<div className={c.searchView} style={{marginBottom:0}}>
         <div className={c.search} style={{borderBottom:'none'}}>
           <div className={c.searchL} />
           <div className={c.searchR}>
@@ -145,6 +147,7 @@ function RTable () {
         </div>
       </div>
       <Table
+				scroll={SCROLL}
         columns={columns}
         dataSource={data}
         size="small"

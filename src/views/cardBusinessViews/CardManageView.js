@@ -12,7 +12,8 @@ import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import DropdownComponent from "../../components/DropdownComponent"
 import ModalComponent from "../../components/ModalComponent"
-import { CARDS_STATUS } from "../../utils/config"
+import { CARDS_STATUS, SCROLL } from "../../utils/config"
+import ActionComponent from '../../components/ActionComponent'
 
 function CardManageView () {
   const [title, setTitle] = useState()
@@ -150,42 +151,42 @@ function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
   const columns = [
     {
       title: '卡密编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '商品编号',
+			ellipsis: true,
       dataIndex: 'good_id',
-      align: 'center',
   },
     {
       title: '商品名称',
+			ellipsis: true,
       dataIndex: 'name',
-      align: 'center',
   },
     {
       title: '商品类别',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'ctg',
   },
     {
       title: '卡密类型',
+			ellipsis: true,
       dataIndex: 'card_category',
-      align: 'center',
   },
     {
       title: '卡号',
+			ellipsis: true,
       dataIndex: 'number',
-      align: 'center',
   },
     {
       title: '卡密',
+			ellipsis: true,
       dataIndex: 'card',
-      align: 'center',
   },
     {
       title: '卡密状态',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'status',
       // render: (text, record, index) => {
       // const { text: t, color } = getKey(text, obj)
@@ -194,8 +195,9 @@ function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
       // }
   },
     {
-      title: '操作',
-      align: 'center',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 136,
+			fixed: 'right',
       // render: (text, record, index) => (
       //   <div style={{textDecoration:"underline",color:'#2C68FF',textDecorationColor:'#2C68FF'}} onClick={()=>{
       //     const history = h.get()
@@ -262,8 +264,9 @@ function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
           </div>
         </div>
       </div>
-      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量设置已售出",key:"a"}]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量设置已售出",key:"a"}]}/>
       <Table
+				scroll={SCROLL}
         columns={columns}
         rowSelection={{
           ...rowSelection

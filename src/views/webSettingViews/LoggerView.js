@@ -67,24 +67,24 @@ function RTable () {
   const columns = [
     {
       title: 'ID',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '操作人账号',
+			ellipsis: true,
       dataIndex: 'account',
-      align: 'center',
   },
     {
       title: '登录IP',
+			ellipsis: true,
       dataIndex: 'data',
-      align: 'center',
       render: (text, record, index) => JSON.parse(text).ip
   },
     {
       title: '登录时间',
+			ellipsis: true,
       dataIndex: 'time',
-      align: 'center',
     },
   ];
 

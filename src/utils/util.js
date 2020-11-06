@@ -1,5 +1,6 @@
 import {h} from './history'
 import * as R from 'kefir.ramda'
+import CryptoJS from 'crypto-js';
 import {message} from "antd"
 import {JUMP_DELAY} from './config'
 
@@ -16,6 +17,11 @@ function saveSuccess(jump = true, path, state) {
       }
     }, JUMP_DELAY)
   }
+}
+
+function decrypt (ciphertext) {
+  const bytes  = CryptoJS.AES.decrypt(ciphertext, "U2FsdGVkX19AlbWGMgKH3wEYQBFool5SeSev64DypXU")
+  return bytes.toString(CryptoJS.enc.Utf8)
 }
 
 function push(path, state) {
@@ -106,4 +112,4 @@ function _toFixed (number, num = 2) {
   }
 }
 
-export {dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed}
+export {decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed}

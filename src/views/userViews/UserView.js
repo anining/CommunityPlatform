@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Radio, Button, Table, Input, Space } from 'antd'
 import c from '../../styles/view.module.css'
-import { USER_STATUS } from "../../utils/config"
+import { USER_STATUS, SCROLL } from "../../utils/config"
 import oc from '../../styles/oc.module.css'
 import good23 from '../../icons/good/good23.png'
 import good24 from '../../icons/good/good24.png'
@@ -14,6 +14,7 @@ import { transformTime, push, getKey, saveSuccess } from "../../utils/util"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 import { USER_RANK } from "../../utils/config"
+import ActionComponent from '../../components/ActionComponent'
 
 function UserView () {
   // TODO: 三个弹窗
@@ -222,67 +223,67 @@ function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data
   const columns = [
     {
       title: '用户编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '用户账号',
+			ellipsis: true,
       dataIndex: 'account',
-      align: 'center',
   },
     {
       title: '用户等级',
+			ellipsis: true,
       dataIndex: 'lv',
-      align: 'center',
       render: (text, record, index) => {
         return USER_RANK[text].label
       }
   },
     {
       title: '消费总额',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'consumed',
   },
     {
       title: '用户余额',
+			ellipsis: true,
       dataIndex: 'balance',
-      align: 'center',
   },
     {
       title: '下单次数',
+			ellipsis: true,
       dataIndex: 'ordered',
-      align: 'center',
   },
     {
       title: '社区商品密价',
-      align: 'center',
+			ellipsis: true,
       render: (text, record, index) => {
         return (
         <Space size="small">
-          <div onClick={()=>push('/main/editUserPrice',record)} className={c.clickText}>查看</div>
+          <div onClick={()=>push('/main/editUserPrice',record)} className={c.view_text}>查看</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)} >修改</div>
+          <div className={c.view_text} onClick={()=>push('/main/editUserPrice',record)} >修改</div>
         </Space>
         )
       }
   },
     {
       title: '卡密商品密价',
+			ellipsis: true,
       dataIndex: 'ordered',
-      align: 'center',
       render: (text, record, index) => {
         return (
         <Space size="small">
-          <div style={{cursor:'wait'}} className={c.clickText}>查看</div>
+          <div style={{cursor:'wait'}} className={c.view_text}>查看</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{}}>修改</div>
+          <div style={{cursor:'wait'}} className={c.view_text} onClick={()=>{}}>修改</div>
         </Space>
         )
       }
   },
     {
       title: '注册时间',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'time',
       sorter: {
         compare: (a, b) => {
@@ -293,18 +294,19 @@ function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data
   },
     {
       title: '状态',
+			ellipsis: true,
       dataIndex: 'status',
-      align: 'center',
       render: (text, record, index) => {
         const { text: t, color } = getKey(text, obj)
         return <div style={{color}}>{t}</div>
       }
   },
     {
-      title: '操作',
-      align: 'center',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 282,
+			fixed: 'right',
       render: (text, record, index) => (
-        <Space size="small">
+				<Space size="small" className={c.space}>
           {/* <Popconfirm icon={<img src="" alt="" style={{width:0,height:0}}/>} */}
           {/*   placement = "left" */}
           {/*   title = { */}
@@ -326,15 +328,15 @@ function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data
           {/*     } > */}
             <div style={{cursor:'wait'}} className={c.clickText}>修改余额</div>
           {/* </Popconfirm> */}
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.line} />
           {/* <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)}>修改等级</div> */}
           <div className={c.clickText} onClick={()=>{
             setSel(record)
             setVisible(true)
           }}>修改等级</div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.line} />
           {/* <div className={c.clickText} onClick={()=>push('/main/addUser',record)}>修改用户信息</div> */}
-          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{}}>修改用户信息</div>
+          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{}}>修改信息</div>
         </Space>
       )
     },
@@ -373,8 +375,9 @@ function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data
           </div>
         </div>
       </div>
-      <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/>
       <Table
+				scroll={SCROLL}
         columns={columns}
         rowSelection={{
           ...rowSelection

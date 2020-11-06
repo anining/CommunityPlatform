@@ -42,7 +42,7 @@
   display: flex;
   align-items: center;
   border-radius: 2px;
-  font-size: 1.785rem;
+  font-size: 1.714rem;
   color: #34374A;
   font-weight: 500;
   padding: 0 37px;
@@ -473,15 +473,25 @@
   align-items: center;
   justify-content: center;
   color: #34374A;
+	position: relative;
 }
 
 .orderHI div {
   font-weight: 500;
+	z-index: 1;
   font-size: 1.785rem;
 }
 
 .orderHI span {
+	z-index: 1;
   font-size: 0.857rem;
+}
+
+.orderHI img {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	height: 83px;
 }
 
 .orderM {
@@ -498,14 +508,14 @@
   padding-left: 20px;
   color: #34374A;
   font-weight: 500;
-  font-size: 1.142rem;
+  font-size: 1.285rem;
   border-bottom: 1px solid #D8D8D8;
   margin-bottom: 30px;
 }
 
 .orderLine {
   color: #34374A;
-  font-size: 0.857rem;
+  font-size: 1rem;
 }
 
 .orderLine div:first-child {

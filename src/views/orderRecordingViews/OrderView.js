@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
 import { Timeline, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
+import header5 from '../../icons/header/header5.png'
+import header6 from '../../icons/header/header6.png'
+import header7 from '../../icons/header/header7.png'
+import header8 from '../../icons/header/header8.png'
 import edit23 from '../../icons/edit/edit23.png'
 import { push,  transformTime } from "../../utils/util"
 import { orderHis } from "../../utils/api"
@@ -15,24 +19,28 @@ function OrderView () {
     {
       label: "订单差值",
       num: "10",
-      background: "#FFF5F5"
+      background: "#FFF8F8",
+			icon: header5
     },
     {
       label: "用户下单消耗",
       num: "125.1255",
-      background: "#F3F7FE"
+      background: "#F8FAFF",
+			icon: header8
 
     },
     {
       label: "您给用户退款",
       num: "12.1255",
-      background: "#FFF9F1"
+      background: "#FFF9F1",
+			icon: header6
 
     },
     {
       label: "上级给您退款",
       num: "25.1255",
-      background: "#F2FDF5"
+      background: "#F3FDF6",
+			icon: header7
 
     }
   ])
@@ -61,7 +69,7 @@ function OrderView () {
           <Breadcrumb.Item>订单历程</Breadcrumb.Item>
         </Breadcrumb>
       </div>
-      <div className={c.main}>
+			<div className={c.main} style={{marginTop:24}}>
         <div className={c.headerT}>
           <div style={{zIndex:1}}>订单历程</div>
           <div className={c.circle} />
@@ -165,9 +173,10 @@ function RLine ({ orders = [] }) {
 function RHeader ({ nums }) {
   const views = []
   nums.forEach((item, i) => {
-    const { label, background, num } = item
+    const { label, background, icon, num } = item
     views.push(
       <div className={c.orderHI} style={{background}} key={i}>
+				<img src={icon} alt=""/>
         <div>{num}</div>
         <span>{label}</span>
       </div>

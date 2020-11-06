@@ -14,6 +14,8 @@ import {paySettle, providers} from "../../utils/api"
 import Popconfirm from "antd/es/popconfirm"
 import Space from "antd/es/space"
 import {getPath, saveSuccess, push} from "../../utils/util"
+import ActionComponent from '../../components/ActionComponent'
+import {SCROLL} from '../../utils/config'
 
 function StoreView() {
   const data = [
@@ -114,52 +116,52 @@ function RTable() {
   const columns = [
     {
       title: '供货商编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
     },
     {
       title: '供货商名称',
+			ellipsis: true,
       dataIndex: 'nickname',
-      align: 'center',
     },
     {
       title: '供货商账号',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'account',
     },
     {
       title: '供货商商品数',
+			ellipsis: true,
       dataIndex: 'providing_amount',
-      align: 'center',
     },
     {
       title: '总消耗',
+			ellipsis: true,
       dataIndex: 'price',
-      align: 'center',
       render: (text, record, index) => {
         return '-'
       }
     },
     {
       title: '待结算',
+			ellipsis: true,
       dataIndex: 'value_stlreqed',
-      align: 'center',
       render: (text, record, index) => {
         return '-'
       }
     },
     {
       title: '申请结算',
+			ellipsis: true,
       dataIndex: 'value_stlreqed',
-      align: 'center',
       render: (text, record, index) => {
         return <div>{text || 0}</div>
       }
     },
     {
       title: '供货状态',
+			ellipsis: true,
       dataIndex: 'status',
-      align: 'center',
       render: (text, record, index) => {
         return '-'
       }
@@ -170,10 +172,11 @@ function RTable() {
       // }
     },
     {
-      title: '操作',
-      align: 'center',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 153,
+			fixed: 'right',
       render: (...arg) => (
-        <Space size="small" style={{color: '#2C68FF'}}>
+        <Space size="small" className={c.space}>
           <div className={c.clickText} onClick={() => {
             if(!getPath(['0', 'value_stlreqed'], arg)) {
               message.info('暂无可结算金额');
@@ -188,7 +191,7 @@ function RTable() {
           }}>
             结算
           </div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+          <div className={c.line} />
           <div className={c.clickText} onClick={()=>push("/main/editStore",arg[1])}>修改</div>
         </Space>
       )
@@ -234,9 +237,10 @@ function RTable() {
           </div>
         </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
       <Table
         columns={columns}
+				scroll={SCROLL}
         rowSelection={{
           ...rowSelection
         }}

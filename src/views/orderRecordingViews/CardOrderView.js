@@ -10,6 +10,8 @@ import good35 from '../../icons/good/good35.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent"
 import { transformTime } from "../../utils/util"
+import {SCROLL} from '../../utils/config'
+import ActionComponent from '../../components/ActionComponent'
 
 function CardOrderView () {
   const data = [
@@ -93,32 +95,32 @@ function RTable ({ setVisible }) {
   const columns = [
     {
       title: '订单编号',
+			ellipsis: true,
       dataIndex: 'id',
-      align: 'center',
   },
     {
       title: '商品名称',
+			ellipsis: true,
       dataIndex: 'text',
-      align: 'center',
   },
     {
       title: '商品分类',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'ctg',
   },
     {
       title: '卡密编号',
+			ellipsis: true,
       dataIndex: 'number',
-      align: 'center',
   },
     {
       title: '下单用户',
+			ellipsis: true,
       dataIndex: 'msg',
-      align: 'center',
   },
     {
       title: '订单状态',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'status',
       // render: (text, record, index) => {
       // const { text: t, color } = getKey(text, obj)
@@ -128,12 +130,13 @@ function RTable ({ setVisible }) {
   },
     {
       title: '下单时间',
+			ellipsis: true,
       dataIndex: 'msg',
-      align: 'center',
   },
     {
-      title: '操作',
-      align: 'center',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 136,
+			fixed: 'right',
       // render: (text, record, index) => (
       //   <div style={{color:'#2c68ff',cursor:'pointer'}}>置为已完成</div>
       // )
@@ -194,8 +197,9 @@ function RTable ({ setVisible }) {
           </div>
         </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
       <Table
+				scroll={SCROLL}
         columns={columns}
         rowSelection={{
           ...rowSelection

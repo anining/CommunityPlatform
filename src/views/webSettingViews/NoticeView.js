@@ -5,6 +5,8 @@ import good7 from '../../icons/good/good7.png'
 import { push, transformTime, getSimpleText } from "../../utils/util";
 import DropdownComponent from "../../components/DropdownComponent";
 import { announcements } from '../../utils/api'
+import {SCROLL} from '../../utils/config';
+import ActionComponent from '../../components/ActionComponent';
 
 function NoticeView () {
 
@@ -54,25 +56,25 @@ function RTable () {
   const columns = [
     {
       title: '公告标题',
+			ellipsis: true,
       dataIndex: 'title',
-      align: 'center',
   },
     {
       title: '公告内容',
+			ellipsis: true,
       dataIndex: 'content',
       width: 300,
-      align: 'center',
       render: (text, record, index) => <div className={c.noticeHtml}>{getSimpleText(text)}</div>
   },
     {
       title: '发送人',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'manager_account',
   },
     {
       title: '创建时间',
+			ellipsis: true,
       dataIndex: 'time',
-      align: 'center',
     },
   ];
 
@@ -94,7 +96,7 @@ function RTable () {
 
   return (
     <div className={c.main} style={{marginTop:0}}>
-      <div className={c.searchView}>
+			<div className={c.searchView} style={{marginBottom:0}}>
         <div className={c.search}>
           <div className={c.searchL}/>
           <div className={c.searchR}>
@@ -108,7 +110,7 @@ function RTable () {
           </div>
         </div>
       </div>
-      <DropdownComponent submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
       <Table
         columns={columns}
         rowSelection={{

@@ -1,6 +1,6 @@
 import * as React from 'karet'
 import { useState, useEffect } from 'react'
-import { Button, Table, Input, Breadcrumb } from 'antd'
+import { Button, Table, Input, Breadcrumb, Space } from 'antd'
 import c from '../../styles/view.module.css'
 import oc from '../../styles/oc.module.css'
 import cs from '../../styles/edit.module.css'
@@ -13,7 +13,7 @@ import header1 from '../../icons/header/header1.png'
 import { useHistory } from "react-router-dom"
 import { communityDiscPrices, addDiscPrices, deleteDiscPrices, usersPricingType } from "../../utils/api"
 import { saveSuccess, push } from "../../utils/util";
-import { USER_RANK } from '../../utils/config'
+import { USER_RANK, SCROLL } from '../../utils/config'
 import ModalPopComponent from "../../components/ModalPopComponent"
 
 function EditUserPriceView () {
@@ -198,24 +198,24 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
   const columns = [
     {
       title: '商品名称',
+			ellipsis: true,
       dataIndex: 'name',
-      align: 'center',
   },
     {
       title: '商品分类',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'ctg_name',
   },
     {
       title: '进价',
+			ellipsis: true,
       dataIndex: 'unit_cost',
-      align: 'center',
       render: (text, record, index) => text || '-'
   },
     {
       title: '单价',
+			ellipsis: true,
       dataIndex: 'prices',
-      align: 'center',
       render: (text, record, index) => {
         const { user_price } = record
         const color = (text[0] > 0 && !user_price && !text[3] && !text[2] && !text[1]) ? "#4177FE" : "#595959"
@@ -224,8 +224,8 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
   },
     {
       title: '统一密价(高级会员)',
+			ellipsis: true,
       dataIndex: 'prices',
-      align: 'center',
       render: (text, record, index) => {
         const { user_price } = record
         const color = (text[1] > 0 && !user_price && !text[3] && !text[2]) ? "#4177FE" : "#595959"
@@ -234,8 +234,8 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
   },
     {
       title: '统一密价(钻石会员)',
+			ellipsis: true,
       dataIndex: 'prices',
-      align: 'center',
       render: (text, record, index) => {
         const { user_price } = record
         const color = (text[2] > 0 && !user_price && !text[3]) ? "#4177FE" : "#595959"
@@ -244,8 +244,8 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
   },
     {
       title: '统一密价(至尊会员)',
+			ellipsis: true,
       dataIndex: 'prices',
-      align: 'center',
       render: (text, record, index) => {
         const { user_price } = record
         const color = (text[3] > 0 && !user_price) ? "#4177FE" : "#595959"
@@ -254,7 +254,7 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
   },
     {
       title: '用户密价',
-      align: 'center',
+			ellipsis: true,
       dataIndex: 'user_price',
       render: (text, record, index) => {
         const color = text > 0 ? "#4177FE" : "#595959"
@@ -262,13 +262,20 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
       }
     },
     {
-      title: '操作',
-      align: 'center',
+			title: () => <span style={{marginLeft:32}}>操作</span>,
+			width: 164,
+			fixed: 'right',
       render: (text, record, index) => {
-        return <div onClick={()=>{
-          setSelected(record)
-          setVisible(true)
-        }} className={c.clickText}>修改用户密价</div>
+        return (
+					<Space size="small" className={c.space}>
+						<div onClick={()=>{
+							setSelected(record)
+							setVisible(true)
+						}} className={c.clickText}>
+							修改用户密价
+						</div>
+					</Space>
+				)
       }
     }
   ];
@@ -294,6 +301,7 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
           </div>
       </div>
       <Table
+				scroll={SCROLL}
         columns={columns}
         dataSource={data}
         size="small"

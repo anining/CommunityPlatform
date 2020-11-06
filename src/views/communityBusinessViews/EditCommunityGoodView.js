@@ -268,7 +268,7 @@ function EditCommunityGoodView () {
           <div style={{zIndex:1}}>{id?"修改":"新增"}社区商品</div>
           <div className={c.circle} />
         </div>
-        <div className={c.tips}>带“ * ”的项目必须填写。</div>
+        <div className={c.tips}>带“ * ”的项目必须填写带。如果要修改商品价格请通过“商品列表 -  修改价格”操作。</div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
