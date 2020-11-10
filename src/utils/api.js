@@ -286,3 +286,34 @@ export function balanceChanges (page, size, start_from, end_with) {
 export function priceHistories (goods_type, goods_id) {
   return transformFetch("GET", "/price-histories", {goods_id, goods_type})
 }
+
+// 对接目标
+export function docking (type, gid, table, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/ext-prvds", table)
+    case "add":
+      return transformFetch("POST", "/ext-prvds", body);
+    case "modify":
+      return transformFetch("PUT", `/ext-prvds/${gid}`, body);
+    // case "modifys":
+    //   return transformFetch("PATCH", `/cmnt-goods?${table}`, body);
+    default:
+        return transformFetch("DELETE", `/ext-prvds?${body}`);
+  }
+}
+
+// 获取对接目标统计数据
+export function extPrvdStat () {
+	return transformFetch("GET", `/ext-prvd-stat`);
+}
+
+// 获取对接目标的商品列表
+export function extPrvdsGoods (id) {
+	return transformFetch("GET", `/ext-prvds/${id}/goods`);
+}
+
+// 获取对接目标的商品明细
+export function extPrvdsGood (id,gid) {
+	return transformFetch("GET", `/ext-prvds/${id}/goods/${gid}`);
+}

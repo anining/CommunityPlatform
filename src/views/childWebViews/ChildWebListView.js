@@ -80,7 +80,7 @@ function RTable ({ setVisible }) {
 
   // const obj = [
   //   {
-  //     color: "#2C68FF",
+  //     color: "#595959",
   //     text: '正常',
   //     icon: good32,
   //   },

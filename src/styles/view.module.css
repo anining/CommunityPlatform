@@ -402,3 +402,16 @@
 	width: 124px;
 	height: 40px;
 }
+
+.select_label_view {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 32px;
+}
+
+.add_select_category {
+	background-color: #FF8E32;
+	color: #fff;
+	border-color: #FF8E32;
+}

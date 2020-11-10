@@ -473,6 +473,7 @@
   align-items: center;
   justify-content: center;
   color: #34374A;
+	overflow: hidden;
 	position: relative;
 }
 

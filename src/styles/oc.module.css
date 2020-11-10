@@ -21,6 +21,10 @@
   margin-top: 16px;
 }
 
+.basic_msg_view {
+	width: 50%;
+}
+
 .limit_item span {
   margin-left: 8px;
   color: #333;
@@ -229,13 +233,19 @@
   justify-content: center;
 }
 
+.basic_msg_parameter {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	width: 100%;
+}
+
 .basic_msg {
   width: 100%;
 	background: #FAFAFA;
 	border-radius: 2px;
 	display: flex;
 	padding: 24px;
-	justify-content: space-between;
 	margin-bottom: 40px;
 }
 
@@ -285,7 +295,14 @@
 	margin-bottom: 4px;
 }
 
+.edit_view {
+  width: 29.25%;
+	background: #F7FAFF;
+	padding: 0 0 15px 12px;
+}
+
 .basic_msg_text {
+	width: 50%;
 	color: #333333;
 	display: flex;
 	align-items: center;

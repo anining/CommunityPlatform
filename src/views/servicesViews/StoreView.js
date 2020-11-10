@@ -18,6 +18,7 @@ import ActionComponent from '../../components/ActionComponent'
 import {SCROLL} from '../../utils/config'
 
 function StoreView() {
+
   const data = [
     {
       label: '供货商',
@@ -96,21 +97,21 @@ function RTable() {
   const obj = [
     {
       text: '关闭',
-      color: '#FF5F5F',
+      color: '#595959',
     },
     {
       text: '正常',
-      color: 'rgba(0, 0, 0, 0.65)'
+      color: '#2C68FF'
     }
   ]
   const obj1 = [
     {
       text: '是',
-      color: '#2C67FF',
+      color: '#595959',
     },
     {
       text: '否',
-      color: '#FF5F5F'
+      color: '#595959'
     }
   ]
   const columns = [
@@ -172,11 +173,21 @@ function RTable() {
       // }
     },
     {
+      title: '结算二维码',
+			ellipsis: true,
+      dataIndex: 'status',
+      render: (text, record, index) => <div className={c.view_text}>查看</div>
+    },
+    {
 			title: () => <span style={{marginLeft:32}}>操作</span>,
-			width: 153,
+			width: 282,
 			fixed: 'right',
       render: (...arg) => (
         <Space size="small" className={c.space}>
+          <div className={c.clickText} onClick={()=>push("/main/editStore",arg[1])}>修改信息</div>
+          <div className={c.line} />
+					<div className={c.clickText} onClick={()=>push("/main/imp",arg[1])}>导入商品</div>
+          <div className={c.line} />
           <div className={c.clickText} onClick={() => {
             if(!getPath(['0', 'value_stlreqed'], arg)) {
               message.info('暂无可结算金额');
@@ -189,10 +200,8 @@ function RTable() {
               }
             })
           }}>
-            结算
+            立即结算
           </div>
-          <div className={c.line} />
-          <div className={c.clickText} onClick={()=>push("/main/editStore",arg[1])}>修改</div>
         </Space>
       )
     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Space, Popconfirm, Table, message, Input, DatePicker } from 'antd'
+import { Button, Badge, Space, Popconfirm, Table, message, Input, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import oc from '../../styles/oc.module.css'
 import good17 from '../../icons/good/good17.png'
@@ -22,7 +22,7 @@ import SelectComponent from "../../components/SelectComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
-import { REFUND_STATUS, SCROLL } from '../../utils/config'
+import { REFUND_STATUS, SCROLL, COMMUNITY_ORDER_STATUS, COMMUNITY_COMMUNICATION_STATUS, COMMUNITY_AFTER_STATUS } from '../../utils/config'
 import ActionComponent from '../../components/ActionComponent'
 
 function CommunityOrderView () {
@@ -186,52 +186,6 @@ function CommunityOrderView () {
     setMoment()
   }
 
-  const obj = {
-    pending: {
-      color: "#FF8D30",
-      text: '待处理',
-    },
-    processing: {
-      color: "#2C68FF",
-      text: '进行中',
-    },
-    completed: {
-      color: "#52C41A",
-      text: '已完成',
-    },
-    // {
-    //   color: "#FF8D30",
-    //   text: '异常',
-    // },
-    closed: {
-      color: "#FF5730",
-      text: '已终止',
-    }
-  }
-  const obj1 = {
-    pending: {
-      color: "#FF4D4F",
-      text: '已退款',
-    },
-    processing: {
-      color: "#FF8D30",
-      text: '退款中',
-    },
-    completed: {
-      color: "rgba(0, 0, 0, 0.65)",
-      text: '-',
-    },
-  }
-  const obj2 = {
-    pending: {
-      color: "#2C68FF",
-      text: '通信正常',
-    },
-    processing: {
-      color: "#FF4D4F",
-      text: '通信失败',
-    },
-  }
   const columns = [
     {
       title: '订单编号',
@@ -253,30 +207,31 @@ function CommunityOrderView () {
 			ellipsis: true,
       dataIndex: 'user_account',
   },
-    {
-      title: '下单信息',
-			ellipsis: true,
-      render: (text, record, index) => {
-        return <div onClick={()=>{
-          setSel(record)
-          setVisibleMsg(true)
-        }} className={c.view_text}>查看</div>
-  }
-}, {
-  title: '拓展信息',
-			ellipsis: true,
-  render: (text, record, index) => {
-    return <div onClick={()=>{
-      setSel(record)
-      setVisibleOther(true)
-    }} className={c.view_text}>查看</div>
-  }
-}, {
+    // {
+    //   title: '下单信息',
+			// ellipsis: true,
+    //   render: (text, record, index) => {
+    //     return <div onClick={()=>{
+    //       setSel(record)
+    //       setVisibleMsg(true)
+    //     }} className={c.view_text}>查看</div>
+  // }
+// }, {
+  // title: '拓展信息',
+			// ellipsis: true,
+  // render: (text, record, index) => {
+    // return <div onClick={()=>{
+    //   setSel(record)
+    //   setVisibleOther(true)
+    // }} className={c.view_text}>查看</div>
+  // }
+// }, 
+		{
   title: '下单数量',
 			ellipsis: true,
   dataIndex: 'amount',
 }, {
-  title: '订单数额',
+  title: '订单总额',
 			ellipsis: true,
   dataIndex: 'h_price',
 },
@@ -284,17 +239,17 @@ function CommunityOrderView () {
   title: '订单状态',
 			ellipsis: true,
   dataIndex: 'status',
-  render: (text, record, index) => {
-    const { text: t, color } = getKey(text, obj)
-    return <div style={{color}}>{t}</div>
-  }
+	render: (text) => {
+		const { text: t, color } = getKey(text, COMMUNITY_ORDER_STATUS)
+		return <div><Badge color={color} />{t}</div>
+	}
 }, {
   title: '售后状态',
 			ellipsis: true,
   dataIndex: 'refund_status',
   render: (text, record, index) => {
     const { reason="暂无" } = record
-    const { text: t, color } = getKey(text, REFUND_STATUS)
+    const { text: t, color } = getKey(text, COMMUNITY_AFTER_STATUS)
     return (
       <div style={{display:'flex',alignItems:'center'}}>
         <div style={{color,flexShrink:0}}>{t}</div>
@@ -312,53 +267,72 @@ function CommunityOrderView () {
   title: '通信状态',
 			ellipsis: true,
   dataIndex: 'refund_status',
+	// COMMUNITY_COMMUNICATION_STATUS
   render: (text, record, index) => {
     return '-'
 }
-}, {
-  title: '订单历程',
-			ellipsis: true,
-  render: (text, record, index) => <div onClick={()=>push('/main/editCommunityOrder',record)} className={c.view_text}>查看</div>
-}, {
+},
+	{
   title: '订单去向',
 			ellipsis: true,
   dataIndex: 'time',
   render: (text, record, index) => {
     return '-'
 }
-}, {
+},
+	{
   title: '下单时间',
 			ellipsis: true,
   dataIndex: 'time',
-}, {
-  title: '订单备注',
+},
+	{
+  title: '用户备注(用户可见)',
 			ellipsis: true,
+  dataIndex: 'time',
   render: (text, record, index) => {
-    return <div onClick={()=>{
-      setSel(record)
-      setRemark(sel.comment)
-      setVisible(true)
-    }} className={c.view_text}>查看</div>
-  }
-}, {
+    return '-'
+}
+},
+	{
+  title: '订单信息',
+			ellipsis: true,
+  dataIndex: 'time',
+  render: (text, record, index) => {
+    return '-'
+}
+},
+	// {
+  // title: '订单历程',
+	// 		ellipsis: true,
+  // render: (text, record, index) => <div onClick={()=>push('/main/editCommunityOrder',record)} className={c.view_text}>查看</div>
+// }, 
+	// {
+  // title: '订单备注',
+	// 		ellipsis: true,
+  // render: (text, record, index) => {
+    // return <div onClick={()=>{
+      // setSel(record)
+      // setRemark(sel.comment)
+      // setVisible(true)
+    // }} className={c.view_text}>查看</div>
+  // }
+// },
+	{
 	title: () => <span style={{marginLeft:32}}>操作</span>,
-	width: 209,
+	width: 355,
 	fixed: 'right',
   render: (text, record, index) => (
 		<Space size="small" className={c.space}>
-      {
-        record.refund_status === "refunding" ?
-          <div style={{display:'flex',alignItems:'center'}}>
-            <div style={{color:'#FF4D4F',textDecorationColor:"#ff4d4f"}} onClick={()=>{
-              setSel(record)
-              setVisibleRef(true)
-            }} className={c.clickText}>退款</div>
-            <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          </div>:null
-      }
       <div style={{cursor:'wait'}} className={c.clickText}>添加备注</div>
       <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-      <div style={{cursor:'wait'}} className={c.clickText}>重新通信</div>
+      <div style={{cursor:'wait'}} className={c.clickText}>订单历程</div>
+      <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+			<div onClick={()=>{
+				setSel(record)
+				setVisibleRef(true)
+			}} className={c.clickText}>同意退款</div>
+			<div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+      <div style={{cursor:'wait'}} className={c.clickText}>重新推送</div>
     </Space>
   )
 }

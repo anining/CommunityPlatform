@@ -19,40 +19,52 @@ import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
 
 let win
 
-function EditCommunityGoodView () {
+function ImpCommunityGoodView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
-  const { id, provider_type:p_t, padj_id, name: n, prices: pr_s = [], supp_goods_id, refundable: re = false, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "", ptpl_id, pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c } = state
+	console.log(state)
+	// switch (state) {
+		// default:
+	const { gid, name:n, price, limit_min, limit_max, image, desc } = state
+	const { provider_type } = state
+			// setGoods_id(gid)
+	// }
+	//
+	//
+	//
+	//
+	//
+
+  const [goods_id, setGoods_id] = useState(gid)
   const [name, setName] = useState(n)
-  const [status, setStatus] = useState(s)
-  const [pics, setPics] = useState(ps)
-  const [ctg_id, setCtgId] = useState(c_id)
-  const [community_param_template_id, setCommunity_param_template_id] = useState(ptpl_id)
-  const [tag_ids, setTag_ids] = useState(tag_s.map(i => i.id))
-  const [min_order_amount, setMin_order_amount] = useState(min_o_a)
-  const [max_order_amount, setMax_order_amount] = useState(max_o_a)
-  const [weight, setWeight] = useState(w)
-  const [intro, setIntroduction] = useState(i_td)
-  const [repeatable, setRepeatable] = useState(r_o)
-  const [batch_order, setBatch_order] = useState(Boolean(b_o))
+  const [unit_price, setUnit_price] = useState(price)
+  const [min_order_amount, setMin_order_amount] = useState(limit_min)
+  const [max_order_amount, setMax_order_amount] = useState(limit_max)
+  const [pics, setPics] = useState([image])
+  const [intro, setIntroduction] = useState(desc || "")
+
+  const [status, setStatus] = useState("unavailable")
+  const [ctg_id, setCtgId] = useState()
+  // const [community_param_template_id, setCommunity_param_template_id] = useState(ptpl_id)
+  const [tag_ids, setTag_ids] = useState()
+  const [weight, setWeight] = useState()
+  const [repeatable, setRepeatable] = useState(false)
+  const [batch_order, setBatch_order] = useState(false)
   const [recommended, setRecommended] = useState(false)
-  const [provider_type, setProvider_type] = useState(p_t)
-  const [goods_id, setGoods_id] = useState(supp_goods_id)
-  const [refundable, setRefundable] = useState(re)
-  const [unit_cost, setUnit_cost] = useState(u_c)
-  const [unit, setUnit] = useState(u)
-  const [prices, setPrices] = useState(Boolean(padj_id))
-  const [unit_price, setUnit_price] = useState(pr_s[0])
-  const [factors, setFactors] = useState(pr_s)
+  const [refundable, setRefundable] = useState(false)
+  const [unit_cost, setUnit_cost] = useState()
+  const [unit, setUnit] = useState()
+  // const [prices, setPrices] = useState(Boolean(padj_id))
+  const [factors, setFactors] = useState([])
 
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState(pics[0])
-  const [tags, setTags] = useState(tag_s)
+  const [tags, setTags] = useState([])
   const [has_more, setHasMore] = useState(false)
-  const [dockingTarget, setDockingTarget] = useState(padj_id)
+  const [dockingTarget, setDockingTarget] = useState()
 
   const [marks, setMarks] = useState([])
-  const [selectedProviders, setSelectedProviders] = useState()
+  // const [selectedProviders, setSelectedProviders] = useState()
 
   const setPriceAt = i => R.pipe(
     e => L.set([i], +e.target.value, factors),
@@ -131,15 +143,15 @@ function EditCommunityGoodView () {
   }
 
   function getGoodCategories(page,size) {
-    if (selectedProviders) {
-      return goodsSummaries(selectedProviders,page,size).then(r => {
-        if (!r.error) {
-          return r.data
-        }
-        return []
-      }).catch(()=>[])
-    }
-    return new Promise((resolve,reject)=>resolve([]))
+    // if (selectedProviders) {
+    //   return goodsSummaries(selectedProviders,page,size).then(r => {
+    //     if (!r.error) {
+    //       return r.data
+    //     }
+    //     return []
+    //   }).catch(()=>[])
+    // }
+    // return new Promise((resolve,reject)=>resolve([]))
   }
 
   function save (jump) {
@@ -152,11 +164,12 @@ function EditCommunityGoodView () {
       return
     }
     let body = {
-      supp_goods: { provider_type, goods_id },
       name,
+
+      supp_goods: { provider_type, goods_id },
       ctg_id,
-      ptpl_id: community_param_template_id,
-      prices: prices ? factors : [(unit_price||0), 0, 0, 0],
+      // ptpl_id: community_param_template_id,
+      prices: factors,
       unit,
       tag_ids,
       pics,
@@ -170,12 +183,10 @@ function EditCommunityGoodView () {
       recommended,
       repeatable,
       batch_order,
-    }
-    if( prices ) {
-      body = {...body,...{padj_id: dockingTarget}}
+			padj_id: dockingTarget
     }
     setLoading(true)
-    const promise = communityGoods(id ? "modify" : 'add', id, undefined, body)
+    const promise = communityGoods('add', undefined, undefined, body)
     promise.then(r => {
       setLoading(false)
       if (!r.error) {
@@ -266,24 +277,10 @@ function EditCommunityGoodView () {
       </div>
       <div className={c.main}>
         <div className={c.headerT}>
-          <div style={{zIndex:1}}>{id?"修改":"新增"}商品信息</div>
+          <div style={{zIndex:1}}>从XXXX(供应商名称)导入商品</div>
           <div className={c.circle} />
         </div>
-        <div className={c.tips}>带“ * ”的项目必须填写带。如果要修改商品价格请通过“商品列表 -  修改价格”操作。</div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>商品来源</div>
-          </div>
-					{provider_type}
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>商品名称</div>
-          </div>
-          <Input maxLength={40} placeholder="请输入商品名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput}/>
-        </div>
+        <div className={c.tips}>带“ * ”的项目必须填写带。</div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
@@ -299,21 +296,25 @@ function EditCommunityGoodView () {
 						<span>*</span>
 						<div className={c.itemText}>调价模版</div>
 					</div>
-					{ dockingTarget || "未选择调价模版" }
+					<DropdownPromiseComponent placeholder="请选择调价模版" value={dockingTarget} fetchName={getCmntPadjs} setValue={setDockingTarget}/>
+				</div>
+				<div className={c.itemTips}>
+					<div className={c.itemName} />
+					<div>当系统获取到这个商品在供应商的价格变化信息时,会根据选择的模版配置同步调整这个商品的单价和统一密价</div>
 				</div>
 				<div className={c.item}>
 					<div className={c.itemName}>
-						<span className={c.white}>*</span>
+						<span>*</span>
 						<div className={c.itemText}>进价</div>
 					</div>
-					{ unit_cost }
+					<Input type="number" onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>
 				</div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
             <div className={c.itemText}>单价</div>
           </div>
-					{ unit_price }
+          <Input type="number" onChange={e=>setUnit_price(e.target.value)} value={unit_price} placeholder="请输入商品销售单价" className={c.itemInput}></Input>
         </div>
 				<div className={c.item} style={{alignItems:'flex-start'}}>
 					<div className={c.itemName}>
@@ -324,36 +325,27 @@ function EditCommunityGoodView () {
 						<div className={c.disc_price_item}>
 							<img src={good46} alt="" />
 							<div>高级会员</div>
-							{factors[1] || "未填写"}
+							<Input value={factors[1]} onChange={setPriceAt(1)} placeholder="请输入密价"/>
 						</div>
 						<div className={c.disc_price_item}>
 							<img src={good48} alt="" />
 							<div>钻石会员</div>
-							{factors[2] || "未填写"}
+							<Input value={factors[2]} onChange={setPriceAt(2)} placeholder="请输入密价"/>
 						</div>
 						<div className={c.disc_price_item}>
 							<img src={good47} alt="" />
 							<div>至尊会员</div>
-							{factors[3] || "未填写"}
+							<Input value={factors[3]} onChange={setPriceAt(3)} placeholder="请输入密价"/>
 						</div>
 					</div>
 				</div>
-				<div className={c.item} style={{alignItems:'flex-start'}}>
-					<div className={c.itemName}>
-            <span className={c.white}>*</span>
-						<div className={c.itemText}>下单参数</div>
-					</div>
-					<div className={oc.edit_view}>
-						{/* { */}
-						{/* 	(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>) */}
-						{/* } */}
-						<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
-						<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
-					</div>
-					<Button type="primary" style={{width:120}} className={c.itemBtn} onClick={()=>{
-						push('/main/editGoodCategory')
-					}}>同步下单参数</Button>
-				</div>
+        <div className={c.item}>
+          <div className={c.itemName}>
+            <span>*</span>
+            <div className={c.itemText}>商品名称</div>
+          </div>
+          <Input maxLength={40} placeholder="请输入商品名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput}/>
+        </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
@@ -416,6 +408,29 @@ function EditCommunityGoodView () {
           </div>
           <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={intro} onChange={e=>setIntroduction(e)}/>
         </div>
+        {/* <div className={c.item}> */}
+        {/*   <div className={c.itemName}> */}
+        {/*     <span className={c.white}>*</span> */}
+        {/*     <div className={c.itemText}>商品来源</div> */}
+        {/*   </div> */}
+        {/*   <DropdownPromiseComponent value={provider_type} placeholder="请选择商品来源" initNums={[{name:"供货商",id:"supplier"}]} setValue={setProvider_type}/> */}
+        {/* </div> */}
+				{/* <div className={c.item} style={{alignItems:'flex-start'}}> */}
+					{/* <div className={c.itemName}> */}
+        {/*     <span className={c.white}>*</span> */}
+						{/* <div className={c.itemText}>下单参数</div> */}
+					{/* </div> */}
+					{/* <div className={oc.edit_view}> */}
+						{/* {/1* { *1/} */}
+						{/* {/1* 	(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>) *1/} */}
+						{/* {/1* } *1/} */}
+						{/* <div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div> */}
+						{/* <div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div> */}
+					{/* </div> */}
+					{/* <Button type="primary" style={{width:120}} className={c.itemBtn} onClick={()=>{ */}
+						{/* push('/main/editGoodCategory') */}
+					{/* }}>同步下单参数</Button> */}
+				{/* </div> */}
 
         {/* { */}
         {/*   U.when(provider_type==="supplier",( */}
@@ -528,7 +543,7 @@ function EditCommunityGoodView () {
                   <span className={c.white}>*</span>
                   <div className={c.itemText}>重复下单</div>
                 </div>
-                <Radio.Group value={recommended} onChange={e=>setRecommended(e.target.value)} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
+                <Radio.Group value={repeatable} onChange={e=>setRepeatable(e.target.value)} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
                   <Radio value={false} className={c.itemRadio} style={{width:'33.333%'}}>不允许重复下单</Radio>
                   <Radio value={true} className={c.itemRadio} style={{width:'33.333%'}}>允许重复下单</Radio>
                 </Radio.Group>
@@ -585,4 +600,4 @@ function RTable ({ tags }) {
   return views;
 }
 
-export default EditCommunityGoodView
+export default ImpCommunityGoodView

@@ -138,15 +138,19 @@ function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
     get(page)
   }
 
-  // const obj = [
+  // const obj2 = [
   //   {
-  //     color: "#4177FE",
+  //     color: "#2C68FF",
   //     text: '已售出',
   //   },
   //   {
-  //     color: "#FF8D30",
+  //     color: "rgba(0, 0, 0, 0.25)",
   //     text: '未售出',
   //   },
+  //   {
+  //     color: "#595959",
+  //     text: '-',
+  //   }
   // ]
   const columns = [
     {

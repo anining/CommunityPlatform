@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, message, Input } from 'antd'
+import { Button, Space, Table, message, Input } from 'antd'
 import c from '../../styles/view.module.css'
 import oc from '../../styles/oc.module.css'
 import good36 from '../../icons/good/good36.png'
@@ -7,13 +7,14 @@ import good37 from '../../icons/good/good37.png'
 import good7 from '../../icons/good/good7.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
-import DropdownComponent from "../../components/DropdownComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
-import {SCROLL} from '../../utils/config'
 import ActionComponent from '../../components/ActionComponent'
+import { docking } from '../../utils/api'
+import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
+import {push, saveSuccess, transformTime} from '../../utils/util'
 
 function DockingView () {
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
 
   const data = [
     {
@@ -63,28 +64,34 @@ function RTable ({ setVisible }) {
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
+	const [name, setName] = useState()
+	const [type, setType] = useState()
 
   useEffect(() => {
     get(current)
   }, [])
 
   function get (current) {
-    // let body = { page: current, size: pageSize }
-    // if (id) {
-    //   body = { ...body, ...{ id } }
-    // }
-    // communityGoods("get", undefined, body).then(r => {
-    //   if (!r.error) {
-    //     const { data, total } = r
-    //     setTotal(total)
-    //     setData(format(data))
-    //   }
-    // })
+    let body = { page: current, size: pageSize }
+    if (name) {
+      body = { ...body, ...{ name } }
+    }
+    if (type) {
+      body = { ...body, ...{ type } }
+    }
+    docking("get", undefined, body).then(r => {
+      if (!r.error) {
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
   }
 
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
+      item.time = transformTime(item.created_at)
     })
     return arr
   }
@@ -108,7 +115,7 @@ function RTable ({ setVisible }) {
     {
       title: '对接平台',
 			ellipsis: true,
-      dataIndex: 'platform',
+      dataIndex: 'type',
   },
     {
       title: '对接商品',
@@ -118,7 +125,7 @@ function RTable ({ setVisible }) {
     {
       title: '对接凭证',
 			ellipsis: true,
-      dataIndex: 'number',
+      dataIndex: 'payload',
   },
     {
       title: '对接时间',
@@ -126,28 +133,34 @@ function RTable ({ setVisible }) {
       dataIndex: 'time',
   },
     {
-			title: () => <span style={{marginLeft:32}}>操作</span>,
-			width: 136,
-			fixed: 'right',
-      // render: (text, record, index) => (
-      //   <div style={{color:'#2C68FF',textDecoration:"underline",textDecorationColor:'#2C68FF'}} onClick={()=>{
-      //         const history = h.get()
-      //         history.push("/main/editDocking")
-      //   }}>修改对接信息</div>
-      // )
+			title: "操作",
+      render: (text, record, index) => (
+				<Space size="small">
+					<div className={c.clickText} onClick={()=>push("/main/imp",record)}>导入商品</div>
+          <div className={c.line} />
+					<div className={c.clickText} onClick={()=>push("/main/editDocking",record)}>修改对接信息</div>
+				</Space>
+      )
     },
   ];
 
   const rowSelection = {
     onChange: (selectedRowKeys, rows) => {
       setSelectRows(selectedRowKeys)
-    }
+    },
+    selectedRowKeys: selectedRows
   };
 
   function submit (key) {
     switch (key) {
       case "delete":
-        message.success('批量删除操作');
+        docking("delete", undefined, undefined, "ids=" + selectedRows.map(i => data[i].id).toString()).then(r => {
+          if (!r.error) {
+            saveSuccess(false)
+            setSelectRows([])
+            get(current)
+          }
+        })
         break
       default:
         ;
@@ -155,7 +168,8 @@ function RTable ({ setVisible }) {
   }
 
   function reset () {
-    // setId(undefined)
+		setName(undefined)
+		setType(undefined)
   }
 
   return (
@@ -163,8 +177,8 @@ function RTable ({ setVisible }) {
       <div className={c.searchView}>
         <div className={c.search}>
           <div className={c.searchL}>
-            <Input placeholder="请输入名称" size="small" className={c.searchInput}/>
-            <DropdownComponent keys={[]} placeholder="请选择对接平台" style={{width:186}}/>
+						<Input placeholder="请输入名称" value={name} onChange={e=>setName(e.target.value)} onPressEnter={()=>get(current)} size="small" className={c.searchInput}/>
+						<DropdownPromiseComponent initNums={[{name:"亿乐",id:"yile"}]} placeholder="请选择对接平台" value={type} setValue={setType} view={true}/>
           </div>
           <div className={c.searchR}>
             <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>
@@ -178,10 +192,9 @@ function RTable ({ setVisible }) {
           </div>
         </div>
       </div>
-			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
       <Table
         columns={columns}
-				scroll={SCROLL}
         rowSelection={{
           ...rowSelection
         }}

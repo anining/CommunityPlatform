@@ -212,7 +212,7 @@ function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data
 
   const obj = {
     normal: {
-      color: '#2C68FF',
+      color: '#595959',
       text: '正常',
     },
     banned: {

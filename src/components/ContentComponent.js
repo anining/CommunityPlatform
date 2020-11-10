@@ -55,6 +55,8 @@ import MarkupTemView from "../views/communityBusinessViews/MarkupTemView"
 import EditMarkupTemView from "../views/communityBusinessViews/EditMarkupTemView"
 import EditCardManView from "../views/cardBusinessViews/EditCardManView"
 import StorePlugView from "../views/childWebViews/StorePlugView"
+import ImportView from "../views/servicesViews/ImportView"
+import ImpCommunityGoodView from '../views/communityBusinessViews/ImpCommunityGoodView'
 
 function ContentComponent () {
   const { permissions, role } = getter(['permissions', 'role']);
@@ -92,6 +94,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/editCommunityGood">
           { localPermissions.includes('cmntbiz') ? <EditCommunityGoodView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/impGood">
+          { localPermissions.includes('cmntbiz') ? <ImpCommunityGoodView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/orderModel">
           { localPermissions.includes('cmntbiz') ? <OrderModelView /> : <Redirect to="/main/error" /> }
@@ -156,6 +161,9 @@ function ContentComponent () {
         </Route>
         <Route exact path="/main/store">
           { localPermissions.includes('valueaddedsrv') ? <StoreView /> : <Redirect to="/main/error" /> }
+        </Route>
+        <Route exact path="/main/imp">
+          { localPermissions.includes('valueaddedsrv') ? <ImportView /> : <Redirect to="/main/error" /> }
         </Route>
         {/* 站点管理 */}
         <Route exact path="/main/storeSetting">

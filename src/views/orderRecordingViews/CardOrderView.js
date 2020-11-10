@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { Button, Table, message, Input, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import good19 from '../../icons/good/good19.png'
-import good20 from '../../icons/good/good20.png'
 import good9 from '../../icons/good/good9.png'
 import good62 from '../../icons/good/good62.png'
-import good34 from '../../icons/good/good34.png'
-import good35 from '../../icons/good/good35.png'
+import good20 from '../../icons/good/good20.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent"
 import { transformTime } from "../../utils/util"
-import {SCROLL} from '../../utils/config'
+import {SCROLL, CARD_STATUS} from '../../utils/config'
 import ActionComponent from '../../components/ActionComponent'
 
 function CardOrderView () {
@@ -62,7 +60,7 @@ function RTable ({ setVisible }) {
     //   if (!r.error) {
     //     // const { data, total } = r
     //     // setTotal(total)
-    //     // setData(format(data))
+        // setData(format(data))
     //   }
     // })
   }
@@ -75,23 +73,7 @@ function RTable ({ setVisible }) {
     return arr
   }
 
-  // const obj = [
-  //   {
-  //     color: "#2C68FF",
-  //     text: '待发货',
-  //     icon: good32,
-  //   },
-  //   {
-  //     color: "#52C41A",
-  //     text: '已完成',
-  //     icon: good34,
-  //   },
-  //   {
-  //     color: "#FF8D30",
-  //     text: '异常',
-  //     icon: good35,
-  //   },
-  // ]
+	// CARD_STATUS
   const columns = [
     {
       title: '订单编号',

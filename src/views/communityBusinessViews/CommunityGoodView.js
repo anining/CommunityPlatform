@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Badge,  Modal, Timeline, Space, Table, notification, Input, message, Tooltip } from 'antd'
+import { Button, Badge, Empty,  Modal, Timeline, Space, Table, notification, Input, message, Tooltip } from 'antd'
 import { SmileOutlined } from '@ant-design/icons';
 import good46 from '../../icons/good/good46.png'
 import good47 from '../../icons/good/good47.png'
@@ -27,7 +27,7 @@ import ActionComponent from '../../components/ActionComponent';
 function CommunityGoodView () {
   const [visible, setVisible] = useState(false)
   const [statusSelected,setSTatusSelected] = useState()
-  const [visible_limit, setVisibleLimit] = useState(true)
+  const [visible_limit, setVisibleLimit] = useState(false)
   const [visible_his, setVisibleHis] = useState(false)
   const [visibleS, setVisibleS] = useState(false)
   const [visible_c, setVisibleC] = useState(false)
@@ -241,7 +241,7 @@ function CommunityGoodView () {
       title: '自助退款',
 			ellipsis: true,
       dataIndex: 'refundable',
-      render: (text) => <div style={{color:text?"#2C68FF":"#BFBFBF"}}>{text?"允许退款":"不允许退款"}</div>
+      render: (text) => <div style={{color:text?"#595959":"#C8C8C8"}}>{text?"允许退款":"不允许退款"}</div>
   },
     {
       title: '更多信息',
@@ -438,13 +438,20 @@ function CommunityGoodView () {
 						<div className={oc.circle} />
 					</div>
 					<div className={oc.more_label}>基本信息</div>
-					<div className={oc.basic_msg}>
-						<div>
-							<div className={oc.basic_msg_label}>下单参数</div>
+					<div className={oc.basic_msg} style={{marginBottom:10,flexDirection:'column'}}>
+						<div className={oc.basic_msg_label} style={{marginBottom:0}}>下单参数</div>
+						<div className={oc.basic_msg_parameter}>
+							{/* { */}
+							{/* 	(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>) */}
+							{/* } */}
+							<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
+							<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
 							<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
 							<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
 						</div>
-						<div>
+					</div>
+					<div className={oc.basic_msg}>
+						<div className={oc.basic_msg_view}>
 							<div className={oc.basic_msg_label}>统一密价</div>
 							<div className={oc.more_item}>
 								<img src={good46} alt="" />
@@ -462,33 +469,34 @@ function CommunityGoodView () {
 								<span>{sel.prices && sel.prices[3]}</span>
 							</div>
 						</div>
-						<div>
+						<div className={oc.basic_msg_view}>
 							<div className={oc.basic_msg_label}>下单限制</div>
-							<div className={oc.limit_item}>最低下单：<span>{sel.min_order_amount || 0}</span></div>
-							<div className={oc.limit_item}>最高下单：<span>{sel.max_order_amount || 0}</span></div>
+							<div className={oc.limit_item}>最低下单：<span style={{marginRight:30}}>{sel.min_order_amount || 0}</span>最高下单：<span>{sel.max_order_amount || 0}</span></div>
 							<div className={oc.limit_item}>重复下单：<span style={{color:sel.repeatable?"#333":"#FF5F5F"}}>{sel.repeatable?"允许重复下单":"不允许重复下单"}</span></div>
 							<div className={oc.limit_item}>批量下单：<span style={{color:sel.repeatable?"#333":"#FF5F5F"}}>{sel.repeatable?"允许批量下单":"不允许批量下单"}</span></div>
 						</div>
 					</div>
 					<div className={oc.more_label}>商品标签</div>
-					<div className={oc.table_msg}>
-						{
-							(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>)
-						}
-					</div>
+					<Empty style={{background:"#FAFAFA",paddingTop:29,paddingBottom:29}} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+					{/* <div className={oc.table_msg}> */}
+					{/* 	{ */}
+					{/* 		(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>) */}
+					{/* 	} */}
+					{/* </div> */}
 					<div className={oc.more_label}>调价历史</div>
-						<Timeline className={oc.more_time}>
-							{
-								his.map(i=>{
-									const { created_at, prices, unit_cost } = i
-									return (
-										<Timeline.Item color="#1890FF">
-											<div className={oc.time_line}><span className={oc.time}>{transformTime(created_at)}</span> 价格调整　进价：<span style={{color:"#2C68FF"}}>{unit_cost}</span>、单价：<span style={{color:"#FF5F5F"}}>{prices[0]}</span>、高级会员：<span style={{fontWeight:800}}>{prices[1]}</span>、钻石会员：<span style={{fontWeight:800}}>{prices[2]}</span>、至尊会员<span style={{fontWeight:800}}>{prices[3]}</span> 。</div>
-										</Timeline.Item>
-									)
-							})
-							}
-						</Timeline>
+						<Empty style={{background:"#FAFAFA",paddingTop:29,paddingBottom:29}} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+						{/* <Timeline className={oc.more_time}> */}
+						{/* 	{ */}
+						{/* 		his.map(i=>{ */}
+						{/* 			const { created_at, prices, unit_cost } = i */}
+						{/* 			return ( */}
+						{/* 				<Timeline.Item color="#1890FF"> */}
+						{/* 					<div className={oc.time_line}><span className={oc.time}>{transformTime(created_at)}</span> 价格调整　进价：<span style={{color:"#2C68FF"}}>{unit_cost}</span>、单价：<span style={{color:"#FF5F5F"}}>{prices[0]}</span>、高级会员：<span style={{fontWeight:800}}>{prices[1]}</span>、钻石会员：<span style={{fontWeight:800}}>{prices[2]}</span>、至尊会员<span style={{fontWeight:800}}>{prices[3]}</span> 。</div> */}
+						{/* 				</Timeline.Item> */}
+						{/* 			) */}
+						{/* 	}) */}
+						{/* 	} */}
+						{/* </Timeline> */}
 				</div>
 			</Modal>
 					<Modal

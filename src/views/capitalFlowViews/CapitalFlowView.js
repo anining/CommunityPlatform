@@ -15,7 +15,7 @@ import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { balanceChanges } from "../../utils/api"
 import { getKey, transformTime } from "../../utils/util"
-import {SCROLL} from '../../utils/config'
+import {SCROLL, CONSUMPTION_TYPE} from '../../utils/config'
 
 function CapitalFlowView () {
   const data = [
@@ -97,36 +97,6 @@ function RTable () {
     get(page)
   }
 
-  const obj = {
-    charge: {
-      color: "#53C41C",
-      text: '充值',
-      textColor: '#2C68FF',
-    },
-    refund: {
-      color: "#FF4D4F",
-      text: '退款',
-      textColor: '#FF8D30',
-    },
-    add_fund: {
-      color: "#FF8D30",
-      text: '系统加款',
-      textColor: '#FF4D4F',
-    },
-    sub_fund: {
-      color: "#FF8D30",
-      text: '系统减款',
-      textColor: '#FF4D4F',
-    },
-    consumed_by_cmnt: {
-      color: "#2C68FF",
-      text: '购买社区商品',
-    },
-    consumed_by_card: {
-      color: "#2C68FF",
-      text: '购买卡密商品',
-    },
-  }
   const columns = [
     {
       title: '用户账号',
@@ -155,7 +125,7 @@ function RTable () {
 			ellipsis: true,
       dataIndex: 'type',
       render: (text, record, index) => {
-        const { text: t, color } = getKey(text, obj)
+        const { text: t, color } = getKey(text, CONSUMPTION_TYPE)
         return <div style={{color}}>{t}</div>
       }
   },

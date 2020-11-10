@@ -1,16 +1,9 @@
 import React from 'react'
+import header9 from '../icons/header/header9.png'
 
 function LogoComponent () {
 
-  return <div style={styles.logo}/>
-}
-
-const styles = {
-  logo: {
-    width: 84,
-    height: 31,
-    background: "#2C67FF"
-  }
+	return <img src={header9} style={{height:31}} alt="" />
 }
 
 export default LogoComponent

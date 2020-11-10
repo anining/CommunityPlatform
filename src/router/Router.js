@@ -12,6 +12,7 @@ import { setter, getter } from '../utils/store'
 import SelectTableView from "../views/tableViews/SelectTableView"
 import SelectOrderModelView from "../views/communityBusinessViews/SelectOrderModelView"
 import { push } from '../utils/util'
+import SelectGoodCategoryView from '../views/communityBusinessViews/SelectGoodCategoryView'
 
 function Router () {
   proxyRouter(useHistory(), '/login')
@@ -57,6 +58,9 @@ function Router () {
       </Route>
       <Route exact path="/select-order-model">
         <SelectOrderModelView />
+      </Route>
+      <Route exact path="/select-goods-category">
+        <SelectGoodCategoryView />
       </Route>
       <Route path="/login">
         <LoginView />

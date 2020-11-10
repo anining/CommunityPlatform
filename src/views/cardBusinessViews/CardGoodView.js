@@ -96,11 +96,11 @@ function RTable ({ setVisible }) {
 
   // const obj = [
   //   {
-  //     color: "#2C68FF",
+  //     color: "#595959",
   //     text: '正常',
   //   },
   //   {
-  //     color: "#979BA3",
+  //     color: "rgba(0, 0, 0, 0.25)",
   //     text: '空',
   //   },
   //   {
@@ -118,7 +118,7 @@ function RTable ({ setVisible }) {
   //     text: '关闭订单',
   //   },
   //   {
-  //     color: "#FF8D30",
+  //     color: "rgba(0, 0, 0, 0.25)",
   //     text: '已下架',
   //   }
   // ]
