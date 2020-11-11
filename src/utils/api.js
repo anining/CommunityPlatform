@@ -317,3 +317,8 @@ export function extPrvdsGoods (id) {
 export function extPrvdsGood (id,gid) {
 	return transformFetch("GET", `/ext-prvds/${id}/goods/${gid}`);
 }
+
+// 获取对接目标统计数据
+export function extPrvdStats () {
+	return transformFetch("GET", `/ext-prvd-stat`);
+}

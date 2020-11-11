@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Radio, Button, Table, Input, Space, message } from 'antd'
+import { Button, Table, Input, Space, message } from 'antd'
 import c from '../../styles/view.module.css'
 import ce from '../../styles/edit.module.css'
-import { USER_STATUS, SCROLL } from "../../utils/config"
-import oc from '../../styles/oc.module.css'
 import good23 from '../../icons/good/good23.png'
 import good24 from '../../icons/good/good24.png'
 import good9 from '../../icons/good/good9.png'
-import good41 from '../../icons/good/good41.png'
-import { users, updateUsers, extPrvdStat, extPrvdsGoods, extPrvdsGood } from "../../utils/api";
-import TableHeaderComponent from "../../components/TableHeaderComponent";
-import DropdownComponent from "../../components/DropdownComponent";
-import { transformTime, push, getKey, saveSuccess } from "../../utils/util"
-import ModalPopComponent from "../../components/ModalPopComponent"
-import ModalComponent from "../../components/ModalComponent"
-import { USER_RANK } from "../../utils/config"
+import { extPrvdsGoods, extPrvdsGood, goodsSummaries } from "../../utils/api";
+import { push, saveSuccess } from "../../utils/util"
 import ActionComponent from '../../components/ActionComponent'
 import {useHistory} from 'react-router-dom'
 
@@ -22,49 +14,20 @@ let win
 
 function ImportView () {
   const { state = {} } = useHistory().location
-  const h = useHistory()
-	const { id, name, type } = state
+	const { id, provider_type, name, nickname, type } = state
 
-  // TODO: 三个弹窗
-  const [visible, setVisible] = useState(false)
-  const [visible_action, setVisibleAction] = useState(false)
-  const [visible_balance, setVisibleBalance] = useState(false)
-  const [title, setTitle] = useState()
-  const [selected, setSelected] = useState([])
-  const [key, setKey] = useState()
-  const [src, setSrc] = useState()
+  const [selected, setSelected] = useState()
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
-  const [sel, setSel] = useState({})
-  const [seled, setSeled] = useState(0)
-  const [account, setAccount] = useState()
-  const [status, setStatus] = useState()
-  const [date, setDate] = useState([])
   const [initDate, setInitDate] = useState([])
-  const [moment, setMoment] = useState()
   const [selectedRows, setSelectRows] = useState([]);
-  const labels = [
-    {
-      label: '用户总数',
-      number: '10,100',
-      icon: good23,
-      id: 111,
-    },
-    {
-      label: '今日新增',
-      number: '10,111',
-      icon: good24,
-      id: 222,
-    },
-  ]
 
-	window.localClick = function (type, ids) {
+	window.localClick = function (type, id) {
 		switch (type) {
 			case 'good-category':
-				message.error("一键导入失败")
-				// push("/main/impGood",ids)
+				imp(selected, {p_ctg_id: id})
 				break
 			default:
 				;
@@ -77,21 +40,21 @@ function ImportView () {
 		win && win.close()
 	}
 
-	function imp (record) {
-		// 携带供应商类型参数 provider_type
-		extPrvdsGood(id, record.ext_prvd_goods_id).then(r=>{
-			if(!r.error) {
-				push("/main/impGood", formatGood(r.data))
-			}
-		})
+	function imp (record = selected, parameter = {}) {
+		if(provider_type === "supplier") {
+			message.warning("暂未开放!")
+		}else {
+			extPrvdsGood(id, record.ext_prvd_goods_id).then(r=>!r.error && push("/main/impGood", {...formatGood(r.data),...parameter,...{provider_type, provide_name: name, ext_prvd_id: id}}))
+		}
 	}
 
 	function formatGood (data) {
 		switch(type) {
 			case "yile":
-				const { gid, name:n, price, limit_min, limit_max, image, desc } = data
-				return { p_goods_id: gid, p_name: name, p_price: price, p_min_order_amount: limit_min, p_max_order_amount: limit_max, p_pics:[image], p_intro: desc, provider_type: "external_provider"}
+				const { gid, name, price, limit_min, limit_max, inputs=[], image, desc } = data
+				return { p_goods_id: gid, p_name: name, p_price: price, params: JSON.stringify(inputs.map(i=>({name:i[0], field:i[1], type: "text"}))), p_min_order_amount: limit_min, p_max_order_amount: limit_max, p_pics:[image], p_intro: desc }
 			default:
+				return {}
 		}
 	}
 
@@ -100,45 +63,40 @@ function ImportView () {
   }, [])
 
   function initGet () {
-    extPrvdsGoods(id).then(r => {
-      if (!r.error) {
-        const { data } = r
-        setTotal(data.length)
-        setInitDate(format(data))
-				get(current, data)
-      }
-    })
+		if(provider_type === "supplier") {
+			goodsSummaries(id).then(r=>{
+				if (!r.error) {
+					const { data } = r
+					setTotal(data.length)
+					setInitDate(format(data))
+					get(current, data)
+				}
+			})
+		}else {
+			extPrvdsGoods(id).then(r => {
+				if (!r.error) {
+					const { data } = r
+					setTotal(data.length)
+					setInitDate(format(data))
+					get(current, data)
+				}
+			})
+		}
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page) {
     setCurrent(page)
     get(page)
   }
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys) => {
       setSelectRows(selectedRowKeys)
     },
     selectedRowKeys: selectedRows
   };
 
   function submit (key) {
-    let title = ""
-    switch (key) {
-      case "banned":
-        title = "您确定要封禁选中用户吗？";
-        break;
-      case "normal":
-        title = "您确定要解封选中用户吗？";
-        break;
-      default:
-    }
-
-    setTitle(title)
-    setSelected(selectedRows.map(i => data[i]))
-    setSrc(USER_STATUS[key].src)
-    setKey(key)
-    setVisibleAction(true)
   }
 
   function reset () {
@@ -155,7 +113,7 @@ function ImportView () {
     {
       title: '商品编号',
 			ellipsis: true,
-      dataIndex: 'ext_prvd_goods_id',
+			dataIndex: provider_type === "supplier"? "id" : 'ext_prvd_goods_id',
   },
     {
       title: '商品名称',
@@ -167,6 +125,7 @@ function ImportView () {
       render: (text, record, index) => (
 				<Space size="small">
 					<div onClick={()=>{
+						setSelected(record)
 						win = window.open("/select-goods-category", "_blank", "left=390,top=145,width=1200,height=700")
 					}} className={c.clickText}>一键导入</div>
           <div className={c.line} />
@@ -176,11 +135,6 @@ function ImportView () {
     },
   ];
 
-  function dateChange (data, dataString) {
-    setDate([new Date(dataString[0]).toISOString(), new Date(dataString[1]).toISOString()])
-    setMoment(data)
-  }
-
   function get (current, nums=initDate) {
 		setData(nums.slice(current*10-10,current*10-1))
   }
@@ -188,39 +142,9 @@ function ImportView () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      // item.time = transformTime(item.created_at)
+      item.imported = item.imported || "-"
     })
     return arr
-  }
-
-  function onCancel () {
-    setVisible(false)
-    setVisibleAction(false)
-  }
-
-  let text = []
-  selected.forEach(i => text.push(i.account))
-
-  function onOk () {
-    setVisible(false)
-    updateUsers({lv:seled},"ids=" + sel.id).then(r => {
-      if (!r.error) {
-        saveSuccess(false)
-        setSelectRows([])
-        get(current)
-      }
-    })
-  }
-
-  function updateStatus () {
-    setVisibleAction(false)
-    updateUsers({status:key},"ids=" + selected.map(i => i.id).toString()).then(r => {
-      if (!r.error) {
-        saveSuccess(false)
-        setSelectRows([])
-        get(current)
-      }
-    })
   }
 
   return (
@@ -228,7 +152,7 @@ function ImportView () {
       <div className={c.container}>
 				<div style={{marginTop:0,paddingTop:24}} className={c.main}>
 					<div className={ce.headerT} style={{marginBottom:8}}>
-						<div style={{zIndex:1}}>从{name || "供应商"}导入商品</div>
+						<div style={{zIndex:1}}>从{nickname || name ||  "供应商"}导入商品</div>
 						<div className={ce.circle} />
 					</div>
 					<div className={c.searchView}>
@@ -257,7 +181,8 @@ function ImportView () {
 							</div>
 						</div>
 					</div>
-					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/>
+					{/* <ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/> */}
+					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
 					<Table
 						columns={columns}
 						rowSelection={{
@@ -278,44 +203,6 @@ function ImportView () {
       </div>
     </div>
   )
-}
-
-const styles = {
-  view: {
-    width: 340,
-  },
-  input: {
-    height: 32,
-    width: "100%",
-    marginTop: 29,
-    marginBottom: 72
-  },
-  header: {
-    marginTop: 18,
-    color: 'rgba(0, 0, 0, 0.65)',
-    display: 'flex',
-    alignItems: 'center'
-  },
-  footer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  icon: {
-    width: 14,
-    marginRight: 9,
-  },
-  cancelBtn: {
-    height: 24,
-    width: 58,
-    color: 'rgba(0, 0, 0, 0.65)',
-  },
-  okBtn: {
-    marginLeft: 19,
-    height: 24,
-    width: 58,
-    background: '#1890FF'
-  }
 }
 
 export default ImportView

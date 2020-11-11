@@ -3,7 +3,6 @@ import * as U from 'karet.util'
 import * as L from "partial.lenses"
 import * as R from 'kefir.ramda'
 import c from '../../styles/edit.module.css'
-import oc from '../../styles/oc.module.css'
 import { Input, Tooltip, Button, Upload, message, Radio, Checkbox, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
@@ -11,8 +10,8 @@ import good46 from '../../icons/good/good46.png'
 import good47 from '../../icons/good/good47.png'
 import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
-import { goBack, saveSuccess, push } from "../../utils/util";
-import { communityGoods, providerSummaries, goodsSummaries, cmntPadjs, communityGoodsCategories, communityParamTemplates } from "../../utils/api";
+import { saveSuccess, push } from "../../utils/util";
+import { communityGoods, providerSummaries, cmntPadjs, communityGoodsCategories, communityParamTemplates } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import { MODULES } from "../../utils/config";
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
@@ -22,48 +21,36 @@ let win
 function ImpCommunityGoodView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
-	console.log(state)
-	// switch (state) {
-		// default:
-	const { gid, name:n, price, limit_min, limit_max, image, desc } = state
-	const { provider_type } = state
-			// setGoods_id(gid)
-	// }
-	//
-	//
-	//
-	//
-	//
+	const { params, ext_prvd_id, provide_name, p_goods_id, p_name, p_price, p_min_order_amount, p_max_order_amount, p_pics, p_intro= "", provider_type, p_ctg_id } = state
 
-  const [goods_id, setGoods_id] = useState(gid)
-  const [name, setName] = useState(n)
-  const [unit_price, setUnit_price] = useState(price)
-  const [min_order_amount, setMin_order_amount] = useState(limit_min)
-  const [max_order_amount, setMax_order_amount] = useState(limit_max)
-  const [pics, setPics] = useState([image])
-  const [intro, setIntroduction] = useState(desc || "")
-
-  const [status, setStatus] = useState("unavailable")
-  const [ctg_id, setCtgId] = useState()
-  // const [community_param_template_id, setCommunity_param_template_id] = useState(ptpl_id)
-  const [tag_ids, setTag_ids] = useState()
+  const [factors, setFactors] = useState([])
+  const [ctg_id, setCtgId] = useState(p_ctg_id)
+  const [dockingTarget, setDockingTarget] = useState()
+  const [unit_cost, setUnit_cost] = useState()
+  const [unit_price, setUnit_price] = useState(p_price)
+  const [name, setName] = useState(p_name)
+  const [unit, setUnit] = useState()
+  const [pics, setPics] = useState(p_pics)
+  const [intro, setIntroduction] = useState(p_intro)
+  const [status, setStatus] = useState("paused")
   const [weight, setWeight] = useState()
+  const [refundable, setRefundable] = useState(false)
+  const [min_order_amount, setMin_order_amount] = useState(p_min_order_amount)
+  const [max_order_amount, setMax_order_amount] = useState(p_max_order_amount)
   const [repeatable, setRepeatable] = useState(false)
   const [batch_order, setBatch_order] = useState(false)
   const [recommended, setRecommended] = useState(false)
-  const [refundable, setRefundable] = useState(false)
-  const [unit_cost, setUnit_cost] = useState()
-  const [unit, setUnit] = useState()
+  const [tag_ids, setTag_ids] = useState([])
+
+  // // const [community_param_template_id, setCommunity_param_template_id] = useState(ptpl_id)
   // const [prices, setPrices] = useState(Boolean(padj_id))
-  const [factors, setFactors] = useState([])
 
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState(pics[0])
   const [tags, setTags] = useState([])
-  const [has_more, setHasMore] = useState(false)
-  const [dockingTarget, setDockingTarget] = useState()
-
   const [marks, setMarks] = useState([])
+  const [has_more, setHasMore] = useState(false)
+
   // const [selectedProviders, setSelectedProviders] = useState()
 
   const setPriceAt = i => R.pipe(
@@ -83,19 +70,19 @@ function ImpCommunityGoodView () {
     win && win.close()
   }
 
-  window.localJump = function () {
-    push("/main/table")
-    win && win.close()
-  }
+  // window.localJump = function () {
+  //   push("/main/table")
+  //   win && win.close()
+  // }
 
-  function getProviders (page,size) {
-    return providerSummaries(page,size).then(r => {
-      if (!r.error) {
-        return r.data.map(i => ({ id: i.id, name: i.nickname }))
-      }
-      return []
-    }).catch(()=> [])
-  }
+  // function getProviders (page,size) {
+  //   return providerSummaries(page,size).then(r => {
+  //     if (!r.error) {
+  //       return r.data.map(i => ({ id: i.id, name: i.nickname }))
+  //     }
+  //     return []
+  //   }).catch(()=> [])
+  // }
 
   function getCmntPadjs (page,size) {
     return cmntPadjs("get", undefined, {page, size}).then(r => {
@@ -124,14 +111,14 @@ function ImpCommunityGoodView () {
     }
   }, [dockingTarget])
 
-  function getParamTemplates(page,size) {
-    return communityParamTemplates("get",undefined,{page,size}).then(r => {
-      if (!r.error) {
-        return r.data
-      }
-      return []
-    }).catch(()=>[])
-  }
+  // function getParamTemplates(page,size) {
+  //   return communityParamTemplates("get",undefined,{page,size}).then(r => {
+  //     if (!r.error) {
+  //       return r.data
+  //     }
+  //     return []
+  //   }).catch(()=>[])
+  // }
 
   function getGoodsSummaries(page,size) {
     return communityGoodsCategories("get",undefined,{page,size}).then(r => {
@@ -142,20 +129,20 @@ function ImpCommunityGoodView () {
     }).catch(()=>[])
   }
 
-  function getGoodCategories(page,size) {
-    // if (selectedProviders) {
-    //   return goodsSummaries(selectedProviders,page,size).then(r => {
-    //     if (!r.error) {
-    //       return r.data
-    //     }
-    //     return []
-    //   }).catch(()=>[])
-    // }
-    // return new Promise((resolve,reject)=>resolve([]))
-  }
+  // function getGoodCategories(page,size) {
+  //   if (selectedProviders) {
+  //     return goodsSummaries(selectedProviders,page,size).then(r => {
+  //       if (!r.error) {
+  //         return r.data
+  //       }
+  //       return []
+  //     }).catch(()=>[])
+  //   }
+  //   return new Promise((resolve,reject)=>resolve([]))
+  // }
 
   function save (jump) {
-    if (!provider_type || !goods_id || !name || !ctg_id || !unit_price || !tag_ids.length || !unit) {
+    if (!name || !ctg_id || !unit_price) {
       message.warning("请完善信息")
       return
     }
@@ -165,54 +152,31 @@ function ImpCommunityGoodView () {
     }
     let body = {
       name,
-
-      supp_goods: { provider_type, goods_id },
-      ctg_id,
-      // ptpl_id: community_param_template_id,
-      prices: factors,
-      unit,
-      tag_ids,
-      pics,
-      intro,
       status,
-      weight: weight || 1,
-      unit_cost,
+			supp_goods: provider_type==="supplier" ? { provider_type, goods_id: p_goods_id } : { provider_type, ext_prvd_goods_id: p_goods_id, ext_prvd_id, params },
+      ctg_id,
+      tag_ids,
+      prices: factors,
+			unit: unit || "个",
       refundable,
-      min_order_amount: min_order_amount || 1,
-      max_order_amount: max_order_amount || 10000,
       recommended,
       repeatable,
+      min_order_amount: min_order_amount || 1,
+      max_order_amount: max_order_amount || 10000,
+      weight: weight || 1,
+      pics,
+			padj_id: dockingTarget,
+			unit_cost,
       batch_order,
-			padj_id: dockingTarget
+      intro,
     }
     setLoading(true)
     const promise = communityGoods('add', undefined, undefined, body)
     promise.then(r => {
       setLoading(false)
       if (!r.error) {
-        if (!jump) {
-          h.replace('/main/editCommunityGood')
-        }
+				!jump && h.replace('/main/editCommunityGood')
         saveSuccess(jump)
-        // setName(undefined)
-        // setStatus("available")
-        // setPics([])
-        // setCommunity_param_template_id(undefined)
-        // setCtgId(undefined)
-        // setCommunity_goods_category_name(undefined)
-        // setTag_ids([])
-        // setTags([])
-        // setUnit(undefined)
-        // setUnit_price(undefined)
-        // setRefundable(true)
-        // setUnit_cost(undefined)
-        // setMax_order_amount(undefined)
-        // setMin_order_amount(undefined)
-        // setRepeatable(undefined)
-        // setBatch_order(undefined)
-        // setWeight(undefined)
-        // setIntroduction("");
-        // setImageUrl(undefined)
       }
     }).catch(() => {
       if (!jump) {
@@ -246,7 +210,7 @@ function ImpCommunityGoodView () {
     //     }),
     //   );
     // }
-  };
+  }
 
   function beforeUpload (file) {
     // const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -277,7 +241,7 @@ function ImpCommunityGoodView () {
       </div>
       <div className={c.main}>
         <div className={c.headerT}>
-          <div style={{zIndex:1}}>从XXXX(供应商名称)导入商品</div>
+          <div style={{zIndex:1}}>从{provide_name || "供应商"}导入商品</div>
           <div className={c.circle} />
         </div>
         <div className={c.tips}>带“ * ”的项目必须填写带。</div>
@@ -287,9 +251,7 @@ function ImpCommunityGoodView () {
             <div className={c.itemText}>商品分类</div>
           </div>
           <DropdownPromiseComponent placeholder="请选择商品分类" fetchName={getGoodsSummaries} value={ctg_id} setValue={setCtgId}/>
-					<Button type="primary" className={c.itemBtn} onClick={()=>{
-						push('/main/editGoodCategory')
-					}}>新增分类</Button>
+					<Button type="primary" className={c.itemBtn} onClick={()=>push('/main/editGoodCategory')}>新增分类</Button>
         </div>
 				<div className={c.item}>
 					<div className={c.itemName}>

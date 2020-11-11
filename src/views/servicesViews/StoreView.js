@@ -186,7 +186,7 @@ function RTable() {
         <Space size="small" className={c.space}>
           <div className={c.clickText} onClick={()=>push("/main/editStore",arg[1])}>修改信息</div>
           <div className={c.line} />
-					<div className={c.clickText} onClick={()=>push("/main/imp",arg[1])}>导入商品</div>
+					<div className={c.clickText} onClick={()=>push("/main/imp",{...arg[1],...{provider_type: "supplier"}})}>导入商品</div>
           <div className={c.line} />
           <div className={c.clickText} onClick={() => {
             if(!getPath(['0', 'value_stlreqed'], arg)) {

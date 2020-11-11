@@ -39,9 +39,45 @@ function SiderComponent ({ collapsed, toggle }) {
   const { role, openKeys, selectedKeys, permissions } = getter(["permissions", "selectedKeys", "openKeys", "role"])
 
   useEffect(() => {
-    // const { pathname } = window.location
-    // const arr = pathname.split('/')
-    // arr.length && setter([["selectedKeys", arr[arr.length - 1]]]);
+		const obj = {
+			"home": "home",
+			"table": "table",
+			"dataStatistics": "statistics",
+			"moneyStatistics": "statistics",
+			"userStatistics": "statistics",
+			"webStatistics": "statistics",
+			"goodStatistics": "statistics",
+			"communityGood":"communityBusiness",
+			"goodCategory":"communityBusiness",
+			"orderModel":"communityBusiness",
+			"cardGood":"cardBusiness",
+			"cardManage":"cardBusiness",
+			"cardCategory":"cardBusiness",
+			"subService":"services",
+			"docking":"docking",
+			"store":"store",
+			"communityOrder":"orderRecording",
+			"cardOrder":"orderRecording",
+			"capitalFlow":"capitalFlow",
+			"user":"user",
+			"storeSetting":"webSetting",
+			"rebot":"webSetting",
+			"images":"webSetting",
+			"peopleService":"webSetting",
+			"notice":"webSetting",
+			"admin":"systemSetting",
+			"password":"systemSetting",
+			"logger":"systemSetting",
+			"about":"systemSetting",
+			"businessSetting":"systemSetting",
+			"childWebList":"childWeb",
+		}
+    const { pathname } = window.location
+    const arr = pathname.split('/')
+		if( arr.length ) {
+			setter([["selectedKeys", arr[arr.length - 1]]]);
+      setter([["openKeys", [obj[arr[arr.length - 1]]]]])
+		}
   }, [])
 
   function menuItemClick ({ item, key, keyPath, domEvent }) {
@@ -72,7 +108,7 @@ function SiderComponent ({ collapsed, toggle }) {
           用户主页
         </Menu.Item>
         { U.when(R.includes('statistics',permissions), (
-          <Menu.SubMenu onTitleClick={onTitleClick} key="statistics" icon={<Icon keys="statistics" />} title="数据统计">
+					<Menu.SubMenu onTitleClick={onTitleClick} key="statistics" title={<Title keys="statistics" label="数据统计"/>}>
             <Menu.Item key="dataStatistics">数据概览</Menu.Item>
             <Menu.Item key="moneyStatistics">资金统计</Menu.Item>
             <Menu.Item key="goodStatistics">商品&订单统计</Menu.Item>
@@ -81,15 +117,15 @@ function SiderComponent ({ collapsed, toggle }) {
           </Menu.SubMenu>
         )) }
         { U.when(R.includes('cmntbiz',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" icon={<Icon keys="communityBusiness" />} title="社区业务">
+            <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" title={<Title keys="communityBusiness" label="社区业务"/>}>
               <Menu.Item key="communityGood">社区商品列表</Menu.Item>
               <Menu.Item key="goodCategory">社区商品分类</Menu.Item>
-              <Menu.Item key="orderModel">下单模型</Menu.Item>
+              {/* <Menu.Item key="orderModel">下单模型</Menu.Item> */}
               <Menu.Item key="markupTem">调价模版</Menu.Item>
             </Menu.SubMenu>
         )) }
         { U.when(R.includes('cardbiz',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="cardBusiness" icon={<Icon keys="cardBusiness" />} title="卡密业务">
+            <Menu.SubMenu onTitleClick={onTitleClick} key="cardBusiness" title={<Title keys="cardBusiness" label="卡密业务"/>}>
               <Menu.Item key="cardGood">卡密商品列表</Menu.Item>
               <Menu.Item key="cardCategory">卡密商品分类</Menu.Item>
               <Menu.Item key="cardManage">卡密管理</Menu.Item>
@@ -111,12 +147,12 @@ function SiderComponent ({ collapsed, toggle }) {
             </Menu.Item>
         )) }
         { U.when(R.includes('valueaddedsrv',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="services" icon={<Icon keys="services" />} title="增值服务">
+            <Menu.SubMenu onTitleClick={onTitleClick} key="services" title={<Title keys="services" label="增值服务" />}>
               <Menu.Item key="subService">开通服务</Menu.Item>
             </Menu.SubMenu>
         )) }
         { U.when(R.includes('orderlog',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="orderRecording" icon={<Icon keys="orderRecording" />} title="订单记录">
+            <Menu.SubMenu onTitleClick={onTitleClick} key="orderRecording" title={<Title keys="orderRecording" label="订单记录" />}>
               <Menu.Item key="communityOrder">社区订单</Menu.Item>
               <Menu.Item key="cardOrder">卡密订单</Menu.Item>
             </Menu.SubMenu>
@@ -132,12 +168,12 @@ function SiderComponent ({ collapsed, toggle }) {
             </Menu.Item>
         )) }
         { U.when(R.includes('subcitemng',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="childWeb" icon={<Icon keys="childWeb" />} title="分站管理">
+            <Menu.SubMenu onTitleClick={onTitleClick} key="childWeb" title={<Title keys="childWeb" label="分站管理" />}>
               <Menu.Item key="childWebList">分站列表</Menu.Item>
             </Menu.SubMenu>
         )) }
         { U.when(R.includes('citecfg',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" icon={<Icon keys="webSetting" />} title="站点设置">
+            <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" title={<Title keys="webSetting"  label="站点设置"/>}>
               <Menu.Item key="storeSetting">店铺设置</Menu.Item>
               <Menu.Item key="storePlug">店铺装修</Menu.Item>
               <Menu.Item key="rebot">支付配置</Menu.Item>
@@ -146,7 +182,7 @@ function SiderComponent ({ collapsed, toggle }) {
               <Menu.Item key="notice">发布公告</Menu.Item>
             </Menu.SubMenu>
         )) }
-         <Menu.SubMenu onTitleClick={onTitleClick} key="systemSetting" icon={<Icon keys="systemSetting" />} title="系统设置">
+         <Menu.SubMenu onTitleClick={onTitleClick} key="systemSetting" title={<Title keys="systemSetting" label="系统设置" />}>
           { U.when(R.equals(role, "superuser"), <Menu.Item key="admin">系统管理员</Menu.Item>) }
           <Menu.Item key="logger">登录日志</Menu.Item>
           <Menu.Item key="businessSetting">业务配置</Menu.Item>
@@ -162,6 +198,87 @@ function SiderComponent ({ collapsed, toggle }) {
       <MyMenu karet-lift role={role} permissions={permissions} />
     </Layout.Sider>
   )
+}
+
+function Title ({ keys, label }) {
+  const { selectedKeys } = getter(["selectedKeys"])
+  const obj = {
+    "home": {
+      icon: [sider15, sider5],
+      keys: ["home"],
+			c: "home_icon"
+    },
+    "table": {
+      icon: [sider23, sider24],
+      keys: ["table"],
+			c: "table_icon_customize"
+    },
+    "statistics": {
+      icon: [sider18, sider14],
+      keys: ["dataStatistics", "moneyStatistics", "userStatistics", "webStatistics", "goodStatistics"],
+			c: "statistics_icon"
+    },
+    "communityBusiness": {
+      icon: [sider12, sider4],
+      keys: ["communityGood", "goodCategory", "orderModel", "markupTem"],
+			c: "communityBusiness_icon"
+    },
+    "cardBusiness": {
+      icon: [sider2, sider6],
+      keys: ["cardGood", "cardManage", "cardCategory"],
+			c: "cardBusiness_icon"
+    },
+    "services": {
+      icon: [sider7, sider9],
+      keys: ["subService"],
+			c: "services_icon"
+    },
+    "docking": {
+      icon: [sider25, sider26],
+      keys: ["docking"],
+			c: "docking_icon"
+    },
+    "store": {
+      icon: [sider27, sider28],
+      keys: ["store"],
+			c: "store_icon"
+    },
+    "orderRecording": {
+      icon: [sider13, sider10],
+      keys: ["communityOrder", "cardOrder"],
+			c: "orderRecording_icon"
+    },
+    "capitalFlow": {
+      icon: [sider17, sider3],
+      keys: ["capitalFlow"],
+			c: "capitalFlow_icon"
+    },
+    "user": {
+      icon: [sider8, sider1],
+      keys: ["user"],
+			c: "user_icon"
+    },
+    "webSetting": {
+      icon: [sider11, sider20],
+      keys: ["storeSetting", "rebot", "images", "peopleService", 'notice'],
+			c: "webSetting_icon"
+    },
+    "systemSetting": {
+      icon: [sider19, sider16],
+      keys: ["admin", "password", "logger", "about", "businessSetting"],
+			c: "systemSetting_icon"
+    },
+    "childWeb": {
+      icon: [sider21, sider22],
+      keys: ["childWebList"],
+			c: "childWeb_icon"
+    }
+  }
+	return (
+		<div style={{backgroundImage: U.ifElse(R.includes(selectedKeys, obj[keys].keys), `url(${obj[keys].icon[1]})`, `url(${obj[keys].icon[0]})`)}} className={obj[keys].c}>
+			<span>{label}</span>
+		</div>
+	)
 }
 
 function Icon ({ keys }) {

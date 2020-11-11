@@ -9,27 +9,48 @@ import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ActionComponent from '../../components/ActionComponent'
-import { docking } from '../../utils/api'
+import { docking, extPrvdStats } from '../../utils/api'
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
 import {push, saveSuccess, transformTime} from '../../utils/util'
 
 function DockingView () {
   const [visible, setVisible] = useState(false)
-
-  const data = [
+	const [labels, setLabels] = useState([
     {
       label: '已对接',
-      number: '10,100',
+      number: 0,
       icon: good36,
       id: 111,
     },
     {
       label: '总对接商品',
-      number: '10,111',
+      number: 0,
       icon: good37,
       id: 222,
-    },
-  ]
+    }
+	])
+
+	useEffect(()=>{
+		extPrvdStats().then(r=>{
+			if(!r.error){
+				const { total_ext_prvd_amount, total_providing_amount } = r.data
+				setLabels([
+					{
+						label: '已对接',
+						number: total_ext_prvd_amount,
+						icon: good36,
+						id: 111,
+					},
+					{
+						label: '总对接商品',
+						number:total_providing_amount,
+						icon: good37,
+						id: 222,
+					}
+				])
+			}
+		})
+	},[])
 
   function onCancel () {
     setVisible(false)
@@ -38,7 +59,7 @@ function DockingView () {
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent small_btn="查看已归档" path="/main/editDocking" data={data} text="新增"/>
+        <TableHeaderComponent small_btn="查看已归档" path="/main/editDocking" data={labels} text="新增"/>
         <RTable />
       </div>
       <ModalPopComponent
@@ -136,12 +157,12 @@ function RTable ({ setVisible }) {
 			title: "操作",
       render: (text, record, index) => (
 				<Space size="small">
-					<div className={c.clickText} onClick={()=>push("/main/imp",record)}>导入商品</div>
+					<div className={c.clickText} onClick={()=>push("/main/imp",{...record,...{provider_type: "external_provider"}})}>导入商品</div>
           <div className={c.line} />
 					<div className={c.clickText} onClick={()=>push("/main/editDocking",record)}>修改对接信息</div>
 				</Space>
       )
-    },
+    }
   ];
 
   const rowSelection = {

@@ -28,7 +28,6 @@ function CommunityGoodView () {
   const [visible, setVisible] = useState(false)
   const [statusSelected,setSTatusSelected] = useState()
   const [visible_limit, setVisibleLimit] = useState(false)
-  const [visible_his, setVisibleHis] = useState(false)
   const [visibleS, setVisibleS] = useState(false)
   const [visible_c, setVisibleC] = useState(false)
   const [title, setTitle] = useState()
@@ -119,11 +118,12 @@ function CommunityGoodView () {
   }
 
   function getHis (record) {
+		setSel(record)
     const { id } = record
     priceHistories("cmnt", id).then(r=>{
       if (!r.error) {
         setHis(r.data)
-        setVisibleHis(true)
+				setVisibleLimit(true)
       }
     })
   }
@@ -248,8 +248,7 @@ function CommunityGoodView () {
 			ellipsis: true,
       dataIndex: '',
 			render: (text, record, index) => <div onClick={()=>{
-          setSel(record)
-					setVisibleLimit(true)
+				getHis(record)
 			}} className={c.view_text}>查看</div>
   },
     {
@@ -277,7 +276,6 @@ function CommunityGoodView () {
   function onCancel () {
     setVisible(false)
     setVisibleLimit(false)
-    setVisibleHis(false)
     setVisibleC(false)
     setVisibleS(false)
   }
@@ -444,10 +442,11 @@ function CommunityGoodView () {
 							{/* { */}
 							{/* 	(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>) */}
 							{/* } */}
-							<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
-							<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
-							<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
-							<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
+							null
+							{/* <div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div> */}
+							{/* <div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div> */}
+							{/* <div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div> */}
+							{/* <div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div> */}
 						</div>
 					</div>
 					<div className={oc.basic_msg}>
@@ -477,26 +476,33 @@ function CommunityGoodView () {
 						</div>
 					</div>
 					<div className={oc.more_label}>商品标签</div>
-					<Empty style={{background:"#FAFAFA",paddingTop:29,paddingBottom:29}} image={Empty.PRESENTED_IMAGE_SIMPLE} />
-					{/* <div className={oc.table_msg}> */}
-					{/* 	{ */}
-					{/* 		(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>) */}
-					{/* 	} */}
-					{/* </div> */}
+					{
+						sel.tags && sel.tags.length ? 
+							<div className={oc.table_msg}>
+								{
+									(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>)
+								}
+							</div>:
+							<Empty style={{background:"#FAFAFA",paddingTop:29,paddingBottom:29}} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+
+					}
 					<div className={oc.more_label}>调价历史</div>
-						<Empty style={{background:"#FAFAFA",paddingTop:29,paddingBottom:29}} image={Empty.PRESENTED_IMAGE_SIMPLE} />
-						{/* <Timeline className={oc.more_time}> */}
-						{/* 	{ */}
-						{/* 		his.map(i=>{ */}
-						{/* 			const { created_at, prices, unit_cost } = i */}
-						{/* 			return ( */}
-						{/* 				<Timeline.Item color="#1890FF"> */}
-						{/* 					<div className={oc.time_line}><span className={oc.time}>{transformTime(created_at)}</span> 价格调整　进价：<span style={{color:"#2C68FF"}}>{unit_cost}</span>、单价：<span style={{color:"#FF5F5F"}}>{prices[0]}</span>、高级会员：<span style={{fontWeight:800}}>{prices[1]}</span>、钻石会员：<span style={{fontWeight:800}}>{prices[2]}</span>、至尊会员<span style={{fontWeight:800}}>{prices[3]}</span> 。</div> */}
-						{/* 				</Timeline.Item> */}
-						{/* 			) */}
-						{/* 	}) */}
-						{/* 	} */}
-						{/* </Timeline> */}
+						{
+							his.length ? 
+								<Timeline className={oc.more_time}>
+									{
+										his.map(i=>{
+											const { created_at, prices, unit_cost } = i
+											return (
+												<Timeline.Item color="#1890FF">
+													<div className={oc.time_line}><span className={oc.time}>{transformTime(created_at)}</span> 价格调整　进价：<span style={{color:"#2C68FF"}}>{unit_cost}</span>、单价：<span style={{color:"#FF5F5F"}}>{prices[0]}</span>、高级会员：<span style={{fontWeight:800}}>{prices[1]}</span>、钻石会员：<span style={{fontWeight:800}}>{prices[2]}</span>、至尊会员<span style={{fontWeight:800}}>{prices[3]}</span> 。</div>
+												</Timeline.Item>
+											)
+									})
+									}
+								</Timeline>:
+								<Empty style={{background:"#FAFAFA",paddingTop:29,paddingBottom:29}} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+						}
 				</div>
 			</Modal>
 					<Modal

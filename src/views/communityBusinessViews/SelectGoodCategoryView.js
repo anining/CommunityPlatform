@@ -75,8 +75,9 @@ function RTable () {
   },
     {
       title: '操作',
+      dataIndex: 'id',
       render: (text, record, index) => (
-        <div className={c.clickText} onClick={()=>{window.opener.localClick('good-category', record)}}>导入到这个分类</div>
+        <div className={c.clickText} onClick={()=>{window.opener.localClick('good-category', text)}}>导入到这个分类</div>
       )
     }
 ];

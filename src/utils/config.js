@@ -169,6 +169,10 @@ const PROVIDER_TYPE = {
   supplier: {
     color: "#FF4D4F",
     text: '供货商',
+  },
+  external_provider: {
+    color: "#FF4D4F",
+    text: '外部供货商',
   }
 }
 const SCROLL = {x:"120%"}
