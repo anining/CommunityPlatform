@@ -37,7 +37,10 @@ async function transformFetch (method, url, data = {}) {
         const DATA_TEXT = await FETCH_DATA.text();
         const localDate = DEVELOPER === 'Production' ? JSON.parse(DATA_TEXT) : JSON.parse(DATA_TEXT)
         const { error } = localDate
-        if (FETCH_DATA.status === 422) {
+        if (FETCH_DATA.status === 404) {
+          message.error("服务器爆满中")
+          resolve({ error: "服务器爆满中" });
+        } else if (FETCH_DATA.status === 422) {
           message.error("参数错误")
           resolve({ error: "参数错误" });
         } else {

@@ -210,7 +210,8 @@ function RTable() {
   const rowSelection = {
     onChange: (selectedRowKeys, rows) => {
       setSelectRows(selectedRowKeys)
-    }
+    },
+    selectedRowKeys: selectedRows
   };
 
   function submit(key) {

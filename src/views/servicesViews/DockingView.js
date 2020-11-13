@@ -59,7 +59,7 @@ function DockingView () {
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent small_btn="查看已归档" path="/main/editDocking" data={labels} text="新增"/>
+        <TableHeaderComponent path="/main/editDocking" data={labels} text="新增"/>
         <RTable />
       </div>
       <ModalPopComponent

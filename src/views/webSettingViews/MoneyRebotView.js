@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import { Switch,Input, Button, Upload, message } from 'antd'
 import ReactQuill from 'react-quill';
+import ImgCrop from 'antd-img-crop';
 import good5 from '../../icons/good/good5.png'
 import good75 from '../../icons/good/good75.png'
 import cs from '../../styles/childWebSetting.module.css'
@@ -9,43 +10,24 @@ import edit1 from '../../icons/edit/edit1.png'
 import { MODULES } from "../../utils/config";
 
 function MoneyRebotView () {
-  const [imageUrl, setImageUrl] = useState()
   const [value, setValue] = useState()
-  const [quillValue, setQuillValue] = useState()
+  const [quillValue, setQuillValue] = useState("")
+	const [fileList, setFileList] = useState([])
+	const [weChatFileList, setWeChatFileList] = useState([])
 
-  function getBase64 (img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
-
-  function handleChange (info) {
-    if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
-      return;
+  async function onPreview (file) {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      })
     }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          imageUrl,
-          loading: false,
-        }),
-      );
-    }
-  };
-
-  function beforeUpload (file) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow.document.write(image.outerHTML);
   }
 
   function onChange (e) {
@@ -79,39 +61,37 @@ function MoneyRebotView () {
             <div className={cs.qr_code_top}>
               <div className={cs.rebot_upload}>
                 <div style={{marginRight:25}}>支付宝</div>
-                {/* <img className={cs.rebot_null_img} src={good5} alt="" /> */}
-                <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className={cs.rebot_img}
-                  showUploadList={false}
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}
-                >
-                  <div>
-                    <img src={good75} alt="" className={c.uploadImg}/>
-                    <div className={c.uploadText}>上传二维码</div>
-                  </div>
-                </Upload>
+								<ImgCrop rotate>
+									<Upload
+										action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+										listType="picture-card"
+										fileList={fileList}
+										onChange={({ fileList: newFileList })=> setFileList(newFileList.slice(-1))}
+										onPreview={onPreview}
+									>
+										<div className={cs.upload_qr_code}>
+											<img src={good75} alt="" className={c.uploadImg}/>
+											<div className={c.uploadText}>上传二维码</div>
+										</div>
+									</Upload>
+								</ImgCrop>
               </div>
               <div className={cs.rebot_upload}>
                 <div style={{marginRight:25}}>微信</div>
-                {/* <img className={cs.rebot_null_img} src={good5} alt="" /> */}
-                <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className={cs.rebot_img}
-                  showUploadList={false}
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}
-                >
-                  <div>
-                    <img src={good75} alt="" className={c.uploadImg}/>
-                    <div className={c.uploadText}>上传二维码</div>
-                  </div>
-                </Upload>
+								<ImgCrop rotate>
+									<Upload
+										action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+										listType="picture-card"
+										fileList={weChatFileList}
+										onChange={({ fileList: newFileList })=> setWeChatFileList(newFileList.slice(-1))}
+										onPreview={onPreview}
+									>
+										<div className={cs.upload_qr_code}>
+											<img src={good75} alt="" className={c.uploadImg}/>
+											<div className={c.uploadText}>上传二维码</div>
+										</div>
+									</Upload>
+								</ImgCrop>
               </div>
             </div>
             <div className={cs.qr_code_bottom}>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Badge, Empty,  Modal, Timeline, Space, Table, notification, Input, message, Tooltip } from 'antd'
+import { Button, Badge, Empty,  Modal, Timeline, Space, Table, notification, Input, message } from 'antd'
 import { SmileOutlined } from '@ant-design/icons';
 import good46 from '../../icons/good/good46.png'
 import good47 from '../../icons/good/good47.png'
@@ -16,7 +16,7 @@ import good9 from '../../icons/good/good9.png'
 import good45 from '../../icons/good/good45.png'
 import DropdownComponent from "../../components/DropdownComponent";
 import ModalComponent from "../../components/ModalComponent";
-import { push, decrypt, getKey, saveSuccess, getSimpleText, transformTime } from "../../utils/util"
+import { push, decrypt, getKey, saveSuccess, transformTime } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import { communityGoods, communityGoodsCategories, priceHistories } from "../../utils/api"
 import { GOODS_STATUS, PROVIDER_TYPE, SCROLL } from "../../utils/config"
@@ -309,12 +309,11 @@ function CommunityGoodView () {
 
   let text = []
   selected.forEach(i => text.push(i.name))
-  console.log(sel)
 
 	const customize = (
 		<>
-			<Button className={c.docking_btn}>导入对接商品</Button>
-			<Button className={c.store_btn} type="primary">导入供应商商品</Button>
+			<Button className={c.docking_btn} onClick={()=>push("/main/docking")}>导入对接商品</Button>
+			<Button className={c.store_btn} onClick={()=>push("/main/store")} type="primary">导入供应商商品</Button>
 		</>
 	)
 
@@ -366,7 +365,7 @@ function CommunityGoodView () {
             }}
           />
         </div>
-				<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/>
+				<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量下架",key:"unavailable"},{name:"批量维护",key:"paused"}]}/>
       </div>
       <ModalComponent
         src={src}
@@ -529,15 +528,15 @@ function CommunityGoodView () {
 										color:statusSelected==="unavailable"?"#fff":"rgba(0, 0, 0, 0.25)",
 										background:statusSelected==="unavailable"?"#2C68FF":"#fff",
 										borderColor:statusSelected==="unavailable"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
-									}}>已关闭</Button>
+									}}>已下架</Button>
 									<Button className={c.statusBtn} onClick={()=>setSTatusSelected("paused")} style={{
 										color:statusSelected==="paused"?"#fff":"rgba(0, 0, 0, 0.25)",
 										background:statusSelected==="paused"?"#2C68FF":"#fff",
 										borderColor:statusSelected==="paused"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
-									}}>已下架</Button>
+									}}>维护中</Button>
 								</div>
 							</div>
-							<div>
+							<div style={{marginTop:8}}>
 								<Button onClick={()=>setVisibleS(false)} style={styles.cancelBtn}>取消</Button>
 								<Button type="primary" style={styles.okBtn} onClick={()=>modalOk()}>确定</Button>
 							</div>

@@ -24,10 +24,16 @@ function EditMarkupTemView () {
   const [factors, setFactors] = useState([])
   const [loading, setLoading] = useState(false)
 
-  const setPriceAt = i => R.pipe(
-    e => L.set([i], +e.target.value, factors),
-    setFactors,
-  )
+  // const setPriceAt = i => R.pipe(
+  //   e => L.set([i], +e.target.value, factors),
+  //   setFactors,
+  // )
+
+	const setPriceAt = (e, i) => {
+		const localFactors = [...factors]
+		localFactors[i] = e.target.value
+		setFactors(localFactors)
+	}
 
   function save (jump) {
     if (!name) {
@@ -108,33 +114,33 @@ function EditMarkupTemView () {
           </div>
           <div>
             <div className={c.tem_line}>
-              <div>&#8194;假设商品进价为</div>
+              <div>&#8194; 假设商品进价为</div>
               <Input placeholder="0" value={price} onChange={e=>setPrice(e.target.value)}/>
             </div>
             <div className={c.tem_line}>
-              <div>&#12288;&#12288;&#12288;&#8194;单价加价</div>
-              <Input placeholder="0" value={factors[0]} onChange={setPriceAt(0)}/>
+              <div>&#12288;&#12288;&#12288;&#8194; 单价加价</div>
+							<Input placeholder="0" value={factors[0]} onChange={e=>setPriceAt(e,0)}/>
               <div>{type==="relative"?'% , ':', '}加价之后的单价为：</div>
               <span>{price?factors[0]?type==="absolute"?+price+ (+factors[0]):+price*(100+(+factors[0]))/100:price:factors[0]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good54} alt="" />
               <div>高级会员加价</div>
-              <Input placeholder="0" value={factors[1] } onChange={setPriceAt(1)}/>
+              <Input placeholder="0" value={factors[1] } onChange={e=>setPriceAt(e,1)}/>
               <div>{type==="relative"?'% , ':', '}加价之后的高级会员统一密价为：</div>
               <span>{price?factors[1]?type==="absolute"?+price+ (+factors[1]):+price*(100+(+factors[1]))/100:price:factors[1]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good48} alt="" />
               <div>钻石会员加价</div>
-              <Input placeholder="0" value={factors[2] } onChange={setPriceAt(2)}/>
+              <Input placeholder="0" value={factors[2] } onChange={e=>setPriceAt(e,2)}/>
               <div>{type==="relative"?'% , ':', '}加价之后的高级会员统一密价为：</div>
               <span>{price?factors[2]?type==="absolute"?+price+ (+factors[2]):+price*(100+(+factors[2]))/100:price:factors[2]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good47} alt="" />
               <div>至尊会员加价</div>
-              <Input placeholder="0" value={factors[3] } onChange={setPriceAt(3)}/>
+              <Input placeholder="0" value={factors[3] } onChange={e=>setPriceAt(e,3)}/>
               <div>{type==="relative"?'% , ':', '}加价之后的至尊会员统一密价为：</div>
               <span>{price?factors[3]?type==="absolute"?+price+ (+factors[3]):+price*(100+(+factors[3]))/100:price:factors[3]||0}</span>
             </div>

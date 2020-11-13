@@ -54,11 +54,9 @@ function RTable () {
       dataIndex: 'time',
   },
     {
-			title: () => <span style={{marginLeft:32}}>操作</span>,
-			width: 153,
-			fixed: 'right',
+			title: "操作",
       render: (text, record, index) => (
-				<Space size="small" className={c.space}>
+				<Space size="small">
           <div className={c.clickText} style={{cursor:'wait'}} onClick={()=>{}}>修改</div>
           <div className={c.line} />
           <div style={{cursor:'wait',color:'#FF4D4F',textDecorationColor:"#FF4D4F"}} className={c.clickText} onClick={()=>{}}>删除</div>
@@ -93,7 +91,6 @@ function RTable () {
         </div>
       </div>
       <Table
-				scroll={SCROLL}
         columns={columns}
         dataSource={data}
         size="small"

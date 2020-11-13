@@ -182,80 +182,80 @@ function HomeView () {
 
   return (
     <div className="container">
-        <div className={c.header}>
-          <img src={home8} alt="" className={c.avatar}/>
-          <div className={c.headerU}>
-            <div className={c.headerUN}>
-              <div>欢迎您，{nickname}，祝您开心每一天！</div>
-              <div className={c.headerUNTips}>旗舰版</div>
-            </div>
-            <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>2021.01.01 01:15:23</div>　<span style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")}>续费</span></div>
-          </div>
-          <div className={c.line}/>
-          <div className={c.headerL}>
-            <div className={c.headerLTips}>上次登录信息</div>
-            <div className={c.headerLPath}>127.0.0.1/重庆市</div>
-            <div className={c.headerLTime}>2020.01.15 15:15:23</div>
-          </div>
-          <Button size="small" type="primary" className={c.headerBtn} onClick={()=>push('/main/dataSetting')}>主页看板设置</Button>
-          <img src={home7} alt="" className={c.headerBg}/>
-        </div>
-
-        <div className={c.message}>
-          {
-            orders.map((item, index) => {
-              const { label, number, icon } = item
-              return(
-                <div className={c.order_item}>
-                  <img src={icon} alt="" />
-                  <div>{number}</div>
-                  <span>{label}</span>
-                </div>
-              )
-            })
-          }
-          <div className={c.moving}>
-            <div className={c.moving_header}>
-              <div>最近动态</div>
-              <div style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")}>更多</div>
-            </div>
-            <div className={c.time}>
-              <Timeline>
-                <Timeline.Item color="#2C68FF">2020.01.15 15:20:05　删除 订单(2548)</Timeline.Item>
-                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
-                <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item>
-              </Timeline>
-            </div>
-          </div>
-        </div>
-
-        <div className={c.tableView}>
-          <div className={c.tableHeader}>
-            <div className={c.tableTitle}>最近进价变动表</div>
-            <div style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")} className={c.tableTips}>查看全部</div>
-          </div>
-          <Table
-            columns={columns}
-            dataSource={data}
-            size="small"
-            pagination={false}
-          />
-        </div>
-        <div className={ct.orderView} style={{marginTop: 24}}>
-          <div className={ct.title}>充值</div>
-          <div className={ct.chart_label} style={{marginBottom:12}}>充值数额</div>
-          <Line {...config} />
-        </div>
-        <div className={ct.orderView} style={{marginTop: 24}}>
-          <div className={ct.title}>商品订单统计</div>
-          <div className={ct.chart_label} style={{marginBottom:12}}>订单数量</div>
-          <Line {...orderConfig} />
-        </div>
-        {/* <div className={c.nullView}> */}
-        {/*   <img src={home9} alt="" /> */}
-        {/*   <div>暂无数据</div> */}
-        {/*   <Button size="small" type="primary" className={c.nullBtn}>主页看板设置</Button> */}
+        {/* <div className={c.header}> */}
+        {/*   <img src={home8} alt="" className={c.avatar}/> */}
+        {/*   <div className={c.headerU}> */}
+        {/*     <div className={c.headerUN}> */}
+        {/*       <div>欢迎您，{nickname}，祝您开心每一天！</div> */}
+        {/*       <div className={c.headerUNTips}>旗舰版</div> */}
+        {/*     </div> */}
+        {/*     <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>2021.01.01 01:15:23</div>　<span style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")}>续费</span></div> */}
+        {/*   </div> */}
+        {/*   <div className={c.line}/> */}
+        {/*   <div className={c.headerL}> */}
+        {/*     <div className={c.headerLTips}>上次登录信息</div> */}
+        {/*     <div className={c.headerLPath}>127.0.0.1/重庆市</div> */}
+        {/*     <div className={c.headerLTime}>2020.01.15 15:15:23</div> */}
+        {/*   </div> */}
+        {/*   <Button size="small" type="primary" className={c.headerBtn} onClick={()=>push('/main/dataSetting')}>主页看板设置</Button> */}
+        {/*   <img src={home7} alt="" className={c.headerBg}/> */}
         {/* </div> */}
+
+        {/* <div className={c.message}> */}
+        {/*   { */}
+        {/*     orders.map((item, index) => { */}
+        {/*       const { label, number, icon } = item */}
+        {/*       return( */}
+        {/*         <div className={c.order_item}> */}
+        {/*           <img src={icon} alt="" /> */}
+        {/*           <div>{number}</div> */}
+        {/*           <span>{label}</span> */}
+        {/*         </div> */}
+        {/*       ) */}
+        {/*     }) */}
+        {/*   } */}
+        {/*   <div className={c.moving}> */}
+        {/*     <div className={c.moving_header}> */}
+        {/*       <div>最近动态</div> */}
+        {/*       <div style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")}>更多</div> */}
+        {/*     </div> */}
+        {/*     <div className={c.time}> */}
+        {/*       <Timeline> */}
+        {/*         <Timeline.Item color="#2C68FF">2020.01.15 15:20:05　删除 订单(2548)</Timeline.Item> */}
+        {/*         <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item> */}
+        {/*         <Timeline.Item color="#979BA3">2020.01.15 15:20:05　修改余额65.1456 用户(154)</Timeline.Item> */}
+        {/*       </Timeline> */}
+        {/*     </div> */}
+        {/*   </div> */}
+        {/* </div> */}
+
+        {/* <div className={c.tableView}> */}
+        {/*   <div className={c.tableHeader}> */}
+        {/*     <div className={c.tableTitle}>最近进价变动表</div> */}
+        {/*     <div style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")} className={c.tableTips}>查看全部</div> */}
+        {/*   </div> */}
+        {/*   <Table */}
+        {/*     columns={columns} */}
+        {/*     dataSource={data} */}
+        {/*     size="small" */}
+        {/*     pagination={false} */}
+        {/*   /> */}
+        {/* </div> */}
+        {/* <div className={ct.orderView} style={{marginTop: 24}}> */}
+        {/*   <div className={ct.title}>充值</div> */}
+        {/*   <div className={ct.chart_label} style={{marginBottom:12}}>充值数额</div> */}
+        {/*   <Line {...config} /> */}
+        {/* </div> */}
+        {/* <div className={ct.orderView} style={{marginTop: 24}}> */}
+        {/*   <div className={ct.title}>商品订单统计</div> */}
+        {/*   <div className={ct.chart_label} style={{marginBottom:12}}>订单数量</div> */}
+        {/*   <Line {...orderConfig} /> */}
+        {/* </div> */}
+        <div className={c.nullView}>
+          <img src={home9} alt="" />
+          <div>暂无数据</div>
+          <Button disabled={true} size="small" type="primary" className={c.nullBtn}>主页看板设置</Button>
+        </div>
     </div>
   )
 }

@@ -322,3 +322,13 @@ export function extPrvdsGood (id,gid) {
 export function extPrvdStats () {
 	return transformFetch("GET", `/ext-prvd-stat`);
 }
+
+// 供货商商品明细
+export function suppGood (id) {
+	return transformFetch("GET", `/supp-goods/${id}`);
+}
+
+// 批量修改订单备注
+export function orderComments (ids, comment) {
+	return transformFetch("PUT", `/cmnt-order-comments?${ids}`, {ids, comment});
+}

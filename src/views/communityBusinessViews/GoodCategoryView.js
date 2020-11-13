@@ -14,7 +14,7 @@ import {SCROLL} from '../../utils/config'
 function GoodCategoryView () {
   // TODO: 两个删除弹窗
   const [visible, setVisible] = useState(false)
-  const [actionId, setActionId] = useState(2)
+  const [actionId, setActionId] = useState(1)
 
   function handleOk () {
 
@@ -27,7 +27,7 @@ function GoodCategoryView () {
   return (
     <div className="view">
       <div className={c.container}>
-        <RTable />
+        <RTable setVisible={setVisible}/>
       </div>
       <Modal
         visible={visible}
@@ -38,7 +38,7 @@ function GoodCategoryView () {
         <div style={styles.modal}>
           <img src={good6} alt="" style={styles.icon} />
           <div style={styles.label}>
-            {actionId===1?"确定要删除此支付账户吗？":"删除分类"}
+            {actionId===1?"确定要删除此分类吗？":"删除分类"}
           </div>
           {(()=>{
           if(actionId===1){
@@ -65,7 +65,7 @@ function GoodCategoryView () {
   )
 }
 
-function RTable () {
+function RTable ({ setVisible }) {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
@@ -126,14 +126,8 @@ function RTable () {
       dataIndex: 'time',
   },
     {
-			title: () => <span style={{marginLeft:32}}>操作</span>,
-			width: 136,
-			fixed: 'right',
-      render: (record) => (
-				<Space size="small" className={c.space}>
-					<div className={c.clickText} onClick={()=>push("/main/editGoodCategory",record)}>编辑分类</div>
-				</Space>
-      )
+			title: "操作",
+      render: (record) =>	<div className={c.clickText} onClick={()=>push("/main/editGoodCategory",record)}>编辑分类</div>
   }
 ];
 
@@ -144,16 +138,21 @@ function RTable () {
     selectedRowKeys: selectedRows
   };
 
+	function deleteCategory () {
+		// setVisible(true)
+		communityGoodsCategories("delete", undefined, undefined, "ids=" + selectedRows.map(i => data[i].id).toString()).then(r => {
+			if (!r.error) {
+				saveSuccess(false)
+				setSelectRows([])
+				get(current)
+			}
+		})
+	}
+
   function submit (key) {
     switch (key) {
       case "delete":
-        communityGoodsCategories("delete", undefined, undefined, "ids=" + selectedRows.map(i => data[i].id).toString()).then(r => {
-          if (!r.error) {
-            saveSuccess(false)
-            setSelectRows([])
-            get(current)
-          }
-        })
+				deleteCategory()
         break
       default:
         ;
@@ -187,7 +186,6 @@ function RTable () {
           </div>
       </div>
       <Table
-				scroll={SCROLL}
         columns={columns}
         rowSelection={{
           ...rowSelection

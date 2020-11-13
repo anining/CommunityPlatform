@@ -18,7 +18,7 @@ import good73 from '../icons/good/good73.png'
 import good77 from '../icons/good/good77.png'
 
 const DEVELOPER = "Production"
-const API_URL = DEVELOPER === "Production" ? "https://test-omnivstore.prismslight.com/mng" : "http://192.168.1.36:8000/mng"
+const API_URL = DEVELOPER === "Production" ? "https://beta-omnivstore.prismslight.com/mng" : "https://test-omnivstore.prismslight.com/mng"
 const JUMP_DELAY = 500
 const MODULES = {
   toolbar: [
@@ -70,12 +70,12 @@ const GOODS_STATUS = {
     text: '已上架',
     src: good43
   },
-  unavailable: {
+  paused: {
     status: "warning",
     text: '维护中',
     src: good42
   },
-  paused: {
+  unavailable: {
     status: "default",
     text: '已下架',
     src: good44
@@ -149,21 +149,21 @@ const USER_RANK = {
 
 const REFUND_STATUS = {
   "-": {
-    color: "rgba(0, 0, 0, 0.65)",
+		status: "default",
     text: '-',
   },
   refunding: {
-    color: "#FF8D30",
+		status: "warning",
     text: '退款中',
   },
   refunded: {
-    color: "#565759",
+		status: "default",
     text: '已退款',
   },
   rejected: {
-    color: "#FF4D4F",
+		status: "error",
     text: '已拒绝',
-  },
+  }
 }
 const PROVIDER_TYPE = {
   supplier: {
@@ -225,15 +225,15 @@ const CARD_STATUS = [
 ]
 const COMMUNITY_ORDER_STATUS = {
 	pending: {
-		color: "#FF8D30",
+		status: "warning",
 		text: '待处理',
 	},
 	processing: {
-		color: "#2C68FF",
+		status: "processing",
 		text: '进行中',
 	},
 	completed: {
-		color: "#52C41A",
+		status: "success",
 		text: '已完成',
 	},
 	// {
@@ -245,29 +245,45 @@ const COMMUNITY_ORDER_STATUS = {
 		text: '已结束',
 	}
 }
-const COMMUNITY_COMMUNICATION_STATUS = {
-	pending: {
-		color: "#595959",
-		text: '通信正常',
-	},
-	processing: {
-		color: "#FF4D4F",
-		text: '通信失败',
-	}
-}
 const COMMUNITY_AFTER_STATUS = {
-	pending: {
+	completed: {
 		color: "#595959",
-		text: '已退款',
+		text: '-',
 	},
 	processing: {
 		color: "#FF8D30",
 		text: '退款中',
 	},
-	completed: {
+	pending: {
 		color: "#595959",
-		text: '-',
+		text: '已退款',
+	}
+}
+const COMMUNITY_SYNC_STATUS = {
+	pending: {
+		status: "processing",
+		text: '待处理',
+	},
+	failed: {
+		status: "processing",
+		text: '已失败',
+	},
+	up_to_date: {
+		status: "processing",
+		text: '已更新',
+	},
+	updating: {
+		status: "processing",
+		text: '更新中',
+	},
+	out_of_date: {
+		status: "processing",
+		text: '已过期',
+	},
+	stopped: {
+		status: "processing",
+		text: '已停止',
 	}
 }
 
-export { COMMUNITY_AFTER_STATUS, COMMUNITY_COMMUNICATION_STATUS, COMMUNITY_ORDER_STATUS, CARD_STATUS, CONSUMPTION_TYPE, REFUND_STATUS, SCROLL, PROVIDER_TYPE, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }
+export { COMMUNITY_SYNC_STATUS, COMMUNITY_AFTER_STATUS, COMMUNITY_ORDER_STATUS, CARD_STATUS, CONSUMPTION_TYPE, REFUND_STATUS, SCROLL, PROVIDER_TYPE, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }

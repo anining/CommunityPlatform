@@ -7,7 +7,7 @@ import header6 from '../../icons/header/header6.png'
 import header7 from '../../icons/header/header7.png'
 import header8 from '../../icons/header/header8.png'
 import edit23 from '../../icons/edit/edit23.png'
-import { push,  transformTime } from "../../utils/util"
+import { push,  transformTime, dateFormat } from "../../utils/util"
 import { orderHis } from "../../utils/api"
 import { useHistory } from "react-router-dom"
 
@@ -154,7 +154,7 @@ function RLine ({ orders = [] }) {
         };break;
       case "refund_rejected": {
         const { provider_name, provider_id, reason } = payload
-        Msg=<div>{provider_name} (供应商或者对接/串货目标名称)拒绝退款，拒绝原因：<span> {reason}</span>。</div>
+        Msg=<div>{provider_name} 拒绝退款，拒绝原因：<span> {reason}</span>。</div>
         };break;
       default:{
         const { amount, refund_value, closed } = payload
@@ -163,7 +163,7 @@ function RLine ({ orders = [] }) {
     }
     return (
       <Timeline.Item key={index} color="#1890FF" className={c.orderLine}>
-        <div className={c.orderLineTime}>{ transformTime(created_at) }</div>
+        <div className={c.orderLineTime}>{ dateFormat(created_at) }</div>
         {Msg}
       </Timeline.Item>
     )

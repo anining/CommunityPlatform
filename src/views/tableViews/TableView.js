@@ -160,7 +160,7 @@ function RGroup ({ tagsGroup, get, setTagsGroup }) {
         <Button type="small" onClick={()=>{
           handleClose(id,index)
         }} className={cs.tagTitle}>
-          <div>{name}&#112288; x</div>
+          <div>{name}&#8195;x</div>
         </Button>
         <div className={cs.tItem}>{items}</div>
       </div>

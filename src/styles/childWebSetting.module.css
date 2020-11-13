@@ -99,11 +99,15 @@
   display: flex;
   align-items: center;
   font-weight: 500;
-  justify-content: center;
 }
 
-.rebot_img {
-  align-self: flex-end;
+.upl
+
+.upload_qr_code {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .rebot_upload div {
@@ -114,7 +118,6 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
 .qr_code_bottom {

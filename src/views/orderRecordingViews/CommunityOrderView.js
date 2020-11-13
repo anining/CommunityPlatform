@@ -17,22 +17,23 @@ import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { dateFormat, push, getKey, saveSuccess, transformTime } from "../../utils/util";
-import { refundAccept, communityGoodsOrders, communityGoodsCategories } from "../../utils/api"
+import { refundAccept, orderComments, communityGoodsOrders, communityGoodsCategories } from "../../utils/api"
 import SelectComponent from "../../components/SelectComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
-import { REFUND_STATUS, SCROLL, COMMUNITY_ORDER_STATUS, COMMUNITY_COMMUNICATION_STATUS, COMMUNITY_AFTER_STATUS } from '../../utils/config'
+import { REFUND_STATUS, SCROLL, COMMUNITY_SYNC_STATUS, COMMUNITY_ORDER_STATUS, COMMUNITY_COMMUNICATION_STATUS, COMMUNITY_AFTER_STATUS } from '../../utils/config'
 import ActionComponent from '../../components/ActionComponent'
 
 function CommunityOrderView () {
+  const [visibleMsg, setVisibleMsg] = useState(false)
+  const [visibleOther, setVisibleOther] = useState(false)
+
   const [visible_push, setVisiblePush] = useState(false)
   const [visible_ref, setVisibleRef] = useState(false)
   const [visible, setVisible] = useState(false)
   const [remark, setRemark] = useState()
   const [refundNum, setRefundNum] = useState()
-  const [visibleMsg, setVisibleMsg] = useState(false)
-  const [visibleOther, setVisibleOther] = useState(false)
   const [sel, setSel] = useState({})
   const label = [
     {
@@ -100,6 +101,13 @@ function CommunityOrderView () {
   }, [])
 
   function addRemark () {
+		orderComments("ids="+sel.id, remark).then(r=> {
+      if (!r.error) {
+        saveSuccess(false)
+        setRemark(undefined)
+        get(current)
+      }
+		})
     setVisible(false)
   }
 
@@ -240,36 +248,33 @@ function CommunityOrderView () {
 			ellipsis: true,
   dataIndex: 'status',
 	render: (text) => {
-		const { text: t, color } = getKey(text, COMMUNITY_ORDER_STATUS)
-		return <div><Badge color={color} />{t}</div>
+		const { text: t, status } = getKey(text, COMMUNITY_ORDER_STATUS)
+		return <Badge status={status} text={t}/>
 	}
 }, {
   title: '售后状态',
 			ellipsis: true,
   dataIndex: 'refund_status',
   render: (text, record, index) => {
-    const { reason="暂无" } = record
-    const { text: t, color } = getKey(text, COMMUNITY_AFTER_STATUS)
+    const { reject_reason="暂无" } = record
+    const { text: t, status } = getKey(text, REFUND_STATUS)
     return (
-      <div style={{display:'flex',alignItems:'center'}}>
-        <div style={{color,flexShrink:0}}>{t}</div>
-        <Popconfirm
-          icon={<img src="" alt="" style={ms.popConfirmIcon}/>}
-          placement="bottomRight"
-          title={() => <div style={{color:'#999',fontSize:'0.857rem',paddingTop:8}}>{reason}</div>}
-        >
-          <div style={{opacity:text==="rejected"?1:0}} className={c.refundCircle}>!</div>
-        </Popconfirm>
-      </div>
+			<Popconfirm
+				icon={<img src="" alt="" style={ms.popConfirmIcon}/>}
+				placement="bottomRight"
+				title={()=><div style={{color:'#999',fontSize:'0.857rem',paddingTop:8}}>{reject_reason}</div>}
+			>
+				<Badge status={status} text={t} />
+			</Popconfirm>
     )
   }
 }, {
   title: '通信状态',
-			ellipsis: true,
-  dataIndex: 'refund_status',
-	// COMMUNITY_COMMUNICATION_STATUS
+	ellipsis: true,
+  dataIndex: 'sync_status',
   render: (text, record, index) => {
-    return '-'
+    const { text: t, status } = getKey(text, COMMUNITY_SYNC_STATUS)
+		return <Badge status={status} text={t} />
 }
 },
 	{
@@ -301,31 +306,21 @@ function CommunityOrderView () {
     return '-'
 }
 },
-	// {
-  // title: '订单历程',
-	// 		ellipsis: true,
-  // render: (text, record, index) => <div onClick={()=>push('/main/editCommunityOrder',record)} className={c.view_text}>查看</div>
-// }, 
-	// {
-  // title: '订单备注',
-	// 		ellipsis: true,
-  // render: (text, record, index) => {
-    // return <div onClick={()=>{
-      // setSel(record)
-      // setRemark(sel.comment)
-      // setVisible(true)
-    // }} className={c.view_text}>查看</div>
-  // }
-// },
 	{
 	title: () => <span style={{marginLeft:32}}>操作</span>,
 	width: 355,
 	fixed: 'right',
   render: (text, record, index) => (
 		<Space size="small" className={c.space}>
-      <div style={{cursor:'wait'}} className={c.clickText}>添加备注</div>
+      <div className={c.clickText} onClick={()=>{
+				setSel(record)
+				setRemark(sel.comment)
+				setVisible(true)
+			}}>
+				添加备注
+			</div>
       <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-      <div style={{cursor:'wait'}} className={c.clickText}>订单历程</div>
+      <div className={c.clickText} onClick={()=>push('/main/editCommunityOrder',record)}>订单历程</div>
       <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
 			<div onClick={()=>{
 				setSel(record)
@@ -480,9 +475,9 @@ function CommunityOrderView () {
             </div>
           </div>
         }
-        title = "添加备注"
-        visible = { visible }
-        onCancel = { onCancel }
+        title="添加备注"
+        visible={visible}
+        onCancel={onCancel}
       />
     </div>
 )

@@ -49,7 +49,7 @@ function SiderComponent ({ collapsed, toggle }) {
 			"goodStatistics": "statistics",
 			"communityGood":"communityBusiness",
 			"goodCategory":"communityBusiness",
-			"orderModel":"communityBusiness",
+			"markupTem":"communityBusiness",
 			"cardGood":"cardBusiness",
 			"cardManage":"cardBusiness",
 			"cardCategory":"cardBusiness",
@@ -107,15 +107,17 @@ function SiderComponent ({ collapsed, toggle }) {
         <Menu.Item key="home" icon={<Icon keys="home" />}>
           用户主页
         </Menu.Item>
-        { U.when(R.includes('statistics',permissions), (
-					<Menu.SubMenu onTitleClick={onTitleClick} key="statistics" title={<Title keys="statistics" label="数据统计"/>}>
-            <Menu.Item key="dataStatistics">数据概览</Menu.Item>
-            <Menu.Item key="moneyStatistics">资金统计</Menu.Item>
-            <Menu.Item key="goodStatistics">商品&订单统计</Menu.Item>
-            <Menu.Item key="userStatistics">用户统计</Menu.Item>
-            <Menu.Item key="webStatistics">网站访问统计</Menu.Item>
-          </Menu.SubMenu>
-        )) }
+				{/* <> */}
+        {/* { U.when(R.includes('statistics',permissions), ( */}
+				{/* 	<Menu.SubMenu onTitleClick={onTitleClick} key="statistics" title={<Title keys="statistics" label="数据统计"/>}> */}
+            {/* <Menu.Item key="dataStatistics">数据概览</Menu.Item> */}
+            {/* <Menu.Item key="moneyStatistics">资金统计</Menu.Item> */}
+            {/* <Menu.Item key="goodStatistics">商品&订单统计</Menu.Item> */}
+            {/* <Menu.Item key="userStatistics">用户统计</Menu.Item> */}
+            {/* <Menu.Item key="webStatistics">网站访问统计</Menu.Item> */}
+          {/* </Menu.SubMenu> */}
+        {/* )) } */}
+				{/* </> */}
         { U.when(R.includes('cmntbiz',permissions), (
             <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" title={<Title keys="communityBusiness" label="社区业务"/>}>
               <Menu.Item key="communityGood">社区商品列表</Menu.Item>
@@ -124,13 +126,15 @@ function SiderComponent ({ collapsed, toggle }) {
               <Menu.Item key="markupTem">调价模版</Menu.Item>
             </Menu.SubMenu>
         )) }
-        { U.when(R.includes('cardbiz',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="cardBusiness" title={<Title keys="cardBusiness" label="卡密业务"/>}>
-              <Menu.Item key="cardGood">卡密商品列表</Menu.Item>
-              <Menu.Item key="cardCategory">卡密商品分类</Menu.Item>
-              <Menu.Item key="cardManage">卡密管理</Menu.Item>
-            </Menu.SubMenu>
-        )) }
+				{/* <> */}
+				{/* 	{ U.when(R.includes('cardbiz',permissions), ( */}
+				{/* 			<Menu.SubMenu onTitleClick={onTitleClick} key="cardBusiness" title={<Title keys="cardBusiness" label="卡密业务"/>}> */}
+				{/* 				<Menu.Item key="cardGood">卡密商品列表</Menu.Item> */}
+				{/* 				<Menu.Item key="cardCategory">卡密商品分类</Menu.Item> */}
+				{/* 				<Menu.Item key="cardManage">卡密管理</Menu.Item> */}
+				{/* 			</Menu.SubMenu> */}
+				{/* 	)) } */}
+				{/* </> */}
         { U.when(R.includes('tagmng', permissions), (
             <Menu.Item key="table" icon={<Icon keys="table" />}>
               商品标签
@@ -146,15 +150,17 @@ function SiderComponent ({ collapsed, toggle }) {
               对接/串货
             </Menu.Item>
         )) }
-        { U.when(R.includes('valueaddedsrv',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="services" title={<Title keys="services" label="增值服务" />}>
-              <Menu.Item key="subService">开通服务</Menu.Item>
-            </Menu.SubMenu>
-        )) }
+				{/* <> */}
+        {/* { U.when(R.includes('valueaddedsrv',permissions), ( */}
+            {/* <Menu.SubMenu onTitleClick={onTitleClick} key="services" title={<Title keys="services" label="增值服务" />}> */}
+              {/* <Menu.Item key="subService">开通服务</Menu.Item> */}
+            {/* </Menu.SubMenu> */}
+        {/* )) } */}
+				{/* </> */}
         { U.when(R.includes('orderlog',permissions), (
             <Menu.SubMenu onTitleClick={onTitleClick} key="orderRecording" title={<Title keys="orderRecording" label="订单记录" />}>
               <Menu.Item key="communityOrder">社区订单</Menu.Item>
-              <Menu.Item key="cardOrder">卡密订单</Menu.Item>
+              {/* <Menu.Item key="cardOrder">卡密订单</Menu.Item> */}
             </Menu.SubMenu>
         )) }
         { U.when(R.includes('capitalflow',permissions), (
@@ -167,17 +173,19 @@ function SiderComponent ({ collapsed, toggle }) {
               用户管理
             </Menu.Item>
         )) }
-        { U.when(R.includes('subcitemng',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="childWeb" title={<Title keys="childWeb" label="分站管理" />}>
-              <Menu.Item key="childWebList">分站列表</Menu.Item>
-            </Menu.SubMenu>
-        )) }
+				{/* <> */}
+        {/* { U.when(R.includes('subcitemng',permissions), ( */}
+            {/* <Menu.SubMenu onTitleClick={onTitleClick} key="childWeb" title={<Title keys="childWeb" label="分站管理" />}> */}
+              {/* <Menu.Item key="childWebList">分站列表</Menu.Item> */}
+            {/* </Menu.SubMenu> */}
+        {/* )) } */}
+				{/* </> */}
         { U.when(R.includes('citecfg',permissions), (
             <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" title={<Title keys="webSetting"  label="站点设置"/>}>
               <Menu.Item key="storeSetting">店铺设置</Menu.Item>
-              <Menu.Item key="storePlug">店铺装修</Menu.Item>
-              <Menu.Item key="rebot">支付配置</Menu.Item>
-              <Menu.Item key="images">图床配置</Menu.Item>
+              {/* <Menu.Item key="storePlug">店铺装修</Menu.Item> */}
+              {/* <Menu.Item key="rebot">支付配置</Menu.Item> */}
+              {/* <Menu.Item key="images">图床配置</Menu.Item> */}
               <Menu.Item key="peopleService">客服配置</Menu.Item>
               <Menu.Item key="notice">发布公告</Menu.Item>
             </Menu.SubMenu>
@@ -185,8 +193,8 @@ function SiderComponent ({ collapsed, toggle }) {
          <Menu.SubMenu onTitleClick={onTitleClick} key="systemSetting" title={<Title keys="systemSetting" label="系统设置" />}>
           { U.when(R.equals(role, "superuser"), <Menu.Item key="admin">系统管理员</Menu.Item>) }
           <Menu.Item key="logger">登录日志</Menu.Item>
-          <Menu.Item key="businessSetting">业务配置</Menu.Item>
-          <Menu.Item key="about">系统信息</Menu.Item>
+          {/* <Menu.Item key="businessSetting">业务配置</Menu.Item> */}
+          {/* <Menu.Item key="about">系统信息</Menu.Item> */}
           <Menu.Item key="password">修改密码</Menu.Item>
         </Menu.SubMenu>
       </Menu>

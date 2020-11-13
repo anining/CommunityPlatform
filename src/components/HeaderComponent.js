@@ -25,10 +25,10 @@ function HeaderComponent ({ toggle }) {
       <LogoComponent toggle={toggle}/>
       <div className={c.containerR}>
         <div style={{marginRight:24,cursor:'pointer'}} onClick={()=>{
-          window.open("https://www.baidu.com")
+          window.open("https://easydoc.xyz/s/85631950")
         }}>帮助中心</div>
         <div style={{cursor:'pointer'}} onClick={()=>{
-          window.open("https://www.baidu.com")
+					window.open("https://easydoc.xyz/s/85631950")
         }}>开放平台</div>
         <Dropdown overlay={menu}>
           <Button className={c.btn}>

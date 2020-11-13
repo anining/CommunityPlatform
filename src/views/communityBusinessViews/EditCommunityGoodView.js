@@ -11,8 +11,8 @@ import good46 from '../../icons/good/good46.png'
 import good47 from '../../icons/good/good47.png'
 import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
-import { goBack, saveSuccess, push } from "../../utils/util";
-import { communityGoods, providerSummaries, goodsSummaries, cmntPadjs, communityGoodsCategories, communityParamTemplates } from "../../utils/api";
+import { saveSuccess, push } from "../../utils/util";
+import { communityGoods, communityGoodsCategories } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import { MODULES } from "../../utils/config";
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
@@ -22,12 +22,12 @@ let win
 function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
-  const { id, provider_type:p_t, padj_id, name: n, prices: pr_s = [], supp_goods_id, refundable: re = false, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "", ptpl_id, pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c } = state
+  const { id, ext_prvd_goods_id, ext_prvd_id, params, provider_type, padj_id, name: n, prices: pr_s = [], supp_goods_id, refundable: re = false, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "", ptpl_id, pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c } = state
   const [name, setName] = useState(n)
+  const [ctg_id, setCtgId] = useState(c_id)
   const [status, setStatus] = useState(s)
   const [pics, setPics] = useState(ps)
-  const [ctg_id, setCtgId] = useState(c_id)
-  const [community_param_template_id, setCommunity_param_template_id] = useState(ptpl_id)
+  const [tags, setTags] = useState(tag_s)
   const [tag_ids, setTag_ids] = useState(tag_s.map(i => i.id))
   const [min_order_amount, setMin_order_amount] = useState(min_o_a)
   const [max_order_amount, setMax_order_amount] = useState(max_o_a)
@@ -36,23 +36,17 @@ function EditCommunityGoodView () {
   const [repeatable, setRepeatable] = useState(r_o)
   const [batch_order, setBatch_order] = useState(Boolean(b_o))
   const [recommended, setRecommended] = useState(false)
-  const [provider_type, setProvider_type] = useState(p_t)
-  const [goods_id, setGoods_id] = useState(supp_goods_id)
   const [refundable, setRefundable] = useState(re)
   const [unit_cost, setUnit_cost] = useState(u_c)
   const [unit, setUnit] = useState(u)
   const [prices, setPrices] = useState(Boolean(padj_id))
   const [unit_price, setUnit_price] = useState(pr_s[0])
   const [factors, setFactors] = useState(pr_s)
-
+  const [dockingTarget, setDockingTarget] = useState(padj_id)
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState(pics[0])
-  const [tags, setTags] = useState(tag_s)
   const [has_more, setHasMore] = useState(false)
-  const [dockingTarget, setDockingTarget] = useState(padj_id)
-
   const [marks, setMarks] = useState([])
-  const [selectedProviders, setSelectedProviders] = useState()
 
   const setPriceAt = i => R.pipe(
     e => L.set([i], +e.target.value, factors),
@@ -76,25 +70,6 @@ function EditCommunityGoodView () {
     win && win.close()
   }
 
-  function getProviders (page,size) {
-    return providerSummaries(page,size).then(r => {
-      if (!r.error) {
-        return r.data.map(i => ({ id: i.id, name: i.nickname }))
-      }
-      return []
-    }).catch(()=> [])
-  }
-
-  function getCmntPadjs (page,size) {
-    return cmntPadjs("get", undefined, {page, size}).then(r => {
-      if (!r.error) {
-        setMarks(r.data)
-        return r.data
-      }
-      return []
-    }).catch(()=> [])
-  }
-
   useEffect(() => {
     if (dockingTarget) {
       const values = marks.filter(i => i.id === dockingTarget)
@@ -112,15 +87,6 @@ function EditCommunityGoodView () {
     }
   }, [dockingTarget])
 
-  function getParamTemplates(page,size) {
-    return communityParamTemplates("get",undefined,{page,size}).then(r => {
-      if (!r.error) {
-        return r.data
-      }
-      return []
-    }).catch(()=>[])
-  }
-
   function getGoodsSummaries(page,size) {
     return communityGoodsCategories("get",undefined,{page,size}).then(r => {
       if (!r.error) {
@@ -130,20 +96,8 @@ function EditCommunityGoodView () {
     }).catch(()=>[])
   }
 
-  function getGoodCategories(page,size) {
-    if (selectedProviders) {
-      return goodsSummaries(selectedProviders,page,size).then(r => {
-        if (!r.error) {
-          return r.data
-        }
-        return []
-      }).catch(()=>[])
-    }
-    return new Promise((resolve,reject)=>resolve([]))
-  }
-
   function save (jump) {
-    if (!provider_type || !goods_id || !name || !ctg_id || !unit_price || !tag_ids.length || !unit) {
+    if (!name || !ctg_id || !unit_price) {
       message.warning("请完善信息")
       return
     }
@@ -152,24 +106,24 @@ function EditCommunityGoodView () {
       return
     }
     let body = {
-      supp_goods: { provider_type, goods_id },
       name,
       ctg_id,
-      ptpl_id: community_param_template_id,
-      prices: prices ? factors : [(unit_price||0), 0, 0, 0],
-      unit,
-      tag_ids,
-      pics,
-      intro,
       status,
-      weight: weight || 1,
-      unit_cost,
+			supp_goods: provider_type==="supplier" ? { provider_type, goods_id: supp_goods_id } : { provider_type, ext_prvd_goods_id, ext_prvd_id, params },
+      tag_ids,
+      prices: factors,
+			unit: unit || "个",
       refundable,
-      min_order_amount: min_order_amount || 1,
-      max_order_amount: max_order_amount || 10000,
       recommended,
       repeatable,
+      min_order_amount: min_order_amount || 1,
+      max_order_amount: max_order_amount || 10000,
+      weight: weight || 1,
+      pics,
+			padj_id: dockingTarget,
+			unit_cost,
       batch_order,
+      intro,
     }
     if( prices ) {
       body = {...body,...{padj_id: dockingTarget}}
@@ -183,25 +137,6 @@ function EditCommunityGoodView () {
           h.replace('/main/editCommunityGood')
         }
         saveSuccess(jump)
-        // setName(undefined)
-        // setStatus("available")
-        // setPics([])
-        // setCommunity_param_template_id(undefined)
-        // setCtgId(undefined)
-        // setCommunity_goods_category_name(undefined)
-        // setTag_ids([])
-        // setTags([])
-        // setUnit(undefined)
-        // setUnit_price(undefined)
-        // setRefundable(true)
-        // setUnit_cost(undefined)
-        // setMax_order_amount(undefined)
-        // setMin_order_amount(undefined)
-        // setRepeatable(undefined)
-        // setBatch_order(undefined)
-        // setWeight(undefined)
-        // setIntroduction("");
-        // setImageUrl(undefined)
       }
     }).catch(() => {
       if (!jump) {
@@ -272,13 +207,6 @@ function EditCommunityGoodView () {
         <div className={c.tips}>带“ * ”的项目必须填写带。如果要修改商品价格请通过“商品列表 -  修改价格”操作。</div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>商品来源</div>
-          </div>
-					{provider_type}
-        </div>
-        <div className={c.item}>
-          <div className={c.itemName}>
             <span>*</span>
             <div className={c.itemText}>商品名称</div>
           </div>
@@ -294,50 +222,6 @@ function EditCommunityGoodView () {
 						push('/main/editGoodCategory')
 					}}>新增分类</Button>
         </div>
-				<div className={c.item}>
-					<div className={c.itemName}>
-						<span>*</span>
-						<div className={c.itemText}>调价模版</div>
-					</div>
-					{ dockingTarget || "未选择调价模版" }
-				</div>
-				<div className={c.item}>
-					<div className={c.itemName}>
-						<span className={c.white}>*</span>
-						<div className={c.itemText}>进价</div>
-					</div>
-					{ unit_cost }
-				</div>
-        <div className={c.item}>
-          <div className={c.itemName}>
-            <span>*</span>
-            <div className={c.itemText}>单价</div>
-          </div>
-					{ unit_price }
-        </div>
-				<div className={c.item} style={{alignItems:'flex-start'}}>
-					<div className={c.itemName}>
-						<span className={c.white}>*</span>
-						<div className={c.itemText}>统一密价</div>
-					</div>
-					<div className={c.disc_price_view}>
-						<div className={c.disc_price_item}>
-							<img src={good46} alt="" />
-							<div>高级会员</div>
-							{factors[1] || "未填写"}
-						</div>
-						<div className={c.disc_price_item}>
-							<img src={good48} alt="" />
-							<div>钻石会员</div>
-							{factors[2] || "未填写"}
-						</div>
-						<div className={c.disc_price_item}>
-							<img src={good47} alt="" />
-							<div>至尊会员</div>
-							{factors[3] || "未填写"}
-						</div>
-					</div>
-				</div>
 				<div className={c.item} style={{alignItems:'flex-start'}}>
 					<div className={c.itemName}>
             <span className={c.white}>*</span>
@@ -416,51 +300,6 @@ function EditCommunityGoodView () {
           </div>
           <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={intro} onChange={e=>setIntroduction(e)}/>
         </div>
-
-        {/* { */}
-        {/*   U.when(provider_type==="supplier",( */}
-        {/*     <div className={c.item}> */}
-        {/*       <div className={c.itemName}> */}
-        {/*         <span>*</span> */}
-        {/*         <div className={c.itemText}>供货商</div> */}
-        {/*       </div> */}
-        {/*       <DropdownPromiseComponent placeholder="请选择供货商" value={selectedProviders} fetchName={getProviders} setValue={setSelectedProviders}/> */}
-        {/*     </div> */}
-        {/*   )) */}
-        {/* } */}
-        {/* { */}
-        {/*   U.when(provider_type!=="internal" && provider_type,( */}
-        {/*     <div className={c.item}> */}
-        {/*       <div className={c.itemName}> */}
-        {/*         <span>*</span> */}
-        {/*         <div className={c.itemText}>对接目标</div> */}
-        {/*       </div> */}
-        {/*       <DropdownPromiseComponent placeholder="请选择对接目标" initNums={[]} setValue={setDockingTarget}/> */}
-        {/*     </div> */}
-        {/*   )) */}
-        {/* } */}
-        {/* { */}
-        {/*   U.when(provider_type,( */}
-        {/*     <div className={c.item}> */}
-        {/*       <div className={c.itemName}> */}
-        {/*         <span>*</span> */}
-        {/*         <div className={c.itemText}>关联商品</div> */}
-        {/*       </div> */}
-        {/*       <DropdownPromiseComponent placeholder="请选择关联商品" fetchName={getGoodCategories} value={goods_id} refresh={[selectedProviders]} setValue={setGoods_id}/> */}
-        {/*       {/1* <DropdownPromiseComponent tooltip={tooltips?tooltips.name:""} placeholder="请选择关联商品" initNums={goods} setValue={setGoods_id}/> *1/} */}
-        {/*     </div> */}
-        {/*   )) */}
-        {/* } */}
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span>*</span> */}
-        {/*     <div className={c.itemText}>下单模型</div> */}
-        {/*   </div> */}
-        {/*   <DropdownPromiseComponent placeholder="请选择下单模型" fetchName={getParamTemplates} value={community_param_template_id} setValue={setCommunity_param_template_id}/> */}
-        {/*     <Button type="primary" className={c.itemBtn} onClick={()=>{ */}
-        {/*       push('/main/editOrderModel') */}
-        {/*     }}>新增模型</Button> */}
-        {/* </div> */}
         <div className={c.hasMore}>
           <Checkbox className={c.hasMoreCheckBox} onChange={e=>setHasMore(e.target.checked)} checked={has_more}>更多设置</Checkbox>
         </div>
@@ -577,7 +416,7 @@ function RTable ({ tags }) {
   })
 
   views.push(
-    <Button type="primary" key="select" style={{marginLeft:0,marginBottom:28}} className={c.itemBtn} onClick={()=>{
+    <Button type="primary" key="select" style={{marginLeft:0}} className={c.itemBtn} onClick={()=>{
          win = window.open("/select-table", "_blank", "left=390,top=145,width=1200,height=700")
     }}>{!tags.length?"选择":"重新选择"}</Button>
   )

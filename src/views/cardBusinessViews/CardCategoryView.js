@@ -85,9 +85,7 @@ function RTable ({ setVisible }) {
       dataIndex: 'time',
   },
     {
-			title: () => <span style={{marginLeft:32}}>操作</span>,
-			width: 136,
-			fixed: 'right',
+			title: "操作",
       // render: (text, record, index) => (
       //   <div style={{textDecoration:"underline",textDecorationColor:'#2C68FF',color:'#2C68FF'}} onClick={()=>{
       //     const history = h.get()
@@ -140,7 +138,6 @@ function RTable ({ setVisible }) {
 			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
       <Table
         columns={columns}
-				scroll={SCROLL}
         rowSelection={{
           ...rowSelection
         }}

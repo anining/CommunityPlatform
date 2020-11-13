@@ -136,12 +136,6 @@ function RTable () {
   },
   ];
 
-  const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
-      setSelectRows(selectedRowKeys)
-    }
-  };
-
   function submit (key) {
     switch (key) {
       case "delete":
@@ -192,9 +186,6 @@ function RTable () {
       <Button className={c.excelBtn} disabled={true} type="primary">导出本页为Excel</Button>
       <Table
         columns={columns}
-        rowSelection={{
-          ...rowSelection
-        }}
         dataSource={data}
         size="small"
         pagination={{

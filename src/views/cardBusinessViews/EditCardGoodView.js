@@ -198,13 +198,13 @@ function EditCardGoodView () {
             <span>*</span>
             <div className={c.itemText}>卡密类型</div>
           </div>
-          <Radio.Group onChange={onChange} value={value} className={c.itemGrop}>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="常规卡 ： 可以添加多条卡密，每条卡密只能出售一次。">
-                    <Radio value={1} className={c.itemRadio}>常规卡</Radio>
-                  </Tooltip>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="循环卡 ： 可以添加多条卡密，每条卡密只能出售一次。">
-                    <Radio value={2} className={c.itemRadio}>循环卡</Radio>
-                  </Tooltip>
+					<Radio.Group onChange={onChange} value={value} className={c.itemGrop} style={{justifyContent: "flex-start"}}>
+						<Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="常规卡 ： 可以添加多条卡密，每条卡密只能出售一次。">
+							<Radio value={1} className={c.itemRadio} style={{width:'33.333%'}}>常规卡</Radio>
+						</Tooltip>
+						<Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="循环卡 ： 可以添加多条卡密，每条卡密只能出售一次。">
+							<Radio value={2} className={c.itemRadio} style={{width:'33.333%'}}>循环卡</Radio>
+						</Tooltip>
           </Radio.Group>
         </div>
         <div className={c.item} style={{alignItems:'flex-start'}}>
@@ -385,7 +385,7 @@ function RTable ({ tags }) {
   })
 
   views.push(
-    <Button type="primary" key="select" style={{marginLeft:0,marginBottom:28}} className={c.itemBtn} onClick={()=>{
+    <Button type="primary" key="select" style={{marginLeft:0}} className={c.itemBtn} onClick={()=>{
          win = window.open("/select-table", "_blank", "left=390,top=145,width=1200,height=700")
     }}>{!tags.length?"选择":"重新选择"}</Button>
   )

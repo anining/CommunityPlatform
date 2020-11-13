@@ -21,15 +21,15 @@ let win
 function ImpCommunityGoodView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
-	const { params, ext_prvd_id, provide_name, p_goods_id, p_name, p_price, p_min_order_amount, p_max_order_amount, p_pics, p_intro= "", provider_type, p_ctg_id } = state
+	const { params, ext_prvd_id, provide_name, p_goods_id, p_name, p_price, p_min_order_amount, p_max_order_amount, p_pics, p_intro= "", provider_type, p_ctg_id, p_unit } = state
 
   const [factors, setFactors] = useState([])
   const [ctg_id, setCtgId] = useState(p_ctg_id)
   const [dockingTarget, setDockingTarget] = useState()
-  const [unit_cost, setUnit_cost] = useState()
+  const [unit_cost, setUnit_cost] = useState(p_price)
   const [unit_price, setUnit_price] = useState(p_price)
   const [name, setName] = useState(p_name)
-  const [unit, setUnit] = useState()
+  const [unit, setUnit] = useState(p_unit)
   const [pics, setPics] = useState(p_pics)
   const [intro, setIntroduction] = useState(p_intro)
   const [status, setStatus] = useState("paused")
@@ -101,9 +101,9 @@ function ImpCommunityGoodView () {
       let localValues = [0, 0, 0, 0];
       for (let j = 0; j < 4; j++) {
         if (type === "absolute") {
-          localValues[j] = (+factors[j] || 0) + (+unit_cost || 0)
+          localValues[j] = ((+factors[j] || 0) + (+unit_cost || 0)).toFixed(4)
         } else {
-          localValues[j] = ((+factors[j] || 0) + 100) / 100 * (+unit_cost || 0)
+          localValues[j] = (((+factors[j] || 0) + 100) / 100 * (+unit_cost || 0)).toFixed(4)
         }
       }
       localValues[0]= unit_price || 0
@@ -142,6 +142,14 @@ function ImpCommunityGoodView () {
   // }
 
   function save (jump) {
+    if (!name) {
+      message.warning("请输入商品名称!")
+      return
+    }
+    if (!ctg_id) {
+      message.warning("请选择商品分类!")
+      return
+    }
     if (!name || !ctg_id || !unit_price) {
       message.warning("请完善信息")
       return
@@ -156,7 +164,7 @@ function ImpCommunityGoodView () {
 			supp_goods: provider_type==="supplier" ? { provider_type, goods_id: p_goods_id } : { provider_type, ext_prvd_goods_id: p_goods_id, ext_prvd_id, params },
       ctg_id,
       tag_ids,
-      prices: factors,
+			prices: dockingTarget ? factors : [unit_price,0,0,0],
 			unit: unit || "个",
       refundable,
       recommended,
@@ -175,13 +183,9 @@ function ImpCommunityGoodView () {
     promise.then(r => {
       setLoading(false)
       if (!r.error) {
-				!jump && h.replace('/main/editCommunityGood')
         saveSuccess(jump)
       }
     }).catch(() => {
-      if (!jump) {
-        h.replace('/main/editCommunityGood')
-      }
       setLoading(false)
     })
   }
@@ -255,7 +259,7 @@ function ImpCommunityGoodView () {
         </div>
 				<div className={c.item}>
 					<div className={c.itemName}>
-						<span>*</span>
+						<span className={c.white}>*</span>
 						<div className={c.itemText}>调价模版</div>
 					</div>
 					<DropdownPromiseComponent placeholder="请选择调价模版" value={dockingTarget} fetchName={getCmntPadjs} setValue={setDockingTarget}/>
@@ -266,7 +270,7 @@ function ImpCommunityGoodView () {
 				</div>
 				<div className={c.item}>
 					<div className={c.itemName}>
-						<span>*</span>
+						<span className={c.white}>*</span>
 						<div className={c.itemText}>进价</div>
 					</div>
 					<Input type="number" onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>

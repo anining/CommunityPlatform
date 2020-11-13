@@ -52,7 +52,7 @@ function getSimpleText(html) {
   return msg;
 }
 
-function dateFormat(date, format) {
+function dateFormat(date, format='yyyy-MM-dd HH:mm:ss') {
   date = new Date(date);
   var o = {
     'M+': date.getMonth() + 1, //month

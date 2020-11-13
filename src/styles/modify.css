@@ -126,3 +126,7 @@ td.ant-table-column-sort {
 .ant-tag {
   font-size: 1rem;
 }
+
+.ant-dropdown-menu-item:hover, .ant-dropdown-menu-submenu-title:hover {
+	background-color: #EEF4FE;
+}

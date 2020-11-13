@@ -20,7 +20,7 @@
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-start;
-  width: calc(100%-122px);
+  /* width: calc(100%-122px); */
   height: 100%;
 }
 
@@ -69,6 +69,7 @@
 }
 
 .headerItemImg {
+	margin-left: 5%;
   width: 87px;
 }
 
@@ -166,7 +167,7 @@
 }
 
 .dropItem:hover {
-  background-color: #f5f5f5;
+  background-color: #EEF4FE;
 }
 
 .actionBtn {
