@@ -385,7 +385,7 @@ function RTable ({ tags }) {
   })
 
   views.push(
-    <Button type="primary" key="select" style={{marginLeft:0}} className={c.itemBtn} onClick={()=>{
+    <Button type="primary" key="select" style={{marginLeft:0,marginBottom:tags.length?28:0}} className={c.itemBtn} onClick={()=>{
          win = window.open("/select-table", "_blank", "left=390,top=145,width=1200,height=700")
     }}>{!tags.length?"选择":"重新选择"}</Button>
   )

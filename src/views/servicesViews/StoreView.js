@@ -22,25 +22,25 @@ function StoreView() {
   const data = [
     {
       label: '供货商',
-      number: '10,100',
+      number: '-',
       icon: good38,
       id: 111,
     },
     {
       label: '供货商品数',
-      number: '10,111',
+      number: '-',
       icon: good39,
       id: 222,
     },
     {
       label: '关闭供货',
-      number: '3',
+      number: '-',
       icon: good57,
       id: 333,
     },
     {
       label: '申请结算',
-      number: '3',
+      number: '-',
       icon: good58,
       id: 444,
     },
@@ -176,7 +176,7 @@ function RTable() {
       title: '结算二维码',
 			ellipsis: true,
       dataIndex: 'status',
-      render: (text, record, index) => <div className={c.view_text}>查看</div>
+			render: (text, record, index) => <div onClick={()=>message.warning("敬请期待")} className={c.view_text}>查看</div>
     },
     {
 			title: () => <span style={{marginLeft:32}}>操作</span>,
@@ -257,6 +257,7 @@ function RTable() {
         dataSource={data}
         size="small"
         pagination={{
+					showSizeChanger:false,
           showQuickJumper: true,
           current,
           pageSize,

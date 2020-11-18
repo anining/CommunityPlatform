@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Badge, Space, Popconfirm, Table, message, Input, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
+import * as L from "partial.lenses"
+import * as R from 'kefir.ramda'
 import oc from '../../styles/oc.module.css'
 import good17 from '../../icons/good/good17.png'
 import good18 from '../../icons/good/good18.png'
@@ -16,8 +18,8 @@ import good41 from '../../icons/good/good41.png'
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
-import { dateFormat, push, getKey, saveSuccess, transformTime } from "../../utils/util";
-import { refundAccept, orderComments, communityGoodsOrders, communityGoodsCategories } from "../../utils/api"
+import { dateFormat, push, getKey, saveSuccess } from "../../utils/util";
+import { refundAccept, orderSync, orderComments, communityGoodsOrders, communityGoodsCategories, ordersStat } from "../../utils/api"
 import SelectComponent from "../../components/SelectComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
@@ -27,40 +29,39 @@ import ActionComponent from '../../components/ActionComponent'
 
 function CommunityOrderView () {
   const [visibleMsg, setVisibleMsg] = useState(false)
-  const [visibleOther, setVisibleOther] = useState(false)
-
   const [visible_push, setVisiblePush] = useState(false)
   const [visible_ref, setVisibleRef] = useState(false)
   const [visible, setVisible] = useState(false)
   const [remark, setRemark] = useState()
   const [refundNum, setRefundNum] = useState()
   const [sel, setSel] = useState({})
-  const label = [
+  const [selected, setSelected] = useState([])
+	const [labels, setLabels] = useState([
     {
       label: '订单总数',
-      number: '10,100',
+      number: '0',
       icon: good19,
       id: 111,
     },
     {
       label: '待处理订单',
-      number: '10,111',
+      number: '0',
       icon: good21,
       id: 222,
     },
     {
       label: '退款中',
-      number: '10,111',
+      number: '0',
       icon: good17,
       id: 333,
     },
     {
       label: '通信失败',
-      number: '1',
+      number: '0',
       icon: good59,
       id: 444,
     },
-  ]
+  ])
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
@@ -73,6 +74,56 @@ function CommunityOrderView () {
   const [search_goods_name, setSearch_goods_name] = useState()
   const [community_goods_category_id, setCommunity_goods_category_id] = useState()
   const [status, setStatus] = useState()
+  const [refundStatus, setRefundStatus] = useState()
+	const [width, setWidth] = useState([209,0,0,0])
+
+	const sumIf = pred => R.pipe(
+		R.filter(pred),
+		R.map(R.prop("count")),
+		R.sum
+	)
+
+	const getNums = () => {
+		ordersStat().then(r=>{
+			if(!r.error){
+				const goods_num = sumIf(() => true)(r.data)
+				const pending_num = sumIf(x => x.status === "pending")(r.data)
+				const refunding_num = sumIf(x => x.refund_status === "refunding")(r.data)
+				const failed_num = sumIf(x => x.sync_status === "failed")(r.data)
+				setLabels([
+					{
+						label: '订单总数',
+						number: goods_num,
+						icon: good19,
+						id: 111,
+					},
+					{
+						label: '待处理订单',
+						number: pending_num,
+						icon: good21,
+						id: 222,
+					},
+					{
+						label: '退款中',
+						number: refunding_num,
+						icon: good17,
+						id: 333,
+					},
+					{
+						label: '通信失败',
+						number: failed_num,
+						icon: good59,
+						id: 444,
+					}
+				])
+			}
+		})
+	}
+
+  const setPriceAt = i => R.pipe(
+    num => L.set([i], num, width),
+    setWidth
+  )
 
   function getGoodsSummaries(page,size) {
     return communityGoodsCategories("get",undefined,{page,size}).then(r => {
@@ -117,7 +168,8 @@ function CommunityOrderView () {
   }
 
   function get (current) {
-    communityGoodsOrders(current, pageSize, id, search_user_account, search_goods_name, community_goods_category_id, status, date[0], date[1]).then(r => {
+		getNums()
+		communityGoodsOrders(current, pageSize, id, refundStatus, search_user_account, search_goods_name, community_goods_category_id, status, date[0], date[1]).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
@@ -129,7 +181,7 @@ function CommunityOrderView () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = transformTime(item.created_at)
+      item.time = dateFormat(item.created_at)
     })
     return arr
   }
@@ -174,13 +226,24 @@ function CommunityOrderView () {
     get(page)
   }
 
+	const ordersPush = (sels = selected) => {
+		orderSync("ids=" + sels.map(i => i.id).toString()).then(r => {
+			if (!r.error) {
+				saveSuccess(false)
+				setSelectRows([])
+				get(current)
+			}
+		})
+	}
+
   function submit (key) {
     switch (key) {
-      case "delete":
-        message.success('批量删除操作');
+      case "push":
+      case "sync":
+				setSelected(selectedRows.map(i => data[i]))
+				ordersPush(selectedRows.map(i => data[i]))
         break
       default:
-        ;
     }
   }
 
@@ -188,6 +251,7 @@ function CommunityOrderView () {
     setId(undefined)
     setSearch_user_account(undefined)
     setSearch_goods_name(undefined)
+		setRefundStatus(undefined)
     setCommunity_goods_category_id(undefined)
     setStatus(undefined)
     setDate([])
@@ -202,6 +266,7 @@ function CommunityOrderView () {
   },
     {
       title: '商品名称',
+			width: 200,
 			ellipsis: true,
       dataIndex: 'goods_name',
   },
@@ -287,7 +352,8 @@ function CommunityOrderView () {
 },
 	{
   title: '下单时间',
-			ellipsis: true,
+	width: 200,
+	ellipsis: true,
   dataIndex: 'time',
 },
 	{
@@ -300,36 +366,83 @@ function CommunityOrderView () {
 },
 	{
   title: '订单信息',
-			ellipsis: true,
+	ellipsis: true,
   dataIndex: 'time',
-  render: (text, record, index) => {
-    return '-'
-}
+	render: (text, record, index) => {
+		return <div onClick={()=>{
+			setSel(record)
+			setVisibleMsg(true)
+		}} className={c.view_text}>查看</div>
+	}
 },
 	{
 	title: () => <span style={{marginLeft:32}}>操作</span>,
-	width: 355,
+	width: width[0]+width[1]+width[2]+width[3],
 	fixed: 'right',
-  render: (text, record, index) => (
-		<Space size="small" className={c.space}>
-      <div className={c.clickText} onClick={()=>{
-				setSel(record)
-				setRemark(sel.comment)
-				setVisible(true)
-			}}>
-				添加备注
-			</div>
-      <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-      <div className={c.clickText} onClick={()=>push('/main/editCommunityOrder',record)}>订单历程</div>
-      <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-			<div onClick={()=>{
-				setSel(record)
-				setVisibleRef(true)
-			}} className={c.clickText}>同意退款</div>
-			<div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-      <div style={{cursor:'wait'}} className={c.clickText}>重新推送</div>
-    </Space>
-  )
+  render: (...args) => {
+		if(args[1].refund_status === "refunding") {
+			if(width[1] !== 73) {
+				const localWidth = [...width]
+				localWidth[1] = 73
+				setWidth(localWidth)
+			}
+		}
+		if(args[1].sync_status === "pending") {
+			if(width[2] !== 73) {
+				const localWidth = [...width]
+				localWidth[2] = 73
+				setWidth(localWidth)
+			}
+		}
+		if(args[1].sync_status === "failed") {
+			if(width[3] !== 73) {
+				const localWidth = [...width]
+				localWidth[3] = 73
+				setWidth(localWidth)
+			}
+		}
+		return (
+			<Space size="small" className={c.space} style={{paddingLeft:32, justifyContent: "flex-start"}}>
+				<div className={c.clickText} onClick={()=>{
+					setSel(args[1])
+					setRemark(sel.comment)
+					setVisible(true)
+				}}>
+					添加备注
+				</div>
+				<div className={c.line} />
+				<div className={c.clickText} onClick={()=>push('/main/editCommunityOrder',args[1])}>订单历程</div>
+				{
+					args[1].refund_status === "refunding" ?
+						<>
+							<div className={c.line} />
+							<div onClick={()=>{
+								setSel(args[1])
+								setVisibleRef(true)
+							}} className={c.clickText}>同意退款</div>
+						</>:null
+				}
+				{
+					args[1].sync_status === "pending" ?
+						<>
+							<div className={c.line} />
+							<div onClick={()=>{
+								ordersPush([args[1]])
+							}} className={c.clickText}>重新推送</div>
+						</>:null
+				}
+				{
+					args[1].sync_status === "failed" ?
+						<>
+							<div className={c.line} />
+							<div onClick={()=>{
+								ordersPush([args[1]])
+							}} className={c.clickText}>重新同步</div>
+						</>:null
+				}
+			</Space>
+		)
+	}
 }
 ];
 
@@ -341,13 +454,12 @@ function CommunityOrderView () {
     setVisible(false)
     setVisiblePush(false)
     setVisibleMsg(false)
-    setVisibleOther(false)
   }
 
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent data={label}/>
+        <TableHeaderComponent data={labels}/>
         <div className={c.main}>
           <div className={c.searchView}>
             <div className={c.search}>
@@ -355,13 +467,13 @@ function CommunityOrderView () {
                 <Input value={id} onChange={e=>setId(e.target.value)} onPressEnter={()=>get(current)} placeholder="请输入订单编号" size="small" className={c.searchInput}/>
                 <Input onPressEnter={()=>get(current)} placeholder="请输入商品名称" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/>
                 {/* <Input onPressEnter={()=>get(current)} placeholder="请输入下单编号" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/> */}
-                <Input onPressEnter={()=>get(current)} value={search_user_account} onChange={e=>setSearch_user_account(e.target.value)} placeholder="请输入用户账户" size="small" className={c.searchInput}/>
+                <Input onPressEnter={()=>get(current)} value={search_user_account} onChange={e=>setSearch_user_account(e.target.value)} placeholder="请输入下单用户" size="small" className={c.searchInput}/>
                 <DropdownPromiseComponent view placeholder="请选择商品分类" value={community_goods_category_id} setValue={setCommunity_goods_category_id} fetchName={getGoodsSummaries}/>
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择商品分类" style={{width:186}}/> */}
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单状态" style={{width:186}}/> */}
-                {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择售后状态" style={{width:186}}/> */}
+                <DropdownComponent action={refundStatus} setAction={setRefundStatus} keys={[{"name":"退款中",key:"refunding"},{"name":"已退款",key:"refunded"},{"name":"已拒绝",key:"rejected"}]} placeholder="请选择售后状态" style={{width:186}}/>
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择通信状态" style={{width:186}}/> */}
-                <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已终止",key:"closed"}]} placeholder="请选择订单去向" style={{width:186}}/>
+                <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已终止",key:"closed"}]} placeholder="请选择订单状态" style={{width:186}}/>
                 <DatePicker.RangePicker
                   format="YYYY-MM-DD"
                   onChange={dateChange}
@@ -380,7 +492,7 @@ function CommunityOrderView () {
               </div>
             </div>
           </div>
-					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
+					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{"name":"重新推送",key:"push"},{"name":"重新通信",key:"sync"}]}/>
           <Table
 						scroll={SCROLL}
             columns={columns}
@@ -391,6 +503,7 @@ function CommunityOrderView () {
             size="small"
             pagination={{
               showQuickJumper:true,
+							showSizeChanger:false,
               current,
               pageSize,
               showLessItems:true,
@@ -400,28 +513,23 @@ function CommunityOrderView () {
           />
         </div>
     </div>
+
       <ModalPopComponent
-        div = {
+        div={
           <div className={oc.limit_view}>
             {
-              sel.args ? Object.keys(JSON.parse(sel.args || "{}")).map(i=><div key={i} className={oc.limit_item}>{i}：<span>{JSON.parse(sel.args || "{}")[i]}</span></div>) : <div className={oc.limit_item} style={{paddingLeft:0}}>暂无</div>
+              sel.args ? Object.keys(JSON.parse(sel.args || "{}")).map(i=><div key={i} className={oc.limit_item}>{i}：<span>{JSON.parse(sel.args || "{}")[i]}</span></div>) : null
+            }
+            {
+              sel.extras ? Object.keys(JSON.parse(sel.extras || "{}")).map(i=><div key={i} className={oc.limit_item}>{i}：<span>{JSON.parse(sel.extras || "{}")[i]}</span></div>) : null
+            }
+            {
+							!sel.extras && !sel.args ? <div className={oc.limit_item} style={{paddingLeft:0}}>暂无</div> : null
             }
           </div>
         }
-        title="下单信息"
+        title="订单信息"
         visible={visibleMsg}
-        onCancel = {onCancel}
-      />
-      <ModalPopComponent
-        div = {
-          <div className={oc.limit_view}>
-            {
-              sel.extras ? Object.keys(JSON.parse(sel.extras || "{}")).map(i=><div key={i} className={oc.limit_item}>{i}：<span>{JSON.parse(sel.extras || "{}")[i]}</span></div>) : <div className={oc.limit_item} style={{paddingLeft:0}}>暂无</div>
-            }
-          </div>
-        }
-        title="扩展信息"
-        visible={visibleOther}
         onCancel = {onCancel}
       />
       <ModalComponent

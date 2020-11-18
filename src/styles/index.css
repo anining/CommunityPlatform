@@ -7,6 +7,9 @@ html, body, #root {
   font-size: 14px;
   min-width: 1100px;
   min-height: 100%;
+}
+
+.user-select {
   moz-user-select: -moz-none;
   -moz-user-select: none;
   -o-user-select:none;

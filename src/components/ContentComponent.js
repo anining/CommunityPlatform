@@ -166,10 +166,10 @@ function ContentComponent () {
           { localPermissions.includes('valueaddedsrv') ? <ImportView /> : <Redirect to="/main/error" /> }
         </Route>
         {/* 站点管理 */}
-        <Route exact path="/main/storeSetting">
+        <Route exact path="/main/sSetting">
           { localPermissions.includes('citecfg') ? <StoreSettingView /> : <Redirect to="/main/error" /> }
         </Route>
-        <Route exact path="/main/storePlug">
+        <Route exact path="/main/sPlug">
           { localPermissions.includes('citecfg') ? <StorePlugView /> : <Redirect to="/main/error" /> }
         </Route>
         <Route exact path="/main/rebot">

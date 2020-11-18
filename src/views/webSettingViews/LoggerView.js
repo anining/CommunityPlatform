@@ -3,7 +3,7 @@ import { Button, Table, Input, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import good9 from '../../icons/good/good9.png'
 import { loginlogs } from "../../utils/api"
-import { transformTime } from "../../utils/util"
+import { dateFormat } from "../../utils/util"
 
 function LoggerView () {
 
@@ -53,7 +53,7 @@ function RTable () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = transformTime(item.created_at)
+      item.time = dateFormat(item.created_at)
     })
     return arr
   }
@@ -117,6 +117,7 @@ function RTable () {
         size="small"
         pagination={{
           showQuickJumper:true,
+					showSizeChanger:false,
           current,
           pageSize,
           showLessItems:true,

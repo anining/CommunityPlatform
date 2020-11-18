@@ -9,6 +9,10 @@ const ERROR_MSG = {
   token_expired: "登录过期",
   incorrect_old_password: "原密码错误"
 }
+const FETCH_STATUS_MSG = {
+  422: "参数错误",
+  404: "服务器爆满中"
+}
 
 function parameterTransform (method, key, parameter) {
   if (method === 'DELETE' || method === 'POST' || method === 'PUT' || method === "PATCH") {
@@ -37,13 +41,10 @@ async function transformFetch (method, url, data = {}) {
         const DATA_TEXT = await FETCH_DATA.text();
         const localDate = DEVELOPER === 'Production' ? JSON.parse(DATA_TEXT) : JSON.parse(DATA_TEXT)
         const { error } = localDate
-        if (FETCH_DATA.status === 404) {
-          message.error("服务器爆满中")
-          resolve({ error: "服务器爆满中" });
-        } else if (FETCH_DATA.status === 422) {
-          message.error("参数错误")
-          resolve({ error: "参数错误" });
-        } else {
+				if(FETCH_DATA.status in FETCH_STATUS_MSG) {
+					message.error(FETCH_STATUS_MSG[FETCH_DATA.status])
+          resolve({ error: FETCH_STATUS_MSG[FETCH_DATA.status] });
+				} else {
           if (error) {
             if (error in ERROR_MSG) {
               message.error(ERROR_MSG[error])
@@ -64,6 +65,6 @@ async function transformFetch (method, url, data = {}) {
   } catch (e) {
     message.error("请求失败")
   }
-};
+}
 
 export { transformFetch }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button, Table, message } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
-import { push, transformTime, getSimpleText } from "../../utils/util";
+import { push, dateFormat, getSimpleText } from "../../utils/util";
 import DropdownComponent from "../../components/DropdownComponent";
 import { announcements } from '../../utils/api'
 import {SCROLL} from '../../utils/config';
@@ -43,7 +43,7 @@ function RTable () {
   function format (arr = []) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = transformTime(item.created_at)
+      item.time = dateFormat(item.created_at)
     })
     return arr
   }
@@ -87,7 +87,7 @@ function RTable () {
   function submit (key) {
     switch (key) {
       case "delete":
-        message.success('批量删除操作');
+        message.warning('敬请期待');
         break
       default:
         ;
@@ -120,6 +120,7 @@ function RTable () {
         size="small"
         pagination={{
           showQuickJumper:true,
+					showSizeChanger:false,
           current,
           pageSize,
           showLessItems:true,

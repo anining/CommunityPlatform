@@ -5,7 +5,7 @@ import { managers } from '../../utils/api'
 import good7 from '../../icons/good/good7.png'
 import home9 from '../../icons/home/home9.png'
 import good40 from '../../icons/good/good40.png'
-import { push, transformTime, getKey } from "../../utils/util"
+import { push, dateFormat, getKey } from "../../utils/util"
 import { PERMISSIONS, PERMISSIONS_ARRAY, SCROLL } from "../../utils/config"
 
 function AdminView () {
@@ -47,7 +47,7 @@ function RTable () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = transformTime(item.created_at)
+      item.time = dateFormat(item.created_at)
     })
     return arr
   }
@@ -153,6 +153,7 @@ function RTable () {
         size="small"
         pagination={{
           showQuickJumper:true,
+					showSizeChanger:false,
           showLessItems:true,
         }}
       />

@@ -27,9 +27,13 @@ function LoginView () {
   }
 
   function submit () {
-    if (!account || !password) {
-      message.warning("请完善信息")
-      return;
+    if (!account) {
+      message.warning("请输入账号")
+      return
+    }
+    if (!password) {
+      message.warning("请输入密码")
+      return
     }
     setLoading(true)
     const promise = login(account, password)
@@ -72,16 +76,16 @@ function LoginView () {
         <div className={c.topView}>
           <img src={auth2} alt="" className={c.img} />
           <div className={c.leftView}>
-            <div className={c.tipsTitle}>欢迎加入分站社区!</div>
+            <div className={c.tipsTitle}>欢迎使用义舟系统!</div>
             <div className={c.tipsContent}>
-              <div>卡密实时到账</div>
-              <div>卡密实时到账</div>
-              <div>社区任务超多</div>
+              <div>用户密价</div>
+              <div>开放接口</div>
+              <div>一键串货</div>
             </div>
           </div>
           <div className={c.rightView}>
             <div className={c.inputView}>
-              <div className={c.inputTitle}>登录社区</div>
+              <div className={c.inputTitle}>商户端登录</div>
               <div className={c.inputItem}>
                 <div className={c.inputText}>账号</div>
                 <Input size="small" maxLength={20} onChange={e=>onChange(e,1)} value={account} className={c.input} placeholder="请输入登录手机号" prefix={

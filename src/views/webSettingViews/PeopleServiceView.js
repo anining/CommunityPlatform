@@ -95,6 +95,7 @@ function RTable () {
         dataSource={data}
         size="small"
         pagination={{
+					showSizeChanger:false,
           showQuickJumper:true,
           showLessItems:true,
         }}

@@ -18,7 +18,9 @@ import good73 from '../icons/good/good73.png'
 import good77 from '../icons/good/good77.png'
 
 const DEVELOPER = "Production"
-const API_URL = DEVELOPER === "Production" ? "https://beta-omnivstore.prismslight.com/mng" : "https://test-omnivstore.prismslight.com/mng"
+const API_URL = process.env.REACT_APP_API_URL
+// const API_URL = DEVELOPER === "Test" ? "https://beta-omnivstore.prismslight.com/mng" : "https://test-omnivstore.prismslight.com/mng"
+// const API_URL = DEVELOPER === "Test" ? "https://beta-omnivstore.prismslight.com/mng" : "http://192.168.1.36:8000/mng"
 const JUMP_DELAY = 500
 const MODULES = {
   toolbar: [
@@ -26,20 +28,20 @@ const MODULES = {
         ['blockquote', 'code-block'],
         ['link', 'image'],
 
-        [{ 'header': 1 }, { 'header': 2 }], // custom button values
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'script': 'sub' }, { 'script': 'super' }], // superscript/subscript
-        [{ 'indent': '-1' }, { 'indent': '+1' }], // outdent/indent
-        [{ 'direction': 'rtl' }], // text direction
+        // [{ 'header': 1 }, { 'header': 2 }], // custom button values
+        // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        // [{ 'script': 'sub' }, { 'script': 'super' }], // superscript/subscript
+        // [{ 'indent': '-1' }, { 'indent': '+1' }], // outdent/indent
+        // [{ 'direction': 'rtl' }], // text direction
 
-        [{ 'size': ['small', false, 'large', 'huge'] }], // custom dropdown
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        // [{ 'size': ['small', false, 'large', 'huge'] }], // custom dropdown
+        // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-        [{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
-        [{ 'font': [] }],
-        [{ 'align': [] }],
+        // [{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
+        // [{ 'font': [] }],
+        // [{ 'align': [] }],
 
-        ['clean'] // remove formatting button
+        // ['clean'] // remove formatting button
     ]
 }
 const PERMISSIONS = {
@@ -80,33 +82,29 @@ const GOODS_STATUS = {
     text: '已下架',
     src: good44
   },
-  a: {
+  refundableTrue: {
     color: "#353535",
     text: '允许退款',
     src: good49
   },
-  b: {
+  refundableFalse: {
     color: "#FF4D4F",
     text: '不允许退款',
     src: good50
   },
-  c: {
+  recommendedTrue: {
     color: "#FF4D4F",
-    text: '推荐',
     src: good51
   },
-  d: {
+  recommendedFalse: {
     color: "#FF4D4F",
-    text: '已下架',
     src: good52
   },
-  e: {
+  del: {
     color: "#FF4D4F",
-    text: '已下架',
     src: good53
-  },
+  }
 }
-
 const CARDS_STATUS = {
   a: {
     color: "#FF4D4F",
@@ -114,7 +112,6 @@ const CARDS_STATUS = {
     src: good56
   }
 }
-
 const USER_STATUS = {
   banned: {
     color: "#FF4D4F",
@@ -127,7 +124,6 @@ const USER_STATUS = {
     src: good69
   }
 }
-
 const USER_RANK = {
   "0": {
     src: good77,
@@ -146,7 +142,6 @@ const USER_RANK = {
     label: "至尊用户"
   }
 }
-
 const REFUND_STATUS = {
   "-": {
 		status: "default",
@@ -163,16 +158,6 @@ const REFUND_STATUS = {
   rejected: {
 		status: "error",
     text: '已拒绝',
-  }
-}
-const PROVIDER_TYPE = {
-  supplier: {
-    color: "#FF4D4F",
-    text: '供货商',
-  },
-  external_provider: {
-    color: "#FF4D4F",
-    text: '外部供货商',
   }
 }
 const SCROLL = {x:"120%"}
@@ -236,12 +221,8 @@ const COMMUNITY_ORDER_STATUS = {
 		status: "success",
 		text: '已完成',
 	},
-	// {
-	//   color: "#FF8D30",
-	//   text: '异常',
-	// },
 	closed: {
-		color: "rgba(0, 0, 0, 0.25)",
+		status: "default",
 		text: '已结束',
 	}
 }
@@ -286,4 +267,4 @@ const COMMUNITY_SYNC_STATUS = {
 	}
 }
 
-export { COMMUNITY_SYNC_STATUS, COMMUNITY_AFTER_STATUS, COMMUNITY_ORDER_STATUS, CARD_STATUS, CONSUMPTION_TYPE, REFUND_STATUS, SCROLL, PROVIDER_TYPE, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }
+export { COMMUNITY_SYNC_STATUS, COMMUNITY_AFTER_STATUS, COMMUNITY_ORDER_STATUS, CARD_STATUS, CONSUMPTION_TYPE, REFUND_STATUS, SCROLL, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }

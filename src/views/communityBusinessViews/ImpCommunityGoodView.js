@@ -8,9 +8,10 @@ import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
 import good46 from '../../icons/good/good46.png'
 import good47 from '../../icons/good/good47.png'
+import ImgCrop from 'antd-img-crop';
 import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
-import { saveSuccess, push } from "../../utils/util";
+import { beforeUpload, saveSuccess, push } from "../../utils/util";
 import { communityGoods, providerSummaries, cmntPadjs, communityGoodsCategories, communityParamTemplates } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import { MODULES } from "../../utils/config";
@@ -23,14 +24,19 @@ function ImpCommunityGoodView () {
   const h = useHistory()
 	const { params, ext_prvd_id, provide_name, p_goods_id, p_name, p_price, p_min_order_amount, p_max_order_amount, p_pics, p_intro= "", provider_type, p_ctg_id, p_unit } = state
 
-  const [factors, setFactors] = useState([])
+	const [pics, setPics] = useState(p_pics.map(i => ({
+		uid: '-1',
+		name: 'image.png',
+		status: 'done',
+		url: i.replace(/!yile/g,""),
+	})))
   const [ctg_id, setCtgId] = useState(p_ctg_id)
   const [dockingTarget, setDockingTarget] = useState()
   const [unit_cost, setUnit_cost] = useState(p_price)
   const [unit_price, setUnit_price] = useState(p_price)
+  const [factors, setFactors] = useState([p_price])
   const [name, setName] = useState(p_name)
   const [unit, setUnit] = useState(p_unit)
-  const [pics, setPics] = useState(p_pics)
   const [intro, setIntroduction] = useState(p_intro)
   const [status, setStatus] = useState("paused")
   const [weight, setWeight] = useState()
@@ -46,7 +52,7 @@ function ImpCommunityGoodView () {
   // const [prices, setPrices] = useState(Boolean(padj_id))
 
   const [loading, setLoading] = useState(false)
-  const [imageUrl, setImageUrl] = useState(pics[0])
+  const [imageUrl, setImageUrl] = useState()
   const [tags, setTags] = useState([])
   const [marks, setMarks] = useState([])
   const [has_more, setHasMore] = useState(false)
@@ -70,6 +76,11 @@ function ImpCommunityGoodView () {
     win && win.close()
   }
 
+	window.localTable = function () {
+		win && win.close()
+		push("/main/table")
+	}
+
   // window.localJump = function () {
   //   push("/main/table")
   //   win && win.close()
@@ -83,6 +94,21 @@ function ImpCommunityGoodView () {
   //     return []
   //   }).catch(()=> [])
   // }
+
+  async function onPreview (file) {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      })
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow.document.write(image.outerHTML);
+  }
 
   function getCmntPadjs (page,size) {
     return cmntPadjs("get", undefined, {page, size}).then(r => {
@@ -98,6 +124,7 @@ function ImpCommunityGoodView () {
     if (dockingTarget) {
       const values = marks.filter(i => i.id === dockingTarget)
       const { type, factors } = values[0]
+			console.log(type, factors)
       let localValues = [0, 0, 0, 0];
       for (let j = 0; j < 4; j++) {
         if (type === "absolute") {
@@ -106,7 +133,6 @@ function ImpCommunityGoodView () {
           localValues[j] = (((+factors[j] || 0) + 100) / 100 * (+unit_cost || 0)).toFixed(4)
         }
       }
-      localValues[0]= unit_price || 0
       setFactors(localValues)
     }
   }, [dockingTarget])
@@ -172,7 +198,7 @@ function ImpCommunityGoodView () {
       min_order_amount: min_order_amount || 1,
       max_order_amount: max_order_amount || 10000,
       weight: weight || 1,
-      pics,
+			pics: pics.map(i => i.url),
 			padj_id: dockingTarget,
 			unit_cost,
       batch_order,
@@ -191,42 +217,12 @@ function ImpCommunityGoodView () {
   }
 
   function parsing () {
-    imageUrl && setPics([imageUrl])
-  }
-
-  function getBase64 (img, callback) {
-    // const reader = new FileReader();
-    // reader.addEventListener('load', () => callback(reader.result));
-    // reader.readAsDataURL(img);
-  }
-
-  function handleChange (info) {
-    // if (info.file.status === 'uploading') {
-    //   this.setState({ loading: true });
-    //   return;
-    // }
-    // if (info.file.status === 'done') {
-    //   // Get this url from response in real world.
-    //   getBase64(info.file.originFileObj, imageUrl =>
-    //     this.setState({
-    //       imageUrl,
-    //       loading: false,
-    //     }),
-    //   );
-    // }
-  }
-
-  function beforeUpload (file) {
-    // const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-
-    // if (!isJpgOrPng) {
-    //   message.error('You can only upload JPG/PNG file!');
-    // }
-    // const isLt2M = file.size / 1024 / 1024 < 2;
-    // if (!isLt2M) {
-    //   message.error('Image must smaller than 2MB!');
-    // }
-    // return isJpgOrPng && isLt2M;
+		imageUrl && setPics([{
+										uid: '-1',
+										name: 'image.png',
+										status: 'done',
+										url: imageUrl,
+									}])
   }
 
   return (
@@ -280,7 +276,7 @@ function ImpCommunityGoodView () {
             <span>*</span>
             <div className={c.itemText}>单价</div>
           </div>
-          <Input type="number" onChange={e=>setUnit_price(e.target.value)} value={unit_price} placeholder="请输入商品销售单价" className={c.itemInput}></Input>
+          <Input onChange={setPriceAt(0)} value={factors[0]} placeholder="请输入商品销售单价" className={c.itemInput}></Input>
         </div>
 				<div className={c.item} style={{alignItems:'flex-start'}}>
 					<div className={c.itemName}>
@@ -344,23 +340,19 @@ function ImpCommunityGoodView () {
           <div className={c.itemName}>
             <span style={{color:'#fff'}}>*</span>
           </div>
-          <Upload
-            disabled={true}
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-          >
-            {pics.length ? <img src={pics[0]} alt="avatar" style={{ width: 100 }} /> :
+					<ImgCrop rotate>
+						<Upload
+							action={file=>beforeUpload(file, pics, setPics)}
+							listType="picture-card"
+							fileList={pics}
+							onPreview={onPreview}
+						>
               <div>
                 <img src={edit1} alt="" className={c.uploadImg}/>
                 <div className={c.uploadText}>上传图片</div>
               </div>
-            }
-          </Upload>
+						</Upload>
+					</ImgCrop>
           <div className={c.uploadTips}>
             <div>商品图片最多存在1张；</div>
             <div>推荐图片大小<span>100*100，200*200</span></div>
@@ -558,7 +550,7 @@ function RTable ({ tags }) {
   })
 
   views.push(
-    <Button type="primary" key="select" style={{marginLeft:0,marginBottom:28}} className={c.itemBtn} onClick={()=>{
+    <Button type="primary" key="select" style={{marginLeft:0,marginBottom:tags.length?28:0}} className={c.itemBtn} onClick={()=>{
          win = window.open("/select-table", "_blank", "left=390,top=145,width=1200,height=700")
     }}>{!tags.length?"选择":"重新选择"}</Button>
   )

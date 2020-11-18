@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Input, Modal, Space } from 'antd'
+import { Button, Table, Input, Modal, Space, message } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
 import { communityGoodsCategories } from '../../utils/api'
-import { push, transformTime, saveSuccess } from "../../utils/util";
+import { push, dateFormat, saveSuccess } from "../../utils/util";
 import DropdownComponent from '../../components/DropdownComponent'
 import { styles } from "../../styles/modal"
 import ActionComponent from '../../components/ActionComponent'
@@ -94,7 +94,7 @@ function RTable ({ setVisible }) {
   function format (arr = []) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = transformTime(item.created_at)
+      item.time = dateFormat(item.created_at)
     })
     return arr
   }
@@ -139,14 +139,16 @@ function RTable ({ setVisible }) {
   };
 
 	function deleteCategory () {
+		setSelectRows([])
+		message.warning("敬请期待")
 		// setVisible(true)
-		communityGoodsCategories("delete", undefined, undefined, "ids=" + selectedRows.map(i => data[i].id).toString()).then(r => {
-			if (!r.error) {
-				saveSuccess(false)
-				setSelectRows([])
-				get(current)
-			}
-		})
+		// communityGoodsCategories("delete", undefined, undefined, "ids=" + selectedRows.map(i => data[i].id).toString()).then(r => {
+		// 	if (!r.error) {
+		// 		saveSuccess(false)
+		// 		setSelectRows([])
+		// 		get(current)
+		// 	}
+		// })
 	}
 
   function submit (key) {
@@ -194,6 +196,7 @@ function RTable ({ setVisible }) {
         size="small"
         pagination={{
           showQuickJumper:true,
+					showSizeChanger:false,
           current,
           pageSize,
           showLessItems:true,

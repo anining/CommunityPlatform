@@ -27,7 +27,7 @@ function EditDockingView () {
     let body = {
 			payload: JSON.stringify({ key: apiKey, api_token: apiToken }),
       name,
-      endpoint,
+			endpoint: formatEndpoint(endpoint),
       type: type || "yile",
     }
     setLoading(true)
@@ -52,6 +52,16 @@ function EditDockingView () {
       setLoading(false)
     })
   }
+
+	const formatEndpoint = (endpoint="") => {
+		let localEndpoint = endpoint.charAt(endpoint.length-1) === "/" ? endpoint.slice(0,-1) : endpoint
+		switch (type) {
+			case "yile":
+				return localEndpoint + ".api.94sq.cn"
+			default:
+				return localEndpoint
+		}
+	}
 
   return (
     <div className={c.container}>
@@ -101,14 +111,14 @@ function EditDockingView () {
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
-            <div className={c.itemText}>登录账户</div>
+            <div className={c.itemText}>TokenID</div>
           </div>
           <Input value={apiToken} onChange={e=>setApiToken(e.target.value)} placeholder="在对接系统的登录账号" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
-            <div className={c.itemText}>登录密码</div>
+            <div className={c.itemText}>密匙</div>
           </div>
           <Input value={apiKey} onChange={e=>setApiKey(e.target.value)} placeholder="在对接系统的登录密码" className={c.itemInput}></Input>
         </div>

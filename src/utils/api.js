@@ -215,10 +215,13 @@ export function customerServices (type, cid, table, body) {
 }
 
 // 获取社区订单列表
-export function communityGoodsOrders (page, size, id, search_user_account, search_goods_name, community_goods_category_id, status, start_from, end_with) {
+export function communityGoodsOrders (page, size, id, refund_status, search_user_account, search_goods_name, community_goods_category_id, status, start_from, end_with) {
   let data = { page, size }
   if (id) {
     data = { ...data, ...{ id } }
+  }
+  if (refund_status) {
+    data = { ...data, ...{ refund_status } }
   }
   if (search_user_account) {
     data = { ...data, ...{ user_account: search_user_account } }
@@ -331,4 +334,39 @@ export function suppGood (id) {
 // 批量修改订单备注
 export function orderComments (ids, comment) {
 	return transformFetch("PUT", `/cmnt-order-comments?${ids}`, {ids, comment});
+}
+
+// 获取社区订单统计信息
+export function ordersStat () {
+	return transformFetch("GET", `/cmnt-orders-stat`);
+}
+
+// 获取社区商品统计信息
+export function goodsStat () {
+	return transformFetch("GET", `/cmnt-goods-stat`);
+}
+
+// 批量删除社区商品
+export function delGoods (ids) {
+	return transformFetch("DELETE", `/cmnt-goods?${ids}`);
+}
+
+// 用户加减款
+export function usersBalances (id, amount) {
+	return transformFetch("POST", `/users/${id}/balances`, {amount});
+}
+
+// 批量重新同步社区订单
+export function orderSync (ids) {
+	return transformFetch("PATCH", `/cmnt-order-sync-status?${ids}`);
+}
+
+// 加款机器人设置
+export function botConfig (type, body) {
+  switch (type) {
+    case "get":
+      return transformFetch("GET", "/add-fund-bot-config")
+    default:
+      return transformFetch("PUT", "/add-fund-bot-config", body)
+  }
 }

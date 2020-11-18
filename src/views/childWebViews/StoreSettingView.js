@@ -8,6 +8,10 @@ import { saveSuccess } from "../../utils/util";
 import { MODULES } from "../../utils/config";
 
 function StoreSettingView () {
+  const [pics, setPics] = useState([])
+	const [siteName, setSiteName] = useState()
+  const [icon, setIcon] = useState()
+
   const [under_maintenance, setUnder_maintenance] = useState(false) // 店铺维护中
   const [show_goods_under_maintenance, setShow_goods_under_maintenance] = useState(false) // 商品状态
   const [allow_registration, setAllow_registration] = useState(false) // 允许注册
@@ -19,11 +23,15 @@ function StoreSettingView () {
   useEffect(() => {
     storeConfig('get').then(r => {
       if (!r.error) {
-        const { allow_guest, allow_registration, announcement, icp, show_goods_under_maintenance, under_maintenance } = r
+        const { logo, banners, site_name, allow_guest, allow_registration, announcement, icp, show_goods_under_maintenance, under_maintenance } = r.data
+				console.log(announcement)
+				setSiteName(site_name)
+				setPics(banners)
         setAllow_guest(allow_guest)
         setAllow_registration(allow_registration)
         setAnnouncement(announcement)
         setIcp(icp)
+				setIcon(logo)
         setShow_goods_under_maintenance(show_goods_under_maintenance)
         setUnder_maintenance(under_maintenance)
       }
@@ -32,7 +40,7 @@ function StoreSettingView () {
 
   function save () {
     setLoading(true)
-    storeConfig('modify', { under_maintenance, show_goods_under_maintenance, allow_registration, allow_guest, icp, announcement }).then(r => {
+		storeConfig('modify', { logo: icon, banners: pics, site_name: siteName, under_maintenance, show_goods_under_maintenance, allow_registration, allow_guest, icp, announcement }).then(r => {
       setLoading(false);
       !r.error && saveSuccess(false)
     }).catch(() => {
@@ -56,7 +64,7 @@ function StoreSettingView () {
             <Switch defaultChecked onClick={e=>{
               setUnder_maintenance(e)
             }} checked={under_maintenance} className={cs.switch}/>
-            <div className={cs.switchText} style={{color:under_maintenance?"#2C68FF":"#34374A"}}>当前状态：开启自主申请开通分站</div>
+						<div className={cs.switchText} style={{color:under_maintenance?"#2C68FF":"#34374A"}}>当前状态：{!under_maintenance?"店铺正常营业":"店铺维护中"}</div>
           </div>
         </div>
         <div className={c.itemTips}>
@@ -70,21 +78,31 @@ function StoreSettingView () {
           </div>
           <div className={cs.switchView}>
             <Switch onClick={e=>setShow_goods_under_maintenance(e)} checked={show_goods_under_maintenance} className={cs.switch}/>
-            <div className={cs.switchText} style={{color:show_goods_under_maintenance?"#2C68FF":"#34374A"}}>当前状态：商品不可见</div>
+						<div className={cs.switchText} style={{color:show_goods_under_maintenance?"#2C68FF":"#34374A"}}>当前状态：{show_goods_under_maintenance?"商品可见":"商品不可见"}</div>
           </div>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
-          <div>开启时，当店铺处于维护中状态，用户可以看见商品；关闭时，当店铺处于维护中状态，用户不可以看见商品。</div>
+					<div>
+						<div>开启时，当店铺处于维护中状态，用户可以看见商品；</div>
+						<div>开启时，当店铺处于维护中状态，用户可以看见商品；</div>
+					</div>
         </div>
         <div className={c.item} style={{marginTop:32}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
-            <div className={c.itemText}>允许注册</div>
+            <div className={c.itemText}>维护公告</div>
+          </div>
+          <ReactQuill className={c.quill} modules={MODULES} theme="snow" value={announcement} onChange={e=>setAnnouncement(e)}/>
+        </div>
+        <div className={c.item} style={{marginTop:32}}>
+          <div className={c.itemName}>
+            <span className={c.white}>*</span>
+            <div className={c.itemText}>开放注册</div>
           </div>
           <div className={cs.switchView}>
             <Switch onClick={e=>setAllow_registration(e)} checked={allow_registration} className={cs.switch}/>
-            <div className={cs.switchText} style={{color:allow_registration?"#2C68FF":"#34374A"}}>当前状态：允许注册</div>
+						<div className={cs.switchText} style={{color:allow_registration?"#2C68FF":"#34374A"}}>当前状态：{allow_registration?"开放注册":"关闭注册"}</div>
           </div>
         </div>
         <div className={c.itemTips}>
@@ -94,31 +112,24 @@ function StoreSettingView () {
         <div className={c.item} style={{marginTop:32}}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>
-            <div className={c.itemText}>游客模式</div>
-          </div>
-          <div className={cs.switchView}>
-            <Switch onClick={e=>setAllow_guest(e)} checked={allow_guest} className={cs.switch}/>
-            <div className={cs.switchText} style={{color:allow_guest?"#2C68FF":"#34374A"}}>当前状态 ： 允许游客访问</div>
-          </div>
-        </div>
-        <div className={c.itemTips}>
-          <div className={c.itemName} />
-          <div>开启时，用户无须登录就可以直接访问商城；关闭时，用户必须要登录才能访问商城。</div>
-        </div>
-        <div className={c.item} style={{marginTop:32}}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>备注信息</div>
+            <div className={c.itemText}>备案信息</div>
           </div>
           <Input onChange={e=>setIcp(e.target.value)} value={icp} placeholder="请输入备案编号" className={c.itemInput}></Input>
         </div>
-        <div className={c.item} style={{marginTop:32}}>
-          <div className={c.itemName}>
-            <span className={c.white}>*</span>
-            <div className={c.itemText}>维护公告</div>
-          </div>
-          <ReactQuill className={c.quill} modules={MODULES} theme="snow" value={announcement} onChange={e=>setAnnouncement(e)}/>
-        </div>
+        {/* <div className={c.item} style={{marginTop:32}}> */}
+        {/*   <div className={c.itemName}> */}
+        {/*     <span className={c.white}>*</span> */}
+        {/*     <div className={c.itemText}>游客模式</div> */}
+        {/*   </div> */}
+        {/*   <div className={cs.switchView}> */}
+        {/*     <Switch onClick={e=>setAllow_guest(e)} checked={allow_guest} className={cs.switch}/> */}
+        {/*     <div className={cs.switchText} style={{color:allow_guest?"#2C68FF":"#34374A"}}>当前状态 ： 允许游客访问</div> */}
+        {/*   </div> */}
+        {/* </div> */}
+        {/* <div className={c.itemTips}> */}
+        {/*   <div className={c.itemName} /> */}
+        {/*   <div>开启时，用户无须登录就可以直接访问商城；关闭时，用户必须要登录才能访问商城。</div> */}
+        {/* </div> */}
         {/* <div className={c.headerT} style={{marginTop:50}}> */}
         {/*   <div style={{zIndex:1}}>SEO相关</div> */}
         {/*   <div className={c.circle} /> */}
@@ -156,9 +167,9 @@ function StoreSettingView () {
           </div>
           <div className={c.btnView}>
             <Button type="primary" loading={loading} className={c.submit} onClick={save}>保存</Button>
-            <div className={c.btnTipsView} style={{justifyContent:'center'}}>
-              <div style={{color:'#979BA3',fontSize:'0.857rem'}}>上次保存: 0000.00.00 00:00:00</div>
-            </div>
+            {/* <div className={c.btnTipsView} style={{justifyContent:'center'}}> */}
+            {/*   <div style={{color:'#979BA3',fontSize:'0.857rem'}}>上次保存: 0000.00.00 00:00:00</div> */}
+            {/* </div> */}
           </div>
         </div>
       </div>

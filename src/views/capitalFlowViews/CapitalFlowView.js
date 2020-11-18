@@ -21,34 +21,34 @@ function CapitalFlowView () {
   const data = [
     {
       label: '今日下单额',
-      number: '10,100',
+      number: '0',
       icon: good66,
       id: 111,
     },
     {
       label: '今日退款额',
-      number: '10,111',
+      number: '0',
       icon: good67,
       id: 222,
     },
     {
       label: '今日充值',
-      number: '10,111',
+      number: '0',
       icon: good65,
       id: 333,
     },
     {
       label: '今日加款',
-      number: '10,111',
+      number: '0',
       icon: good64,
       id: 333,
     },
     {
       label: '今日减款',
-      number: '10,111',
+      number: '0',
       icon: good63,
       id: 333,
-    },
+    }
   ]
 
   return (
@@ -189,6 +189,7 @@ function RTable () {
         dataSource={data}
         size="small"
         pagination={{
+					showSizeChanger:false,
           showQuickJumper:true,
           current,
           pageSize,

@@ -68,7 +68,7 @@ function DropdownPromiseComponent ({refresh=[], value, view, tooltip = "", fetch
   const selected = nums.filter(i => i.id == value)
 
   return (
-    <Dropdown visible={visible} trigger={["click"]} overlay={menu}>
+    <Dropdown overlay={menu}>
       <Tooltip placement="bottomLeft" color="#F7FAFF" title={tooltip}>
 				<Button size="small" ref={myRef} onClick={()=>setVisible(!visible)} className={view?c.dropdown_view:c.dropdownPromise}>
           <div className={c.hiddenText} style={{color:selected.length?"#34374A":"#C4C4C4"}}>

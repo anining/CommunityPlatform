@@ -31,8 +31,6 @@ function EditGoodCategoryView () {
         h.replace('/main/editGoodCategory')
       }
       if (!r.error) {
-        setName(undefined)
-        setWeight(undefined)
         saveSuccess(jump)
       }
     }).catch(() => {
@@ -86,11 +84,6 @@ function EditGoodCategoryView () {
           </div>
           <div className={c.btnView}>
             <Button type="primary" loading={loading} className={c.submit} onClick={()=>save(true)}>保存</Button>
-            <div className={c.btnTipsView}>
-              <div className={c.quitBtn} onClick={goBack}>放弃编辑</div>
-              <div className={c.quitBorder}/>
-              <div className={c.saveBtn} onClick={()=>save(false)}>保存并新增</div>
-            </div>
           </div>
         </div>
       </div>

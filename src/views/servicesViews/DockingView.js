@@ -11,7 +11,7 @@ import ModalPopComponent from "../../components/ModalPopComponent"
 import ActionComponent from '../../components/ActionComponent'
 import { docking, extPrvdStats } from '../../utils/api'
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
-import {push, saveSuccess, transformTime} from '../../utils/util'
+import {dateFormat, push, saveSuccess } from '../../utils/util'
 
 function DockingView () {
   const [visible, setVisible] = useState(false)
@@ -112,7 +112,7 @@ function RTable ({ setVisible }) {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = transformTime(item.created_at)
+      item.time = dateFormat(item.created_at)
     })
     return arr
   }
@@ -139,14 +139,16 @@ function RTable ({ setVisible }) {
       dataIndex: 'type',
   },
     {
-      title: '对接商品',
+      title: '已对接商品',
 			ellipsis: true,
-      dataIndex: 'good',
+      dataIndex: 'providing_amount',
+			render: text => text+"个"
   },
     {
       title: '对接凭证',
 			ellipsis: true,
       dataIndex: 'payload',
+			render: text => JSON.parse(text).key
   },
     {
       title: '对接时间',
@@ -223,6 +225,7 @@ function RTable ({ setVisible }) {
         size="small"
         pagination={{
           showQuickJumper:true,
+					showSizeChanger:false,
           current,
           pageSize,
           showLessItems:true,

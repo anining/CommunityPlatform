@@ -39,62 +39,62 @@ function SiderComponent ({ collapsed, toggle }) {
   const { role, openKeys, selectedKeys, permissions } = getter(["permissions", "selectedKeys", "openKeys", "role"])
 
   useEffect(() => {
-		const obj = {
-			"home": "home",
-			"table": "table",
-			"dataStatistics": "statistics",
-			"moneyStatistics": "statistics",
-			"userStatistics": "statistics",
-			"webStatistics": "statistics",
-			"goodStatistics": "statistics",
-			"communityGood":"communityBusiness",
-			"goodCategory":"communityBusiness",
-			"markupTem":"communityBusiness",
-			"cardGood":"cardBusiness",
-			"cardManage":"cardBusiness",
-			"cardCategory":"cardBusiness",
-			"subService":"services",
-			"docking":"docking",
-			"store":"store",
-			"communityOrder":"orderRecording",
-			"cardOrder":"orderRecording",
-			"capitalFlow":"capitalFlow",
-			"user":"user",
-			"storeSetting":"webSetting",
-			"rebot":"webSetting",
-			"images":"webSetting",
-			"peopleService":"webSetting",
-			"notice":"webSetting",
-			"admin":"systemSetting",
-			"password":"systemSetting",
-			"logger":"systemSetting",
-			"about":"systemSetting",
-			"businessSetting":"systemSetting",
-			"childWebList":"childWeb",
-		}
-    const { pathname } = window.location
-    const arr = pathname.split('/')
-		if( arr.length ) {
-			setter([["selectedKeys", arr[arr.length - 1]]]);
-      setter([["openKeys", [obj[arr[arr.length - 1]]]]])
-		}
+		// const obj = {
+		// 	"home": "home",
+		// 	"table": "table",
+		// 	"dataStatistics": "statistics",
+		// 	"moneyStatistics": "statistics",
+		// 	"userStatistics": "statistics",
+		// 	"webStatistics": "statistics",
+		// 	"goodStatistics": "statistics",
+		// 	"communityGood":"communityBusiness",
+		// 	"goodCategory":"communityBusiness",
+		// 	"markupTem":"communityBusiness",
+		// 	"cardGood":"cardBusiness",
+		// 	"cardManage":"cardBusiness",
+		// 	"cardCategory":"cardBusiness",
+		// 	"subService":"services",
+		// 	"docking":"docking",
+		// 	"store":"store",
+		// 	"communityOrder":"orderRecording",
+		// 	"cardOrder":"orderRecording",
+		// 	"capitalFlow":"capitalFlow",
+		// 	"user":"user",
+		// 	"storeSetting":"webSetting",
+		// 	"rebot":"webSetting",
+		// 	"images":"webSetting",
+		// 	"peopleService":"webSetting",
+		// 	"notice":"webSetting",
+		// 	"admin":"systemSetting",
+		// 	"password":"systemSetting",
+		// 	"logger":"systemSetting",
+		// 	"about":"systemSetting",
+		// 	"businessSetting":"systemSetting",
+		// 	"childWebList":"childWeb",
+		// }
+    // const { pathname } = window.location
+    // const arr = pathname.split('/')
+		// if( arr.length ) {
+		// 	setter([["selectedKeys", arr[arr.length - 1]]]);
+      // setter([["openKeys", [obj[arr[arr.length - 1]]]]])
+		// }
   }, [])
 
   function menuItemClick ({ item, key, keyPath, domEvent }) {
-    if (["home", "table", "capitalFlow", "user"].includes(key)) {
-      setter([["openKeys", []]])
-    }
-    setter([["selectedKeys", keyPath]])
-    push(`/main/${key}`)
+    // if (["home", "table", "capitalFlow", "user"].includes(key)) {
+    //   setter([["openKeys", []]])
+    // }
+    // setter([["selectedKeys", keyPath]])
+    // push(`/main/${key}`)
   }
 
   function onTitleClick ({ key, domEvent }) {
-    const localOpenKeys = openKeys.get()
-    if (localOpenKeys.length && localOpenKeys.includes(key)) {
-      setter([["openKeys", []]])
-    } else {
-      setter([["openKeys", [key]]])
-    }
+    // const localOpenKeys = openKeys.get()
+    // if (localOpenKeys.length && localOpenKeys.includes(key)) {
+    //   setter([["openKeys", []]])
+    // } else {
+    //   setter([["openKeys", [key]]])
+    // }
   }
 
   function MyMenu ({ role, permissions }) {
@@ -103,7 +103,7 @@ function SiderComponent ({ collapsed, toggle }) {
     }
 
     return (
-      <Menu karet-lift theme="light" mode="inline" openKeys={U.template(openKeys)} selectedKeys={U.template(selectedKeys)} onClick={menuItemClick} multiple={false}>
+      <Menu karet-lift theme="light" mode="inline" className="user-select" openKeys={U.template(openKeys)} selectedKeys={U.template(selectedKeys)} onClick={menuItemClick} multiple={false}>
         <Menu.Item key="home" icon={<Icon keys="home" />}>
           用户主页
         </Menu.Item>
@@ -119,7 +119,7 @@ function SiderComponent ({ collapsed, toggle }) {
         {/* )) } */}
 				{/* </> */}
         { U.when(R.includes('cmntbiz',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" title={<Title keys="communityBusiness" label="社区业务"/>}>
+            <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" title={<Title keys="communityBusiness" label="社区商品"/>}>
               <Menu.Item key="communityGood">社区商品列表</Menu.Item>
               <Menu.Item key="goodCategory">社区商品分类</Menu.Item>
               {/* <Menu.Item key="orderModel">下单模型</Menu.Item> */}
@@ -182,9 +182,9 @@ function SiderComponent ({ collapsed, toggle }) {
 				{/* </> */}
         { U.when(R.includes('citecfg',permissions), (
             <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" title={<Title keys="webSetting"  label="站点设置"/>}>
-              <Menu.Item key="storeSetting">店铺设置</Menu.Item>
-              {/* <Menu.Item key="storePlug">店铺装修</Menu.Item> */}
-              {/* <Menu.Item key="rebot">支付配置</Menu.Item> */}
+              <Menu.Item key="sSetting">店铺设置</Menu.Item>
+              <Menu.Item key="sPlug">店铺装修</Menu.Item>
+              <Menu.Item key="rebot">支付配置</Menu.Item>
               {/* <Menu.Item key="images">图床配置</Menu.Item> */}
               <Menu.Item key="peopleService">客服配置</Menu.Item>
               <Menu.Item key="notice">发布公告</Menu.Item>
@@ -268,7 +268,7 @@ function Title ({ keys, label }) {
     },
     "webSetting": {
       icon: [sider11, sider20],
-      keys: ["storeSetting", "rebot", "images", "peopleService", 'notice'],
+      keys: ["sSetting", "sPlug", "rebot", "images", "peopleService", 'notice'],
 			c: "webSetting_icon"
     },
     "systemSetting": {
@@ -338,7 +338,7 @@ function Icon ({ keys }) {
     },
     "webSetting": {
       icon: [sider11, sider20],
-      keys: ["storeSetting", "rebot", "images", "peopleService", 'notice']
+      keys: ["sSetting", "sPlug", "rebot", "images", "peopleService", 'notice']
     },
     "systemSetting": {
       icon: [sider19, sider16],

@@ -1,4 +1,5 @@
 import {h} from './history'
+import * as qiniu from 'qiniu-js'
 import * as R from 'kefir.ramda'
 import CryptoJS from 'crypto-js';
 import {message} from "antd"
@@ -112,4 +113,140 @@ function _toFixed (number, num = 2) {
   }
 }
 
-export {decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed}
+function utf16to8(str) {
+	var out, i, len, c;
+	out = "";
+	len = str.length;
+	for (i = 0; i < len; i++) {
+			c = str.charCodeAt(i);
+			if ((c >= 0x0001) && (c <= 0x007F)) {
+					out += str.charAt(i);
+			} else if (c > 0x07FF) {
+					out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+					out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+					out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+			} else {
+					out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+					out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+			}
+	}
+	return out;
+}
+
+/*
+ * Interfaces:
+ * b64 = base64encode(data);
+ * data = base64decode(b64);
+ */
+const base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+const safe64 = function(base64) {
+		base64 = base64.replace(/\+/g, "-");
+		base64 = base64.replace(/\//g, "_");
+		return base64;
+};
+
+function base64encode(str) {
+	var out, i, len;
+	var c1, c2, c3;
+	len = str.length;
+	i = 0;
+	out = "";
+	while (i < len) {
+			c1 = str.charCodeAt(i++) & 0xff;
+			if (i == len) {
+					out += base64EncodeChars.charAt(c1 >> 2);
+					out += base64EncodeChars.charAt((c1 & 0x3) << 4);
+					out += "==";
+					break;
+			}
+			c2 = str.charCodeAt(i++);
+			if (i == len) {
+					out += base64EncodeChars.charAt(c1 >> 2);
+					out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+					out += base64EncodeChars.charAt((c2 & 0xF) << 2);
+					out += "=";
+					break;
+			}
+			c3 = str.charCodeAt(i++);
+			out += base64EncodeChars.charAt(c1 >> 2);
+			out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+			out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
+			out += base64EncodeChars.charAt(c3 & 0x3F);
+	}
+	return out;
+}
+
+/**
+ * 上传凭证算法实现参考
+ * 请注意External Resources项中引用的第三方CryptoJS库
+ */
+const genUpToken = function(accessKey="UEF0xvCcLO8bBKHD1R_JNJlTQsdSWbI3BBUo7tzN", secretKey="pm-lYjawA4M74YP1L_uA8ThqEMQ00SVR94ld5V0u", putPolicy={"scope":"yizhou-img","deadline":2605708420}) {
+	//SETP 2
+	var put_policy = JSON.stringify(putPolicy);
+	console && console.log("put_policy = ", put_policy);
+
+	//SETP 3
+	var encoded = base64encode(utf16to8(put_policy));
+	console && console.log("encoded = ", encoded);
+
+	//SETP 4
+	var hash = CryptoJS.HmacSHA1(encoded, secretKey);
+	var encoded_signed = hash.toString(CryptoJS.enc.Base64);
+	console && console.log("encoded_signed=", encoded_signed)
+
+	//SETP 5
+	var upload_token = accessKey + ":" + safe64(encoded_signed) + ":" + encoded;
+	console && console.log("upload_token=", upload_token)
+	return upload_token;
+}
+
+function beforeUpload(file, fileList, setFileList, more = false) {
+	const fileName = Date.now()+ ".png"
+
+	const observer = {
+		complete(res){
+			if(more) {
+				setFileList([...fileList,{
+						uid: Date.now(),
+						name: 'image.png',
+						status: 'done',
+						url:`http://yzimg.gu126.cn/${fileName}`,
+					}])
+			}else {
+				setFileList([
+					{
+						uid: '-1',
+						name: 'image.png',
+						status: 'done',
+						url:`http://yzimg.gu126.cn/${fileName}`,
+					}
+				])
+			}
+		}
+	}
+	const config = {
+		useCdnDomain: true,
+		region: qiniu.region.z2
+	}
+	const putExtra = {
+		fname: Date.now().toString(),
+		params: {},
+		mimeType: ["image/png"]
+	}
+	const observable = qiniu.upload(file, fileName, genUpToken(), putExtra, config)
+	observable.subscribe(observer) // 上传开始
+	// const subscription = observable.subscribe(observer) // 上传开始
+	// subscription.unsubscribe() // 上传取消
+
+	const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+	if (!isJpgOrPng) {
+		message.error('You can only upload JPG/PNG file!');
+	}
+	const isLt2M = file.size / 1024 / 1024 < 2;
+	if (!isLt2M) {
+		message.error('Image must smaller than 2MB!');
+	}
+	return isJpgOrPng && isLt2M;
+}
+
+export {beforeUpload, genUpToken, decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed}

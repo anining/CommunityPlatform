@@ -81,11 +81,11 @@ function AddPeopleServiceView () {
           </div>
           <div className={c.btnView}>
             <Button loading={loading} type="primary" onClick={()=>save(true)} className={c.submit}>保存</Button>
-            <div className={c.btnTipsView}>
-              <div className={c.quitBtn} onClick={goBack}>放弃编辑</div>
-              <div className={c.quitBorder}/>
-              <div className={c.saveBtn} onClick={()=>save(false)}>保存并新增</div>
-            </div>
+            {/* <div className={c.btnTipsView}> */}
+            {/*   <div className={c.quitBtn} onClick={goBack}>放弃编辑</div> */}
+            {/*   <div className={c.quitBorder}/> */}
+            {/*   <div className={c.saveBtn} onClick={()=>save(false)}>保存并新增</div> */}
+            {/* </div> */}
           </div>
         </div>
       </div>

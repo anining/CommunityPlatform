@@ -6,6 +6,13 @@
 }
 
 .header {
+  moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -o-user-select:none;
+  -khtml-user-select:none;
+  -webkit-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
   width: 100%;
   padding-right: 24px;
   background: #fff;
@@ -390,7 +397,6 @@
 	background: #FF8B2D;
 	border-color: #ff8b2d;
 	margin-right: 24px;
-	border-radius: 2px;
 }
 
 .docking_btn:hover {
@@ -412,6 +418,12 @@
 }
 
 .add_select_category {
+	background-color: #FF8E32;
+	color: #fff;
+	border-color: #FF8E32;
+}
+
+.add_select_category:hover {
 	background-color: #FF8E32;
 	color: #fff;
 	border-color: #FF8E32;

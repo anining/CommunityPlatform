@@ -5,7 +5,7 @@ import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
 import { cmntPadjs } from '../../utils/api'
-import { push, transformTime, saveSuccess } from "../../utils/util";
+import { push, dateFormat, saveSuccess } from "../../utils/util";
 import DropdownComponent from '../../components/DropdownComponent'
 import { styles } from "../../styles/modal"
 import { TEM_TYPE } from "../../utils/config"
@@ -94,8 +94,8 @@ function RTable () {
   function format (arr = []) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = transformTime(item.created_at)
-      item.updateTime = transformTime(item.updated_at)
+      item.time = dateFormat(item.created_at)
+      item.updateTime = dateFormat(item.updated_at)
     })
     return arr
   }
@@ -202,6 +202,7 @@ function RTable () {
           showQuickJumper:true,
           current,
           pageSize,
+					showSizeChanger:false,
           showLessItems:true,
           total,
           onChange

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import * as R from 'kefir.ramda'
 import { Button, Badge, Empty,  Modal, Timeline, Space, Table, notification, Input, message } from 'antd'
 import { SmileOutlined } from '@ant-design/icons';
 import good46 from '../../icons/good/good46.png'
@@ -18,7 +19,7 @@ import DropdownComponent from "../../components/DropdownComponent";
 import ModalComponent from "../../components/ModalComponent";
 import { push, decrypt, getKey, saveSuccess, transformTime } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
-import { communityGoods, communityGoodsCategories, priceHistories } from "../../utils/api"
+import { communityGoods, communityGoodsCategories, goodsStat, delGoods, priceHistories } from "../../utils/api"
 import { GOODS_STATUS, PROVIDER_TYPE, SCROLL } from "../../utils/config"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import DropdownPromiseComponent from "../../components/DropdownPromiseComponent"
@@ -36,36 +37,37 @@ function CommunityGoodView () {
   const [key, setKey] = useState()
   const [src, setSrc] = useState()
   const [sel, setSel] = useState({})
-  const [label] = useState([
+  const [labels, setLabels] = useState([
     {
       label: '商品总数',
-      number: '10,100',
+      number: '0',
       icon: good3,
       id: 111,
     },
     {
       label: '已上架数',
-      number: '10,111',
+      number: '0',
       icon: good1,
       id: 222,
     },
     {
       label: '已下架数',
-      number: '10,111',
+      number: '0',
       icon: good2,
       id: 333,
     },
     {
       label: '关闭下单',
-      number: '10,111',
+      number: '0',
       icon: good4,
       id: 444,
-    },
+    }
   ])
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
+  const [tableLoading, setTableLoading] = useState(true)
   const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
 
   const [id, setId] = useState()
@@ -76,8 +78,53 @@ function CommunityGoodView () {
   const [order_by, setOrder_by] = useState()
   const [ordering, setOrdering] = useState()
 
-  function get (current) {
-    let body = { page: current, size: pageSize }
+	const sumIf = pred => R.pipe(
+		R.filter(pred),
+		R.map(R.prop("count")),
+		R.sum
+	)
+
+	const getNums = () => {
+		goodsStat().then(r=>{
+			if(!r.error){
+				const goods_num = sumIf(() => true)(r.data)
+				const available_num = sumIf(x => x.status === "available")(r.data)
+				const unavailable_num = sumIf(x => x.status === "unavailable")(r.data)
+				const paused_num = sumIf(x => x.status === "paused")(r.data)
+				setLabels([
+					{
+						label: '商品总数',
+						number: goods_num,
+						icon: good3,
+						id: 111,
+					},
+					{
+						label: '已上架数',
+						number: available_num,
+						icon: good1,
+						id: 222,
+					},
+					{
+						label: '已下架数',
+						number: unavailable_num,
+						icon: good2,
+						id: 333,
+					},
+					{
+						label: '关闭下单',
+						number: paused_num,
+						icon: good4,
+						id: 444,
+					}
+				])
+			}
+		})
+	}
+
+  function get (current, size=pageSize) {
+		getNums()
+		setTableLoading(true)
+    let body = { page: current, size }
     if (id) {
       body = { ...body, ...{ id } }
     }
@@ -104,6 +151,7 @@ function CommunityGoodView () {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
+				setTableLoading(false)
       }
     })
   }
@@ -153,19 +201,19 @@ function CommunityGoodView () {
 
   function submit (key) {
     let title = ""
-    // switch (key) {
-      // case "c":
-      //   title = "您确定要推荐这些商品吗？";
-      //   break;
-      // case "d":
-      //   title = "您确定要取消推荐这些商品吗？";
-      //   break;
-      // case "e":
-      //   title = "您确定要删除选中的商品吗?";
-      //   break;
-      // default:
+    switch (key) {
+      case "recommendedTrue":
+        title = "您确定要推荐这些商品吗？";
+        break;
+      case "recommendedFalse":
+        title = "您确定要取消推荐这些商品吗？";
+        break;
+      case "del":
+        title = "您确定要删除选中的商品吗?";
+        break;
+      default:
         title = `修改商品状态为${GOODS_STATUS[key].text}`
-    // }
+    }
 
     setTitle(title)
     setSelected(selectedRows.map(i => data[i]))
@@ -187,7 +235,8 @@ function CommunityGoodView () {
     {
       title: '商品名称',
       dataIndex: 'name',
-			render: text => <div title={text} className={c.hiddenText}><img src={good45} style={{width:20,marginRight:8}} alt="" />{text}</div>
+			width: 200,
+			render: (text, record) => <div title={text} className={c.hiddenText}>{record.recommended ? <img src={good45} style={{width:20,marginRight:8}} alt="" />:null}{text}</div>
   },
     {
       title: '商品分类',
@@ -219,23 +268,19 @@ function CommunityGoodView () {
 			ellipsis: true,
       render: (text) => {
         const { text: t, status } = getKey(text, GOODS_STATUS)
-        return <div><Badge status={status} />{t}</div>
+        return <Badge status={status} text={t}/>
       }
   },
     {
       title: '商品来源',
 			ellipsis: true,
-      dataIndex: 'provider_type',
-      render: (text) => {
-        const { text: t, color } = getKey(text, PROVIDER_TYPE)
-        return <div style={{color}}>{t}</div>
-      }
+      dataIndex: 'provider_name'
   },
     {
       title: '调价模版',
 			ellipsis: true,
       dataIndex: '',
-			render: text => "-"
+			render: () => "-"
   },
     {
       title: '自助退款',
@@ -247,8 +292,8 @@ function CommunityGoodView () {
       title: '更多信息',
 			ellipsis: true,
       dataIndex: '',
-			render: (text, record, index) => <div onClick={()=>{
-				getHis(record)
+			render: (...args) => <div onClick={()=>{
+				getHis(args[1])
 			}} className={c.view_text}>查看</div>
   },
     {
@@ -265,9 +310,9 @@ function CommunityGoodView () {
           }}>修改状态</div>
           <div className={c.line} />
           <div onClick={()=>{
-            setSel(record)
-            setVisibleC(true)
-          }} className={c.clickText}>修改价格</div>
+            // setSel(record)
+            // setVisibleC(true)
+					}} style={{cursor:"wait"}} className={c.clickText}>修改价格</div>
         </Space>
       )
     }
@@ -281,14 +326,41 @@ function CommunityGoodView () {
   }
 
   function onOk () {
-    setVisible(false)
-    communityGoods("modifys", undefined, "ids=" + selected.map(i => i.id).toString(), { status: key }).then(r => {
-      if (!r.error) {
-        saveSuccess(false)
-        setSelectRows([])
-        get(current)
-      }
-    })
+		setVisible(false)
+		if(key === "del") {
+			delGoods("ids=" + selected.map(i => i.id).toString()).then(r => {
+				if (!r.error) {
+					saveSuccess(false)
+					setSelectRows([])
+					get(current)
+				}
+			})
+		}else {
+			let body
+			switch (key) {
+				case "recommendedTrue":
+					body = { recommended: true }
+					break
+				case "recommendedFalse":
+					body = { recommended: false }
+					break
+				case "refundableTrue":
+					body = { refundable: true }
+					break
+				case "refundableFalse":
+					body = { refundable: false }
+					break
+				default:
+					body = { status: key }
+			}
+			communityGoods("modifys", undefined, "ids=" + selected.map(i => i.id).toString(), body).then(r => {
+				if (!r.error) {
+					saveSuccess(false)
+					setSelectRows([])
+					get(current)
+				}
+			})
+		}
   }
 
   function modalOk (key) {
@@ -317,36 +389,40 @@ function CommunityGoodView () {
 		</>
 	)
 
+	const onShowSizeChange = (current, size) => {
+		setPageSize(size)
+		setCurrent(current)
+		get(current, size)
+	}
+
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent customize={customize} path="/main/editCommunityGood" data={label} text="添加商品"/>
+        <TableHeaderComponent customize={customize} path="/main/editCommunityGood" data={labels} text="添加商品"/>
         <div className={c.main}>
           <div className={c.searchView}>
             <div className={c.search}>
               <div className={c.searchL}>
-                <Input value={id} onPressEnter={()=>get(current)} onChange={e=>setId(e.target.value)} placeholder="请输入商品编号" size="small" className={c.searchInput}/>
+                {/* <Input value={id} onPressEnter={()=>get(current)} onChange={e=>setId(e.target.value)} placeholder="请输入商品编号" size="small" className={c.searchInput}/> */}
                 <Input value={search_name} onPressEnter={()=>{
                   (setSearch_name && search_name === decrypt("U2FsdGVkX18gbk6+Gqdcl4lOHiGaM/qMZnh6gl7vYEE=")) && notification.open({message: decrypt("U2FsdGVkX19qRkuqXwfKlQPX97o49Q08x5LSPixLTuo="),description: decrypt("U2FsdGVkX18s/mj00aiQXBbnDz7ONKIFN4p9GKIb4s2ehjz7uKlrHj1opMVuGxj0"),icon: <SmileOutlined style={{color:'#108ee9'}}/>})
                   get(current)
                 }} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入商品名称" size="small" className={c.searchInput}/>
-                <DropdownComponent action={status} setAction={setStatus} keys={[{name:"已上架",key:"available"},{name:"已关闭订单",key:"unavailable"},{name:"已下架",key:"paused"}]} placeholder="请选择商品状态" style={{width:186}}/>
-                <DropdownComponent keys={[{name:"可退单",key:"refundable"},{name:"不可退单",key:"no_refundable"},{name:"全部",key:"un_refundable"}]} action={refundable} setAction={setRefundable} placeholder="请选择是否可退单" style={{width:186}}/>
+                <DropdownComponent action={status} setAction={setStatus} keys={[{name:"已上架",key:"available"},{name:"已下架",key:"unavailable"},{name:"维护中",key:"paused"}]} placeholder="请选择商品状态" style={{width:186}}/>
+                <DropdownComponent keys={[{name:"允许退款",key:"refundable"},{name:"不允许退款",key:"no_refundable"}]} action={refundable} setAction={setRefundable} placeholder="请选择自助退款状态" style={{width:186}}/>
                 <DropdownPromiseComponent view placeholder="请选择商品分类" value={community_goods_category_id} setValue={setCommunity_goods_category_id} fetchName={getGoodsSummaries}/>
               </div>
               <div className={c.searchR}>
                 <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>
-                <Button icon={
-                  <img src={good9} alt="" style={{width:14,marginRight:6}} />
-                }
-                  type = "primary"
-                  size = "small"
+                <Button 
+	                icon={<img src={good9} alt="" style={{width:14,marginRight:6}} />}
+                  type="primary"
+                  size="small"
                   onClick={()=>get(current)}
                   className={c.searchBtn}>搜索商品</Button>
                 </div>
             </div>
           </div>
-          {/* <DropdownComponent selectedRows={selectedRows} submit={submit} keys={[{name:"批量允许退款",key:"a"},{name:"批量不允许退款",key:"b"},{name:"批量置为推荐商品",key:"c"},{name:"批量删除推荐商品",key:"d"},{name:"批量删除",key:"e"},{name:"批量上架",key:"available"},{name:"批量关闭",key:"unavailable"},{name:"批量下架",key:"paused"}]}/> */}
           <Table
             columns={columns}
             rowSelection={{
@@ -356,8 +432,13 @@ function CommunityGoodView () {
             size="small"
 						scroll={SCROLL}
             pagination={{
+							pageSize,
+							onShowSizeChange,
+							pageSizeOptions:[10,20,50],
+							showSizeChanger:true,
               showQuickJumper:true,
               current,
+							loading: tableLoading,
               pageSize,
               showLessItems:true,
               total,
@@ -365,7 +446,7 @@ function CommunityGoodView () {
             }}
           />
         </div>
-				<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量上架",key:"available"},{name:"批量下架",key:"unavailable"},{name:"批量维护",key:"paused"}]}/>
+				<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"置为已上架",key:"available"},{name:"置为已下架",key:"unavailable"},{name:"置为维护中",key:"paused"},{name:"置为推荐商品",key:"recommendedTrue"},{name:"取消推荐商品",key:"recommendedFalse"},{name:"置为允许退款",key:"refundableTrue"},{name:"置为不允许退款",key:"refundableFalse"},{name:"删除选中商品",key:"del"}]}/>
       </div>
       <ModalComponent
         src={src}
@@ -435,19 +516,17 @@ function CommunityGoodView () {
 						<div className={oc.circle} />
 					</div>
 					<div className={oc.more_label}>基本信息</div>
-					<div className={oc.basic_msg} style={{marginBottom:10,flexDirection:'column'}}>
-						<div className={oc.basic_msg_label} style={{marginBottom:0}}>下单参数</div>
-						<div className={oc.basic_msg_parameter}>
-							{/* { */}
-							{/* 	(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>) */}
-							{/* } */}
-							null
-							{/* <div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div> */}
-							{/* <div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div> */}
-							{/* <div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div> */}
-							{/* <div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div> */}
-						</div>
-					</div>
+					{
+						sel.tags && sel.tags.length && false ?
+							<div className={oc.basic_msg} style={{marginBottom:10,flexDirection:'column'}}>
+								<div className={oc.basic_msg_label} style={{marginBottom:0}}>下单参数</div>
+								<div className={oc.basic_msg_parameter}>
+									{
+										(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>)
+									}
+								</div>
+							</div>: null
+					}
 					<div className={oc.basic_msg}>
 						<div className={oc.basic_msg_view}>
 							<div className={oc.basic_msg_label}>统一密价</div>
@@ -516,7 +595,8 @@ function CommunityGoodView () {
 								修改状态
 							</div>
 							<div>
-								<div className={c.statusModelTips}>选中订单：{sel.id}    订单状态：<span style={{color}}>{t}</span></div>
+								<div className={c.statusModelTips}>商品状态：<span style={{color}}>{t}</span></div>
+								{/* <div className={c.statusModelTips}>选中订单：{sel.id}&#8195;&#8195;订单状态：<span style={{color}}>{t}</span></div> */}
 								<div className={c.statusModelTitle}>修改为</div>
 								<div>
 									<Button className={c.statusBtn} onClick={()=>setSTatusSelected("available")} style={{

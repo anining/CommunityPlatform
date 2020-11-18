@@ -72,6 +72,9 @@ function EditUserPriceView () {
   }
 
   function delDiscPrice () {
+		if(!selected.cmnt_user_price_id) {
+			return
+		}
     deleteDiscPrices(selected.cmnt_user_price_id).then(r => {
       if (!r.error) {
         saveSuccess(false)
@@ -84,30 +87,30 @@ function EditUserPriceView () {
   return (
     <div className="view">
       <ModalPopComponent
-        div = {
-          <div>
-            <div onClick={delDiscPrice} style={{cursor:'pointer',textAlign:'right',color:'#2C68FF',marginBottom:15}}>删除密价</div>
-              <div className={oc.remark_tips}>
-                当前选中商品： <span>( {selected.name || ''} )</span>
-              </div>
-                <div className={oc.remark} style={{marginTop:10}}>
-                  <div>用户密价：</div>
-                  <Input placeholder="请输入用户密价" value={discPrice} onChange={e=>setDisePrice(e.target.value)}/>
-                </div>
-                {/* <div className = { oc.remark_tips } style={{color:'#FF5730',fontSize:'0.857rem'}}> */}
-                {/*   填写的价格小于进价，这样会亏本哦。 */}
-                {/* </div> */}
-                <div className={oc.change_btn_view} style={{ marginTop: 70}}>
-                  <Button onClick={onCancel} className={oc.change_btn_cancel}>
-                    取消
-                  </Button>
-                  <Button type="primary" onClick={updateDiscPrice} className={oc.change_btn_ok}>确定</Button>
-                </div>
+        div={
+          <div className={oc.edit_user_price}>
+            <div onClick={delDiscPrice} style={{cursor:'pointer',textAlign:'right',color:'#2C68FF',marginTop:16}}>删除密价</div>
+						<div className={oc.remark_tips} style={{marginLeft:84}}>
+							当前选中商品： <span>( {selected.name || ''} )</span>
+						</div>
+						<div className={oc.remark} style={{paddingTop:10}}>
+							<div>用户密价：</div>
+							<Input placeholder="请输入用户密价" value={discPrice} onChange={e=>setDisePrice(e.target.value)}/>
+						</div>
+						{/* <div className = { oc.remark_tips } style={{color:'#FF5730',fontSize:'0.857rem'}}> */}
+						{/*   填写的价格小于进价，这样会亏本哦。 */}
+						{/* </div> */}
+						<div className={oc.change_btn_view} style={{ marginTop: 70}}>
+							<Button onClick={onCancel} className={oc.change_btn_cancel}>
+								取消
+							</Button>
+							<Button type="primary" onClick={updateDiscPrice} className={oc.change_btn_ok}>确定</Button>
+						</div>
           </div>
-      }
-      title = "用户密价"
-      visible = { visible }
-      onCancel = { onCancel }
+				}
+      title="用户密价"
+      visible={visible}
+      onCancel={onCancel}
       />
       <div className={c.container}>
         <div className={ce.header} style={{flexShrink:0}}>
@@ -307,6 +310,7 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
         size="small"
         pagination={{
           showQuickJumper:true,
+					showSizeChanger:false,
           current,
           pageSize,
           showLessItems:true,

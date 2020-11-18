@@ -24,10 +24,6 @@ function SelectTableView () {
     window.opener.localClick('tables', selects)
   }
 
-  function jump () {
-    window.opener.localJump()
-  }
-
   return (
     <div className={c.container} style={{
       background:'#F0F2F5',
@@ -42,7 +38,7 @@ function SelectTableView () {
           <div style={{zIndex:1}}>选择标签</div>
           <div className={c.table_circle} />
           <div className={c.table_header_btn_view}>
-            <Button onClick={jump} className={c.table_btn}>编辑标签</Button>
+						<Button onClick={()=>window.opener.localTable()} className={c.table_btn}>编辑标签</Button>
             <div>编辑标签会离开这页面，请先保存已填写的内容。</div>
           </div>
         </div>

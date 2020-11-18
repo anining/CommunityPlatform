@@ -76,19 +76,19 @@ function EditMarkupTemView () {
             <span onClick={()=>push("/main/home")}>首页</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <span onClick={()=>push("/main/markupTem")}>加价模版</span>
+            <span onClick={()=>push("/main/markupTem")}>调价模版</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>{id?"修改":"新增"}模版</Breadcrumb.Item>
         </Breadcrumb>
       </div>
       <div className={c.main} style={{marginTop:24}}>
         <div className={c.headerT}>
-          <div style={{zIndex:1}}>{id?"修改":"新增"}加价模版</div>
+          <div style={{zIndex:1}}>{id?"修改":"新增"}调价模版</div>
           <div className={c.circle} />
         </div>
         <div className={c.tem_header}>
           <img src={good55} alt="" />
-          <div>加价模板用于商品进价被改变时，同步调整销售价格。</div>
+          <div>调价模板用于商品进价被改变时，同步调整销售价格。</div>
         </div>
         <div className={c.item}>
           <div className={c.itemName} style={{width:'auto'}}>
@@ -100,17 +100,17 @@ function EditMarkupTemView () {
         <div className={c.item}>
           <div className={c.itemName} style={{width:'auto'}}>
             <span style={{color:'#fff'}}>*</span>
-            <div className={c.itemText}>加价类型</div>
+            <div className={c.itemText}>调价类型</div>
           </div>
           <Radio.Group className={c.itemGrop} onChange={e=>setType(e.target.value)} value={type} style={{justifyContent:'flex-start'}}>
-            <Radio value="relative" className={c.itemRadio} style={{width:'33.333%'}}>百分比加价</Radio>
-            <Radio value="absolute" className={c.itemRadio} style={{width:'33.333%'}}>固定加价</Radio>
+            <Radio value="relative" className={c.itemRadio} style={{width:'33.333%'}}>百分比调价</Radio>
+            <Radio value="absolute" className={c.itemRadio} style={{width:'33.333%'}}>固定调价</Radio>
           </Radio.Group>
         </div>
         <div className={c.item} style={{alignItems:'flex-start'}}>
           <div className={c.itemName} style={{width:'auto'}}>
             <span style={{color:'#fff'}}>*</span>
-            <div className={c.itemText} style={{marginTop:9}}>加价配置</div>
+            <div className={c.itemText} style={{marginTop:9}}>调价配置</div>
           </div>
           <div>
             <div className={c.tem_line}>
@@ -118,40 +118,40 @@ function EditMarkupTemView () {
               <Input placeholder="0" value={price} onChange={e=>setPrice(e.target.value)}/>
             </div>
             <div className={c.tem_line}>
-              <div>&#12288;&#12288;&#12288;&#8194; 单价加价</div>
+              <div>&#12288;&#12288;&#12288;&#8194; 单价调价</div>
 							<Input placeholder="0" value={factors[0]} onChange={e=>setPriceAt(e,0)}/>
-              <div>{type==="relative"?'% , ':', '}加价之后的单价为：</div>
+              <div>{type==="relative"?'% , ':', '}调价之后的单价为：</div>
               <span>{price?factors[0]?type==="absolute"?+price+ (+factors[0]):+price*(100+(+factors[0]))/100:price:factors[0]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good54} alt="" />
-              <div>高级会员加价</div>
+              <div>高级会员调价</div>
               <Input placeholder="0" value={factors[1] } onChange={e=>setPriceAt(e,1)}/>
-              <div>{type==="relative"?'% , ':', '}加价之后的高级会员统一密价为：</div>
+              <div>{type==="relative"?'% , ':', '}调价之后的高级会员统一密价为：</div>
               <span>{price?factors[1]?type==="absolute"?+price+ (+factors[1]):+price*(100+(+factors[1]))/100:price:factors[1]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good48} alt="" />
-              <div>钻石会员加价</div>
+              <div>钻石会员调价</div>
               <Input placeholder="0" value={factors[2] } onChange={e=>setPriceAt(e,2)}/>
-              <div>{type==="relative"?'% , ':', '}加价之后的高级会员统一密价为：</div>
+              <div>{type==="relative"?'% , ':', '}调价之后的高级会员统一密价为：</div>
               <span>{price?factors[2]?type==="absolute"?+price+ (+factors[2]):+price*(100+(+factors[2]))/100:price:factors[2]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good47} alt="" />
-              <div>至尊会员加价</div>
+              <div>至尊会员调价</div>
               <Input placeholder="0" value={factors[3] } onChange={e=>setPriceAt(e,3)}/>
-              <div>{type==="relative"?'% , ':', '}加价之后的至尊会员统一密价为：</div>
+              <div>{type==="relative"?'% , ':', '}调价之后的至尊会员统一密价为：</div>
               <span>{price?factors[3]?type==="absolute"?+price+ (+factors[3]):+price*(100+(+factors[3]))/100:price:factors[3]||0}</span>
             </div>
-            <div className={c.tem_tips}>*检测到至尊会员统一密价大于钻石会员统一密价，请确认是否填写错误。</div>
+						{/* <div className={c.tem_tips}>{ true ? "*检测到至尊会员统一密价大于钻石会员统一密价，请确认是否填写错误。":null}</div> */}
           </div>
         </div>
         <div className={c.item} style={{marginTop:46}}>
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
-            <Button type="primary" className={c.submit} onClick={()=>save(true)}>保存加价模版</Button>
+            <Button type="primary" className={c.submit} onClick={()=>save(true)}>保存调价模版</Button>
           </div>
         </div>
       </div>

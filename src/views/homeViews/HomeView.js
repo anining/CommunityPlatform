@@ -182,24 +182,25 @@ function HomeView () {
 
   return (
     <div className="container">
-        {/* <div className={c.header}> */}
-        {/*   <img src={home8} alt="" className={c.avatar}/> */}
-        {/*   <div className={c.headerU}> */}
-        {/*     <div className={c.headerUN}> */}
-        {/*       <div>欢迎您，{nickname}，祝您开心每一天！</div> */}
-        {/*       <div className={c.headerUNTips}>旗舰版</div> */}
-        {/*     </div> */}
-        {/*     <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>2021.01.01 01:15:23</div>　<span style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")}>续费</span></div> */}
-        {/*   </div> */}
-        {/*   <div className={c.line}/> */}
-        {/*   <div className={c.headerL}> */}
-        {/*     <div className={c.headerLTips}>上次登录信息</div> */}
-        {/*     <div className={c.headerLPath}>127.0.0.1/重庆市</div> */}
-        {/*     <div className={c.headerLTime}>2020.01.15 15:15:23</div> */}
-        {/*   </div> */}
-        {/*   <Button size="small" type="primary" className={c.headerBtn} onClick={()=>push('/main/dataSetting')}>主页看板设置</Button> */}
-        {/*   <img src={home7} alt="" className={c.headerBg}/> */}
-        {/* </div> */}
+        <div className={c.header}>
+          <img src={home8} alt="" className={c.avatar}/>
+          <div className={c.headerU}>
+            <div className={c.headerUN}>
+              <div>欢迎您，{nickname}，祝您开心每一天！</div>
+              <div className={c.headerUNTips}>旗舰版</div>
+            </div>
+            <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>公测期间免费使用</div>　<span style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")}>续费</span></div>
+            {/* <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>2021.01.01 01:15:23</div>　<span style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")}>续费</span></div> */}
+          </div>
+          <div className={c.line}/>
+          <div className={c.headerL}>
+            <div className={c.headerLTips}>上次登录信息</div>
+            <div className={c.headerLPath}>暂无</div>
+            {/* <div className={c.headerLTime}>2020.01.15 15:15:23</div> */}
+          </div>
+          <Button disabled={true} size="small" type="primary" className={c.headerBtn} onClick={()=>push('/main/dataSetting')}>主页看板设置</Button>
+          <img src={home7} alt="" className={c.headerBg}/>
+        </div>
 
         {/* <div className={c.message}> */}
         {/*   { */}
@@ -251,9 +252,9 @@ function HomeView () {
         {/*   <div className={ct.chart_label} style={{marginBottom:12}}>订单数量</div> */}
         {/*   <Line {...orderConfig} /> */}
         {/* </div> */}
-        <div className={c.nullView}>
+			<div className={c.nullView}>
           <img src={home9} alt="" />
-          <div>暂无数据</div>
+          <div>部分暂未开放,敬请期待!</div>
           <Button disabled={true} size="small" type="primary" className={c.nullBtn}>主页看板设置</Button>
         </div>
     </div>

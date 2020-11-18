@@ -18,27 +18,27 @@ function OrderView () {
   const [nums, setNums] = useState([
     {
       label: "订单差值",
-      num: "10",
+      num: "-",
       background: "#FFF8F8",
 			icon: header5
     },
     {
       label: "用户下单消耗",
-      num: "125.1255",
+      num: "-",
       background: "#F8FAFF",
 			icon: header8
 
     },
     {
       label: "您给用户退款",
-      num: "12.1255",
+      num: "-",
       background: "#FFF9F1",
 			icon: header6
 
     },
     {
       label: "上级给您退款",
-      num: "25.1255",
+      num: "-",
       background: "#F3FDF6",
 			icon: header7
 
@@ -114,15 +114,15 @@ function RLine ({ orders = [] }) {
       };break;
       case "pushed": {
         const { provider_name, provider_id, amount, cost } = payload
-        Msg=<div>在 {provider_name} (供应商或对接/串货目标)下单成功，下单数量<span style={{color:"#FF4D4F"}}> {amount} </span>，消耗 <span style={{color:"#FF4D4F"}}> {cost} </span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#2C68FF"}}>进行中</span>。</div>
+        Msg=<div>在 {provider_name} 下单成功，下单数量<span style={{color:"#FF4D4F"}}> {amount} </span>，消耗 <span style={{color:"#FF4D4F"}}> {cost} </span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#2C68FF"}}>进行中</span>。</div>
       };break;
       case "push_closed": {
         const { provider_name, provider_id, reason } = payload
-        Msg=<div>在 {provider_name} (供应商或对接/串货目标)下单失败，失败原因：<span>{ reason }</span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#74C041"}}>已终止</span>。</div>
+        Msg=<div>在 {provider_name} 下单失败，失败原因：<span>{ reason }</span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#74C041"}}>已终止</span>。</div>
       };break;
       case "push_failed": {
         const { provider_name, provider_id, reason } = payload
-        Msg=<div>在{ provider_name }(供应商或对接/串货目标)下单失败，失败原因：<span> {reason} </span> 您可以通过点击“重新推送”按钮来重新推送订单。</div>
+        Msg=<div>在{ provider_name }下单失败，失败原因：<span> {reason} </span> 您可以通过点击“重新推送”按钮来重新推送订单。</div>
       };break;
       case "repushed": {
         const { amount, cost, manager_nickname, manager_id } = payload

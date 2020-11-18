@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import * as U from 'karet.util'
+import ImgCrop from 'antd-img-crop';
 import * as L from "partial.lenses"
 import * as R from 'kefir.ramda'
 import c from '../../styles/edit.module.css'
@@ -11,7 +12,7 @@ import good46 from '../../icons/good/good46.png'
 import good47 from '../../icons/good/good47.png'
 import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
-import { saveSuccess, push } from "../../utils/util";
+import { saveSuccess, push, beforeUpload } from "../../utils/util";
 import { communityGoods, communityGoodsCategories } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import { MODULES } from "../../utils/config";
@@ -23,10 +24,16 @@ function EditCommunityGoodView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
   const { id, ext_prvd_goods_id, ext_prvd_id, params, provider_type, padj_id, name: n, prices: pr_s = [], supp_goods_id, refundable: re = false, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "", ptpl_id, pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c } = state
+	console.log(ps)
   const [name, setName] = useState(n)
   const [ctg_id, setCtgId] = useState(c_id)
   const [status, setStatus] = useState(s)
-  const [pics, setPics] = useState(ps)
+	const [pics, setPics] = useState(ps.map(i => ({
+		uid: '-1',
+		name: 'image.png',
+		status: 'done',
+		url: i.replace(/!yile/g,""),
+	})))
   const [tags, setTags] = useState(tag_s)
   const [tag_ids, setTag_ids] = useState(tag_s.map(i => i.id))
   const [min_order_amount, setMin_order_amount] = useState(min_o_a)
@@ -44,7 +51,7 @@ function EditCommunityGoodView () {
   const [factors, setFactors] = useState(pr_s)
   const [dockingTarget, setDockingTarget] = useState(padj_id)
   const [loading, setLoading] = useState(false)
-  const [imageUrl, setImageUrl] = useState(pics[0])
+  const [imageUrl, setImageUrl] = useState()
   const [has_more, setHasMore] = useState(false)
   const [marks, setMarks] = useState([])
 
@@ -60,14 +67,28 @@ function EditCommunityGoodView () {
         setTag_ids(ids.map(i => i.id))
         break
       default:
-        ;
     }
     win && win.close()
   }
 
-  window.localJump = function () {
-    push("/main/table")
-    win && win.close()
+	window.localTable = function () {
+		win && win.close()
+		push("/main/table")
+	}
+
+  async function onPreview (file) {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      })
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow.document.write(image.outerHTML);
   }
 
   useEffect(() => {
@@ -119,7 +140,7 @@ function EditCommunityGoodView () {
       min_order_amount: min_order_amount || 1,
       max_order_amount: max_order_amount || 10000,
       weight: weight || 1,
-      pics,
+			pics: pics.map(i => i.url),
 			padj_id: dockingTarget,
 			unit_cost,
       batch_order,
@@ -147,42 +168,12 @@ function EditCommunityGoodView () {
   }
 
   function parsing () {
-    imageUrl && setPics([imageUrl])
-  }
-
-  function getBase64 (img, callback) {
-    // const reader = new FileReader();
-    // reader.addEventListener('load', () => callback(reader.result));
-    // reader.readAsDataURL(img);
-  }
-
-  function handleChange (info) {
-    // if (info.file.status === 'uploading') {
-    //   this.setState({ loading: true });
-    //   return;
-    // }
-    // if (info.file.status === 'done') {
-    //   // Get this url from response in real world.
-    //   getBase64(info.file.originFileObj, imageUrl =>
-    //     this.setState({
-    //       imageUrl,
-    //       loading: false,
-    //     }),
-    //   );
-    // }
-  };
-
-  function beforeUpload (file) {
-    // const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-
-    // if (!isJpgOrPng) {
-    //   message.error('You can only upload JPG/PNG file!');
-    // }
-    // const isLt2M = file.size / 1024 / 1024 < 2;
-    // if (!isLt2M) {
-    //   message.error('Image must smaller than 2MB!');
-    // }
-    // return isJpgOrPng && isLt2M;
+		imageUrl && setPics([{
+										uid: '-1',
+										name: 'image.png',
+										status: 'done',
+										url: imageUrl,
+									}])
   }
 
   return (
@@ -231,16 +222,16 @@ function EditCommunityGoodView () {
 						{/* { */}
 						{/* 	(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>) */}
 						{/* } */}
-						<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
-						<div className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
+						<div style={{width:"100%"}} className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
+						<div style={{width:"100%"}} className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
 					</div>
-					<Button type="primary" style={{width:120}} className={c.itemBtn} onClick={()=>{
+					<Button type="primary" disabled={true} style={{width:120}} className={c.itemBtn} onClick={()=>{
 						push('/main/editGoodCategory')
 					}}>同步下单参数</Button>
 				</div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span>*</span>
+            <span className={c.white}>*</span>
             <div className={c.itemText}>单位</div>
           </div>
           <Input maxLength={20} value={unit} onChange={e=>setUnit(e.target.value)} placeholder="请输入商品的计算单位" className={c.itemInput}></Input>
@@ -251,7 +242,7 @@ function EditCommunityGoodView () {
             <div className={c.itemText}>商品标签</div>
           </div>
           <div className={c.tableView}>
-            <RTable tags={tags}/>
+            <RTable win={win} tags={tags}/>
           </div>
         </div>
         <div className={c.itemTips}>
@@ -270,23 +261,19 @@ function EditCommunityGoodView () {
           <div className={c.itemName}>
             <span style={{color:'#fff'}}>*</span>
           </div>
-          <Upload
-            disabled={true}
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-          >
-            {pics.length ? <img src={pics[0]} alt="avatar" style={{ width: 100 }} /> :
+					<ImgCrop rotate>
+						<Upload
+							action={file=>beforeUpload(file, pics, setPics)}
+							listType="picture-card"
+							fileList={pics}
+							onPreview={onPreview}
+						>
               <div>
                 <img src={edit1} alt="" className={c.uploadImg}/>
                 <div className={c.uploadText}>上传图片</div>
               </div>
-            }
-          </Upload>
+						</Upload>
+					</ImgCrop>
           <div className={c.uploadTips}>
             <div>商品图片最多存在1张；</div>
             <div>推荐图片大小<span>100*100，200*200</span></div>
@@ -416,7 +403,7 @@ function RTable ({ tags }) {
   })
 
   views.push(
-    <Button type="primary" key="select" style={{marginLeft:0}} className={c.itemBtn} onClick={()=>{
+		<Button type="primary" key="select" style={{marginLeft:0,marginBottom:tags.length?28:0}} className={c.itemBtn} onClick={()=>{
          win = window.open("/select-table", "_blank", "left=390,top=145,width=1200,height=700")
     }}>{!tags.length?"选择":"重新选择"}</Button>
   )

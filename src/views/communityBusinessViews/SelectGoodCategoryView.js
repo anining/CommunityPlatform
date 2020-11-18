@@ -4,7 +4,7 @@ import c from '../../styles/view.module.css'
 import ce from '../../styles/edit.module.css'
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
-import good31 from '../../icons/good/good31.png'
+import good9 from '../../icons/good/good9.png'
 import { communityGoodsCategories } from '../../utils/api'
 import { push, transformTime, saveSuccess } from "../../utils/util";
 import DropdownComponent from '../../components/DropdownComponent'
@@ -112,7 +112,7 @@ function RTable () {
 					<div style={{zIndex:1}}>要将商品导入到哪个分类下</div>
 					<div className={ce.circle} style={{left:-5,top:10}}/>
 				</div>
-				<Button onClick={()=>window.opener.localClick} className={c.add_select_category}>新增分类</Button>
+				<Button onClick={()=>window.opener.localJump()} type="primary" className={c.add_select_category}>新增分类</Button>
 			</div>
 			<div style={{color:"rgba(0, 0, 0, 0.45)",fontSize:"0.857rem",textAlign:'right'}}>新增分类会离开这页面，请先保存已填写的内容。</div>
       <div className={c.searchView}>
@@ -123,7 +123,7 @@ function RTable () {
             <div className={c.searchR}>
               <Button
                 icon={
-                  <img src={good31} alt="" style={{width:14,marginRight:6}} />
+                  <img src={good9} alt="" style={{width:14,marginRight:6}} />
                 }
                 type = "primary"
                 size = "small"
@@ -138,6 +138,7 @@ function RTable () {
         size="small"
         pagination={{
           showQuickJumper:true,
+					showSizeChanger:false,
           current,
           pageSize,
           showLessItems:true,

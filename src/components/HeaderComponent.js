@@ -10,6 +10,7 @@ import LogoComponent from './LogoComponent'
 
 function HeaderComponent ({ toggle }) {
   const { nickname } = getter(["nickname"])
+	const { protocol, host } = window.location
 
   const menu = (
     <Menu>
@@ -25,11 +26,17 @@ function HeaderComponent ({ toggle }) {
       <LogoComponent toggle={toggle}/>
       <div className={c.containerR}>
         <div style={{marginRight:24,cursor:'pointer'}} onClick={()=>{
+          window.open(`${protocol}//${host.replace(/merchant/g, "pc")}`)
+        }}>访问店铺</div>
+        <div style={{marginRight:24,cursor:'pointer'}} onClick={()=>{
+          window.open(`${protocol}//${host.replace(/merchant/g, "supplier")}`)
+        }}>访问供应商</div>
+        <div style={{marginRight:24,cursor:'pointer'}} onClick={()=>{
           window.open("https://easydoc.xyz/s/85631950")
         }}>帮助中心</div>
-        <div style={{cursor:'pointer'}} onClick={()=>{
-					window.open("https://easydoc.xyz/s/85631950")
-        }}>开放平台</div>
+        {/* <div style={{cursor:'pointer'}} onClick={()=>{ */}
+					{/* window.open("https://easydoc.xyz/s/85631950") */}
+        {/* }}>开放平台</div> */}
         <Dropdown overlay={menu}>
           <Button className={c.btn}>
             <img src={header1} alt="" className={c.avatar}/>

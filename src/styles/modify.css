@@ -130,3 +130,7 @@ td.ant-table-column-sort {
 .ant-dropdown-menu-item:hover, .ant-dropdown-menu-submenu-title:hover {
 	background-color: #EEF4FE;
 }
+
+.ant-empty-normal {
+	margin: 0;
+}

@@ -7,7 +7,7 @@ import good23 from '../../icons/good/good23.png'
 import good24 from '../../icons/good/good24.png'
 import good9 from '../../icons/good/good9.png'
 import good41 from '../../icons/good/good41.png'
-import { users, updateUsers } from "../../utils/api";
+import { users, updateUsers, usersBalances } from "../../utils/api";
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { transformTime, push, getKey, saveSuccess } from "../../utils/util"
@@ -17,11 +17,12 @@ import { USER_RANK } from "../../utils/config"
 import ActionComponent from '../../components/ActionComponent'
 
 function UserView () {
-  // TODO: 三个弹窗
   const [visible, setVisible] = useState(false)
   const [visible_action, setVisibleAction] = useState(false)
   const [visible_balance, setVisibleBalance] = useState(false)
   const [title, setTitle] = useState()
+	const [add, setAdd] = useState(false)
+	const [addBalabce, setAddBalance] = useState()
   const [selected, setSelected] = useState([])
   const [key, setKey] = useState()
   const [src, setSrc] = useState()
@@ -39,136 +40,17 @@ function UserView () {
   const labels = [
     {
       label: '用户总数',
-      number: '10,100',
+      number: '0',
       icon: good23,
       id: 111,
     },
     {
       label: '今日新增',
-      number: '10,111',
+      number: '0',
       icon: good24,
       id: 222,
     },
   ]
-
-  function get (current) {
-    users(current, pageSize, account, status).then(r => {
-      if (!r.error) {
-        const { data, total } = r
-        setTotal(total)
-        setData(format(data))
-      }
-    })
-  }
-
-  function format (arr) {
-    arr.forEach((item, index) => {
-      item.key = index
-      item.time = transformTime(item.created_at)
-    })
-    return arr
-  }
-
-  function onCancel () {
-    setVisible(false)
-    setVisibleAction(false)
-  }
-
-  let text = []
-  selected.forEach(i => text.push(i.account))
-
-  function onOk () {
-    setVisible(false)
-    updateUsers({lv:seled},"ids=" + sel.id).then(r => {
-      if (!r.error) {
-        saveSuccess(false)
-        setSelectRows([])
-        get(current)
-      }
-    })
-  }
-
-  function updateStatus () {
-    setVisibleAction(false)
-    updateUsers({status:key},"ids=" + selected.map(i => i.id).toString()).then(r => {
-      if (!r.error) {
-        saveSuccess(false)
-        setSelectRows([])
-        get(current)
-      }
-    })
-  }
-
-  return (
-    <div className="view">
-      <div className={c.container}>
-        <TableHeaderComponent path="/main/addUser" data={labels} text="添加用户"/>
-        <RTable selectedRows={selectedRows} setSelectRows={setSelectRows} setSel={setSel} setVisible={setVisible} setTitle={setTitle} get={get} current={current} setCurrent={setCurrent} data={data} setAccount={setAccount} setStatus={setStatus} setDate={setDate} account={account} pageSize={pageSize} total={total} status={status} setMoment={setMoment} setSelected={setSelected} setSrc={setSrc} setKey={setKey} setVisibleAction={setVisibleAction}/>
-      </div>
-      <ModalPopComponent
-        div={
-          <div>
-            <div className={oc.user_setting}>
-              <div style={{color:'#333'}}>当前选中用户：{sel.account||''}</div>
-              <div className={oc.user_tips}>修改为</div>
-              <div className={oc.selects}>
-                {
-                  [{id:0,label:"普通用户"},{id:1,label:"高级用户"},{id:2,label:"钻石用户"},{id:3,label:"至尊用户"}].map(i=><Button style={{color:seled===i.id?'#fff':'rgba(0, 0, 0, 0.25)',background:seled===i.id?'#2C68FF':"#fff"}} onClick={()=>setSeled(i.id)} className={oc.user_sel}>{i.label}</Button>)
-                }
-              </div>
-            </div>
-            <div className={oc.change_btn_view}>
-              <Button onClick={()=>setVisible(false)} className={oc.change_btn_cancel}>取消</Button>
-              <Button type = "primary" className = { oc.change_btn_ok } onClick={onOk}> 确定 < /Button>
-            </div>
-          </div>
-        }
-        title="用户等级"
-        visible={visible}
-        onCancel={onCancel}
-      />
-      <ModalComponent
-        src={src}
-        div="当前选中用户："
-        span={text.join('、')}
-        title={title}
-        action={key}
-        visible={visible_action}
-        onCancel={onCancel}
-        onOk={updateStatus}
-      />
-      <ModalPopComponent
-        div={
-          <div>
-            <div className={oc.remark}>
-              <div>余额数值：</div>
-              <Radio.Group style={{marginLeft:12}}>
-                <Radio value="normal">加款</Radio>
-                <Radio value="banned">
-                  减款
-                </Radio>
-              </Radio.Group>
-            </div>
-            <div className={oc.remark} style={{marginTop:24}}>
-              <div>余额数值：</div>
-              <Input placeholder="请输入变动数值"/>
-            </div>
-            <div className={oc.remark_tips}>当前选中订单： <span> 20200105020305(音符点赞) </span></div>
-              <div className = { oc.change_btn_view } style={{marginTop: 70}}>
-                <Button className={oc.change_btn_cancel}>取消</Button>
-                <Button type = "primary" className={oc.change_btn_ok}>确定</Button>
-              </div>
-          </div>
-        }
-        title = "用户余额"
-        visible = { visible_balance }
-        onCancel = { onCancel }
-      />
-    </div>
-  )
-}
-
-function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data,setAccount,setStatus,setDate,setMoment,account,pageSize,total,status,setVisible,setVisibleAction,setKey,setSrc,setTitle,setSelected }) {
 
   useEffect(() => {
     get(current)
@@ -326,7 +208,10 @@ function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data
           {/*         ) */}
           {/*       } */}
           {/*     } > */}
-            <div style={{cursor:'wait'}} className={c.clickText}>修改余额</div>
+					<div onClick={()=>{
+            setSel(record)
+            setVisibleBalance(true)
+					}} className={c.clickText}>修改余额</div>
           {/* </Popconfirm> */}
           <div className={c.line} />
           {/* <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)}>修改等级</div> */}
@@ -347,51 +232,181 @@ function RTable ({ selectedRows,setSelectRows,setSel,get,current,setCurrent,data
     setMoment(data)
   }
 
+  function get (current) {
+    users(current, pageSize, account, status).then(r => {
+      if (!r.error) {
+        const { data, total } = r
+        setTotal(total)
+        setData(format(data))
+      }
+    })
+  }
+
+  function format (arr) {
+    arr.forEach((item, index) => {
+      item.key = index
+      item.time = transformTime(item.created_at)
+    })
+    return arr
+  }
+
+	const addMoney = () => {
+		setAddBalance(undefined)
+		setAdd(false)
+		setVisibleBalance(false)
+		usersBalances(sel.id, add ? +addBalabce: -addBalabce).then(r=>{
+			if(!r.error) {
+				saveSuccess(false)
+				get(current)
+			}
+		})
+	}
+
+  function onCancel () {
+    setVisible(false)
+    setVisibleAction(false)
+		setVisibleBalance(false)
+  }
+
+  let text = []
+  selected.forEach(i => text.push(i.account))
+
+  function onOk () {
+    setVisible(false)
+    updateUsers({lv:seled},"ids=" + sel.id).then(r => {
+      if (!r.error) {
+        saveSuccess(false)
+        setSelectRows([])
+        get(current)
+      }
+    })
+  }
+
+  function updateStatus () {
+    setVisibleAction(false)
+    updateUsers({status:key},"ids=" + selected.map(i => i.id).toString()).then(r => {
+      if (!r.error) {
+        saveSuccess(false)
+        setSelectRows([])
+        get(current)
+      }
+    })
+  }
+
   return (
-    <div className={c.main}>
-      <div className={c.searchView}>
-        <div className={c.search}>
-          <div className={c.searchL}>
-            <Input onPressEnter={()=>get(current)} maxLength={20} placeholder="请输入用户账号" onChange={e=>setAccount(e.target.value)} value={account} size="small" className={c.searchInput} />
-            <DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户状态" style={{width:186}}/>
-            {/* <DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户等级" style={{width:186}}/> */}
-            {/* { */}
-            {/*   <DatePicker.RangePicker */}
-            {/*     format="YYYY-MM-DD" */}
-            {/*     onChange={dateChange} */}
-            {/*     value={moment} */}
-            {/*     className={c.dataPicker}/> */}
-            {/* } */}
-          </div>
-          <div className={c.searchR}>
-            <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>
-            <Button icon={
-              <img src={good9} alt="" style={{width:14,marginRight:6}} />
-              }
-              type = "primary"
-              onClick={()=>get(current)}
-              size = "small"
-              className={c.searchBtn}>搜索用户</Button>
-          </div>
-        </div>
+    <div className="view">
+      <div className={c.container}>
+        <TableHeaderComponent path="/main/addUser" data={labels} text="添加用户"/>
+				<div className={c.main}>
+					<div className={c.searchView}>
+						<div className={c.search}>
+							<div className={c.searchL}>
+								<Input onPressEnter={()=>get(current)} maxLength={20} placeholder="请输入用户账号" onChange={e=>setAccount(e.target.value)} value={account} size="small" className={c.searchInput} />
+								<DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户状态" style={{width:186}}/>
+								{/* <DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户等级" style={{width:186}}/> */}
+								{/* { */}
+								{/*   <DatePicker.RangePicker */}
+								{/*     format="YYYY-MM-DD" */}
+								{/*     onChange={dateChange} */}
+								{/*     value={moment} */}
+								{/*     className={c.dataPicker}/> */}
+								{/* } */}
+							</div>
+							<div className={c.searchR}>
+								<Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>
+								<Button icon={
+									<img src={good9} alt="" style={{width:14,marginRight:6}} />
+									}
+									type = "primary"
+									onClick={()=>get(current)}
+									size = "small"
+									className={c.searchBtn}>搜索用户</Button>
+							</div>
+						</div>
+					</div>
+					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/>
+					<Table
+						scroll={SCROLL}
+						columns={columns}
+						rowSelection={{
+							...rowSelection
+						}}
+						dataSource={data}
+						size="small"
+						pagination={{
+							showQuickJumper:true,
+							showSizeChanger:false,
+							current,
+							pageSize,
+							showLessItems:true,
+							total,
+							onChange
+						}}
+					/>
+				</div>
       </div>
-			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/>
-      <Table
-				scroll={SCROLL}
-        columns={columns}
-        rowSelection={{
-          ...rowSelection
-        }}
-        dataSource={data}
-        size="small"
-        pagination={{
-          showQuickJumper:true,
-          current,
-          pageSize,
-          showLessItems:true,
-          total,
-          onChange
-        }}
+      <ModalPopComponent
+        div={
+          <div>
+            <div className={oc.user_setting}>
+              <div style={{color:'#333'}}>当前选中用户：{sel.account||''}</div>
+              <div className={oc.user_tips}>修改为</div>
+              <div className={oc.selects}>
+                {
+                  [{id:0,label:"普通用户"},{id:1,label:"高级用户"},{id:2,label:"钻石用户"},{id:3,label:"至尊用户"}].map(i=><Button style={{color:seled===i.id?'#fff':'rgba(0, 0, 0, 0.25)',background:seled===i.id?'#2C68FF':"#fff"}} onClick={()=>setSeled(i.id)} className={oc.user_sel}>{i.label}</Button>)
+                }
+              </div>
+            </div>
+            <div className={oc.change_btn_view}>
+              <Button onClick={()=>setVisible(false)} className={oc.change_btn_cancel}>取消</Button>
+              <Button type = "primary" className = { oc.change_btn_ok } onClick={onOk}> 确定 < /Button>
+            </div>
+          </div>
+        }
+        title="用户等级"
+        visible={visible}
+        onCancel={onCancel}
+      />
+      <ModalComponent
+        src={src}
+        div="当前选中用户："
+        span={text.join('、')}
+        title={title}
+        action={key}
+        visible={visible_action}
+        onCancel={onCancel}
+        onOk={updateStatus}
+      />
+      <ModalPopComponent
+        div={
+          <div>
+            <div className={oc.remark}>
+              <div>余额数值：</div>
+							<Radio.Group value={add} onChange={e=>setAdd(e.target.value)} style={{marginLeft:12}}>
+                <Radio value={true}>加款</Radio>
+                <Radio value={false}>
+                  减款
+                </Radio>
+              </Radio.Group>
+            </div>
+            <div className={oc.remark} style={{paddingTop:0}}>
+              <div>余额数值：</div>
+							<Input onChange={e=>setAddBalance(e.target.value)} value={addBalabce} placeholder="请输入变动数值"/>
+            </div>
+						<div className={oc.remark_tips} style={{marginLeft:85}}>当前选中用户： <span> {sel.id}({sel.account}) </span></div>
+              <div className = { oc.change_btn_view } style={{marginTop: 70}}>
+								<Button className={oc.change_btn_cancel} onClick={()=>{
+									setAddBalance(undefined)
+									setAdd(false)
+									setVisibleBalance(false)
+								}}>取消</Button>
+                <Button type = "primary" onClick={addMoney} className={oc.change_btn_ok}>确定</Button>
+              </div>
+          </div>
+        }
+        title = "用户余额"
+        visible = { visible_balance }
+        onCancel = { onCancel }
       />
     </div>
   )
