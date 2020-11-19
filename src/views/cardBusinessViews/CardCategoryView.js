@@ -4,8 +4,8 @@ import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good31 from '../../icons/good/good31.png'
 import { push, transformTime } from "../../utils/util"
-import DropdownComponent from "../../components/DropdownComponent"
-import {SCROLL} from '../../utils/config'
+
+
 import ActionComponent from '../../components/ActionComponent'
 
 function CardCategoryView () {
@@ -18,19 +18,19 @@ function CardCategoryView () {
   )
 }
 
-function RTable ({ setVisible }) {
+function RTable ({  }) {
   const [selectedRows, setSelectRows] = useState([]);
-  const [search_name, setSearch_name] = useState()
-  const [data, setData] = useState([])
+  const [, ] = useState()
+  const [data, ] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
-  const [total, setTotal] = useState(0)
+  const [total, ] = useState(0)
 
   useEffect(() => {
     get(current)
   }, [])
 
-  function get (current) {
+  function get () {
     // let body = { page: current, size: pageSize }
     // if (search_name) {
     //   body = { ...body, ...{ search_name } }
@@ -52,7 +52,7 @@ function RTable ({ setVisible }) {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -96,7 +96,7 @@ function RTable ({ setVisible }) {
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     }
   };

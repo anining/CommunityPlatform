@@ -1,6 +1,6 @@
 import * as React from 'karet'
 import { useState, useEffect } from 'react'
-import { Button, Table, Timeline, message } from 'antd'
+import { Button,   message } from 'antd'
 import c from '../../styles/home.module.css'
 import home3 from '../../icons/home/home3.png'
 import home1 from '../../icons/home/home1.png'
@@ -9,9 +9,9 @@ import home5 from '../../icons/home/home5.png'
 import home7 from '../../icons/home/home7.png'
 import home8 from '../../icons/home/home8.png'
 import home9 from '../../icons/home/home9.png'
-import { h } from '../../utils/history'
-import { Line } from '@ant-design/charts';
-import ct from '../../styles/statistics.module.css'
+
+
+
 import { getter } from "../../utils/store";
 import {push} from "../../utils/util"
 

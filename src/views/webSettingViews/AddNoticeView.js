@@ -39,7 +39,7 @@ function AddNoticeView () {
             <span onClick={()=>push("/main/home")}>首页</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <span onClick={()=>push("/main/notice")}>发布公告</span>
+            <span onClick={()=>push("/main/notice-setting")}>发布公告</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>新增公告</Breadcrumb.Item>
         </Breadcrumb>

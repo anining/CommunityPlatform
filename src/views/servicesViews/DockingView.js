@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Space, Table, message, Input } from 'antd'
+import { Button, Space, Table,  Input } from 'antd'
 import c from '../../styles/view.module.css'
 import oc from '../../styles/oc.module.css'
 import good36 from '../../icons/good/good36.png'
 import good37 from '../../icons/good/good37.png'
-import good7 from '../../icons/good/good7.png'
+
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
@@ -59,7 +59,7 @@ function DockingView () {
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent path="/main/editDocking" data={labels} text="新增"/>
+        <TableHeaderComponent path="/main/edit-docking" data={labels} text="新增"/>
         <RTable />
       </div>
       <ModalPopComponent
@@ -79,7 +79,7 @@ function DockingView () {
   )
 }
 
-function RTable ({ setVisible }) {
+function RTable ({  }) {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
@@ -90,7 +90,7 @@ function RTable ({ setVisible }) {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function get (current) {
     let body = { page: current, size: pageSize }
@@ -117,7 +117,7 @@ function RTable ({ setVisible }) {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -157,18 +157,18 @@ function RTable ({ setVisible }) {
   },
     {
 			title: "操作",
-      render: (text, record, index) => (
+      render: (text, record ) => (
 				<Space size="small">
-					<div className={c.clickText} onClick={()=>push("/main/imp",{...record,...{provider_type: "external_provider"}})}>导入商品</div>
+					<div className={c.clickText} onClick={()=>push("/main/import-good",{...record,...{provider_type: "external_provider"}})}>导入商品</div>
           <div className={c.line} />
-					<div className={c.clickText} onClick={()=>push("/main/editDocking",record)}>修改对接信息</div>
+					<div className={c.clickText} onClick={()=>push("/main/edit-docking",record)}>修改对接信息</div>
 				</Space>
       )
     }
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     },
     selectedRowKeys: selectedRows

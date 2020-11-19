@@ -7,7 +7,7 @@ import header6 from '../../icons/header/header6.png'
 import header7 from '../../icons/header/header7.png'
 import header8 from '../../icons/header/header8.png'
 import edit23 from '../../icons/edit/edit23.png'
-import { push,  transformTime, dateFormat } from "../../utils/util"
+import { push,   dateFormat } from "../../utils/util"
 import { orderHis } from "../../utils/api"
 import { useHistory } from "react-router-dom"
 
@@ -15,7 +15,7 @@ function OrderView () {
   const { state = {} } = useHistory().location
   const { id } = state
   const [orders, setOrders] = useState([])
-  const [nums, setNums] = useState([
+  const [nums, ] = useState([
     {
       label: "订单差值",
       num: "-",
@@ -47,7 +47,7 @@ function OrderView () {
 
   useEffect(() => {
     get()
-  }, [])
+  }, [get])
 
   function get () {
     orderHis(id).then(r => {
@@ -64,7 +64,7 @@ function OrderView () {
             <span onClick={()=>push("/main/home")}>首页</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <span onClick={()=>push("/main/communityOrder")}>社区订单</span>
+            <span onClick={()=>push("/main/community-recording")}>社区订单</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>订单历程</Breadcrumb.Item>
         </Breadcrumb>
@@ -109,51 +109,51 @@ function RLine ({ orders = [] }) {
     let Msg
     switch( type ) {
       case "made": {
-        const { user_account, user_id, goods_name, goods_id, cost } = payload
+        const { user_account,  goods_name,  cost } = payload
         Msg=<div>用户 {user_account} 下单<span> {goods_name} </span>(消耗<span style={{color:"#FF4D4F"}}> {cost} </span>)，订单状态变为 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span>。</div>
       };break;
       case "pushed": {
-        const { provider_name, provider_id, amount, cost } = payload
+        const { provider_name,  amount, cost } = payload
         Msg=<div>在 {provider_name} 下单成功，下单数量<span style={{color:"#FF4D4F"}}> {amount} </span>，消耗 <span style={{color:"#FF4D4F"}}> {cost} </span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#2C68FF"}}>进行中</span>。</div>
       };break;
       case "push_closed": {
-        const { provider_name, provider_id, reason } = payload
+        const { provider_name,  reason } = payload
         Msg=<div>在 {provider_name} 下单失败，失败原因：<span>{ reason }</span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#74C041"}}>已终止</span>。</div>
       };break;
       case "push_failed": {
-        const { provider_name, provider_id, reason } = payload
+        const { provider_name,  reason } = payload
         Msg=<div>在{ provider_name }下单失败，失败原因：<span> {reason} </span> 您可以通过点击“重新推送”按钮来重新推送订单。</div>
       };break;
       case "repushed": {
-        const { amount, cost, manager_nickname, manager_id } = payload
+        const { amount, cost, manager_nickname  } = payload
         Msg=<div>重新推送成功，下单数量 <span> {amount} </span>，消耗 <span>{cost}</span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#2C68FF"}}>进行中</span>，操作人：<span>{manager_nickname}</span>。</div>
       };break;
       case "repush_closed": {
-        const { reason, manager_nickname, manager_id } = payload
+        const { reason, manager_nickname  } = payload
         Msg=<div>重新推送失败，失败原因：<span>{reason}</span>，订单状态 <span style={{color:"rgb(255, 141, 48)"}}>待处理</span> => <span style={{color:"#74C041"}}>已终止</span>。操作人：<span>{manager_nickname}</span>。</div>
       };break;
       case "repush_failed": {
-        const { reason, manager_nickname, manager_id } = payload
+        const { reason, manager_nickname  } = payload
         Msg=<div>重新推送失败，失败原因：<span>{reason}</span>操作人：<span>{manager_nickname}</span>。</div>
       };break;
       case "completed": {
-        const { pass } = payload
+        const {  } = payload
         Msg=<div>订单完成，订单状态 <span style={{color:"#2C68FF"}}>进行中</span> => <span style={{color:"#74C041"}}>已完成</span>。</div>
       };break;
       case "closed": {
-        const { reason, manager_nickname, manager_id } = payload
+        const { reason   } = payload
         Msg=<div>订单被终止，订单状态 <span style={{color:"#2C68FF"}}>进行中</span> => <span style={{color:"#74C041"}}>已终止</span>，终止原因：<span>{reason}</span>。</div>
       };break;
       case "refund_requested": {
-        const { user_account, user_id } = payload
+        const { user_account  } = payload
         Msg=<div>用户 {user_account} 发起退款申请，售后状态变为<span style={{color:'#74C041'}}> 退款中</span>。</div>
       };break;
       case "refunded": {
-        const { provider_name, provider_id, amount, provider_refund_value, refund_value, closed } = payload
+        const { provider_name,  amount, provider_refund_value, refund_value, closed } = payload
         Msg=<div><span>{provider_name} </span>退款给您，退款<span> {provider_refund_value} </span>(退款数量<span> {amount} </span>){ refund_value ? <>，您退款给用户(退款数量 <span>{refund_value}</span> )</> : "" }，售后状态 <span style={{color:'#74C041'}}>退款中</span> => <span style={{color:"#74C041"}}>已退款</span> { closed ? <>，订单状态 <span style={{color:"#2C68FF"}}>进行中</span> => <span style={{color:"#74C041"}}>已终止</span></>:"" }。</div>
         };break;
       case "refund_rejected": {
-        const { provider_name, provider_id, reason } = payload
+        const { provider_name,  reason } = payload
         Msg=<div>{provider_name} 拒绝退款，拒绝原因：<span> {reason}</span>。</div>
         };break;
       default:{

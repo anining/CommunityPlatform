@@ -151,7 +151,7 @@ function DataStatisticsView () {
       </div>
     )
     const items = []
-    child.forEach((it, i) => {
+    child.forEach((it ) => {
       if (it.length === 1) {
         const { label, num, icon } = it[0]
         items.push(

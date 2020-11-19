@@ -4,7 +4,7 @@ import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good31 from '../../icons/good/good31.png'
 import { communityParamTemplates } from "../../utils/api";
-import DropdownComponent from '../../components/DropdownComponent'
+
 import { push, transformTime, saveSuccess } from "../../utils/util";
 import ActionComponent from '../../components/ActionComponent'
 import {SCROLL} from '../../utils/config'
@@ -30,7 +30,7 @@ function RTable () {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function get (current) {
     let body = { page: current, size: pageSize }
@@ -54,7 +54,7 @@ function RTable () {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -93,7 +93,7 @@ function RTable () {
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     },
     selectedRowKeys: selectedRows

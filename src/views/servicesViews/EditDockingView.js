@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Button, Breadcrumb, message } from 'antd'
 import good5 from '../../icons/good/good5.png'
-import {push, saveSuccess} from "../../utils/util";
+import {push, isUrl, saveSuccess} from "../../utils/util";
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent';
 import {docking} from '../../utils/api';
 import {useHistory} from 'react-router-dom';
@@ -24,6 +24,11 @@ function EditDockingView () {
       message.warning("请完善信息")
       return
     }
+		if(!isUrl(endpoint)) {
+      message.warning("无效的站点域名")
+      return
+		}
+
     let body = {
 			payload: JSON.stringify({ key: apiKey, api_token: apiToken }),
       name,
@@ -35,9 +40,6 @@ function EditDockingView () {
     promise.then(r => {
       setLoading(false)
       if (!r.error) {
-        if (!jump) {
-          h.replace('/main/editDocking')
-        }
         saveSuccess(jump)
 				setName(undefined)
 				setEndpoint(undefined)
@@ -46,20 +48,18 @@ function EditDockingView () {
 				setApiKey(undefined)
       }
     }).catch(() => {
-      if (!jump) {
-        h.replace('/main/editDocking')
-      }
       setLoading(false)
     })
   }
 
 	const formatEndpoint = (endpoint="") => {
-		let localEndpoint = endpoint.charAt(endpoint.length-1) === "/" ? endpoint.slice(0,-1) : endpoint
 		switch (type) {
 			case "yile":
+				let localEndpoint = endpoint.replace(/\.api\.94sq\.cn/g, "")
+				localEndpoint = localEndpoint.charAt(localEndpoint.length-1) === "/" ? localEndpoint.slice(0,-1) : localEndpoint
 				return localEndpoint + ".api.94sq.cn"
 			default:
-				return localEndpoint
+				return endpoint
 		}
 	}
 
@@ -106,21 +106,21 @@ function EditDockingView () {
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />
-          <div style={{color:'#FF8D30'}}>站点主域名，如https://xxx.xxxx.com</div>
+          <div style={{color:'#FF8D30'}}>站点主域名，如http://xxx.xxxx.com</div>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
             <div className={c.itemText}>TokenID</div>
           </div>
-          <Input value={apiToken} onChange={e=>setApiToken(e.target.value)} placeholder="在对接系统的登录账号" className={c.itemInput}></Input>
+          <Input value={apiToken} onChange={e=>setApiToken(e.target.value)} placeholder="在对接系统的TokenID" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
             <div className={c.itemText}>密匙</div>
           </div>
-          <Input value={apiKey} onChange={e=>setApiKey(e.target.value)} placeholder="在对接系统的登录密码" className={c.itemInput}></Input>
+          <Input value={apiKey} onChange={e=>setApiKey(e.target.value)} placeholder="在对接系统的密钥" className={c.itemInput}></Input>
         </div>
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>

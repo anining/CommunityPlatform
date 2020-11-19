@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Button, message, Breadcrumb, } from 'antd'
 import good5 from '../../icons/good/good5.png'
-import { goBack, saveSuccess, push } from "../../utils/util";
+import {  saveSuccess, push } from "../../utils/util";
 import { customerServices } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 
@@ -44,7 +44,7 @@ function AddPeopleServiceView () {
             <span onClick={()=>push("/main/home")}>首页</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <span onClick={()=>push("/main/peopleService")}>客服配置</span>
+            <span onClick={()=>push("/main/people-setting")}>客服配置</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>添加客服</Breadcrumb.Item>
         </Breadcrumb>

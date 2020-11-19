@@ -35,66 +35,66 @@ import sider28 from '../icons/sider/sider28.png'
 import { getter, setter } from "../utils/store"
 import { push } from "../utils/util"
 
-function SiderComponent ({ collapsed, toggle }) {
+function SiderComponent ({ collapsed  }) {
   const { role, openKeys, selectedKeys, permissions } = getter(["permissions", "selectedKeys", "openKeys", "role"])
 
   useEffect(() => {
-		// const obj = {
-		// 	"home": "home",
-		// 	"table": "table",
-		// 	"dataStatistics": "statistics",
-		// 	"moneyStatistics": "statistics",
-		// 	"userStatistics": "statistics",
-		// 	"webStatistics": "statistics",
-		// 	"goodStatistics": "statistics",
-		// 	"communityGood":"communityBusiness",
-		// 	"goodCategory":"communityBusiness",
-		// 	"markupTem":"communityBusiness",
-		// 	"cardGood":"cardBusiness",
-		// 	"cardManage":"cardBusiness",
-		// 	"cardCategory":"cardBusiness",
-		// 	"subService":"services",
-		// 	"docking":"docking",
-		// 	"store":"store",
-		// 	"communityOrder":"orderRecording",
-		// 	"cardOrder":"orderRecording",
-		// 	"capitalFlow":"capitalFlow",
-		// 	"user":"user",
-		// 	"storeSetting":"webSetting",
-		// 	"rebot":"webSetting",
-		// 	"images":"webSetting",
-		// 	"peopleService":"webSetting",
-		// 	"notice":"webSetting",
-		// 	"admin":"systemSetting",
-		// 	"password":"systemSetting",
-		// 	"logger":"systemSetting",
-		// 	"about":"systemSetting",
-		// 	"businessSetting":"systemSetting",
-		// 	"childWebList":"childWeb",
-		// }
-    // const { pathname } = window.location
-    // const arr = pathname.split('/')
-		// if( arr.length ) {
-		// 	setter([["selectedKeys", arr[arr.length - 1]]]);
-      // setter([["openKeys", [obj[arr[arr.length - 1]]]]])
-		// }
+		const obj = {
+			"home": "home",
+			"label": "label",
+			"data-statistics": "statistics",
+			"funds-statistics": "statistics",
+			"user-statistics": "statistics",
+			"web-statistics": "statistics",
+			"goods-statistics": "statistics",
+			"goods-community":"community",
+			"category-community":"community",
+			"markup-community":"community",
+			"goods-card":"card",
+			"manage-card":"card",
+			"category-card":"card",
+			"service":"services",
+			"docking":"docking",
+			"store":"store",
+			"community-recording":"recording",
+			"card-recording":"recording",
+			"flow":"flow",
+			"user":"user",
+			"storeSetting":"setting",
+			"rebot-setting":"setting",
+			"images-setting":"setting",
+			"people-setting":"setting",
+			"notice-setting":"setting",
+			"admin-system":"system",
+			"password-system":"system",
+			"logger-system":"system",
+			"about-system":"system",
+			"business-system":"system",
+			"list-web":"web",
+		}
+    const { pathname } = window.location
+    const p = pathname.split('/')
+		if(p.length) {
+			setter([["selectedKeys", p[p.length - 1]]]);
+      setter([["openKeys", [obj[p[p.length - 1]]]]])
+		}
   }, [])
 
-  function menuItemClick ({ item, key, keyPath, domEvent }) {
-    // if (["home", "table", "capitalFlow", "user"].includes(key)) {
-    //   setter([["openKeys", []]])
-    // }
-    // setter([["selectedKeys", keyPath]])
-    // push(`/main/${key}`)
+  function menuItemClick ({ key, keyPath }) {
+    if (["home", "label", "store", "docking", "flow", "user"].includes(key)) {
+      setter([["openKeys", []]])
+    }
+    setter([["selectedKeys", keyPath]])
+    push(`/main/${key}`)
   }
 
-  function onTitleClick ({ key, domEvent }) {
-    // const localOpenKeys = openKeys.get()
-    // if (localOpenKeys.length && localOpenKeys.includes(key)) {
-    //   setter([["openKeys", []]])
-    // } else {
-    //   setter([["openKeys", [key]]])
-    // }
+  function onTitleClick ({ key }) {
+    const localOpenKeys = openKeys.get()
+    if (localOpenKeys.length && localOpenKeys.includes(key)) {
+      setter([["openKeys", []]])
+    } else {
+      setter([["openKeys", [key]]])
+    }
   }
 
   function MyMenu ({ role, permissions }) {
@@ -110,33 +110,32 @@ function SiderComponent ({ collapsed, toggle }) {
 				{/* <> */}
         {/* { U.when(R.includes('statistics',permissions), ( */}
 				{/* 	<Menu.SubMenu onTitleClick={onTitleClick} key="statistics" title={<Title keys="statistics" label="数据统计"/>}> */}
-            {/* <Menu.Item key="dataStatistics">数据概览</Menu.Item> */}
-            {/* <Menu.Item key="moneyStatistics">资金统计</Menu.Item> */}
-            {/* <Menu.Item key="goodStatistics">商品&订单统计</Menu.Item> */}
-            {/* <Menu.Item key="userStatistics">用户统计</Menu.Item> */}
-            {/* <Menu.Item key="webStatistics">网站访问统计</Menu.Item> */}
+            {/* <Menu.Item key="data-statistics">数据概览</Menu.Item> */}
+            {/* <Menu.Item key="funds-statistics">资金统计</Menu.Item> */}
+            {/* <Menu.Item key="goods-statistics">商品&订单统计</Menu.Item> */}
+            {/* <Menu.Item key="user-statistics">用户统计</Menu.Item> */}
+            {/* <Menu.Item key="web-statistics">网站访问统计</Menu.Item> */}
           {/* </Menu.SubMenu> */}
         {/* )) } */}
 				{/* </> */}
         { U.when(R.includes('cmntbiz',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="communityBusiness" title={<Title keys="communityBusiness" label="社区商品"/>}>
-              <Menu.Item key="communityGood">社区商品列表</Menu.Item>
-              <Menu.Item key="goodCategory">社区商品分类</Menu.Item>
-              {/* <Menu.Item key="orderModel">下单模型</Menu.Item> */}
-              <Menu.Item key="markupTem">调价模版</Menu.Item>
+            <Menu.SubMenu onTitleClick={onTitleClick} key="community" title={<Title keys="community" label="社区商品"/>}>
+              <Menu.Item key="goods-community">社区商品列表</Menu.Item>
+              <Menu.Item key="category-community">社区商品分类</Menu.Item>
+              <Menu.Item key="markup-community">调价模版</Menu.Item>
             </Menu.SubMenu>
         )) }
 				{/* <> */}
 				{/* 	{ U.when(R.includes('cardbiz',permissions), ( */}
-				{/* 			<Menu.SubMenu onTitleClick={onTitleClick} key="cardBusiness" title={<Title keys="cardBusiness" label="卡密业务"/>}> */}
-				{/* 				<Menu.Item key="cardGood">卡密商品列表</Menu.Item> */}
-				{/* 				<Menu.Item key="cardCategory">卡密商品分类</Menu.Item> */}
-				{/* 				<Menu.Item key="cardManage">卡密管理</Menu.Item> */}
+				{/* 			<Menu.SubMenu onTitleClick={onTitleClick} key="card" title={<Title keys="card" label="卡密业务"/>}> */}
+				{/* 				<Menu.Item key="goods-card">卡密商品列表</Menu.Item> */}
+				{/* 				<Menu.Item key="category-card">卡密商品分类</Menu.Item> */}
+				{/* 				<Menu.Item key="manage-card">卡密管理</Menu.Item> */}
 				{/* 			</Menu.SubMenu> */}
 				{/* 	)) } */}
 				{/* </> */}
         { U.when(R.includes('tagmng', permissions), (
-            <Menu.Item key="table" icon={<Icon keys="table" />}>
+            <Menu.Item key="label" icon={<Icon keys="label" />}>
               商品标签
             </Menu.Item>
         )) }
@@ -153,18 +152,18 @@ function SiderComponent ({ collapsed, toggle }) {
 				{/* <> */}
         {/* { U.when(R.includes('valueaddedsrv',permissions), ( */}
             {/* <Menu.SubMenu onTitleClick={onTitleClick} key="services" title={<Title keys="services" label="增值服务" />}> */}
-              {/* <Menu.Item key="subService">开通服务</Menu.Item> */}
+              {/* <Menu.Item key="service-services">开通服务</Menu.Item> */}
             {/* </Menu.SubMenu> */}
         {/* )) } */}
 				{/* </> */}
         { U.when(R.includes('orderlog',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="orderRecording" title={<Title keys="orderRecording" label="订单记录" />}>
-              <Menu.Item key="communityOrder">社区订单</Menu.Item>
-              {/* <Menu.Item key="cardOrder">卡密订单</Menu.Item> */}
+            <Menu.SubMenu onTitleClick={onTitleClick} key="recording" title={<Title keys="recording" label="订单记录" />}>
+              <Menu.Item key="community-recording">社区订单</Menu.Item>
+              {/* <Menu.Item key="card-recording">卡密订单</Menu.Item> */}
             </Menu.SubMenu>
         )) }
         { U.when(R.includes('capitalflow',permissions), (
-            <Menu.Item key="capitalFlow" icon={<Icon keys="capitalFlow" />}>
+            <Menu.Item key="flow" icon={<Icon keys="flow" />}>
               资金记录
             </Menu.Item>
         )) }
@@ -175,27 +174,27 @@ function SiderComponent ({ collapsed, toggle }) {
         )) }
 				{/* <> */}
         {/* { U.when(R.includes('subcitemng',permissions), ( */}
-            {/* <Menu.SubMenu onTitleClick={onTitleClick} key="childWeb" title={<Title keys="childWeb" label="分站管理" />}> */}
-              {/* <Menu.Item key="childWebList">分站列表</Menu.Item> */}
+            {/* <Menu.SubMenu onTitleClick={onTitleClick} key="web" title={<Title keys="web" label="分站管理" />}> */}
+              {/* <Menu.Item key="list-web">分站列表</Menu.Item> */}
             {/* </Menu.SubMenu> */}
         {/* )) } */}
 				{/* </> */}
         { U.when(R.includes('citecfg',permissions), (
-            <Menu.SubMenu onTitleClick={onTitleClick} key="webSetting" title={<Title keys="webSetting"  label="站点设置"/>}>
-              <Menu.Item key="sSetting">店铺设置</Menu.Item>
-              <Menu.Item key="sPlug">店铺装修</Menu.Item>
-              <Menu.Item key="rebot">支付配置</Menu.Item>
-              {/* <Menu.Item key="images">图床配置</Menu.Item> */}
-              <Menu.Item key="peopleService">客服配置</Menu.Item>
-              <Menu.Item key="notice">发布公告</Menu.Item>
+            <Menu.SubMenu onTitleClick={onTitleClick} key="setting" title={<Title keys="setting"  label="站点设置"/>}>
+              <Menu.Item key="store-setting">店铺设置</Menu.Item>
+              <Menu.Item key="plug-setting">店铺装修</Menu.Item>
+              <Menu.Item key="rebot-setting">支付配置</Menu.Item>
+              {/* <Menu.Item key="images-setting">图床配置</Menu.Item> */}
+              <Menu.Item key="people-setting">客服配置</Menu.Item>
+              <Menu.Item key="notice-setting">发布公告</Menu.Item>
             </Menu.SubMenu>
         )) }
-         <Menu.SubMenu onTitleClick={onTitleClick} key="systemSetting" title={<Title keys="systemSetting" label="系统设置" />}>
-          { U.when(R.equals(role, "superuser"), <Menu.Item key="admin">系统管理员</Menu.Item>) }
-          <Menu.Item key="logger">登录日志</Menu.Item>
-          {/* <Menu.Item key="businessSetting">业务配置</Menu.Item> */}
-          {/* <Menu.Item key="about">系统信息</Menu.Item> */}
-          <Menu.Item key="password">修改密码</Menu.Item>
+         <Menu.SubMenu onTitleClick={onTitleClick} key="system" title={<Title keys="system" label="系统设置" />}>
+          { U.when(R.equals(role, "superuser"), <Menu.Item key="admin-system">系统管理员</Menu.Item>) }
+          <Menu.Item key="logger-system">登录日志</Menu.Item>
+          {/* <Menu.Item key="business-system">业务配置</Menu.Item> */}
+          {/* <Menu.Item key="about-system">系统信息</Menu.Item> */}
+          <Menu.Item key="password-system">修改密码</Menu.Item>
         </Menu.SubMenu>
       </Menu>
     )
@@ -216,29 +215,29 @@ function Title ({ keys, label }) {
       keys: ["home"],
 			c: "home_icon"
     },
-    "table": {
+    "label": {
       icon: [sider23, sider24],
-      keys: ["table"],
+      keys: ["label"],
 			c: "table_icon_customize"
     },
     "statistics": {
       icon: [sider18, sider14],
-      keys: ["dataStatistics", "moneyStatistics", "userStatistics", "webStatistics", "goodStatistics"],
+      keys: ["data-statistics", "funds-statistics", "user-statistics", "web-statistics", "goods-statistics"],
 			c: "statistics_icon"
     },
-    "communityBusiness": {
+    "community": {
       icon: [sider12, sider4],
-      keys: ["communityGood", "goodCategory", "orderModel", "markupTem"],
+      keys: ["goods-community", "category-community", "markup-community"],
 			c: "communityBusiness_icon"
     },
-    "cardBusiness": {
+    "card": {
       icon: [sider2, sider6],
-      keys: ["cardGood", "cardManage", "cardCategory"],
+      keys: ["goods-card", "manage-card", "category-card"],
 			c: "cardBusiness_icon"
     },
     "services": {
       icon: [sider7, sider9],
-      keys: ["subService"],
+      keys: ["service"],
 			c: "services_icon"
     },
     "docking": {
@@ -251,14 +250,14 @@ function Title ({ keys, label }) {
       keys: ["store"],
 			c: "store_icon"
     },
-    "orderRecording": {
+    "recording": {
       icon: [sider13, sider10],
-      keys: ["communityOrder", "cardOrder"],
+      keys: ["community-recording", "card-recording"],
 			c: "orderRecording_icon"
     },
-    "capitalFlow": {
+    "flow": {
       icon: [sider17, sider3],
-      keys: ["capitalFlow"],
+      keys: ["flow"],
 			c: "capitalFlow_icon"
     },
     "user": {
@@ -266,19 +265,19 @@ function Title ({ keys, label }) {
       keys: ["user"],
 			c: "user_icon"
     },
-    "webSetting": {
+    "setting": {
       icon: [sider11, sider20],
-      keys: ["sSetting", "sPlug", "rebot", "images", "peopleService", 'notice'],
+      keys: ["store-setting", "plug-setting", "rebot-setting", "images-setting", "people-setting", 'notice-setting'],
 			c: "webSetting_icon"
     },
-    "systemSetting": {
+    "system": {
       icon: [sider19, sider16],
-      keys: ["admin", "password", "logger", "about", "businessSetting"],
+      keys: ["admin-system", "password-system", "logger-system", "about-system", "business-system"],
 			c: "systemSetting_icon"
     },
-    "childWeb": {
+    "web": {
       icon: [sider21, sider22],
-      keys: ["childWebList"],
+      keys: ["list-web"],
 			c: "childWeb_icon"
     }
   }
@@ -296,25 +295,25 @@ function Icon ({ keys }) {
       icon: [sider15, sider5],
       keys: ["home"]
     },
-    "table": {
+    "label": {
       icon: [sider23, sider24],
-      keys: ["table"]
+      keys: ["label"]
     },
     "statistics": {
       icon: [sider18, sider14],
-      keys: ["dataStatistics", "moneyStatistics", "userStatistics", "webStatistics", "goodStatistics"]
+      keys: ["data-statistics", "funds-statistics", "user-statistics", "web-statistics", "goods-statistics"]
     },
-    "communityBusiness": {
+    "community": {
       icon: [sider12, sider4],
-      keys: ["communityGood", "goodCategory", "orderModel"]
+      keys: ["goods-community", "category-community"]
     },
-    "cardBusiness": {
+    "card": {
       icon: [sider2, sider6],
-      keys: ["cardGood", "cardManage", "cardCategory"]
+      keys: ["goods-card", "manage-card", "category-card"]
     },
     "services": {
       icon: [sider7, sider9],
-      keys: ["subService"]
+      keys: ["service"]
     },
     "docking": {
       icon: [sider25, sider26],
@@ -324,29 +323,29 @@ function Icon ({ keys }) {
       icon: [sider27, sider28],
       keys: ["store"]
     },
-    "orderRecording": {
+    "recording": {
       icon: [sider13, sider10],
-      keys: ["communityOrder", "cardOrder"]
+      keys: ["community-recording", "card-recording"]
     },
-    "capitalFlow": {
+    "flow": {
       icon: [sider17, sider3],
-      keys: ["capitalFlow"]
+      keys: ["flow"]
     },
     "user": {
       icon: [sider8, sider1],
       keys: ["user"]
     },
-    "webSetting": {
+    "setting": {
       icon: [sider11, sider20],
-      keys: ["sSetting", "sPlug", "rebot", "images", "peopleService", 'notice']
+      keys: ["store-setting", "plug-setting", "rebot-setting", "images-setting", "people-setting", 'notice-setting']
     },
-    "systemSetting": {
+    "system": {
       icon: [sider19, sider16],
-      keys: ["admin", "password", "logger", "about", "businessSetting"]
+      keys: ["admin-system", "password-system", "logger-system", "about-system", "business-system"]
     },
-    "childWeb": {
+    "web": {
       icon: [sider21, sider22],
-      keys: ["childWebList"]
+      keys: ["list-web"]
     },
   }
 

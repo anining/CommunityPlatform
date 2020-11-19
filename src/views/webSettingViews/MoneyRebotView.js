@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
-import { Switch, Input, Button, Upload, message } from 'antd'
+import {   Button, Upload, message } from 'antd'
 import { MODULES } from "../../utils/config";
 import ImgCrop from 'antd-img-crop';
-import good5 from '../../icons/good/good5.png'
+
 import ReactQuill from 'react-quill';
 import good75 from '../../icons/good/good75.png'
 import cs from '../../styles/childWebSetting.module.css'
-import edit1 from '../../icons/edit/edit1.png'
+
 import {botConfig} from '../../utils/api';
 import {beforeUpload, saveSuccess} from '../../utils/util';
 import ClipboardJS from 'clipboard'
@@ -23,7 +23,7 @@ function MoneyRebotView () {
   useEffect(() => {
     botConfig('get').then(r => {
       if (!r.error) {
-        const { add_fund_api, alipay_qrcode, secret, tutorial = "", wechatpay_qrcode } = r.data
+        const {  alipay_qrcode, secret, tutorial = "", wechatpay_qrcode } = r.data
 				setSecret(secret)
 				setTutorial(tutorial)
 				if(wechatpay_qrcode) {
@@ -61,12 +61,17 @@ function MoneyRebotView () {
 		},[])
 
 	const save = () => {
-		if(!wechatpayQrcode.length || !alipayQrcode.length) {
-			message.warning("请完善信息")
-			return
+		let body = {
+			tutorial
+		}
+		if(wechatpayQrcode.length) {
+			body = {...body,...{wechatpay_qrcode: wechatpayQrcode[0].url}}
+		}
+		if(alipayQrcode.length) {
+			body = {...body,...{alipay_qrcode: alipayQrcode[0].url}}
 		}
     setLoading(true)
-		botConfig('modify', { wechatpay_qrcode: wechatpayQrcode[0].url, tutorial, alipay_qrcode: alipayQrcode[0].url }).then(r => {
+		botConfig('modify', body).then(r => {
       setLoading(false);
       !r.error && saveSuccess(false)
     }).catch(() => {
@@ -126,6 +131,7 @@ function MoneyRebotView () {
 										listType="picture-card"
 										fileList={alipayQrcode}
 										onPreview={onPreview}
+										onChange={({fileList}) => setAlipayQrcode(fileList)}
 									>
 										<div className={cs.upload_qr_code}>
 											<img src={good75} alt="" className={c.uploadImg}/>
@@ -142,6 +148,7 @@ function MoneyRebotView () {
 										listType="picture-card"
 										fileList={wechatpayQrcode}
 										onPreview={onPreview}
+										onChange={({fileList}) => setWechatpayQrcode(fileList)}
 									>
 										<div className={cs.upload_qr_code}>
 											<img src={good75} alt="" className={c.uploadImg}/>

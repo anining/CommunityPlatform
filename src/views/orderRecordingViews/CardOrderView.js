@@ -4,11 +4,11 @@ import c from '../../styles/view.module.css'
 import good19 from '../../icons/good/good19.png'
 import good9 from '../../icons/good/good9.png'
 import good62 from '../../icons/good/good62.png'
-import good20 from '../../icons/good/good20.png'
+
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent"
 import { transformTime } from "../../utils/util"
-import {SCROLL, CARD_STATUS} from '../../utils/config'
+import {SCROLL} from '../../utils/config'
 import ActionComponent from '../../components/ActionComponent'
 
 function CardOrderView () {
@@ -37,25 +37,25 @@ function CardOrderView () {
   )
 }
 
-function RTable ({ setVisible }) {
+function RTable ({  }) {
   const [selectedRows, setSelectRows] = useState([]);
-  const [data, setData] = useState([])
+  const [data, ] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
-  const [total, setTotal] = useState(0)
-  const [date, setDate] = useState([])
+  const [total, ] = useState(0)
+  const [, setDate] = useState([])
   const [moment, setMoment] = useState()
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current])
 
   function dateChange (data, dataString) {
     setDate(dataString)
     setMoment(data)
   }
 
-  function get (current) {
+  function get () {
     // communityGoodsOrders(current, pageSize, id, search_user_account, search_goods_name, community_goods_category_id, status, date[0], date[1]).then(r => {
     //   if (!r.error) {
     //     // const { data, total } = r
@@ -126,12 +126,12 @@ function RTable ({ setVisible }) {
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     }
   };
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }

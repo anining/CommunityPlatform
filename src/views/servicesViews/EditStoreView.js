@@ -24,18 +24,12 @@ function EditStoreView () {
     setLoading(true)
     providers(id ? "modify" : "add", id, undefined, { nickname, account }).then(r => {
       setLoading(false)
-      if (!jump) {
-        h.replace('/main/editStore')
-      }
       if (!r.error) {
         setNickname("")
         setAccount("")
         saveSuccess(jump)
       }
     }).catch(() => {
-      if (!jump) {
-        h.replace('/main/editStore')
-      }
       setLoading(false)
     })
   }

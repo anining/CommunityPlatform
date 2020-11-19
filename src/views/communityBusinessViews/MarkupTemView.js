@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Input, Modal } from 'antd'
+import { Button,  Input, Modal } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
 import { cmntPadjs } from '../../utils/api'
 import { push, dateFormat, saveSuccess } from "../../utils/util";
-import DropdownComponent from '../../components/DropdownComponent'
+
 import { styles } from "../../styles/modal"
 import { TEM_TYPE } from "../../utils/config"
 import ActionComponent from '../../components/ActionComponent'
+import TableComponent from '../../components/TableComponent'
 
 function MarkupTemView () {
   // TODO: 两个弹窗
-  const [visible, setVisible] = useState(false)
-  const [actionId, setActionId] = useState(2)
+  const [visible, ] = useState(false)
+  const [actionId, ] = useState(2)
 
   function handleOk () {
 
@@ -69,13 +70,13 @@ function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
   const [search_name, setSearch_name] = useState()
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function get (current) {
     let body = { page: current, size: pageSize }
@@ -100,7 +101,7 @@ function RTable () {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -140,7 +141,7 @@ function RTable () {
 ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     },
     selectedRowKeys: selectedRows
@@ -171,9 +172,7 @@ function RTable () {
             <div className={c.searchL}>
               <Input onPressEnter={()=>get(current)} placeholder="请输入加价模版关键字" value={search_name} onChange={e=>setSearch_name(e.target.value)} size="small" className={c.searchInput} />
               <Button
-                icon={
-                  <img src={good31} alt="" style={{width:14,marginRight:6}} />
-                }
+                icon={<img src={good31} alt="" style={{width:14,marginRight:6}} />}
                 size = "small"
                 onClick={()=>get(current)}
                 className={c.searchBtn}>搜索模版</Button>
@@ -185,29 +184,24 @@ function RTable () {
                 }
                 type = "primary"
                 size = "small"
-                onClick={()=>push('/main/editMarkupTem')}
+                onClick={()=>push('/main/edit-markup-community')}
                 className={c.searchBtn}>新增模版</Button>
             </div>
           </div>
       </div>
 			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
-      <Table
-        columns={columns}
-        rowSelection={{
-          ...rowSelection
-        }}
-        dataSource={data}
-        size="small"
-        pagination={{
-          showQuickJumper:true,
-          current,
-          pageSize,
-					showSizeChanger:false,
-          showLessItems:true,
-          total,
-          onChange
-        }}
-      />
+			<TableComponent
+				setPageSize={setPageSize}
+				setCurrent={setCurrent}
+				getDataSource={get}
+				setSelectedRowKeys={setSelectRows}
+				selectedRowKeys={selectedRows}
+				columns={columns}
+				dataSource={data}
+				pageSize={pageSize}
+				total={total}
+				current={current}
+			/>
     </div>
   )
 }

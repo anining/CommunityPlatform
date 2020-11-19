@@ -64,10 +64,10 @@ function Context () {
       tips: "开通服务之后，提供特定的数据之后，您可以一键将站外的商品，对接到本系统中。",
       price: 5,
       id: 5
-      },
+      }
   ]
 
-  function openService (id) {
+  function openService () {
     window.open("https://www.baidu.com")
   }
 

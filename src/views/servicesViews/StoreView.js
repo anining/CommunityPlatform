@@ -3,15 +3,15 @@ import {Button, Table, message, Input} from 'antd'
 import c from '../../styles/view.module.css'
 import good38 from '../../icons/good/good38.png'
 import good39 from '../../icons/good/good39.png'
-import good7 from '../../icons/good/good7.png'
+
 import good9 from '../../icons/good/good9.png'
 import good57 from '../../icons/good/good57.png'
 import good58 from '../../icons/good/good58.png'
-import good41 from '../../icons/good/good41.png'
+
 import TableHeaderComponent from "../../components/TableHeaderComponent";
-import DropdownComponent from "../../components/DropdownComponent";
+
 import {paySettle, providers} from "../../utils/api"
-import Popconfirm from "antd/es/popconfirm"
+
 import Space from "antd/es/space"
 import {getPath, saveSuccess, push} from "../../utils/util"
 import ActionComponent from '../../components/ActionComponent'
@@ -49,7 +49,7 @@ function StoreView() {
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent path="/main/editStore" data={data} text="新增"/>
+        <TableHeaderComponent path="/main/edit-store" data={data} text="新增"/>
         <RTable/>
       </div>
     </div>
@@ -66,7 +66,7 @@ function RTable() {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function get(current) {
     let body = {page: current, size: pageSize}
@@ -89,7 +89,7 @@ function RTable() {
     return arr
   }
 
-  function onChange(page, pageSize) {
+  function onChange(page ) {
     setCurrent(page)
     get(page)
   }
@@ -155,7 +155,7 @@ function RTable() {
       title: '申请结算',
 			ellipsis: true,
       dataIndex: 'value_stlreqed',
-      render: (text, record, index) => {
+      render: (text , index) => {
         return <div>{text || 0}</div>
       }
     },
@@ -184,9 +184,9 @@ function RTable() {
 			fixed: 'right',
       render: (...arg) => (
         <Space size="small" className={c.space}>
-          <div className={c.clickText} onClick={()=>push("/main/editStore",arg[1])}>修改信息</div>
+          <div className={c.clickText} onClick={()=>push("/main/edit-store",arg[1])}>修改信息</div>
           <div className={c.line} />
-					<div className={c.clickText} onClick={()=>push("/main/imp",{...arg[1],...{provider_type: "supplier"}})}>导入商品</div>
+					<div className={c.clickText} onClick={()=>push("/main/import-good",{...arg[1],...{provider_type: "supplier"}})}>导入商品</div>
           <div className={c.line} />
           <div className={c.clickText} onClick={() => {
             if(!getPath(['0', 'value_stlreqed'], arg)) {
@@ -208,7 +208,7 @@ function RTable() {
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     },
     selectedRowKeys: selectedRows

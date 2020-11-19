@@ -6,7 +6,7 @@ import oc from '../../styles/oc.module.css'
 import good23 from '../../icons/good/good23.png'
 import good24 from '../../icons/good/good24.png'
 import good9 from '../../icons/good/good9.png'
-import good41 from '../../icons/good/good41.png'
+
 import { users, updateUsers, usersBalances } from "../../utils/api";
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
@@ -34,8 +34,8 @@ function UserView () {
   const [seled, setSeled] = useState(0)
   const [account, setAccount] = useState()
   const [status, setStatus] = useState()
-  const [date, setDate] = useState([])
-  const [moment, setMoment] = useState()
+  const [, setDate] = useState([])
+  const [, setMoment] = useState()
   const [selectedRows, setSelectRows] = useState([]);
   const labels = [
     {
@@ -54,15 +54,15 @@ function UserView () {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     },
     selectedRowKeys: selectedRows
@@ -117,7 +117,7 @@ function UserView () {
       title: '用户等级',
 			ellipsis: true,
       dataIndex: 'lv',
-      render: (text, record, index) => {
+      render: (text , index) => {
         return USER_RANK[text].label
       }
   },
@@ -139,12 +139,12 @@ function UserView () {
     {
       title: '社区商品密价',
 			ellipsis: true,
-      render: (text, record, index) => {
+      render: (text, record ) => {
         return (
         <Space size="small">
-          <div onClick={()=>push('/main/editUserPrice',record)} className={c.view_text}>查看</div>
+          <div onClick={()=>push('/main/edit-price-user',record)} className={c.view_text}>查看</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div className={c.view_text} onClick={()=>push('/main/editUserPrice',record)} >修改</div>
+          <div className={c.view_text} onClick={()=>push('/main/edit-price-user',record)} >修改</div>
         </Space>
         )
       }
@@ -178,7 +178,7 @@ function UserView () {
       title: '状态',
 			ellipsis: true,
       dataIndex: 'status',
-      render: (text, record, index) => {
+      render: (text , index) => {
         const { text: t, color } = getKey(text, obj)
         return <div style={{color}}>{t}</div>
       }
@@ -187,7 +187,7 @@ function UserView () {
 			title: () => <span style={{marginLeft:32}}>操作</span>,
 			width: 282,
 			fixed: 'right',
-      render: (text, record, index) => (
+      render: (text, record ) => (
 				<Space size="small" className={c.space}>
           {/* <Popconfirm icon={<img src="" alt="" style={{width:0,height:0}}/>} */}
           {/*   placement = "left" */}
@@ -296,7 +296,7 @@ function UserView () {
   return (
     <div className="view">
       <div className={c.container}>
-        <TableHeaderComponent path="/main/addUser" data={labels} text="添加用户"/>
+        <TableHeaderComponent path="/main/edit-user" data={labels} text="添加用户"/>
 				<div className={c.main}>
 					<div className={c.searchView}>
 						<div className={c.search}>

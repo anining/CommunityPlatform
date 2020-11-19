@@ -1,28 +1,28 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import * as L from "partial.lenses"
-import * as R from 'kefir.ramda'
+
+
 import { Input, Radio, Button, Breadcrumb, message } from 'antd'
 import good5 from '../../icons/good/good5.png'
-import good8 from '../../icons/good/good8.png'
+
 import good55 from '../../icons/good/good55.png'
 import good48 from '../../icons/good/good48.png'
 import good47 from '../../icons/good/good47.png'
 import good54 from '../../icons/good/good54.png'
-import { saveSuccess, goBack, push } from "../../utils/util"
+import { saveSuccess,  push } from "../../utils/util"
 import { useHistory } from "react-router-dom"
 import { cmntPadjs } from "../../utils/api"
 
 function EditMarkupTemView () {
   const h = useHistory()
   const { state = {} } = useHistory().location
-  const { id, name: n, params: p = [], weight: w } = state
+  const { id,  params: p = []  } = state
 
   const [name, setName] = useState()
   const [type, setType] = useState("absolute")
   const [price, setPrice] = useState()
   const [factors, setFactors] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [, setLoading] = useState(false)
 
   // const setPriceAt = i => R.pipe(
   //   e => L.set([i], +e.target.value, factors),
@@ -49,9 +49,6 @@ function EditMarkupTemView () {
     setLoading(true)
     cmntPadjs(id ? 'modify' : 'add', id, undefined, { name, type, factors: localFactors }).then(r => {
       setLoading(false)
-      if (!jump) {
-        h.replace('/main/editMarkupTem')
-      }
       if (!r.error) {
         saveSuccess(jump)
         setName(undefined)
@@ -60,9 +57,6 @@ function EditMarkupTemView () {
         setFactors([])
       }
     }).catch(() => {
-      if (!jump) {
-        h.replace('/main/editMarkupTem')
-      }
       setLoading(false)
     })
   }
@@ -76,7 +70,7 @@ function EditMarkupTemView () {
             <span onClick={()=>push("/main/home")}>首页</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <span onClick={()=>push("/main/markupTem")}>调价模版</span>
+            <span onClick={()=>push("/main/markup-community")}>调价模版</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>{id?"修改":"新增"}模版</Breadcrumb.Item>
         </Breadcrumb>

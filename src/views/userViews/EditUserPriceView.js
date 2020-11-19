@@ -7,11 +7,11 @@ import cs from '../../styles/edit.module.css'
 import ce from '../../styles/edit.module.css'
 import good5 from '../../icons/good/good5.png'
 import good55 from '../../icons/good/good55.png'
-import good27 from '../../icons/good/good27.png'
+
 import good9 from '../../icons/good/good9.png'
 import header1 from '../../icons/header/header1.png'
 import { useHistory } from "react-router-dom"
-import { communityDiscPrices, addDiscPrices, deleteDiscPrices, usersPricingType } from "../../utils/api"
+import { communityDiscPrices, addDiscPrices, deleteDiscPrices } from "../../utils/api"
 import { saveSuccess, push } from "../../utils/util";
 import { USER_RANK, SCROLL } from '../../utils/config'
 import ModalPopComponent from "../../components/ModalPopComponent"
@@ -25,12 +25,12 @@ function EditUserPriceView () {
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
 
-  const [goods_id, setGoods_id] = useState()
+  const [goods_id, ] = useState()
   const [goods_name, setGoods_name] = useState()
-  const [good_category_id, setGood_category_id] = useState()
+  const [good_category_id, ] = useState()
 
   const [visible, setVisible] = useState(false)
-  const [checked, setChecked] = useState(false)
+  const [checked, ] = useState(false)
   const [selected,setSelected] = useState({})
   const [discPrice,setDisePrice] = useState()
 
@@ -151,7 +151,7 @@ function EditUserPriceView () {
   )
 }
 
-function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total, goods_name, setVisible, id, setSelected, checked }) {
+function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total, goods_name, setVisible,  setSelected  }) {
 
   useEffect(() => {
     get(current)
@@ -182,7 +182,7 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
     // }
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -213,13 +213,13 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
       title: '进价',
 			ellipsis: true,
       dataIndex: 'unit_cost',
-      render: (text, record, index) => text || '-'
+      render: (text , index) => text || '-'
   },
     {
       title: '单价',
 			ellipsis: true,
       dataIndex: 'prices',
-      render: (text, record, index) => {
+      render: (text, record ) => {
         const { user_price } = record
         const color = (text[0] > 0 && !user_price && !text[3] && !text[2] && !text[1]) ? "#4177FE" : "#595959"
         return <div style={{color}}>{text[0] || '-'}</div>
@@ -229,7 +229,7 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
       title: '统一密价(高级会员)',
 			ellipsis: true,
       dataIndex: 'prices',
-      render: (text, record, index) => {
+      render: (text, record ) => {
         const { user_price } = record
         const color = (text[1] > 0 && !user_price && !text[3] && !text[2]) ? "#4177FE" : "#595959"
         return <div style={{color}}>{text[1] || '-'}</div>
@@ -239,7 +239,7 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
       title: '统一密价(钻石会员)',
 			ellipsis: true,
       dataIndex: 'prices',
-      render: (text, record, index) => {
+      render: (text, record ) => {
         const { user_price } = record
         const color = (text[2] > 0 && !user_price && !text[3]) ? "#4177FE" : "#595959"
         return <div style={{color}}>{text[2] || '-'}</div>
@@ -249,7 +249,7 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
       title: '统一密价(至尊会员)',
 			ellipsis: true,
       dataIndex: 'prices',
-      render: (text, record, index) => {
+      render: (text, record ) => {
         const { user_price } = record
         const color = (text[3] > 0 && !user_price) ? "#4177FE" : "#595959"
         return <div style={{color}}>{text[3] || '-'}</div>
@@ -259,7 +259,7 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
       title: '用户密价',
 			ellipsis: true,
       dataIndex: 'user_price',
-      render: (text, record, index) => {
+      render: (text , index) => {
         const color = text > 0 ? "#4177FE" : "#595959"
         return <div style={{color}}>{text || '-'}</div>
       }
@@ -268,7 +268,7 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
 			title: () => <span style={{marginLeft:32}}>操作</span>,
 			width: 164,
 			fixed: 'right',
-      render: (text, record, index) => {
+      render: (text, record ) => {
         return (
 					<Space size="small" className={c.space}>
 						<div onClick={()=>{

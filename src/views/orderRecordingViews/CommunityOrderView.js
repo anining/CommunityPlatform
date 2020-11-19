@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Badge, Space, Popconfirm, Table, message, Input, DatePicker } from 'antd'
+import { Button, Badge, Space, Popconfirm, Table,  Input, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import * as L from "partial.lenses"
 import * as R from 'kefir.ramda'
 import oc from '../../styles/oc.module.css'
 import good17 from '../../icons/good/good17.png'
-import good18 from '../../icons/good/good18.png'
-import good40 from '../../icons/good/good40.png'
+
+
 import good19 from '../../icons/good/good19.png'
-import good20 from '../../icons/good/good20.png'
+
 import good21 from '../../icons/good/good21.png'
 import good59 from '../../icons/good/good59.png'
-import good61 from '../../icons/good/good61.png'
+
 import good60 from '../../icons/good/good60.png'
 import { styles as ms } from '../../styles/modal'
-import good41 from '../../icons/good/good41.png'
+
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { dateFormat, push, getKey, saveSuccess } from "../../utils/util";
 import { refundAccept, orderSync, orderComments, communityGoodsOrders, communityGoodsCategories, ordersStat } from "../../utils/api"
-import SelectComponent from "../../components/SelectComponent"
+
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
-import { REFUND_STATUS, SCROLL, COMMUNITY_SYNC_STATUS, COMMUNITY_ORDER_STATUS, COMMUNITY_COMMUNICATION_STATUS, COMMUNITY_AFTER_STATUS } from '../../utils/config'
+import { REFUND_STATUS, SCROLL, COMMUNITY_SYNC_STATUS, COMMUNITY_ORDER_STATUS,  COMMUNITY_AFTER_STATUS } from '../../utils/config'
 import ActionComponent from '../../components/ActionComponent'
 
 function CommunityOrderView () {
@@ -149,7 +149,7 @@ function CommunityOrderView () {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function addRemark () {
 		orderComments("ids="+sel.id, remark).then(r=> {
@@ -215,13 +215,13 @@ function CommunityOrderView () {
   }
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     },
     selectedRowKeys: selectedRows
   };
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -320,7 +320,7 @@ function CommunityOrderView () {
   title: '售后状态',
 			ellipsis: true,
   dataIndex: 'refund_status',
-  render: (text, record, index) => {
+  render: (text, record ) => {
     const { reject_reason="暂无" } = record
     const { text: t, status } = getKey(text, REFUND_STATUS)
     return (
@@ -337,7 +337,7 @@ function CommunityOrderView () {
   title: '通信状态',
 	ellipsis: true,
   dataIndex: 'sync_status',
-  render: (text, record, index) => {
+  render: (text , index) => {
     const { text: t, status } = getKey(text, COMMUNITY_SYNC_STATUS)
 		return <Badge status={status} text={t} />
 }
@@ -368,7 +368,7 @@ function CommunityOrderView () {
   title: '订单信息',
 	ellipsis: true,
   dataIndex: 'time',
-	render: (text, record, index) => {
+	render: (text, record ) => {
 		return <div onClick={()=>{
 			setSel(record)
 			setVisibleMsg(true)
@@ -411,7 +411,7 @@ function CommunityOrderView () {
 					添加备注
 				</div>
 				<div className={c.line} />
-				<div className={c.clickText} onClick={()=>push('/main/editCommunityOrder',args[1])}>订单历程</div>
+				<div className={c.clickText} onClick={()=>push('/main/order-recording',args[1])}>订单历程</div>
 				{
 					args[1].refund_status === "refunding" ?
 						<>

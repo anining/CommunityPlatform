@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, message, Input } from 'antd'
+import { Button, Table,  Input } from 'antd'
 import c from '../../styles/view.module.css'
 import good11 from '../../icons/good/good11.png'
 import good12 from '../../icons/good/good12.png'
@@ -7,7 +7,7 @@ import good13 from '../../icons/good/good13.png'
 import good14 from '../../icons/good/good14.png'
 import good16 from '../../icons/good/good16.png'
 import good15 from '../../icons/good/good15.png'
-import good7 from '../../icons/good/good7.png'
+
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import DropdownComponent from "../../components/DropdownComponent"
@@ -112,7 +112,7 @@ function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
     get(current)
   }, [])
 
-  function get (current) {
+  function get () {
     // let body = { page: current, size: pageSize }
     // if (id) {
     //   body = { ...body, ...{ id } }
@@ -133,7 +133,7 @@ function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -212,7 +212,7 @@ function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     }
   };

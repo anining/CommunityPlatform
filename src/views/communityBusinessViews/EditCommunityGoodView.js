@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as U from 'karet.util'
 import ImgCrop from 'antd-img-crop';
 import * as L from "partial.lenses"
@@ -8,9 +8,9 @@ import oc from '../../styles/oc.module.css'
 import { Input, Tooltip, Button, Upload, message, Radio, Checkbox, Breadcrumb } from 'antd'
 import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
-import good46 from '../../icons/good/good46.png'
-import good47 from '../../icons/good/good47.png'
-import good48 from '../../icons/good/good48.png'
+
+
+
 import edit1 from '../../icons/edit/edit1.png'
 import { saveSuccess, push, beforeUpload } from "../../utils/util";
 import { communityGoods, communityGoodsCategories } from "../../utils/api";
@@ -21,10 +21,10 @@ import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
 let win
 
 function EditCommunityGoodView () {
+	console.log(1)
   const { state = {} } = useHistory().location
   const h = useHistory()
-  const { id, ext_prvd_goods_id, ext_prvd_id, params, provider_type, padj_id, name: n, prices: pr_s = [], supp_goods_id, refundable: re = false, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "", ptpl_id, pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c } = state
-	console.log(ps)
+  const { id, ext_prvd_goods_id, ext_prvd_id, params, provider_type, padj_id, name: n, prices: pr_s = [], supp_goods_id, refundable: re = false, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "",  pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c } = state
   const [name, setName] = useState(n)
   const [ctg_id, setCtgId] = useState(c_id)
   const [status, setStatus] = useState(s)
@@ -40,20 +40,20 @@ function EditCommunityGoodView () {
   const [max_order_amount, setMax_order_amount] = useState(max_o_a)
   const [weight, setWeight] = useState(w)
   const [intro, setIntroduction] = useState(i_td)
-  const [repeatable, setRepeatable] = useState(r_o)
+  const [repeatable, ] = useState(r_o)
   const [batch_order, setBatch_order] = useState(Boolean(b_o))
   const [recommended, setRecommended] = useState(false)
   const [refundable, setRefundable] = useState(re)
-  const [unit_cost, setUnit_cost] = useState(u_c)
+  const [unit_cost, ] = useState(u_c)
   const [unit, setUnit] = useState(u)
-  const [prices, setPrices] = useState(Boolean(padj_id))
-  const [unit_price, setUnit_price] = useState(pr_s[0])
+  const [prices, ] = useState(Boolean(padj_id))
+  const [unit_price, ] = useState(pr_s[0])
   const [factors, setFactors] = useState(pr_s)
-  const [dockingTarget, setDockingTarget] = useState(padj_id)
+  const [dockingTarget, ] = useState(padj_id)
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState()
   const [has_more, setHasMore] = useState(false)
-  const [marks, setMarks] = useState([])
+  const [marks, ] = useState([])
 
   const setPriceAt = i => R.pipe(
     e => L.set([i], +e.target.value, factors),
@@ -73,7 +73,7 @@ function EditCommunityGoodView () {
 
 	window.localTable = function () {
 		win && win.close()
-		push("/main/table")
+		push("/main/label")
 	}
 
   async function onPreview (file) {
@@ -106,7 +106,7 @@ function EditCommunityGoodView () {
       localValues[0]= unit_price || 0
       setFactors(localValues)
     }
-  }, [dockingTarget])
+  }, [dockingTarget, marks, unit_cost, unit_price])
 
   function getGoodsSummaries(page,size) {
     return communityGoodsCategories("get",undefined,{page,size}).then(r => {
@@ -154,15 +154,15 @@ function EditCommunityGoodView () {
     promise.then(r => {
       setLoading(false)
       if (!r.error) {
-        if (!jump) {
-          h.replace('/main/editCommunityGood')
-        }
+        // if (!jump) {
+        //   h.replace('/main/editCommunityGood')
+        // }
         saveSuccess(jump)
       }
     }).catch(() => {
-      if (!jump) {
-        h.replace('/main/editCommunityGood')
-      }
+      // if (!jump) {
+      //   h.replace('/main/editCommunityGood')
+      // }
       setLoading(false)
     })
   }
@@ -176,6 +176,8 @@ function EditCommunityGoodView () {
 									}])
   }
 
+	const localParams = params ? JSON.parse(params) : []
+
   return (
     <div className={c.container}>
       <div className={c.header}>
@@ -185,7 +187,7 @@ function EditCommunityGoodView () {
             <span onClick={()=>push("/main/home")}>首页</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <span onClick={()=>push("/main/communityGood")}>社区业务</span>
+            <span onClick={()=>push("/main/goods-community")}>社区业务</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>社区商品</Breadcrumb.Item>
         </Breadcrumb>
@@ -210,7 +212,7 @@ function EditCommunityGoodView () {
           </div>
           <DropdownPromiseComponent placeholder="请选择商品分类" fetchName={getGoodsSummaries} value={ctg_id} setValue={setCtgId}/>
 					<Button type="primary" className={c.itemBtn} onClick={()=>{
-						push('/main/editGoodCategory')
+						push('/main/edit-category-community')
 					}}>新增分类</Button>
         </div>
 				<div className={c.item} style={{alignItems:'flex-start'}}>
@@ -219,11 +221,11 @@ function EditCommunityGoodView () {
 						<div className={c.itemText}>下单参数</div>
 					</div>
 					<div className={oc.edit_view}>
-						{/* { */}
-						{/* 	(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>) */}
-						{/* } */}
-						<div style={{width:"100%"}} className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
-						<div style={{width:"100%"}} className={oc.basic_msg_text}><div>参数1</div><div>下单链接:</div>http:'sdsdsdsds</div>
+						{
+							localParams.map((i, index)=>{
+								return <div key={index} style={{width:"100%"}} className={oc.basic_msg_text_edit}><div>参数{index+1}</div><div className={oc.basic_msg_text_edit_name}>{i.name}:</div><div>{i.placeholder}</div></div>
+						})
+						}
 					</div>
 					<Button type="primary" disabled={true} style={{width:120}} className={c.itemBtn} onClick={()=>{
 						push('/main/editGoodCategory')
@@ -267,6 +269,7 @@ function EditCommunityGoodView () {
 							listType="picture-card"
 							fileList={pics}
 							onPreview={onPreview}
+							onChange={({fileList}) => setPics(fileList)}
 						>
               <div>
                 <img src={edit1} alt="" className={c.uploadImg}/>
@@ -302,11 +305,11 @@ function EditCommunityGoodView () {
                   <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
                     <Radio value="available" className={c.itemRadio}>已上架</Radio>
                   </Tooltip>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已下架 ： 已下架。">
-                    <Radio value="paused" className={c.itemRadio}>已下架</Radio>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已下架 ： 用户不可以看见并且购买该商品。">
+                    <Radio value="unavailable" className={c.itemRadio}>已下架</Radio>
                   </Tooltip>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架但关闭下单 ： 已上架但关闭下单。">
-                    <Radio value="unavailable" className={c.itemRadio}>已上架但关闭下单</Radio>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="维护中 ： 用户可以看见但是不能购买该商品。">
+                    <Radio value="paused" className={c.itemRadio}>维护中</Radio>
                   </Tooltip>
                 </Radio.Group>
               </div>
@@ -395,7 +398,7 @@ function EditCommunityGoodView () {
 function RTable ({ tags }) {
   const views = []
 
-  tags.forEach((it, i) => {
+  tags.forEach((it ) => {
     const { id: tag_id, name } = it
     views.push(
       <Button key={tag_id} style={{width:'auto'}} className={c.viewTable}>{name}</Button>

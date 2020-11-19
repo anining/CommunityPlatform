@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Input, Modal, Space, message } from 'antd'
+import { Button, Input, Modal,  message } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
 import { communityGoodsCategories } from '../../utils/api'
-import { push, dateFormat, saveSuccess } from "../../utils/util";
-import DropdownComponent from '../../components/DropdownComponent'
+import { push, dateFormat } from "../../utils/util";
 import { styles } from "../../styles/modal"
 import ActionComponent from '../../components/ActionComponent'
-import {SCROLL} from '../../utils/config'
+import TableComponent from '../../components/TableComponent'
 
 function GoodCategoryView () {
   // TODO: 两个删除弹窗
   const [visible, setVisible] = useState(false)
-  const [actionId, setActionId] = useState(1)
+  const [actionId, ] = useState(1)
 
   function handleOk () {
 
@@ -65,17 +64,17 @@ function GoodCategoryView () {
   )
 }
 
-function RTable ({ setVisible }) {
+function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
   const [search_name, setSearch_name] = useState()
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function get (current) {
     let body = { page: current, size: pageSize }
@@ -99,7 +98,7 @@ function RTable ({ setVisible }) {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -127,12 +126,12 @@ function RTable ({ setVisible }) {
   },
     {
 			title: "操作",
-      render: (record) =>	<div className={c.clickText} onClick={()=>push("/main/editGoodCategory",record)}>编辑分类</div>
+      render: (record) =>	<div className={c.clickText} onClick={()=>push("/main/edit-category-community",record)}>编辑分类</div>
   }
 ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     },
     selectedRowKeys: selectedRows
@@ -182,28 +181,23 @@ function RTable ({ setVisible }) {
                 }
                 type = "primary"
                 size = "small"
-                onClick={()=>push('/main/editGoodCategory')}
+                onClick={()=>push('/main/edit-category-community')}
                 className={c.searchBtn}>新增分类</Button>
             </div>
           </div>
       </div>
-      <Table
-        columns={columns}
-        rowSelection={{
-          ...rowSelection
-        }}
-        dataSource={data}
-        size="small"
-        pagination={{
-          showQuickJumper:true,
-					showSizeChanger:false,
-          current,
-          pageSize,
-          showLessItems:true,
-          total,
-          onChange
-        }}
-      />
+			<TableComponent
+				setPageSize={setPageSize}
+				setCurrent={setCurrent}
+				getDataSource={get}
+				setSelectedRowKeys={setSelectRows}
+				selectedRowKeys={selectedRows}
+				columns={columns}
+				dataSource={data}
+				pageSize={pageSize}
+				total={total}
+				current={current}
+			/>
 			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
     </div>
   )

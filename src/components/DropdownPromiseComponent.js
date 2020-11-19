@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import * as U from 'karet.util'
+
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Button, Menu, Tooltip, Dropdown } from 'antd'
+import { Button,  Tooltip, Dropdown } from 'antd'
 import { styles } from '../styles/modal'
 import { DownOutlined } from '@ant-design/icons';
 import c from '../styles/view.module.css'
@@ -20,14 +20,14 @@ function DropdownPromiseComponent ({refresh=[], value, view, tooltip = "", fetch
       return
     }
     fetchData()
-  }, [])
+  }, [fetchData, fetchName])
 
   useEffect(()=>{
     if (fetchName) {
       setPage(1)
       fetchData(1,true)
     }
-  },refresh)
+  },[fetchData, fetchName])
 
   function fetchData (current = page,clear = false) {
     fetchName(current,size).then(r=>{

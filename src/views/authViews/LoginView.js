@@ -63,7 +63,7 @@ function LoginView () {
     currentManager().then(r => {
       const { data, error } = r
       if (!error) {
-        const { permissions, nickname, role, account, created_at } = data
+        const { permissions, nickname, role,  created_at } = data
         setter([["nickname", nickname], ['permissions', role === "superuser" ? PERMISSION : permissions]], true);
         jump && push('/main')
       }

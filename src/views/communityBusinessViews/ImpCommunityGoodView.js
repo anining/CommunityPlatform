@@ -12,7 +12,7 @@ import ImgCrop from 'antd-img-crop';
 import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
 import { beforeUpload, saveSuccess, push } from "../../utils/util";
-import { communityGoods, providerSummaries, cmntPadjs, communityGoodsCategories, communityParamTemplates } from "../../utils/api";
+import { communityGoods,  cmntPadjs, communityGoodsCategories } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import { MODULES } from "../../utils/config";
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
@@ -33,7 +33,7 @@ function ImpCommunityGoodView () {
   const [ctg_id, setCtgId] = useState(p_ctg_id)
   const [dockingTarget, setDockingTarget] = useState()
   const [unit_cost, setUnit_cost] = useState(p_price)
-  const [unit_price, setUnit_price] = useState(p_price)
+  const [unit_price, ] = useState(p_price)
   const [factors, setFactors] = useState([p_price])
   const [name, setName] = useState(p_name)
   const [unit, setUnit] = useState(p_unit)
@@ -45,7 +45,7 @@ function ImpCommunityGoodView () {
   const [max_order_amount, setMax_order_amount] = useState(p_max_order_amount)
   const [repeatable, setRepeatable] = useState(false)
   const [batch_order, setBatch_order] = useState(false)
-  const [recommended, setRecommended] = useState(false)
+  const [recommended, ] = useState(false)
   const [tag_ids, setTag_ids] = useState([])
 
   // // const [community_param_template_id, setCommunity_param_template_id] = useState(ptpl_id)
@@ -78,7 +78,7 @@ function ImpCommunityGoodView () {
 
 	window.localTable = function () {
 		win && win.close()
-		push("/main/table")
+		push("/main/label")
 	}
 
   // window.localJump = function () {
@@ -128,14 +128,14 @@ function ImpCommunityGoodView () {
       let localValues = [0, 0, 0, 0];
       for (let j = 0; j < 4; j++) {
         if (type === "absolute") {
-          localValues[j] = ((+factors[j] || 0) + (+unit_cost || 0)).toFixed(4)
+          localValues[j] = ((+factors[j] || 0) + (+unit_cost || 0)).toFixed(6)
         } else {
-          localValues[j] = (((+factors[j] || 0) + 100) / 100 * (+unit_cost || 0)).toFixed(4)
+          localValues[j] = (((+factors[j] || 0) + 100) / 100 * (+unit_cost || 0)).toFixed(6)
         }
       }
       setFactors(localValues)
     }
-  }, [dockingTarget])
+  }, [dockingTarget, marks, unit_cost])
 
   // function getParamTemplates(page,size) {
   //   return communityParamTemplates("get",undefined,{page,size}).then(r => {
@@ -234,7 +234,7 @@ function ImpCommunityGoodView () {
             <span onClick={()=>push("/main/home")}>首页</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <span onClick={()=>push("/main/communityGood")}>社区业务</span>
+            <span onClick={()=>push("/main/goods-community")}>社区业务</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>社区商品</Breadcrumb.Item>
         </Breadcrumb>
@@ -251,7 +251,7 @@ function ImpCommunityGoodView () {
             <div className={c.itemText}>商品分类</div>
           </div>
           <DropdownPromiseComponent placeholder="请选择商品分类" fetchName={getGoodsSummaries} value={ctg_id} setValue={setCtgId}/>
-					<Button type="primary" className={c.itemBtn} onClick={()=>push('/main/editGoodCategory')}>新增分类</Button>
+					<Button type="primary" className={c.itemBtn} onClick={()=>push('/main/edit-category-community')}>新增分类</Button>
         </div>
 				<div className={c.item}>
 					<div className={c.itemName}>
@@ -346,6 +346,7 @@ function ImpCommunityGoodView () {
 							listType="picture-card"
 							fileList={pics}
 							onPreview={onPreview}
+							onChange={({fileList}) => setPics(fileList)}
 						>
               <div>
                 <img src={edit1} alt="" className={c.uploadImg}/>
@@ -542,7 +543,7 @@ function ImpCommunityGoodView () {
 function RTable ({ tags }) {
   const views = []
 
-  tags.forEach((it, i) => {
+  tags.forEach((it ) => {
     const { id: tag_id, name } = it
     views.push(
       <Button key={tag_id} style={{width:'auto'}} className={c.viewTable}>{name}</Button>

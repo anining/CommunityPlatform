@@ -43,7 +43,7 @@ function AddAdminView () {
         setPurview(format(data))
       }
     })
-  }, [])
+  }, [initPermissions])
 
   function save () {
     if (!name || !number) {
@@ -76,7 +76,7 @@ function AddAdminView () {
             <span onClick={()=>push("/main/home")}>首页</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <span onClick={()=>push("/main/admin")}>管理员</span>
+            <span onClick={()=>push("/main/admin-system")}>管理员</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>{id?"修改":"新增"}管理员</Breadcrumb.Item>
         </Breadcrumb>

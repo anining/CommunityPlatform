@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Button,Input, Space, Table, message, DatePicker } from 'antd'
+import { Button,  Table, message, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
-import good22 from '../../icons/good/good22.png'
-import good27 from '../../icons/good/good27.png'
-import good26 from '../../icons/good/good26.png'
-import good25 from '../../icons/good/good25.png'
+
+
+
+
 import good9 from '../../icons/good/good9.png'
 import good63 from '../../icons/good/good63.png'
 import good64 from '../../icons/good/good64.png'
@@ -12,10 +12,10 @@ import good65 from '../../icons/good/good65.png'
 import good66 from '../../icons/good/good66.png'
 import good67 from '../../icons/good/good67.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
-import DropdownComponent from "../../components/DropdownComponent";
+
 import { balanceChanges } from "../../utils/api"
 import { getKey, transformTime } from "../../utils/util"
-import {SCROLL, CONSUMPTION_TYPE} from '../../utils/config'
+import { CONSUMPTION_TYPE} from '../../utils/config'
 
 function CapitalFlowView () {
   const data = [
@@ -62,7 +62,7 @@ function CapitalFlowView () {
 }
 
 function RTable () {
-  const [selectedRows, setSelectRows] = useState([]);
+  const [, ] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
@@ -72,7 +72,7 @@ function RTable () {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function get (current) {
     balanceChanges(current, pageSize, date[0], date[1]).then(r => {
@@ -92,7 +92,7 @@ function RTable () {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -107,7 +107,7 @@ function RTable () {
       title: '变动数额',
 			ellipsis: true,
       dataIndex: 'amount',
-      render: (text, record, index) => {
+      render: (text , index) => {
         const color = Number(text) > 0 ? "#2C68FF" : "#FF4D4F"
         return <div style={{color}}>{text}</div>
       }
@@ -124,7 +124,7 @@ function RTable () {
       title: '消费类型',
 			ellipsis: true,
       dataIndex: 'type',
-      render: (text, record, index) => {
+      render: (text , index) => {
         const { text: t, color } = getKey(text, CONSUMPTION_TYPE)
         return <div style={{color}}>{t}</div>
       }

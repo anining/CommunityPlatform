@@ -25,7 +25,7 @@ function RTable () {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function get (current) {
     let body = { page: current, size: pageSize }
@@ -49,7 +49,7 @@ function RTable () {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -84,7 +84,7 @@ function RTable () {
     {
       title: '操作',
       align: 'center',
-      render: (text, record, index) => (
+      render: (text, record ) => (
         <div className={c.clickText} onClick={()=>{window.opener.localClick('order-model-id', record)}}>选择</div>
       )
     },

@@ -15,8 +15,8 @@ import { push } from "../../utils/util";
 let win
 
 function EditCardGoodView () {
-  const [imageUrl, setImageUrl] = useState()
-  const [loading, setLoading] = useState()
+  const [imageUrl, ] = useState()
+  const [, ] = useState()
   const [value, setValue] = useState()
   const [quillValue, setQuillValue] = useState("")
   const [has_more, setHasMore] = useState(false)
@@ -377,7 +377,7 @@ function EditCardGoodView () {
 function RTable ({ tags }) {
   const views = []
 
-  tags.forEach((it, i) => {
+  tags.forEach((it ) => {
     const { id: tag_id, name } = it
     views.push(
       <Button key={tag_id} style={{width:'auto'}} className={c.viewTable}>{name}</Button>

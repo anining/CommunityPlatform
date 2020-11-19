@@ -12,7 +12,7 @@ import service6 from '../../icons/service/service6.png'
 import QRCode from 'qrcode.react'
 
 function SubServiceView () {
-  const [visible, setVisible] = useState(false)
+  const [visible, ] = useState(false)
   const [visiblePay, setVisiblePay] = useState(false)
   const [payType, setPayType] = useState('wx')
   const [number, setNumber] = useState(300)
@@ -36,7 +36,7 @@ function SubServiceView () {
       }
     }, 1000)
     return () => timer && clearInterval(timer)
-  }, [visiblePay])
+  }, [number, visiblePay])
 
   function pay () {
     setVisiblePay(true)

@@ -37,7 +37,7 @@ function RTable () {
   }
 
   function change (record) {
-    push('/main/addAdmin', record)
+    push('/main/edit-admin-system', record)
   }
 
   function close () {
@@ -118,7 +118,7 @@ function RTable () {
 			width: 226,
 			fixed: 'right',
       dataIndex: 'id',
-      render: (text, record, index) => (
+      render: (text, record ) => (
 				<Space size="small" className={c.space}>
           <div className={c.clickText} onClick={()=>change(record)}>修改</div>
           <div className={c.line} />
@@ -141,7 +141,7 @@ function RTable () {
             }
               type = "primary"
               size = "small"
-              onClick={()=>push('/main/addAdmin')}
+              onClick={()=>push('/main/edit-admin-system')}
               className={c.searchBtn}>新增管理员</Button>
           </div>
         </div>

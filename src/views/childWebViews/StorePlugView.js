@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import ImgCrop from 'antd-img-crop';
 import c from '../../styles/edit.module.css'
-import cs from '../../styles/childWebSetting.module.css'
-import { Input, Switch, Button, Upload, message, Radio, Checkbox, Breadcrumb } from 'antd'
-import ReactQuill from 'react-quill';
+
+import { Input,  Button, Upload, message } from 'antd'
+
 import edit1 from '../../icons/edit/edit1.png'
-import good76 from '../../icons/good/good76.png'
-import { beforeUpload, goBack, saveSuccess, push } from "../../utils/util";
+
+import { beforeUpload,  saveSuccess } from "../../utils/util";
 import { storeConfig } from "../../utils/api";
-import { MODULES } from "../../utils/config";
-import QRCode from 'qrcode.react'
+
+
 
 function StorePlugView () {
   const [icons, setIcons] = useState([])
@@ -116,6 +116,10 @@ function StorePlugView () {
     imgWindow.document.write(image.outerHTML);
   }
 
+	const onChange = ({ fileList: newFileList }) => {
+    setBanners(newFileList)
+  }
+
   return (
     <div className={c.container}>
       <div className={c.main}>
@@ -199,10 +203,11 @@ function StorePlugView () {
           </div>
 					<ImgCrop rotate>
 						<Upload
-							action={file=>beforeUpload(file, banners, setBanners, true)}
+							action={file=>beforeUpload(file, banners, setBanners, 5)}
 							listType="picture-card"
 							fileList={banners}
 							onPreview={onPreview}
+							onChange={onChange}
 						>
               <div>
                 <img src={edit1} alt="" className={c.uploadImg}/>

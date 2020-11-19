@@ -62,7 +62,7 @@ function Context () {
     }
   }
 
-  data.forEach((item, index) => {
+  data.forEach((item ) => {
     const { label, icon, id } = item;
     views.push(
       <div className={cs.itemView} onClick={()=>onChange(id)} style={{

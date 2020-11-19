@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import * as R from 'kefir.ramda'
-import { Button, Badge, Empty,  Modal, Timeline, Space, Table, notification, Input, message } from 'antd'
+import { Button, Badge, Empty,  Modal, Timeline, Space,  notification, Input, message } from 'antd'
 import { SmileOutlined } from '@ant-design/icons';
 import good46 from '../../icons/good/good46.png'
 import good47 from '../../icons/good/good47.png'
@@ -20,10 +20,11 @@ import ModalComponent from "../../components/ModalComponent";
 import { push, decrypt, getKey, saveSuccess, transformTime } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import { communityGoods, communityGoodsCategories, goodsStat, delGoods, priceHistories } from "../../utils/api"
-import { GOODS_STATUS, PROVIDER_TYPE, SCROLL } from "../../utils/config"
+import { GOODS_STATUS,  SCROLL } from "../../utils/config"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import DropdownPromiseComponent from "../../components/DropdownPromiseComponent"
 import ActionComponent from '../../components/ActionComponent';
+import TableComponent from '../../components/TableComponent';
 
 function CommunityGoodView () {
   const [visible, setVisible] = useState(false)
@@ -57,7 +58,7 @@ function CommunityGoodView () {
       id: 333,
     },
     {
-      label: '关闭下单',
+      label: '维护中数',
       number: '0',
       icon: good4,
       id: 444,
@@ -65,7 +66,7 @@ function CommunityGoodView () {
   ])
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
-  const [tableLoading, setTableLoading] = useState(true)
+  const [, setTableLoading] = useState(true)
   const [current, setCurrent] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
@@ -75,8 +76,8 @@ function CommunityGoodView () {
   const [community_goods_category_id, setCommunity_goods_category_id] = useState()
   const [status, setStatus] = useState()
   const [refundable, setRefundable] = useState()
-  const [order_by, setOrder_by] = useState()
-  const [ordering, setOrdering] = useState()
+  const [, setOrder_by] = useState()
+  const [, ] = useState()
 
 	const sumIf = pred => R.pipe(
 		R.filter(pred),
@@ -185,19 +186,7 @@ function CommunityGoodView () {
 
   useEffect(() => {
     get(current)
-  }, [])
-
-  function onChange (page, pageSize) {
-    setCurrent(page)
-    get(page)
-  }
-
-  const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
-      setSelectRows(selectedRowKeys)
-    },
-    selectedRowKeys: selectedRows
-  };
+  }, [current, get])
 
   function submit (key) {
     let title = ""
@@ -302,7 +291,7 @@ function CommunityGoodView () {
 			fixed: 'right',
       render: (record) => (
 				<Space size="small" className={c.space}>
-          <div className={c.clickText} onClick={()=>push('/main/editCommunityGood',record)}>修改商品</div>
+          <div className={c.clickText} onClick={()=>push('/main/edit-goods-community',record)}>修改商品</div>
           <div className={c.line} />
           <div className={c.clickText} onClick={()=>{
             setSel(record)
@@ -363,7 +352,7 @@ function CommunityGoodView () {
 		}
   }
 
-  function modalOk (key) {
+  function modalOk () {
     if (!statusSelected) {
       message.warning("请完善信息")
       return
@@ -384,16 +373,10 @@ function CommunityGoodView () {
 
 	const customize = (
 		<>
-			<Button className={c.docking_btn} onClick={()=>push("/main/docking")}>导入对接商品</Button>
-			<Button className={c.store_btn} onClick={()=>push("/main/store")} type="primary">导入供应商商品</Button>
+			<Button className={c.docking_btn} onClick={()=>push("/main/docking", null, true)}>导入对接商品</Button>
+			<Button className={c.store_btn} onClick={()=>push("/main/store", null, true)} type="primary">导入供应商商品</Button>
 		</>
 	)
-
-	const onShowSizeChange = (current, size) => {
-		setPageSize(size)
-		setCurrent(current)
-		get(current, size)
-	}
 
   return (
     <div className="view">
@@ -423,28 +406,18 @@ function CommunityGoodView () {
                 </div>
             </div>
           </div>
-          <Table
-            columns={columns}
-            rowSelection={{
-              ...rowSelection
-            }}
-            dataSource={data}
-            size="small"
-						scroll={SCROLL}
-            pagination={{
-							pageSize,
-							onShowSizeChange,
-							pageSizeOptions:[10,20,50],
-							showSizeChanger:true,
-              showQuickJumper:true,
-              current,
-							loading: tableLoading,
-              pageSize,
-              showLessItems:true,
-              total,
-              onChange
-            }}
-          />
+					<TableComponent
+						setPageSize={setPageSize}
+						setCurrent={setCurrent}
+						getDataSource={get}
+						setSelectedRowKeys={setSelectRows}
+						selectedRowKeys={selectedRows}
+						columns={columns}
+						dataSource={data}
+						pageSize={pageSize}
+						total={total}
+						current={current}
+					/>
         </div>
 				<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"置为已上架",key:"available"},{name:"置为已下架",key:"unavailable"},{name:"置为维护中",key:"paused"},{name:"置为推荐商品",key:"recommendedTrue"},{name:"取消推荐商品",key:"recommendedFalse"},{name:"置为允许退款",key:"refundableTrue"},{name:"置为不允许退款",key:"refundableFalse"},{name:"删除选中商品",key:"del"}]}/>
       </div>

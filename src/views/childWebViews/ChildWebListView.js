@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Table, message, Input, Space } from 'antd'
-import good1 from '../../icons/good/good1.png'
+
 import c from '../../styles/view.module.css'
 import good28 from '../../icons/good/good28.png'
-import good29 from '../../icons/good/good29.png'
+
 import good30 from '../../icons/good/good30.png'
-import good32 from '../../icons/good/good32.png'
-import good34 from '../../icons/good/good34.png'
-import good35 from '../../icons/good/good35.png'
-import good7 from '../../icons/good/good7.png'
+
+
+
+
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent"
@@ -41,18 +41,18 @@ function ChildWebListView () {
   )
 }
 
-function RTable ({ setVisible }) {
+function RTable ({  }) {
   const [selectedRows, setSelectRows] = useState([]);
-  const [data, setData] = useState([])
+  const [data, ] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
-  const [total, setTotal] = useState(0)
+  const [total, ] = useState(0)
 
   useEffect(() => {
     get(current)
   }, [])
 
-  function get (current) {
+  function get () {
     // let body = { page: current, size: pageSize }
     // if (id) {
     //   body = { ...body, ...{ id } }
@@ -73,7 +73,7 @@ function RTable ({ setVisible }) {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -167,7 +167,7 @@ function RTable ({ setVisible }) {
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     }
   };

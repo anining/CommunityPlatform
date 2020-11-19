@@ -4,6 +4,7 @@ import * as R from 'kefir.ramda'
 import CryptoJS from 'crypto-js';
 import {message} from "antd"
 import {JUMP_DELAY} from './config'
+import { setter } from "./store";
 
 function saveSuccess(jump = true, path, state) {
   const history = h.get()
@@ -25,9 +26,17 @@ function decrypt (ciphertext) {
   return bytes.toString(CryptoJS.enc.Utf8)
 }
 
-function push(path, state) {
+function push(path, state, setKeys) {
   const history = h.get()
-  history.push(path, state)
+	try {
+		const p = path.split('/')
+		const v = p[p.length -1].split('-');
+		(v.length && setKeys) && setter([["selectedKeys", v]])
+		history.push(path, state, setKeys)
+	} catch (e) {
+		console.log(e)
+		history.push(path, state, setKeys)
+	}
 }
 
 function goBack() {
@@ -204,24 +213,13 @@ function beforeUpload(file, fileList, setFileList, more = false) {
 	const fileName = Date.now()+ ".png"
 
 	const observer = {
-		complete(res){
-			if(more) {
-				setFileList([...fileList,{
-						uid: Date.now(),
-						name: 'image.png',
-						status: 'done',
-						url:`http://yzimg.gu126.cn/${fileName}`,
-					}])
-			}else {
-				setFileList([
-					{
-						uid: '-1',
-						name: 'image.png',
-						status: 'done',
-						url:`http://yzimg.gu126.cn/${fileName}`,
-					}
-				])
-			}
+		complete(){
+			setFileList([...fileList.slice(0, more-1),{
+				uid: Date.now(),
+				name: 'image.png',
+				status: 'done',
+				url:`http://yzimg.gu126.cn/${fileName}`,
+			}])
 		}
 	}
 	const config = {
@@ -249,4 +247,8 @@ function beforeUpload(file, fileList, setFileList, more = false) {
 	return isJpgOrPng && isLt2M;
 }
 
-export {beforeUpload, genUpToken, decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed}
+function isUrl (url) {
+   return /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/.test(url)
+}
+
+export {isUrl, beforeUpload, genUpToken, decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed}

@@ -4,7 +4,7 @@ import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import { transformTime, push } from "../../utils/util"
 import { customerServices } from "../../utils/api"
-import {SCROLL} from '../../utils/config'
+
 
 function PeopleServiceView () {
 
@@ -85,7 +85,7 @@ function RTable () {
               }
               type = "primary"
               size = "small"
-              onClick={()=>push('/main/addPeopleService')}
+              onClick={()=>push('/main/edit-people-setting')}
               className={c.searchBtn}>新增客服</Button>
           </div>
         </div>

@@ -27,7 +27,7 @@ function RTable () {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function get (current) {
     loginlogs(current, pageSize, manager_id, date[0], date[1]).then(r => {
@@ -79,7 +79,7 @@ function RTable () {
       title: '登录IP',
 			ellipsis: true,
       dataIndex: 'data',
-      render: (text, record, index) => JSON.parse(text).ip
+      render: (text  ) => JSON.parse(text).ip
   },
     {
       title: '登录时间',

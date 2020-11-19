@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Input, Modal, Space } from 'antd'
+import { Button, Table, Input } from 'antd'
 import c from '../../styles/view.module.css'
 import ce from '../../styles/edit.module.css'
-import good7 from '../../icons/good/good7.png'
-import good6 from '../../icons/good/good6.png'
+
+
 import good9 from '../../icons/good/good9.png'
 import { communityGoodsCategories } from '../../utils/api'
-import { push, transformTime, saveSuccess } from "../../utils/util";
-import DropdownComponent from '../../components/DropdownComponent'
-import { styles } from "../../styles/modal"
-import ActionComponent from '../../components/ActionComponent'
-import {SCROLL} from '../../utils/config'
+import {  transformTime, saveSuccess } from "../../utils/util";
+
+
+
+
 
 function SelectGoodCategoryView () {
 
@@ -33,7 +33,7 @@ function RTable () {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function get (current) {
     let body = { page: current, size: pageSize }
@@ -57,7 +57,7 @@ function RTable () {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -76,14 +76,14 @@ function RTable () {
     {
       title: '操作',
       dataIndex: 'id',
-      render: (text, record, index) => (
+      render: (text  ) => (
         <div className={c.clickText} onClick={()=>{window.opener.localClick('good-category', text)}}>导入到这个分类</div>
       )
     }
 ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     },
     selectedRowKeys: selectedRows

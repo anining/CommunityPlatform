@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-import { Input, Radio, Table, Button, message, Breadcrumb } from 'antd'
+import { Input,   Button, message, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
-import good8 from '../../icons/good/good8.png'
+
 import good55 from '../../icons/good/good55.png'
-import good48 from '../../icons/good/good48.png'
-import good47 from '../../icons/good/good47.png'
-import good54 from '../../icons/good/good54.png'
+
+
+
 import { communityParamTemplates } from "../../utils/api"
 import { saveSuccess, goBack, push } from "../../utils/util"
 import { useHistory } from "react-router-dom"
-import DropdownComponent from "../../components/DropdownComponent"
+
 
 function EditCardManView () {
   const h = useHistory()
@@ -53,7 +53,7 @@ function EditCardManView () {
       return
     }
     setLoading(true)
-    communityParamTemplates(id ? 'modify' : 'add', id, undefined, { name, weight: weight || 1, params }).then(r => {
+    communityParamTemplates(id ? 'modify' : 'add', id, undefined, { name, weight: weight || 1 params }).then(r => {
       setLoading(false)
       if (!jump) {
         h.replace('/main/editOrderModel')
@@ -135,7 +135,7 @@ function EditCardManView () {
             <span style={{color:'#fff'}}>*</span>
             <div className={c.itemText}>卡号</div>
           </div>
-          <Input type="number" onChange={e=>{}} placeholder="" className={c.itemInput}></Input>
+          <Input type="number" onChange={=>{}} placeholder="" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>

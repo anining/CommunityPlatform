@@ -6,7 +6,7 @@ import good2 from '../../icons/good/good2.png'
 import good3 from '../../icons/good/good3.png'
 import good4 from '../../icons/good/good4.png'
 import good10 from '../../icons/good/good10.png'
-import good7 from '../../icons/good/good7.png'
+
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import DropdownComponent from "../../components/DropdownComponent"
@@ -57,18 +57,18 @@ function CardGoodView () {
   )
 }
 
-function RTable ({ setVisible }) {
+function RTable ({  }) {
   const [selectedRows, setSelectRows] = useState([]);
-  const [data, setData] = useState([])
+  const [data, ] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
-  const [total, setTotal] = useState(0)
+  const [total, ] = useState(0)
 
   useEffect(() => {
     get(current)
   }, [])
 
-  function get (current) {
+  function get () {
     // let body = { page: current, size: pageSize }
     // if (id) {
     //   body = { ...body, ...{ id } }
@@ -89,7 +89,7 @@ function RTable ({ setVisible }) {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -223,7 +223,7 @@ function RTable ({ setVisible }) {
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     }
   };

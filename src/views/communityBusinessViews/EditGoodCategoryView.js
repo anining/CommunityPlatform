@@ -3,7 +3,7 @@ import c from '../../styles/edit.module.css'
 import { Input, Button, message, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import { communityGoodsCategories } from '../../utils/api'
-import { saveSuccess, goBack, push } from "../../utils/util"
+import { saveSuccess,  push } from "../../utils/util"
 import { useHistory } from "react-router-dom"
 
 function EditGoodCategoryView () {
@@ -27,16 +27,10 @@ function EditGoodCategoryView () {
     setLoading(true)
     communityGoodsCategories(id ? "modify" : "add", id, undefined, body).then(r => {
       setLoading(false)
-      if (!jump) {
-        h.replace('/main/editGoodCategory')
-      }
       if (!r.error) {
         saveSuccess(jump)
       }
     }).catch(() => {
-      if (!jump) {
-        h.replace('/main/editGoodCategory')
-      }
       setLoading(false)
     })
   }
@@ -50,7 +44,7 @@ function EditGoodCategoryView () {
             <span onClick={()=>push("/main/home")}>首页</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <span onClick={()=>push("/main/goodCategory")}>商品分类</span>
+            <span onClick={()=>push("/main/category-community")}>商品分类</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>{id?"修改":"新增"}分类</Breadcrumb.Item>
         </Breadcrumb>

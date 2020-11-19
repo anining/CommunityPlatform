@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { Button, Spin, Table, Input, Space, message } from 'antd'
 import c from '../../styles/view.module.css'
 import ce from '../../styles/edit.module.css'
-import good23 from '../../icons/good/good23.png'
-import good24 from '../../icons/good/good24.png'
+
+
 import good9 from '../../icons/good/good9.png'
 import { extPrvdsGoods, extPrvdsGood, goodsSummaries, communityGoods, suppGood } from "../../utils/api";
 import { push, saveSuccess } from "../../utils/util"
 import ActionComponent from '../../components/ActionComponent'
 import {useHistory} from 'react-router-dom'
 import DropdownComponent from '../../components/DropdownComponent'
-import {reject} from 'ramda'
+
 
 let win
 
@@ -25,7 +25,7 @@ function ImportView () {
   const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
   const [initDate, setInitDate] = useState([])
-  const [filterData, setFilterData] = useState([])
+  const [, setFilterData] = useState([])
   const [selectedRows, setSelectRows] = useState([]);
 	const [account, setAccount] = useState()
 	const [status, setStatus] = useState()
@@ -47,12 +47,12 @@ function ImportView () {
 
 	window.localJump = function () {
 		win && win.close()
-		push("/main/editGoodCategory")
+		push("/main/edit-category-community")
 	}
 
 	function addSupplierGood (data, parameter, resolve, reject) {
 		const localData = {...formatGood(data),...parameter,...{provider_type, provide_name: name, ext_prvd_id: id}}
-		const { p_name, p_intro, p_pics, p_price, p_goods_id } = localData
+		const { p_name, p_intro, p_pics, p_price, p_min_order_amount, p_max_order_amount, p_goods_id } = localData
     let body = {
 			name: p_name,
 			status: "paused",
@@ -64,8 +64,8 @@ function ImportView () {
 			refundable: false,
 			recommended: false,
 			repeatable: false,
-      min_order_amount: 1,
-      max_order_amount: 10000,
+      min_order_amount: p_min_order_amount,
+      max_order_amount: p_max_order_amount,
       weight: 1,
 			pics: p_pics,
 			unit_cost: p_price,
@@ -74,8 +74,12 @@ function ImportView () {
     const promise = communityGoods('add', undefined, undefined, body)
     promise.then(r => {
       if (!r.error) {
-        !resolve && saveSuccess(false)
-				resolve && resolve()
+				if(resolve) {
+					resolve()
+				}else {
+					initGet()
+					saveSuccess(false)
+				}
       }else {
 				reject && reject()
 			}
@@ -84,7 +88,7 @@ function ImportView () {
 
 	function addGood (data, parameter, resolve, reject) {
 		const localData = {...formatGood(data),...parameter,...{provider_type, provide_name: name, ext_prvd_id: id}}
-		const { p_name, p_intro, p_pics, p_price, p_goods_id, ext_prvd_id, params } = localData
+		const { p_name, p_intro, p_pics, p_price, p_min_order_amount, p_max_order_amount, p_goods_id, ext_prvd_id, params } = localData
     let body = {
 			name: p_name,
 			status: "paused",
@@ -96,8 +100,8 @@ function ImportView () {
 			refundable: false,
 			recommended: false,
 			repeatable: false,
-      min_order_amount: 1,
-      max_order_amount: 10000,
+      min_order_amount: p_min_order_amount,
+      max_order_amount: p_max_order_amount,
       weight: 1,
 			pics: p_pics,
 			unit_cost: p_price,
@@ -106,8 +110,12 @@ function ImportView () {
     const promise = communityGoods('add', undefined, undefined, body)
     promise.then(r => {
       if (!r.error) {
-        !resolve && saveSuccess(false)
-				resolve && resolve()
+				if(resolve) {
+					resolve()
+				}else {
+					initGet()
+					saveSuccess(false)
+				}
       }else {
 				reject && reject()
 			}
@@ -119,13 +127,13 @@ function ImportView () {
 			if(parameter.p_ctg_id) {
 				suppGood(record.id).then(r=>!r.error && addSupplierGood(r.data, parameter))
 			}else {
-				suppGood(record.id).then(r=>!r.error && push("/main/impGood", {...formatGood(r.data),...parameter,...{provider_type, provide_name: name, ext_prvd_id: id}}))
+				suppGood(record.id).then(r=>!r.error && push("/main/edit-import-good", {...formatGood(r.data),...parameter,...{provider_type, provide_name: name, ext_prvd_id: id}}))
 			}
 		}else {
 			if(parameter.p_ctg_id) {
 				extPrvdsGood(id, record.ext_prvd_goods_id).then(r=>!r.error && addGood(r.data, parameter))
 			}else {
-				extPrvdsGood(id, record.ext_prvd_goods_id).then(r=>!r.error && push("/main/impGood", {...formatGood(r.data),...parameter,...{provider_type, provide_name: name, ext_prvd_id: id}}))
+				extPrvdsGood(id, record.ext_prvd_goods_id).then(r=>!r.error && push("/main/edit-import-good", {...formatGood(r.data),...parameter,...{provider_type, provide_name: name, ext_prvd_id: id}}))
 			}
 		}
 	}
@@ -134,16 +142,16 @@ function ImportView () {
 		switch(type) {
 			case "yile":
 				const { gid, name, price, limit_min, limit_max, inputs=[], image, desc } = data
-				return { p_goods_id: gid, p_name: name, p_price: price && Number(price).toFixed(4), params: JSON.stringify(inputs.map((i,index)=>({name:i[0].substring(0,20), field:`value${index + 1}`, type: "text", placeholder: i[1].substring(0,20)}))), p_min_order_amount: limit_min, p_max_order_amount: limit_max, p_pics:[image], p_intro: desc }
+				return { p_goods_id: gid, p_name: name, p_price: price && Number(price).toFixed(6), params: JSON.stringify(inputs.map((i,index)=>({name:i[0].substring(0,20), field:`value${index + 1}`, type: "text", placeholder: i[1].substring(0,20)}))), p_min_order_amount: limit_min, p_max_order_amount: limit_max, p_pics:[image], p_intro: desc }
 			default:
 				const { id, name: supplier_name, price: supplier_price, max_order_amount, min_order_amount, intro, unit } = data
-				return { p_goods_id: id, p_name: supplier_name, p_price: supplier_price && Number(supplier_price).toFixed(4), p_min_order_amount: min_order_amount, p_max_order_amount: max_order_amount, p_pics:[], p_intro: intro, p_unit: unit }
+				return { p_goods_id: id, p_name: supplier_name, p_price: supplier_price && Number(supplier_price).toFixed(6), p_min_order_amount: min_order_amount, p_max_order_amount: max_order_amount, p_pics:[], p_intro: intro, p_unit: unit }
 		}
 	}
 
   useEffect(() => {
 		initGet()
-  }, [])
+  }, [initGet])
 
   function initGet () {
 		if(provider_type === "supplier") {
@@ -182,7 +190,7 @@ function ImportView () {
 	}
 
   const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     },
     selectedRowKeys: selectedRows
@@ -220,6 +228,7 @@ function ImportView () {
 		Promise.allSettled(promises).then(r => {
 			setSpinning(false)
 			setSelectRows([])
+			initGet()
 			message.info(`成功${r.filter(i => i.status === "fulfilled").length}条,失败${r.filter(i => i.status === "rejected").length}条`)
 		}).catch(() => {
 			setSelectRows([])

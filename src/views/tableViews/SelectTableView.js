@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
 import cs from '../../styles/business.module.css'
-import edit21 from '../../icons/edit/edit21.png'
-import edit22 from '../../icons/edit/edit22.png'
+
+
 import edit24 from '../../icons/edit/edit24.png'
-import edit25 from '../../icons/edit/edit25.png'
+
 import edit26 from '../../icons/edit/edit26.png'
 import { Button } from 'antd'
 import { tagGroups } from "../../utils/api"
@@ -52,7 +52,7 @@ function SelectTableView () {
   )
 }
 
-function RGroup ({ tagsGroup, setTagsGroup, selects, setSelects }) {
+function RGroup ({ tagsGroup,  selects, setSelects }) {
 
   function handleClose (it) {
     let index
@@ -76,7 +76,7 @@ function RGroup ({ tagsGroup, setTagsGroup, selects, setSelects }) {
   tagsGroup.forEach((item, index) => {
     const { name, tags, id } = item;
     const items = []
-    tags.forEach((it, i) => {
+    tags.forEach((it ) => {
       const { id: tag_id, name } = it
       const val = selects.filter(i => i.id === tag_id).length
       items.push(

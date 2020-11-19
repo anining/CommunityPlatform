@@ -3,9 +3,9 @@ import { Button, Table, message } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import { push, dateFormat, getSimpleText } from "../../utils/util";
-import DropdownComponent from "../../components/DropdownComponent";
+
 import { announcements } from '../../utils/api'
-import {SCROLL} from '../../utils/config';
+
 import ActionComponent from '../../components/ActionComponent';
 
 function NoticeView () {
@@ -28,7 +28,7 @@ function RTable () {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [current, get])
 
   function get (current) {
     announcements("get", undefined, { current, pageSize }).then(r => {
@@ -48,7 +48,7 @@ function RTable () {
     return arr
   }
 
-  function onChange (page, pageSize) {
+  function onChange (page ) {
     setCurrent(page)
     get(page)
   }
@@ -64,7 +64,7 @@ function RTable () {
 			ellipsis: true,
       dataIndex: 'content',
       width: 300,
-      render: (text, record, index) => <div className={c.noticeHtml}>{getSimpleText(text)}</div>
+      render: (text  ) => <div className={c.noticeHtml}>{getSimpleText(text)}</div>
   },
     {
       title: '发送人',
@@ -79,7 +79,7 @@ function RTable () {
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, rows) => {
+    onChange: (selectedRowKeys ) => {
       setSelectRows(selectedRowKeys)
     }
   };
@@ -105,7 +105,7 @@ function RTable () {
               }
               type = "primary"
               size = "small"
-              onClick={()=>push('/main/addNotice')}
+              onClick={()=>push('/main/edit-notice-setting')}
               className={c.searchBtn}>新增公告</Button>
           </div>
         </div>

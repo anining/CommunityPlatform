@@ -304,7 +304,7 @@
 .edit_view {
   width: 29.25%;
 	background: #F7FAFF;
-	padding: 0 0 15px 12px;
+	padding: 0 12px 15px 12px;
 }
 
 .basic_msg_text {
@@ -328,6 +328,41 @@
 }
 
 .basic_msg_text div:last-child {
+	color: rgba(0, 0, 0, 0.45);
+	margin-right: 8px;
+}
+
+.basic_msg_text_edit {
+	width: 100%;
+	color: #333333;
+	display: flex;
+	align-items: center;
+	margin-top: 15px;
+}
+
+.basic_msg_text_edit div:first-child {
+	flex-shrink: 0;
+	width: 38px;
+	color: #fff;
+	height: 16px;
+	background: #FF8D30;
+	margin-right: 8px;
+	border-radius: 2px;
+	line-height: 16px;
+	font-size: 0.857rem;
+	text-align: center;
+}
+
+.basic_msg_text_edit div:last-child {
+	flex-shrink: 0;
+	flex: 1;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.basic_msg_text_edit_name {
+	flex-shrink: 0;
 	color: rgba(0, 0, 0, 0.45);
 	margin-right: 8px;
 }
