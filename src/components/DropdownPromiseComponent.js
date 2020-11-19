@@ -20,14 +20,14 @@ function DropdownPromiseComponent ({refresh=[], value, view, tooltip = "", fetch
       return
     }
     fetchData()
-  }, [fetchData, fetchName])
+  }, [])
 
   useEffect(()=>{
     if (fetchName) {
       setPage(1)
       fetchData(1,true)
     }
-  },[fetchData, fetchName])
+  },refresh)
 
   function fetchData (current = page,clear = false) {
     fetchName(current,size).then(r=>{

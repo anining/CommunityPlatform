@@ -186,7 +186,7 @@ function CommunityGoodView () {
 
   useEffect(() => {
     get(current)
-  }, [current, get])
+  }, [])
 
   function submit (key) {
     let title = ""

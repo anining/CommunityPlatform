@@ -28,7 +28,7 @@ function RTable () {
 
   useEffect(() => {
     get(current)
-  }, [current, get])
+  }, [])
 
   function get (current) {
     announcements("get", undefined, { current, pageSize }).then(r => {

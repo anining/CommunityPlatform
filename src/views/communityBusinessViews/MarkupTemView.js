@@ -76,7 +76,7 @@ function RTable () {
 
   useEffect(() => {
     get(current)
-  }, [current, get])
+  }, [])
 
   function get (current) {
     let body = { page: current, size: pageSize }

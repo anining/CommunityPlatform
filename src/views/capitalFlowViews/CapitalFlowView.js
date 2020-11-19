@@ -72,7 +72,7 @@ function RTable () {
 
   useEffect(() => {
     get(current)
-  }, [current, get])
+  }, [])
 
   function get (current) {
     balanceChanges(current, pageSize, date[0], date[1]).then(r => {

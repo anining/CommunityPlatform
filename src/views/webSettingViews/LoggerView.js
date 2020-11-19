@@ -27,7 +27,7 @@ function RTable () {
 
   useEffect(() => {
     get(current)
-  }, [current, get])
+  }, [])
 
   function get (current) {
     loginlogs(current, pageSize, manager_id, date[0], date[1]).then(r => {

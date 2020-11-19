@@ -149,7 +149,7 @@ function CommunityOrderView () {
 
   useEffect(() => {
     get(current)
-  }, [current, get])
+  }, [])
 
   function addRemark () {
 		orderComments("ids="+sel.id, remark).then(r=> {
@@ -423,7 +423,7 @@ function CommunityOrderView () {
 						</>:null
 				}
 				{
-					args[1].sync_status === "pending" ?
+					args[1].sync_status === "failed" ?
 						<>
 							<div className={c.line} />
 							<div onClick={()=>{
@@ -432,7 +432,7 @@ function CommunityOrderView () {
 						</>:null
 				}
 				{
-					args[1].sync_status === "failed" ?
+					args[1].sync_status === "out_of_date" ?
 						<>
 							<div className={c.line} />
 							<div onClick={()=>{

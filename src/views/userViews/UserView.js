@@ -54,7 +54,7 @@ function UserView () {
 
   useEffect(() => {
     get(current)
-  }, [current, get])
+  }, [])
 
   function onChange (page ) {
     setCurrent(page)
