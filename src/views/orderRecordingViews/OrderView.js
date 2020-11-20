@@ -47,7 +47,7 @@ function OrderView () {
 
   useEffect(() => {
     get()
-  }, [get])
+  }, [])
 
   function get () {
     orderHis(id).then(r => {

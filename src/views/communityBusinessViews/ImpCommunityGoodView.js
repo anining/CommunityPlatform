@@ -269,7 +269,7 @@ function ImpCommunityGoodView () {
 						<span className={c.white}>*</span>
 						<div className={c.itemText}>进价</div>
 					</div>
-					<Input type="number" onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>
+					<Input type="number" disabled={true} onChange={e=>setUnit_cost(e.target.value)} value={unit_cost} placeholder="请输入商品进价" className={c.itemInput}></Input>
 				</div>
         <div className={c.item}>
           <div className={c.itemName}>
@@ -310,7 +310,7 @@ function ImpCommunityGoodView () {
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span>*</span>
+            <span className={c.white}>*</span>
             <div className={c.itemText}>单位</div>
           </div>
           <Input maxLength={20} value={unit} onChange={e=>setUnit(e.target.value)} placeholder="请输入商品的计算单位" className={c.itemInput}></Input>
@@ -450,11 +450,11 @@ function ImpCommunityGoodView () {
                   <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
                     <Radio value="available" className={c.itemRadio}>已上架</Radio>
                   </Tooltip>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已下架 ： 已下架。">
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已下架 ： 用户不可以看见并且不能购买该商品。">
                     <Radio value="paused" className={c.itemRadio}>已下架</Radio>
                   </Tooltip>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架但关闭下单 ： 已上架但关闭下单。">
-                    <Radio value="unavailable" className={c.itemRadio}>已上架但关闭下单</Radio>
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="维护中 ： 用户可以看见但是不能购买该商品。">
+                    <Radio value="unavailable" className={c.itemRadio}>维护中</Radio>
                   </Tooltip>
                 </Radio.Group>
               </div>

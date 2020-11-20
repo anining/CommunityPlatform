@@ -12,6 +12,7 @@ import ActionComponent from '../../components/ActionComponent'
 import { docking, extPrvdStats } from '../../utils/api'
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
 import {dateFormat, push, saveSuccess } from '../../utils/util'
+import TableComponent from '../../components/TableComponent'
 
 function DockingView () {
   const [visible, setVisible] = useState(false)
@@ -83,7 +84,7 @@ function RTable ({  }) {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
 	const [name, setName] = useState()
 	const [type, setType] = useState()
@@ -216,23 +217,19 @@ function RTable ({  }) {
         </div>
       </div>
 			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
-      <Table
-        columns={columns}
-        rowSelection={{
-          ...rowSelection
-        }}
-        dataSource={data}
-        size="small"
-        pagination={{
-          showQuickJumper:true,
-					showSizeChanger:false,
-          current,
-          pageSize,
-          showLessItems:true,
-          total,
-          onChange
-        }}
-      />
+			<TableComponent
+				scroll={null}
+				setPageSize={setPageSize}
+				setCurrent={setCurrent}
+				getDataSource={get}
+				setSelectedRowKeys={setSelectRows}
+				selectedRowKeys={selectedRows}
+				columns={columns}
+				dataSource={data}
+				pageSize={pageSize}
+				total={total}
+				current={current}
+			/>
     </div>
   )
 }

@@ -16,11 +16,15 @@ import good71 from '../icons/good/good71.png'
 import good72 from '../icons/good/good72.png'
 import good73 from '../icons/good/good73.png'
 import good77 from '../icons/good/good77.png'
+import {parseDomain} from './util'
 
-const DEVELOPER = "Production"
-const API_URL = process.env.REACT_APP_API_URL
-// const API_URL = DEVELOPER === "Test" ? "https://beta-omnivstore.prismslight.com/mng" : "https://test-omnivstore.prismslight.com/mng"
-// const API_URL = DEVELOPER === "Test" ? "https://beta-omnivstore.prismslight.com/mng" : "http://192.168.1.36:8000/mng"
+const DEVELOPER = "test"
+// const { protocol, host } = window.location
+// const API_URL = DEVELOPER === "Production" ? `${protocol}://${host}/mng` : "https://test-omnivstore.prismslight.com/mng"
+// const API_URL = DEVELOPER === "Production" ? "https://beta-omnivstore.prismslight.com/mng" : "https://test-omnivstore.prismslight.com/mng"
+const LOCAL_URL = 'https://test-omnivstore.prismslight.com/mng';// 本地测试地址
+const HOST = window.location.host.includes('localhost:') ? LOCAL_URL : parseDomain(window.location.host);
+const API_URL = `http://api.${HOST}/mng`;
 const JUMP_DELAY = 500
 const MODULES = {
   toolbar: [

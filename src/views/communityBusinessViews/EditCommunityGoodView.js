@@ -21,9 +21,7 @@ import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
 let win
 
 function EditCommunityGoodView () {
-	console.log(1)
   const { state = {} } = useHistory().location
-  const h = useHistory()
   const { id, ext_prvd_goods_id, ext_prvd_id, params, provider_type, padj_id, name: n, prices: pr_s = [], supp_goods_id, refundable: re = false, tags: tag_s = [], batch_order: b_o=false,  weight: w, intro: i_td = "",  pics: ps = [], max_order_amount: max_o_a, ctg_id: c_id,  min_order_amount: min_o_a,  repeatable: r_o=false, status: s = "available", unit: u, unit_cost: u_c } = state
   const [name, setName] = useState(n)
   const [ctg_id, setCtgId] = useState(c_id)
@@ -94,17 +92,19 @@ function EditCommunityGoodView () {
   useEffect(() => {
     if (dockingTarget) {
       const values = marks.filter(i => i.id === dockingTarget)
-      const { type, factors } = values[0]
-      let localValues = [0, 0, 0, 0];
-      for (let j = 0; j < 4; j++) {
-        if (type === "absolute") {
-          localValues[j] = (+factors[j] || 0) + (+unit_cost || 0)
-        } else {
-          localValues[j] = ((+factors[j] || 0) + 100) / 100 * (+unit_cost || 0)
-        }
-      }
-      localValues[0]= unit_price || 0
-      setFactors(localValues)
+			if(values && values[0]) {
+				const { type, factors } = values[0]
+				let localValues = [0, 0, 0, 0];
+				for (let j = 0; j < 4; j++) {
+					if (type === "absolute") {
+						localValues[j] = (+factors[j] || 0) + (+unit_cost || 0)
+					} else {
+						localValues[j] = ((+factors[j] || 0) + 100) / 100 * (+unit_cost || 0)
+					}
+				}
+				localValues[0]= unit_price || 0
+				setFactors(localValues)
+			}
     }
   }, [dockingTarget, marks, unit_cost, unit_price])
 

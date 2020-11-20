@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { Button, Spin, Table, Input, Space, message } from 'antd'
 import c from '../../styles/view.module.css'
 import ce from '../../styles/edit.module.css'
-
-
 import good9 from '../../icons/good/good9.png'
 import { extPrvdsGoods, extPrvdsGood, goodsSummaries, communityGoods, suppGood } from "../../utils/api";
 import { push, saveSuccess } from "../../utils/util"
 import ActionComponent from '../../components/ActionComponent'
 import {useHistory} from 'react-router-dom'
 import DropdownComponent from '../../components/DropdownComponent'
-
+import TableComponent from '../../components/TableComponent'
 
 let win
 
@@ -35,6 +33,7 @@ function ImportView () {
 		switch (type) {
 			case 'good-category':
 				if(keys.length) {
+					win && win.close()
 					imports({p_ctg_id: id})
 				}else {
 					imp(selected, {p_ctg_id: id})
@@ -151,7 +150,7 @@ function ImportView () {
 
   useEffect(() => {
 		initGet()
-  }, [initGet])
+  }, [])
 
   function initGet () {
 		if(provider_type === "supplier") {
@@ -219,22 +218,27 @@ function ImportView () {
 	const imports = (parameter = {}) =>{
 		const promises = []
 		setSpinning(true)
-		console.log(keys, keys.length)
 		keys.forEach(i => {
 			const promise = new Promise((resolve, reject) => imps(i, parameter, resolve, reject))
 			promises.push(promise)
 		})
 		setKeys([])
-		Promise.allSettled(promises).then(r => {
-			setSpinning(false)
+		try {
+			Promise.allSettled(promises).then(r => {
+				setSpinning(false)
+				setSelectRows([])
+				initGet()
+				message.info(`成功${r.filter(i => i.status === "fulfilled").length}条,失败${r.filter(i => i.status === "rejected").length}条`)
+			}).catch(() => {
+				setSelectRows([])
+				message.error("批量一键导入失败")
+				setSpinning(false)
+			})
+		}catch(e) {
 			setSelectRows([])
-			initGet()
-			message.info(`成功${r.filter(i => i.status === "fulfilled").length}条,失败${r.filter(i => i.status === "rejected").length}条`)
-		}).catch(() => {
-			setSelectRows([])
-			message.error("批量一键导入失败")
+			message.warning("你的浏览器暂不支持批量导入,请尝试Chrome浏览器!")
 			setSpinning(false)
-		})
+		}
 	}
 
   function submit (key) {
@@ -327,24 +331,20 @@ function ImportView () {
 							</div>
 						</div>
 						<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name: "批量一键导入",key: "import"}]}/>
-						<Table
+						<TableComponent
+							scroll={null}
+							change={onChange}
+							sizeChange={onShowSizeChange}
+							setPageSize={setPageSize}
+							setCurrent={setCurrent}
+							getDataSource={get}
+							setSelectedRowKeys={setSelectRows}
+							selectedRowKeys={selectedRows}
 							columns={columns}
-							rowSelection={{
-								...rowSelection
-							}}
 							dataSource={data}
-							size="small"
-							pagination={{
-								showQuickJumper:true,
-								showSizeChanger:true,
-								pageSize,
-								onShowSizeChange,
-								current,
-								pageSize,
-								showLessItems:true,
-								total,
-								onChange
-							}}
+							pageSize={pageSize}
+							total={total}
+							current={current}
 						/>
 					</div>
 				</div>

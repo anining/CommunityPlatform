@@ -26,6 +26,7 @@ import ModalComponent from "../../components/ModalComponent"
 import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
 import { REFUND_STATUS, SCROLL, COMMUNITY_SYNC_STATUS, COMMUNITY_ORDER_STATUS,  COMMUNITY_AFTER_STATUS } from '../../utils/config'
 import ActionComponent from '../../components/ActionComponent'
+import TableComponent from '../../components/TableComponent'
 
 function CommunityOrderView () {
   const [visibleMsg, setVisibleMsg] = useState(false)
@@ -65,7 +66,7 @@ function CommunityOrderView () {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
   const [date, setDate] = useState([])
   const [moment, setMoment] = useState()
@@ -493,24 +494,18 @@ function CommunityOrderView () {
             </div>
           </div>
 					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{"name":"重新推送",key:"push"},{"name":"重新通信",key:"sync"}]}/>
-          <Table
-						scroll={SCROLL}
-            columns={columns}
-            rowSelection={{
-              ...rowSelection
-            }}
-            dataSource={data}
-            size="small"
-            pagination={{
-              showQuickJumper:true,
-							showSizeChanger:false,
-              current,
-              pageSize,
-              showLessItems:true,
-              total,
-              onChange
-            }}
-          />
+					<TableComponent
+						setPageSize={setPageSize}
+						setCurrent={setCurrent}
+						getDataSource={get}
+						setSelectedRowKeys={setSelectRows}
+						selectedRowKeys={selectedRows}
+						columns={columns}
+						dataSource={data}
+						pageSize={pageSize}
+						total={total}
+						current={current}
+					/>
         </div>
     </div>
 

@@ -16,6 +16,7 @@ import Space from "antd/es/space"
 import {getPath, saveSuccess, push} from "../../utils/util"
 import ActionComponent from '../../components/ActionComponent'
 import {SCROLL} from '../../utils/config'
+import TableComponent from '../../components/TableComponent'
 
 function StoreView() {
 
@@ -61,7 +62,7 @@ function RTable() {
   const [data, setData] = useState([])
   const [nickname, setNickname] = useState()
   const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
 
   useEffect(() => {
@@ -248,24 +249,18 @@ function RTable() {
         </div>
       </div>
 			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
-      <Table
-        columns={columns}
-				scroll={SCROLL}
-        rowSelection={{
-          ...rowSelection
-        }}
-        dataSource={data}
-        size="small"
-        pagination={{
-					showSizeChanger:false,
-          showQuickJumper: true,
-          current,
-          pageSize,
-          showLessItems: true,
-          total,
-          onChange
-        }}
-      />
+			<TableComponent
+				setPageSize={setPageSize}
+				setCurrent={setCurrent}
+				getDataSource={get}
+				setSelectedRowKeys={setSelectRows}
+				selectedRowKeys={selectedRows}
+				columns={columns}
+				dataSource={data}
+				pageSize={pageSize}
+				total={total}
+				current={current}
+			/>
     </div>
   )
 }

@@ -209,17 +209,47 @@ const genUpToken = function(accessKey="UEF0xvCcLO8bBKHD1R_JNJlTQsdSWbI3BBUo7tzN"
 	return upload_token;
 }
 
-function beforeUpload(file, fileList, setFileList, more = false) {
+function parseDomain (str) {
+    if (!str) return '';
+    if (str.indexOf('://') !== -1) {}
+    str = str.substr(str.indexOf('://') + 3);
+    const topLevel = ['com', 'net', 'org', 'gov', 'edu', 'mil', 'biz', 'name', 'info', 'mobi', 'pro', 'travel', 'museum', 'int', 'areo', 'post', 'rec'];
+    const domains = str.split('.');
+    if (domains.length <= 1) return str;
+    if (!isNaN(domains[domains.length - 1])) return str;
+    let i = 0;
+    // eslint-disable-next-line eqeqeq,no-const-assign
+    while (i < topLevel.length && topLevel[i] !== domains[domains.length - 1]) i++;
+    // eslint-disable-next-line eqeqeq
+    if (i !== topLevel.length) {
+        return domains[domains.length - 2] + '.' + domains[domains.length - 1];
+    } else {
+        i = 0;
+        while (i < topLevel.length && topLevel[i] !== domains[domains.length - 2]) i++;
+        if (i === topLevel.length) return domains[domains.length - 2] + '.' + domains[domains.length - 1]; else return domains[domains.length - 3] + '.' + domains[domains.length - 2] + '.' + domains[domains.length - 1];
+    }
+}
+
+function beforeUpload(file, fileList, setFileList, more = 1) {
 	const fileName = Date.now()+ ".png"
 
 	const observer = {
 		complete(){
-			setFileList([...fileList.slice(0, more-1),{
-				uid: Date.now(),
-				name: 'image.png',
-				status: 'done',
-				url:`http://yzimg.gu126.cn/${fileName}`,
-			}])
+			if( more === 1 ) {
+				setFileList([{
+					uid: Date.now(),
+					name: 'image.png',
+					status: 'done',
+					url:`http://yzimg.gu126.cn/${fileName}`,
+				}])
+			}else {
+				setFileList([...fileList.slice(0, more-1),{
+					uid: Date.now(),
+					name: 'image.png',
+					status: 'done',
+					url:`http://yzimg.gu126.cn/${fileName}`,
+				}])
+			}
 		}
 	}
 	const config = {
@@ -251,4 +281,4 @@ function isUrl (url) {
    return /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/.test(url)
 }
 
-export {isUrl, beforeUpload, genUpToken, decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed}
+export { parseDomain, isUrl, beforeUpload, genUpToken, decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed}

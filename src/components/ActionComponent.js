@@ -33,7 +33,7 @@ function ActionComponent ({selectedRows, submit, keys, setSelectRows}) {
             <DownOutlined />
           </Button>
         </Dropdown>
-        <Button className={c.action} onClick={()=>submit(key)} size="small">批量操作</Button>
+        <Button disabled={!key} className={c.action} onClick={()=>submit(key)} size="small">批量操作</Button>
       </div>
 		</div>
 	)

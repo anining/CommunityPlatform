@@ -43,7 +43,7 @@ function AddAdminView () {
         setPurview(format(data))
       }
     })
-  }, [initPermissions])
+  }, [])
 
   function save () {
     if (!name || !number) {

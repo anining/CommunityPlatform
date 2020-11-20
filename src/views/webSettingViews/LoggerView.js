@@ -4,6 +4,7 @@ import c from '../../styles/view.module.css'
 import good9 from '../../icons/good/good9.png'
 import { loginlogs } from "../../utils/api"
 import { dateFormat } from "../../utils/util"
+import TableComponent from '../../components/TableComponent'
 
 function LoggerView () {
 
@@ -19,7 +20,7 @@ function LoggerView () {
 function RTable () {
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
   const [manager_id, setManager_id] = useState()
   const [date, setDate] = useState([])
@@ -111,20 +112,17 @@ function RTable () {
           </div>
         </div>
       </div>
-      <Table
-        columns={columns}
-        dataSource={data}
-        size="small"
-        pagination={{
-          showQuickJumper:true,
-					showSizeChanger:false,
-          current,
-          pageSize,
-          showLessItems:true,
-          total,
-          onChange
-        }}
-      />
+			<TableComponent
+				scroll={null}
+				setPageSize={setPageSize}
+				setCurrent={setCurrent}
+				getDataSource={get}
+				columns={columns}
+				dataSource={data}
+				pageSize={pageSize}
+				total={total}
+				current={current}
+			/>
     </div>
   )
 }

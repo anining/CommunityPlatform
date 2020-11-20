@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Button,  Tooltip, Dropdown } from 'antd'
+import { Button, Tooltip, Dropdown } from 'antd'
 import { styles } from '../styles/modal'
 import { DownOutlined } from '@ant-design/icons';
 import c from '../styles/view.module.css'
 
-function DropdownPromiseComponent ({refresh=[], value, view, tooltip = "", fetchName, setValue, initNums = [], placeholder = "请选择" }) {
-	const [visible, setVisible] = useState()
+function DropdownPromiseComponent ({refresh=[], style, value, view, tooltip = "", fetchName, setValue, initNums = [], placeholder = "请选择" }) {
   const size = 50
   const [page, setPage] = useState(1)
   const [nums, setNums] = useState(initNums)
@@ -54,10 +52,9 @@ function DropdownPromiseComponent ({refresh=[], value, view, tooltip = "", fetch
           nums.map(i => (
             <div key={i.id} onClick={()=>{
               setValue(i.id)
-							setVisible(false)
               // const ref = document.querySelectorAll(".ant-dropdown")
               // for (let i = 0; i < ref.length; i++) { ref[i].className = 'ant-dropdown ant-dropdown-placement-bottomLeft ant-dropdown-hidden' }
-          }} className={c.dropItem}>
+						}} className={c.dropItem}>
               {i.name}
             </div>
           ))
@@ -68,10 +65,10 @@ function DropdownPromiseComponent ({refresh=[], value, view, tooltip = "", fetch
   const selected = nums.filter(i => i.id == value)
 
   return (
-    <Dropdown overlay={menu}>
+    <Dropdown trigger={["click"]} overlay={menu}>
       <Tooltip placement="bottomLeft" color="#F7FAFF" title={tooltip}>
-				<Button size="small" ref={myRef} onClick={()=>setVisible(!visible)} className={view?c.dropdown_view:c.dropdownPromise}>
-          <div className={c.hiddenText} style={{color:selected.length?"#34374A":"#C4C4C4"}}>
+				<Button size="small" ref={myRef} style={style} className={view?c.dropdown_view:c.dropdownPromise}>
+          <div className={c.hiddenText} style={{color:selected.length && value ? "#34374A":"#C4C4C4"}}>
             { selected.length ? selected[0].name : placeholder }
           </div>
           <DownOutlined />

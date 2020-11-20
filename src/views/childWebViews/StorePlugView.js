@@ -88,13 +88,22 @@ function StorePlugView () {
   ]
 
   function save () {
-		if(!icons.length || !banners.length) {
-			message.warning("请完善信息")
-			return
+		let body = {
+			banners: banners.map(i => i.url),
+			site_name: siteName,
+			under_maintenance,
+			show_goods_under_maintenance,
+			allow_registration,
+			allow_guest,
+			icp,
+			announcement
+		}
+		if(icons.length) {
+			body = {...body,...{logo: icons[0].url}}
 		}
     setLoading(true)
-		storeConfig('modify', { logo: icons[0].url, banners: banners.map(i => i.url), site_name: siteName, under_maintenance, show_goods_under_maintenance, allow_registration, allow_guest, icp, announcement }).then(r => {
-      setLoading(false);
+		storeConfig('modify', body).then(r => {
+      setLoading(false)
       !r.error && saveSuccess(false)
     }).catch(() => {
       setLoading(false)
@@ -159,6 +168,7 @@ function StorePlugView () {
 							listType="picture-card"
 							fileList={icons}
 							onPreview={onPreview}
+							onChange={({fileList}) => setIcons(fileList)}
 						>
               <div>
                 <img src={edit1} alt="" className={c.uploadImg}/>
@@ -201,20 +211,18 @@ function StorePlugView () {
           <div className={c.itemName}>
             <span style={{color:'#fff'}}>*</span>
           </div>
-					<ImgCrop rotate>
-						<Upload
-							action={file=>beforeUpload(file, banners, setBanners, 5)}
-							listType="picture-card"
-							fileList={banners}
-							onPreview={onPreview}
-							onChange={onChange}
-						>
-              <div>
-                <img src={edit1} alt="" className={c.uploadImg}/>
-                <div className={c.uploadText}>上传图片</div>
-              </div>
-						</Upload>
-					</ImgCrop>
+					<Upload
+						action={file=>beforeUpload(file, banners, setBanners, 5)}
+						listType="picture-card"
+						fileList={banners}
+						onPreview={onPreview}
+						onChange={onChange}
+					>
+						<div>
+							<img src={edit1} alt="" className={c.uploadImg}/>
+							<div className={c.uploadText}>上传图片</div>
+						</div>
+					</Upload>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />

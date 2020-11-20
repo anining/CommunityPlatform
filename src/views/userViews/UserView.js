@@ -15,6 +15,7 @@ import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 import { USER_RANK } from "../../utils/config"
 import ActionComponent from '../../components/ActionComponent'
+import TableComponent from '../../components/TableComponent'
 
 function UserView () {
   const [visible, setVisible] = useState(false)
@@ -28,7 +29,7 @@ function UserView () {
   const [src, setSrc] = useState()
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
   const [sel, setSel] = useState({})
   const [seled, setSeled] = useState(0)
@@ -325,23 +326,17 @@ function UserView () {
 						</div>
 					</div>
 					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/>
-					<Table
-						scroll={SCROLL}
+					<TableComponent
+						setPageSize={setPageSize}
+						setCurrent={setCurrent}
+						getDataSource={get}
+						setSelectedRowKeys={setSelectRows}
+						selectedRowKeys={selectedRows}
 						columns={columns}
-						rowSelection={{
-							...rowSelection
-						}}
 						dataSource={data}
-						size="small"
-						pagination={{
-							showQuickJumper:true,
-							showSizeChanger:false,
-							current,
-							pageSize,
-							showLessItems:true,
-							total,
-							onChange
-						}}
+						pageSize={pageSize}
+						total={total}
+						current={current}
 					/>
 				</div>
       </div>

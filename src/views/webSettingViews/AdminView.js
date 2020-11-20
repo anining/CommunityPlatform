@@ -7,6 +7,7 @@ import home9 from '../../icons/home/home9.png'
 import good40 from '../../icons/good/good40.png'
 import { push, dateFormat, getKey } from "../../utils/util"
 import { PERMISSIONS, PERMISSIONS_ARRAY, SCROLL } from "../../utils/config"
+import TableComponent from '../../components/TableComponent'
 
 function AdminView () {
 
@@ -21,14 +22,20 @@ function AdminView () {
 
 function RTable () {
   const [data, setData] = useState([])
+	const [pageSize, setPageSize] = useState(10)
+	const [current, setCurrent] = useState(1)
   const [purview, setPurview] = useState([])
   const [visible, setVisible] = useState([])
 
-  useEffect(() => {
+	const get = () => {
     managers("get").then(r => {
       const { error, data } = r;
       !error && setData(format(data))
     })
+	}
+
+  useEffect(() => {
+		get()
   }, [])
 
   function detail (permissions,role, index) {
@@ -146,17 +153,17 @@ function RTable () {
           </div>
         </div>
       </div>
-      <Table
-				scroll={SCROLL}
-        columns={columns}
-        dataSource={data}
-        size="small"
-        pagination={{
-          showQuickJumper:true,
-					showSizeChanger:false,
-          showLessItems:true,
-        }}
-      />
+			<TableComponent
+				scroll={null}
+				setPageSize={setPageSize}
+				setCurrent={setCurrent}
+				getDataSource={get}
+				columns={columns}
+				dataSource={data}
+				pageSize={pageSize}
+				total={data.length}
+				current={current}
+			/>
     </div>
   )
 }

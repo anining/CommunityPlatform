@@ -7,7 +7,6 @@ import cs from '../../styles/edit.module.css'
 import ce from '../../styles/edit.module.css'
 import good5 from '../../icons/good/good5.png'
 import good55 from '../../icons/good/good55.png'
-
 import good9 from '../../icons/good/good9.png'
 import header1 from '../../icons/header/header1.png'
 import { useHistory } from "react-router-dom"
@@ -15,20 +14,18 @@ import { communityDiscPrices, addDiscPrices, deleteDiscPrices } from "../../util
 import { saveSuccess, push } from "../../utils/util";
 import { USER_RANK, SCROLL } from '../../utils/config'
 import ModalPopComponent from "../../components/ModalPopComponent"
+import TableComponent from '../../components/TableComponent'
 
 function EditUserPriceView () {
   const { state = {} } = useHistory().location
   const { account, lv, id } = state
-
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
-
   const [goods_id, ] = useState()
   const [goods_name, setGoods_name] = useState()
   const [good_category_id, ] = useState()
-
   const [visible, setVisible] = useState(false)
   const [checked, ] = useState(false)
   const [selected,setSelected] = useState({})
@@ -145,13 +142,13 @@ function EditUserPriceView () {
             </div>
           </div>
         </div>
-        <RTable setCurrent={setCurrent} get={get} setGoods_name={setGoods_name} current={current} goods_name={goods_name} data={data} pageSize={pageSize} total={total} setSelected={setSelected} setVisible={setVisible} id={id} checked={checked}/>
+        <RTable setPageSize={setPageSize} setCurrent={setCurrent} get={get} setGoods_name={setGoods_name} current={current} goods_name={goods_name} data={data} pageSize={pageSize} total={total} setSelected={setSelected} setVisible={setVisible} id={id} checked={checked}/>
       </div>
     </div>
   )
 }
 
-function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total, goods_name, setVisible,  setSelected  }) {
+function RTable ({setCurrent, setPageSize, get, setGoods_name, current, pageSize, data, total, goods_name, setVisible,  setSelected  }) {
 
   useEffect(() => {
     get(current)
@@ -303,21 +300,16 @@ function RTable ({setCurrent, get, setGoods_name, current, pageSize, data, total
             </div>
           </div>
       </div>
-      <Table
-				scroll={SCROLL}
-        columns={columns}
-        dataSource={data}
-        size="small"
-        pagination={{
-          showQuickJumper:true,
-					showSizeChanger:false,
-          current,
-          pageSize,
-          showLessItems:true,
-          total,
-          onChange
-        }}
-      />
+			<TableComponent
+				setPageSize={setPageSize}
+				setCurrent={setCurrent}
+				getDataSource={get}
+				columns={columns}
+				dataSource={data}
+				pageSize={pageSize}
+				total={total}
+				current={current}
+			/>
     </div>
   )
 }

@@ -287,7 +287,7 @@ export function balanceChanges (page, size, start_from, end_with) {
 
 // 获取价格历史列表
 export function priceHistories (goods_type, goods_id) {
-  return transformFetch("GET", "/price-histories", {goods_id, goods_type})
+  return transformFetch("GET", "/cmnt-price-histories", {goods_id, goods_type})
 }
 
 // 对接目标
@@ -354,6 +354,11 @@ export function delGoods (ids) {
 // 用户加减款
 export function usersBalances (id, amount) {
 	return transformFetch("POST", `/users/${id}/balances`, {amount});
+}
+
+// 修改社区商品价格
+export function goodsPrice (goods_id, unit_cost, prices) {
+	return transformFetch("POST", `/cmnt-goods/${goods_id}/price?goods_id=${goods_id}`, {unit_cost, prices});
 }
 
 // 批量重新同步社区订单

@@ -4,6 +4,7 @@ import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import { transformTime, push } from "../../utils/util"
 import { customerServices } from "../../utils/api"
+import TableComponent from '../../components/TableComponent'
 
 
 function PeopleServiceView () {
@@ -19,12 +20,20 @@ function PeopleServiceView () {
 
 function RTable () {
   const [data, setData] = useState([])
+	const [pageSize, setPageSize] = useState(10)
+	const [current, setCurrent] = useState(1)
 
-  useEffect(() => {
+	const get = () => {
     customerServices("get").then(r => {
       const { error, data } = r;
-      !error && setData(format(data))
+			if(!error) {
+				setData(format(data))
+			}
     })
+	}
+
+  useEffect(() => {
+		get()
   }, [])
 
   const columns = [
@@ -90,16 +99,17 @@ function RTable () {
           </div>
         </div>
       </div>
-      <Table
-        columns={columns}
-        dataSource={data}
-        size="small"
-        pagination={{
-					showSizeChanger:false,
-          showQuickJumper:true,
-          showLessItems:true,
-        }}
-      />
+			<TableComponent
+				scroll={null}
+				columns={columns}
+				dataSource={data}
+				total={data.length}
+				getDataSource={get}
+				setPageSize={setPageSize}
+				pageSize={pageSize}
+				current={current}
+				setCurrent={setCurrent}
+			/>
     </div>
   )
 }

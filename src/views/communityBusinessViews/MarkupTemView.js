@@ -191,6 +191,7 @@ function RTable () {
       </div>
 			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
 			<TableComponent
+				scroll={null}
 				setPageSize={setPageSize}
 				setCurrent={setCurrent}
 				getDataSource={get}

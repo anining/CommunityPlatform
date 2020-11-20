@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import * as R from 'kefir.ramda'
+import * as L from "partial.lenses"
 import { Button, Badge, Empty,  Modal, Timeline, Space,  notification, Input, message } from 'antd'
 import { SmileOutlined } from '@ant-design/icons';
 import good46 from '../../icons/good/good46.png'
@@ -19,7 +20,7 @@ import DropdownComponent from "../../components/DropdownComponent";
 import ModalComponent from "../../components/ModalComponent";
 import { push, decrypt, getKey, saveSuccess, transformTime } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
-import { communityGoods, communityGoodsCategories, goodsStat, delGoods, priceHistories } from "../../utils/api"
+import { communityGoods, communityGoodsCategories, goodsStat, delGoods, priceHistories, cmntPadjs, goodsPrice } from "../../utils/api"
 import { GOODS_STATUS,  SCROLL } from "../../utils/config"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import DropdownPromiseComponent from "../../components/DropdownPromiseComponent"
@@ -38,6 +39,12 @@ function CommunityGoodView () {
   const [key, setKey] = useState()
   const [src, setSrc] = useState()
   const [sel, setSel] = useState({})
+
+	const [unit_cost, setUnit_cost] = useState()
+  const [dockingTarget, setDockingTarget] = useState()
+  const [marks, setMarks] = useState([])
+  const [factors, setFactors] = useState([])
+
   const [labels, setLabels] = useState([
     {
       label: '商品总数',
@@ -79,6 +86,75 @@ function CommunityGoodView () {
   const [, setOrder_by] = useState()
   const [, ] = useState()
 
+	const modifyPrice = () => {
+		if(!unit_cost || factors.length!==4) {
+			message.warning("请完善信息")
+			return
+		}
+		setVisibleC(false)
+    let body = {
+			name: sel.name,
+			ctg_id: sel.ctg_id,
+			status: sel.status,
+			supp_goods: sel.provider_type==="supplier" ? { provider_type: sel.provider_type, goods_id: sel.supp_goods_id } : { provider_type: sel.provider_type, ext_prvd_goods_id: sel.ext_prvd_goods_id, ext_prvd_id: sel.ext_prvd_id, params: sel.params },
+			tag_ids: sel.tags.map(i => i.id),
+      prices: sel.prices,
+			unit: sel.unit,
+			refundable: sel.refundable,
+			recommended: sel.recommended,
+			repeatable: sel.repeatable,
+      min_order_amount: sel.min_order_amount,
+      max_order_amount: sel.max_order_amount,
+      weight: sel.weight,
+			pics: sel.pics,
+			padj_id: dockingTarget,
+			unit_cost: sel.unit_cost,
+			batch_order: sel.batch_order,
+			padj_id: sel.padj_id,
+			intro: sel.intro,
+    }
+		if(!dockingTarget) {
+			delete body.padj_id
+		}
+		communityGoods("modify", sel.id, undefined, body).then(r => {
+			if(!r.error) {
+				goodsPrice(sel.id, unit_cost, factors).then(r=>{
+					if(!r.error){
+						setUnit_cost(undefined)
+						setFactors([])
+						setDockingTarget(undefined)
+						saveSuccess(false)
+						get(current)
+					}
+				})
+			}
+		})
+	}
+
+  useEffect(() => {
+    if (dockingTarget) {
+      const values = marks.filter(i => i.id === dockingTarget)
+			if(values && values[0]) {
+				const { type, factors } = values[0]
+				console.log(type, factors)
+				let localValues = [0, 0, 0, 0];
+				for (let j = 0; j < 4; j++) {
+					if (type === "absolute") {
+						localValues[j] = ((+factors[j] || 0) + (+unit_cost || 0)).toFixed(6)
+					} else {
+						localValues[j] = (((+factors[j] || 0) + 100) / 100 * (+unit_cost || 0)).toFixed(6)
+					}
+				}
+				setFactors(localValues)
+			}
+    }
+  }, [dockingTarget, marks, unit_cost])
+
+  const setPriceAt = i => R.pipe(
+    e => L.set([i], +e.target.value, factors),
+    setFactors,
+  )
+
 	const sumIf = pred => R.pipe(
 		R.filter(pred),
 		R.map(R.prop("count")),
@@ -112,7 +188,7 @@ function CommunityGoodView () {
 						id: 333,
 					},
 					{
-						label: '关闭下单',
+						label: '维护中数',
 						number: paused_num,
 						icon: good4,
 						id: 444,
@@ -121,6 +197,16 @@ function CommunityGoodView () {
 			}
 		})
 	}
+
+  function getCmntPadjs (page, size) {
+    return cmntPadjs("get", undefined, {page, size}).then(r => {
+      if (!r.error) {
+        setMarks(r.data)
+				return [...[{name: "未选择"}], ...r.data]
+      }
+      return []
+    }).catch(()=> [])
+  }
 
   function get (current, size=pageSize) {
 		getNums()
@@ -268,8 +354,8 @@ function CommunityGoodView () {
     {
       title: '调价模版',
 			ellipsis: true,
-      dataIndex: '',
-			render: () => "-"
+      dataIndex: 'padj_name',
+			render: text => text || "-"
   },
     {
       title: '自助退款',
@@ -299,9 +385,12 @@ function CommunityGoodView () {
           }}>修改状态</div>
           <div className={c.line} />
           <div onClick={()=>{
-            // setSel(record)
-            // setVisibleC(true)
-					}} style={{cursor:"wait"}} className={c.clickText}>修改价格</div>
+            setSel(record)
+						setUnit_cost(record.unit_cost)
+						setFactors(record.prices)
+						setDockingTarget(record.padj_id)
+            setVisibleC(true)
+					}} className={c.clickText}>修改价格</div>
         </Space>
       )
     }
@@ -436,15 +525,15 @@ function CommunityGoodView () {
 					<div className={oc.change_desc_view}>
 						<div className={oc.item}>
 							<div className={oc.item_label}>进价</div>
-							<Input placeholder="百分比加价模版"/>
+							<Input value={unit_cost} disabled={true} onChange={e=>setUnit_cost(e.target.value)} placeholder="请输入进价"/>
 						</div>
 						<div className={oc.item}>
 							<div className={oc.item_label}>调价模版</div>
-							<Input placeholder="百分比调价模版"/>
+							<DropdownPromiseComponent style={{width:"70%"}} placeholder="请选择调价模版" value={dockingTarget} fetchName={getCmntPadjs} setValue={setDockingTarget}/>
 						</div>
 						<div className={oc.item}>
 							<div className={oc.item_label}>单价</div>
-							<Input placeholder="百分比加价模版"/>
+							<Input value={factors[0]} disabled={dockingTarget} onChange={setPriceAt(0)} placeholder="请输入单价"/>
 						</div>
 						<div className={oc.item} style={{alignItems:'flex-start'}}>
 							<div className={oc.item_label}>统一密价</div>
@@ -452,29 +541,29 @@ function CommunityGoodView () {
 								<div className={oc.item_vip}>
 									<img src={good46} alt="" />
 									<div>高级会员</div>
-									<Input placeholder="请输入密价"/>
+									<Input value={factors[1]} disabled={dockingTarget} onChange={setPriceAt(1)} placeholder="请输入密价"/>
 								</div>
 								<div className={oc.item_vip}>
 									<img src={good48} alt="" />
 									<div>钻石会员</div>
-									<Input placeholder="请输入密价"/>
+									<Input value={factors[2]} disabled={dockingTarget} onChange={setPriceAt(2)}  placeholder="请输入密价"/>
 								</div>
 								<div className={oc.item_vip}>
 									<img src={good47} alt="" />
 									<div>至尊会员</div>
-									<Input placeholder="请输入密价"/>
+									<Input value={factors[3]} disabled={dockingTarget} onChange={setPriceAt(3)}  placeholder="请输入密价"/>
 								</div>
 							</div>
 						</div>
 						<div className={oc.change_btn_view}>
 							<Button className={oc.change_btn_cancel} onClick={()=>setVisibleC(false)}>取消</Button>
-							<Button type="primary" className={oc.change_btn_ok}>确定</Button>
+							<Button type="primary" onClick={modifyPrice} className={oc.change_btn_ok}>确定</Button>
 						</div>
 					</div>
 				}
-				title = "修改商品价格"
-				visible = { visible_c }
-				onCancel = { onCancel }
+				title="修改商品价格"
+				visible={visible_c}
+				onCancel={onCancel}
 			/>
 			<Modal
 				visible={visible_limit}

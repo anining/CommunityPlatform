@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button,  Table, message, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
-
-
-
-
 import good9 from '../../icons/good/good9.png'
 import good63 from '../../icons/good/good63.png'
 import good64 from '../../icons/good/good64.png'
@@ -12,10 +8,10 @@ import good65 from '../../icons/good/good65.png'
 import good66 from '../../icons/good/good66.png'
 import good67 from '../../icons/good/good67.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
-
 import { balanceChanges } from "../../utils/api"
 import { getKey, transformTime } from "../../utils/util"
 import { CONSUMPTION_TYPE} from '../../utils/config'
+import TableComponent from '../../components/TableComponent'
 
 function CapitalFlowView () {
   const data = [
@@ -65,7 +61,7 @@ function RTable () {
   const [, ] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
-  const [pageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
   const [date, setDate] = useState([])
   const [moment, setMoment] = useState()
@@ -184,20 +180,17 @@ function RTable () {
         </div>
       </div>
       <Button className={c.excelBtn} disabled={true} type="primary">导出本页为Excel</Button>
-      <Table
-        columns={columns}
-        dataSource={data}
-        size="small"
-        pagination={{
-					showSizeChanger:false,
-          showQuickJumper:true,
-          current,
-          pageSize,
-          showLessItems:true,
-          total,
-          onChange
-        }}
-      />
+			<TableComponent
+				scroll={null}
+				setPageSize={setPageSize}
+				setCurrent={setCurrent}
+				getDataSource={get}
+				columns={columns}
+				dataSource={data}
+				pageSize={pageSize}
+				total={total}
+				current={current}
+			/>
     </div>
   )
 }

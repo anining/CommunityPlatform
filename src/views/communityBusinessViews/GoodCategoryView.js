@@ -187,6 +187,7 @@ function RTable () {
           </div>
       </div>
 			<TableComponent
+				scroll={null}
 				setPageSize={setPageSize}
 				setCurrent={setCurrent}
 				getDataSource={get}
