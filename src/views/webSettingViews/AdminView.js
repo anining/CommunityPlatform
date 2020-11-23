@@ -23,15 +23,18 @@ function AdminView () {
 function RTable () {
   const [data, setData] = useState([])
 	const [pageSize, setPageSize] = useState(10)
+	const [loading, setLoading] = useState(true)
 	const [current, setCurrent] = useState(1)
   const [purview, setPurview] = useState([])
   const [visible, setVisible] = useState([])
 
 	const get = () => {
+		setLoading(true)
     managers("get").then(r => {
       const { error, data } = r;
-      !error && setData(format(data))
-    })
+      !error && setData(format(data));
+			setLoading(false)
+		}).catch(() => setLoading(false))
 	}
 
   useEffect(() => {
@@ -156,6 +159,7 @@ function RTable () {
 			<TableComponent
 				scroll={null}
 				setPageSize={setPageSize}
+				loading={loading}
 				setCurrent={setCurrent}
 				getDataSource={get}
 				columns={columns}

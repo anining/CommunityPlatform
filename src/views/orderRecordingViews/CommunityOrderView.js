@@ -68,6 +68,7 @@ function CommunityOrderView () {
   const [current, setCurrent] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
+	const [loading, setLoading] = useState(true)
   const [date, setDate] = useState([])
   const [moment, setMoment] = useState()
   const [id, setId] = useState()
@@ -169,14 +170,17 @@ function CommunityOrderView () {
   }
 
   function get (current) {
+		setLoading(true)
 		getNums()
 		communityGoodsOrders(current, pageSize, id, refundStatus, search_user_account, search_goods_name, community_goods_category_id, status, date[0], date[1]).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
+				selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
-    })
+			setLoading(false)
+		}).catch(() => setLoading(false))
   }
 
   function format (arr) {
@@ -498,6 +502,7 @@ function CommunityOrderView () {
 						setPageSize={setPageSize}
 						setCurrent={setCurrent}
 						getDataSource={get}
+						loading={loading}
 						setSelectedRowKeys={setSelectRows}
 						selectedRowKeys={selectedRows}
 						columns={columns}

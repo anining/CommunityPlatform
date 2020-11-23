@@ -25,6 +25,7 @@ function UserView () {
 	const [add, setAdd] = useState(false)
 	const [addBalabce, setAddBalance] = useState()
   const [selected, setSelected] = useState([])
+	const [loading, setLoading] = useState(true)
   const [key, setKey] = useState()
   const [src, setSrc] = useState()
   const [data, setData] = useState([])
@@ -41,33 +42,21 @@ function UserView () {
   const labels = [
     {
       label: '用户总数',
-      number: '0',
+      number: '-',
       icon: good23,
       id: 111,
     },
     {
       label: '今日新增',
-      number: '0',
+      number: '-',
       icon: good24,
       id: 222,
-    },
+    }
   ]
 
   useEffect(() => {
     get(current)
   }, [])
-
-  function onChange (page ) {
-    setCurrent(page)
-    get(page)
-  }
-
-  const rowSelection = {
-    onChange: (selectedRowKeys ) => {
-      setSelectRows(selectedRowKeys)
-    },
-    selectedRowKeys: selectedRows
-  };
 
   function submit (key) {
     let title = ""
@@ -234,13 +223,16 @@ function UserView () {
   }
 
   function get (current) {
+		setLoading(true)
     users(current, pageSize, account, status).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
+				selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
-    })
+			setLoading(false)
+		}).catch(() => setLoading(false))
   }
 
   function format (arr) {
@@ -327,6 +319,7 @@ function UserView () {
 					</div>
 					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/>
 					<TableComponent
+						loading={loading}
 						setPageSize={setPageSize}
 						setCurrent={setCurrent}
 						getDataSource={get}

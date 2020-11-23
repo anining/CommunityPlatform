@@ -134,3 +134,11 @@ td.ant-table-column-sort {
 .ant-empty-normal {
 	margin: 0;
 }
+
+.ant-skeleton-paragraph {
+	margin-top: 14px;
+}
+
+.ant-skeleton-paragraph li {
+	width: 100%!important;
+}

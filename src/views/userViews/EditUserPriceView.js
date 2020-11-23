@@ -27,6 +27,7 @@ function EditUserPriceView () {
   const [goods_name, setGoods_name] = useState()
   const [good_category_id, ] = useState()
   const [visible, setVisible] = useState(false)
+	const [loading, setLoading] = useState(true)
   const [checked, ] = useState(false)
   const [selected,setSelected] = useState({})
   const [discPrice,setDisePrice] = useState()
@@ -42,13 +43,15 @@ function EditUserPriceView () {
   }
 
   function get (current) {
+		setLoading(true)
     communityDiscPrices(current, pageSize, id, goods_id, goods_name, good_category_id).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
       }
-    })
+			setLoading(false)
+		}).catch(() => setLoading(false))
   }
 
   function format (arr) {
@@ -142,13 +145,13 @@ function EditUserPriceView () {
             </div>
           </div>
         </div>
-        <RTable setPageSize={setPageSize} setCurrent={setCurrent} get={get} setGoods_name={setGoods_name} current={current} goods_name={goods_name} data={data} pageSize={pageSize} total={total} setSelected={setSelected} setVisible={setVisible} id={id} checked={checked}/>
+        <RTable loading={loading} setPageSize={setPageSize} setCurrent={setCurrent} get={get} setGoods_name={setGoods_name} current={current} goods_name={goods_name} data={data} pageSize={pageSize} total={total} setSelected={setSelected} setVisible={setVisible} id={id} checked={checked}/>
       </div>
     </div>
   )
 }
 
-function RTable ({setCurrent, setPageSize, get, setGoods_name, current, pageSize, data, total, goods_name, setVisible,  setSelected  }) {
+function RTable ({setCurrent, loading, setPageSize, get, setGoods_name, current, pageSize, data, total, goods_name, setVisible,  setSelected  }) {
 
   useEffect(() => {
     get(current)
@@ -305,6 +308,7 @@ function RTable ({setCurrent, setPageSize, get, setGoods_name, current, pageSize
 				setCurrent={setCurrent}
 				getDataSource={get}
 				columns={columns}
+				loading={loading}
 				dataSource={data}
 				pageSize={pageSize}
 				total={total}

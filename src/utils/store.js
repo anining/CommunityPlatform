@@ -9,6 +9,7 @@ const localStore = {
   // banner: null,
   // gradeSetting: null,
   // gradeRange: null,
+	visible: false, // DropdownPromiseComponent
   nickname: '',
   openKeys: [], // 当前展开的 SubMenu 菜单项 key 数组
   selectedKeys: [], // 当前选中的菜单项 key 数组

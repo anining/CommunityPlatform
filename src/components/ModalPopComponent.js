@@ -7,6 +7,7 @@ function ModalPopComponent ({ width = 604, title, div, visible, onCancel }) {
 
   return (
     <Modal
+			maskClosable={false}
       visible={visible}
       closable={false}
       width={width}

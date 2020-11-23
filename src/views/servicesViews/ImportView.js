@@ -15,7 +15,7 @@ let win
 function ImportView () {
   const { state = {} } = useHistory().location
 	const { id, provider_type, name, nickname, type } = state
-
+	const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState()
 	const [keys, setKeys] = useState([])
   const [data, setData] = useState([])
@@ -161,8 +161,10 @@ function ImportView () {
 					setInitDate(format(data))
 					setFilterData(format(data))
 					get(data)
+				}else {
+					setLoading(false)
 				}
-			})
+			}).catch(() => setLoading(true))
 		}else {
 			extPrvdsGoods(id).then(r => {
 				if (!r.error) {
@@ -171,8 +173,10 @@ function ImportView () {
 					setInitDate(format(data))
 					setFilterData(format(data))
 					get(data)
+				}else {
+					setLoading(false)
 				}
-			})
+			}).catch(() => setLoading(true))
 		}
   }
 
@@ -294,6 +298,8 @@ function ImportView () {
 		setSelectRows([])
 		setTotal(localData.length)
 		setData(format(localData))
+		setSelectRows([])
+		setLoading(false)
   }
 
   function format (arr) {
@@ -334,6 +340,7 @@ function ImportView () {
 						<TableComponent
 							scroll={null}
 							change={onChange}
+							loading={loading}
 							sizeChange={onShowSizeChange}
 							setPageSize={setPageSize}
 							setCurrent={setCurrent}

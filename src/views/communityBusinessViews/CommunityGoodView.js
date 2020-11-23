@@ -18,7 +18,7 @@ import good9 from '../../icons/good/good9.png'
 import good45 from '../../icons/good/good45.png'
 import DropdownComponent from "../../components/DropdownComponent";
 import ModalComponent from "../../components/ModalComponent";
-import { push, decrypt, getKey, saveSuccess, transformTime } from "../../utils/util"
+import { push, decrypt, getKey, saveSuccess, transformTime, regexNumber } from "../../utils/util"
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import { communityGoods, communityGoodsCategories, goodsStat, delGoods, priceHistories, cmntPadjs, goodsPrice } from "../../utils/api"
 import { GOODS_STATUS,  SCROLL } from "../../utils/config"
@@ -39,12 +39,11 @@ function CommunityGoodView () {
   const [key, setKey] = useState()
   const [src, setSrc] = useState()
   const [sel, setSel] = useState({})
-
+	const [loading, setLoading] = useState(true)
 	const [unit_cost, setUnit_cost] = useState()
   const [dockingTarget, setDockingTarget] = useState()
   const [marks, setMarks] = useState([])
   const [factors, setFactors] = useState([])
-
   const [labels, setLabels] = useState([
     {
       label: '商品总数',
@@ -83,8 +82,7 @@ function CommunityGoodView () {
   const [community_goods_category_id, setCommunity_goods_category_id] = useState()
   const [status, setStatus] = useState()
   const [refundable, setRefundable] = useState()
-  const [, setOrder_by] = useState()
-  const [, ] = useState()
+  const [order_by, setOrder_by] = useState()
 
 	const modifyPrice = () => {
 		if(!unit_cost || factors.length!==4) {
@@ -92,41 +90,13 @@ function CommunityGoodView () {
 			return
 		}
 		setVisibleC(false)
-    let body = {
-			name: sel.name,
-			ctg_id: sel.ctg_id,
-			status: sel.status,
-			supp_goods: sel.provider_type==="supplier" ? { provider_type: sel.provider_type, goods_id: sel.supp_goods_id } : { provider_type: sel.provider_type, ext_prvd_goods_id: sel.ext_prvd_goods_id, ext_prvd_id: sel.ext_prvd_id, params: sel.params },
-			tag_ids: sel.tags.map(i => i.id),
-      prices: sel.prices,
-			unit: sel.unit,
-			refundable: sel.refundable,
-			recommended: sel.recommended,
-			repeatable: sel.repeatable,
-      min_order_amount: sel.min_order_amount,
-      max_order_amount: sel.max_order_amount,
-      weight: sel.weight,
-			pics: sel.pics,
-			padj_id: dockingTarget,
-			unit_cost: sel.unit_cost,
-			batch_order: sel.batch_order,
-			padj_id: sel.padj_id,
-			intro: sel.intro,
-    }
-		if(!dockingTarget) {
-			delete body.padj_id
-		}
-		communityGoods("modify", sel.id, undefined, body).then(r => {
-			if(!r.error) {
-				goodsPrice(sel.id, unit_cost, factors).then(r=>{
-					if(!r.error){
-						setUnit_cost(undefined)
-						setFactors([])
-						setDockingTarget(undefined)
-						saveSuccess(false)
-						get(current)
-					}
-				})
+		goodsPrice(sel.id, unit_cost, factors, dockingTarget).then(r=>{
+			if(!r.error){
+				setUnit_cost(undefined)
+				setFactors([])
+				setDockingTarget(undefined)
+				saveSuccess(false)
+				get(current)
 			}
 		})
 	}
@@ -150,10 +120,12 @@ function CommunityGoodView () {
     }
   }, [dockingTarget, marks, unit_cost])
 
-  const setPriceAt = i => R.pipe(
-    e => L.set([i], +e.target.value, factors),
-    setFactors,
-  )
+	const setPriceAt = (e, i) => {
+		const localFactors = [...factors]
+		const { value } = e.target
+		localFactors[i] = regexNumber(value, true)
+		setFactors(localFactors)
+	}
 
 	const sumIf = pred => R.pipe(
 		R.filter(pred),
@@ -209,6 +181,7 @@ function CommunityGoodView () {
   }
 
   function get (current, size=pageSize) {
+		setLoading(true)
 		getNums()
 		setTableLoading(true)
     let body = { page: current, size }
@@ -239,8 +212,14 @@ function CommunityGoodView () {
         setTotal(total)
         setData(format(data))
 				setTableLoading(false)
-      }
-    })
+				setLoading(false)
+				selectedRows.length && setSelectRows(format(data).map(i => i.key))
+      }else {
+				setLoading(false)
+			}
+		}).catch(() => {
+			setLoading(false)
+		})
   }
 
   function getGoodsSummaries(page,size) {
@@ -499,6 +478,7 @@ function CommunityGoodView () {
 						setPageSize={setPageSize}
 						setCurrent={setCurrent}
 						getDataSource={get}
+						loading={loading}
 						setSelectedRowKeys={setSelectRows}
 						selectedRowKeys={selectedRows}
 						columns={columns}
@@ -506,6 +486,7 @@ function CommunityGoodView () {
 						pageSize={pageSize}
 						total={total}
 						current={current}
+						loading={loading}
 					/>
         </div>
 				<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"置为已上架",key:"available"},{name:"置为已下架",key:"unavailable"},{name:"置为维护中",key:"paused"},{name:"置为推荐商品",key:"recommendedTrue"},{name:"取消推荐商品",key:"recommendedFalse"},{name:"置为允许退款",key:"refundableTrue"},{name:"置为不允许退款",key:"refundableFalse"},{name:"删除选中商品",key:"del"}]}/>
@@ -525,7 +506,7 @@ function CommunityGoodView () {
 					<div className={oc.change_desc_view}>
 						<div className={oc.item}>
 							<div className={oc.item_label}>进价</div>
-							<Input value={unit_cost} disabled={true} onChange={e=>setUnit_cost(e.target.value)} placeholder="请输入进价"/>
+							<Input value={unit_cost} disabled={true} placeholder="请输入进价"/>
 						</div>
 						<div className={oc.item}>
 							<div className={oc.item_label}>调价模版</div>
@@ -533,7 +514,7 @@ function CommunityGoodView () {
 						</div>
 						<div className={oc.item}>
 							<div className={oc.item_label}>单价</div>
-							<Input value={factors[0]} disabled={dockingTarget} onChange={setPriceAt(0)} placeholder="请输入单价"/>
+							<Input value={factors[0] || "-"} disabled={dockingTarget} onChange={e => setPriceAt(e, 0)} placeholder="请输入单价"/>
 						</div>
 						<div className={oc.item} style={{alignItems:'flex-start'}}>
 							<div className={oc.item_label}>统一密价</div>
@@ -541,17 +522,17 @@ function CommunityGoodView () {
 								<div className={oc.item_vip}>
 									<img src={good46} alt="" />
 									<div>高级会员</div>
-									<Input value={factors[1]} disabled={dockingTarget} onChange={setPriceAt(1)} placeholder="请输入密价"/>
+									<Input value={factors[1] || "-"} disabled={dockingTarget} onChange={e => setPriceAt(e, 1)} placeholder="请输入密价"/>
 								</div>
 								<div className={oc.item_vip}>
 									<img src={good48} alt="" />
 									<div>钻石会员</div>
-									<Input value={factors[2]} disabled={dockingTarget} onChange={setPriceAt(2)}  placeholder="请输入密价"/>
+									<Input value={factors[2] || "-"} disabled={dockingTarget} onChange={e => setPriceAt(e, 2)}  placeholder="请输入密价"/>
 								</div>
 								<div className={oc.item_vip}>
 									<img src={good47} alt="" />
 									<div>至尊会员</div>
-									<Input value={factors[3]} disabled={dockingTarget} onChange={setPriceAt(3)}  placeholder="请输入密价"/>
+									<Input value={factors[3] || "-"} disabled={dockingTarget} onChange={e => setPriceAt(e, 3)}  placeholder="请输入密价"/>
 								</div>
 							</div>
 						</div>
@@ -578,17 +559,17 @@ function CommunityGoodView () {
 						<div className={oc.circle} />
 					</div>
 					<div className={oc.more_label}>基本信息</div>
-					{
-						sel.tags && sel.tags.length && false ?
-							<div className={oc.basic_msg} style={{marginBottom:10,flexDirection:'column'}}>
-								<div className={oc.basic_msg_label} style={{marginBottom:0}}>下单参数</div>
-								<div className={oc.basic_msg_parameter}>
-									{
-										(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>)
-									}
-								</div>
-							</div>: null
-					}
+						{
+							sel.tags && sel.tags.length && false ?
+								<div className={oc.basic_msg} style={{marginBottom:10,flexDirection:'column'}}>
+									<div className={oc.basic_msg_label} style={{marginBottom:0}}>下单参数</div>
+									<div className={oc.basic_msg_parameter}>
+										{
+											(sel.tags || []).map(i=><Button className={oc.tags_btn} key={i.id}>{i.name}</Button>)
+										}
+									</div>
+								</div>: null
+						}
 					<div className={oc.basic_msg}>
 						<div className={oc.basic_msg_view}>
 							<div className={oc.basic_msg_label}>统一密价</div>

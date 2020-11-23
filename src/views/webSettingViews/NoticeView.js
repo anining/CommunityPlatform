@@ -24,6 +24,7 @@ function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
+	const [loading, setLoading] = useState(true)
   const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
 
@@ -32,13 +33,16 @@ function RTable () {
   }, [])
 
   function get (current) {
+		setLoading(true)
     announcements("get", undefined, { current, pageSize }).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
+				selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
-    })
+			setLoading(false)
+		}).catch(() => setLoading(false))
   }
 
   function format (arr = []) {
@@ -120,6 +124,7 @@ function RTable () {
 				setSelectedRowKeys={setSelectRows}
 				selectedRowKeys={selectedRows}
 				columns={columns}
+				loading={loading}
 				dataSource={data}
 				pageSize={pageSize}
 				total={total}

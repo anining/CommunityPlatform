@@ -1,20 +1,16 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
-
-
 import { Input, Radio, Button, Breadcrumb, message } from 'antd'
 import good5 from '../../icons/good/good5.png'
-
 import good55 from '../../icons/good/good55.png'
 import good48 from '../../icons/good/good48.png'
 import good47 from '../../icons/good/good47.png'
 import good54 from '../../icons/good/good54.png'
-import { saveSuccess,  push } from "../../utils/util"
+import { saveSuccess,  push, regexNumber } from "../../utils/util"
 import { useHistory } from "react-router-dom"
 import { cmntPadjs } from "../../utils/api"
 
 function EditMarkupTemView () {
-  const h = useHistory()
   const { state = {} } = useHistory().location
   const { id,  params: p = []  } = state
 
@@ -24,14 +20,10 @@ function EditMarkupTemView () {
   const [factors, setFactors] = useState([])
   const [, setLoading] = useState(false)
 
-  // const setPriceAt = i => R.pipe(
-  //   e => L.set([i], +e.target.value, factors),
-  //   setFactors,
-  // )
-
 	const setPriceAt = (e, i) => {
 		const localFactors = [...factors]
-		localFactors[i] = e.target.value
+		const { value } = e.target
+		localFactors[i] = regexNumber(value, true)
 		setFactors(localFactors)
 	}
 
@@ -46,6 +38,11 @@ function EditMarkupTemView () {
         !localFactors[i] && (localFactors[i] = 0)
       }
     }
+		if(type === "relative") {
+      for (let i = 0; i < 4; i++) {
+				localFactors[i] = localFactors[i] / 100
+      }
+		}
     setLoading(true)
     cmntPadjs(id ? 'modify' : 'add', id, undefined, { name, type, factors: localFactors }).then(r => {
       setLoading(false)
@@ -128,7 +125,7 @@ function EditMarkupTemView () {
               <img src={good48} alt="" />
               <div>钻石会员调价</div>
               <Input placeholder="0" value={factors[2] } onChange={e=>setPriceAt(e,2)}/>
-              <div>{type==="relative"?'% , ':', '}调价之后的高级会员统一密价为：</div>
+              <div>{type==="relative"?'% , ':', '}调价之后的钻石会员统一密价为：</div>
               <span>{price?factors[2]?type==="absolute"?+price+ (+factors[2]):+price*(100+(+factors[2]))/100:price:factors[2]||0}</span>
             </div>
             <div className={c.tem_line}>

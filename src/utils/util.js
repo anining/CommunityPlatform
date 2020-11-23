@@ -21,6 +21,16 @@ function saveSuccess(jump = true, path, state) {
   }
 }
 
+function regexNumber (e, float) {
+  const regex = /[^\d]/g
+  const floatRegex = /[^\d.]/g
+
+  if (float) {
+    return e.replace(floatRegex, "")
+  }
+  return e.replace(regex, "")
+}
+
 function decrypt (ciphertext) {
   const bytes  = CryptoJS.AES.decrypt(ciphertext, "U2FsdGVkX19AlbWGMgKH3wEYQBFool5SeSev64DypXU")
   return bytes.toString(CryptoJS.enc.Utf8)
@@ -281,4 +291,4 @@ function isUrl (url) {
    return /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/.test(url)
 }
 
-export { parseDomain, isUrl, beforeUpload, genUpToken, decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed}
+export { regexNumber, parseDomain, isUrl, beforeUpload, genUpToken, decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed}

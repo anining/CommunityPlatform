@@ -198,13 +198,12 @@ function StorePlugView () {
           </div>
           <Input onChange={e=>setImageUrl(e.target.value)} value={imageUrl} placeholder="请填写图片链接或者上传图片" className={c.itemInput}></Input>
 					<Button type="primary" className={c.itemBtn} onClick={()=>{
-						imageUrl && setBanners([...banners,{
-														uid: '-1',
-														name: 'image.png',
-														status: 'done',
-														url: imageUrl,
-													}])
-
+						imageUrl && setBanners([...banners.slice(0, 4),{
+							uid: Date.now(),
+							name: 'image.png',
+							status: 'done',
+							url: imageUrl
+						}])
 					}}>解析图片</Button>
         </div>
         <div className={c.item}>

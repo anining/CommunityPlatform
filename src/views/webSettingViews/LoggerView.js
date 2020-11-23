@@ -20,6 +20,7 @@ function LoggerView () {
 function RTable () {
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
+	const [loading, setLoading] = useState(true)
   const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
   const [manager_id, setManager_id] = useState()
@@ -31,13 +32,15 @@ function RTable () {
   }, [])
 
   function get (current) {
+		setLoading(true)
     loginlogs(current, pageSize, manager_id, date[0], date[1]).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
       }
-    })
+			setLoading(false)
+		}).catch(() => setLoading(false))
   }
 
   function dateChange (data, dataString) {
@@ -115,6 +118,7 @@ function RTable () {
 			<TableComponent
 				scroll={null}
 				setPageSize={setPageSize}
+				loading={loading}
 				setCurrent={setCurrent}
 				getDataSource={get}
 				columns={columns}

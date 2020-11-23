@@ -21,15 +21,18 @@ function PeopleServiceView () {
 function RTable () {
   const [data, setData] = useState([])
 	const [pageSize, setPageSize] = useState(10)
+	const [loading, setLoading] = useState(true)
 	const [current, setCurrent] = useState(1)
 
 	const get = () => {
+		setLoading(true)
     customerServices("get").then(r => {
       const { error, data } = r;
 			if(!error) {
 				setData(format(data))
 			}
-    })
+			setLoading(false)
+		}).catch(() => setLoading(false))
 	}
 
   useEffect(() => {
@@ -101,6 +104,7 @@ function RTable () {
       </div>
 			<TableComponent
 				scroll={null}
+				loading={loading}
 				columns={columns}
 				dataSource={data}
 				total={data.length}

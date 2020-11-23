@@ -227,7 +227,7 @@ const COMMUNITY_ORDER_STATUS = {
 	},
 	closed: {
 		status: "default",
-		text: '已结束',
+		text: '已终止',
 	}
 }
 const COMMUNITY_AFTER_STATUS = {

@@ -357,8 +357,9 @@ export function usersBalances (id, amount) {
 }
 
 // 修改社区商品价格
-export function goodsPrice (goods_id, unit_cost, prices) {
-	return transformFetch("POST", `/cmnt-goods/${goods_id}/price?goods_id=${goods_id}`, {unit_cost, prices});
+export function goodsPrice (goods_id, unit_cost, prices, padj_id = null) {
+	console.log(padj_id)
+	return transformFetch("POST", `/cmnt-goods/${goods_id}/price?goods_id=${goods_id}`, {unit_cost, prices, padj_id});
 }
 
 // 批量重新同步社区订单

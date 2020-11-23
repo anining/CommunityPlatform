@@ -62,6 +62,7 @@ function RTable () {
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+	const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
   const [date, setDate] = useState([])
   const [moment, setMoment] = useState()
@@ -71,13 +72,15 @@ function RTable () {
   }, [])
 
   function get (current) {
+		setLoading(true)
     balanceChanges(current, pageSize, date[0], date[1]).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
       }
-    })
+			setLoading(false)
+		}).catch(() => setLoading(false))
   }
 
   function format (arr) {
@@ -182,6 +185,7 @@ function RTable () {
       <Button className={c.excelBtn} disabled={true} type="primary">导出本页为Excel</Button>
 			<TableComponent
 				scroll={null}
+				loading={loading}
 				setPageSize={setPageSize}
 				setCurrent={setCurrent}
 				getDataSource={get}

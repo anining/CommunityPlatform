@@ -69,6 +69,7 @@ function MarkupTemView () {
 function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
+	const [loading, setLoading] = useState(true)
   const [current, setCurrent] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
@@ -79,6 +80,7 @@ function RTable () {
   }, [])
 
   function get (current) {
+		setLoading(true)
     let body = { page: current, size: pageSize }
     if (search_name) {
       body = { ...body, name: search_name }
@@ -88,8 +90,10 @@ function RTable () {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
+				selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
-    })
+			setLoading(false)
+		}).catch(()=>setLoading(false))
   }
 
   function format (arr = []) {
@@ -194,6 +198,7 @@ function RTable () {
 				scroll={null}
 				setPageSize={setPageSize}
 				setCurrent={setCurrent}
+				loading={loading}
 				getDataSource={get}
 				setSelectedRowKeys={setSelectRows}
 				selectedRowKeys={selectedRows}

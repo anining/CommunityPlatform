@@ -101,7 +101,7 @@ function RGroup ({ tagsGroup,  selects, setSelects }) {
     views.push(
       <div key={`item${index}`} className={cs.tItemView}>
         <Button type="small" onClick={()=>{
-          handleClose(id,index)
+          // handleClose(id,index)
         }} className={cs.tagTitle}>
           {name}
         </Button>
