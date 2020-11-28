@@ -23,9 +23,9 @@ import TableHeaderComponent from "../../components/TableHeaderComponent"
 import { communityGoods, communityGoodsCategories, goodsStat, delGoods, priceHistories, cmntPadjs, goodsPrice } from "../../utils/api"
 import { GOODS_STATUS,  SCROLL } from "../../utils/config"
 import ModalPopComponent from "../../components/ModalPopComponent"
-import DropdownPromiseComponent from "../../components/DropdownPromiseComponent"
 import ActionComponent from '../../components/ActionComponent';
 import TableComponent from '../../components/TableComponent';
+import SearchInput from "../../components/SearchInput";
 
 function CommunityGoodView () {
   const [visible, setVisible] = useState(false)
@@ -213,7 +213,8 @@ function CommunityGoodView () {
         setData(format(data))
 				setTableLoading(false)
 				setLoading(false)
-				selectedRows.length && setSelectRows(format(data).map(i => i.key))
+				// selectedRows.length && setSelectRows(format(data).filter(i => selectedRows.includes(i.key)).map(i => i.key))
+				setSelectRows([])
       }else {
 				setLoading(false)
 			}
@@ -461,7 +462,7 @@ function CommunityGoodView () {
                 }} onChange={e=>setSearch_name(e.target.value)} placeholder="请输入商品名称" size="small" className={c.searchInput}/>
                 <DropdownComponent action={status} setAction={setStatus} keys={[{name:"已上架",key:"available"},{name:"已下架",key:"unavailable"},{name:"维护中",key:"paused"}]} placeholder="请选择商品状态" style={{width:186}}/>
                 <DropdownComponent keys={[{name:"允许退款",key:"refundable"},{name:"不允许退款",key:"no_refundable"}]} action={refundable} setAction={setRefundable} placeholder="请选择自助退款状态" style={{width:186}}/>
-                <DropdownPromiseComponent view placeholder="请选择商品分类" value={community_goods_category_id} setValue={setCommunity_goods_category_id} fetchName={getGoodsSummaries}/>
+								<SearchInput view placeholder="请选择商品分类" value={community_goods_category_id} setValue={setCommunity_goods_category_id} fetchName={getGoodsSummaries} />
               </div>
               <div className={c.searchR}>
                 <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>
@@ -510,7 +511,7 @@ function CommunityGoodView () {
 						</div>
 						<div className={oc.item}>
 							<div className={oc.item_label}>调价模版</div>
-							<DropdownPromiseComponent style={{width:"70%"}} placeholder="请选择调价模版" value={dockingTarget} fetchName={getCmntPadjs} setValue={setDockingTarget}/>
+							<SearchInput placeholder="请选择调价模版" value={dockingTarget} setValue={setDockingTarget} fetchName={getCmntPadjs} style={{width: "70%"}} />
 						</div>
 						<div className={oc.item}>
 							<div className={oc.item_label}>单价</div>

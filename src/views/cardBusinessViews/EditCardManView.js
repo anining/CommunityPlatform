@@ -2,15 +2,10 @@ import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input,   Button, message, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
-
 import good55 from '../../icons/good/good55.png'
-
-
-
 import { communityParamTemplates } from "../../utils/api"
 import { saveSuccess, goBack, push } from "../../utils/util"
 import { useHistory } from "react-router-dom"
-
 
 function EditCardManView () {
   const h = useHistory()

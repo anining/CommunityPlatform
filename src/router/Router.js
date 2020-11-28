@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, {useEffect} from "react";
 import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
 import LoginView from '../views/authViews/LoginView'
 import Guide1View from '../views/authViews/Guide1View'
@@ -11,10 +11,12 @@ import { storage } from '../utils/storage'
 import { setter, getter } from '../utils/store'
 import SelectTableView from "../views/tableViews/SelectTableView"
 import SelectOrderModelView from "../views/communityBusinessViews/SelectOrderModelView"
-import { push } from '../utils/util'
+import {push} from "../utils/util";
+import {linkClient} from "../utils/customizeFetch";
 import SelectGoodCategoryView from '../views/communityBusinessViews/SelectGoodCategoryView'
 
 function Router () {
+	linkClient();
   proxyRouter(useHistory(), '/login')
   const { authorization, old_password, nickname, permissions, role } = getter(['old_password', 'nickname', 'authorization', 'role', 'permissions'])
   const localAuthorization = storage.getItem("authorization")

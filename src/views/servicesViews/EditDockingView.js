@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Button, Breadcrumb, message } from 'antd'
 import good5 from '../../icons/good/good5.png'
-import {push, isUrl, saveSuccess} from "../../utils/util";
-import DropdownPromiseComponent from '../../components/DropdownPromiseComponent';
+import {push, isUrl, saveSuccess, deleteBeforAfterSpace} from "../../utils/util";
 import {docking} from '../../utils/api';
 import {useHistory} from 'react-router-dom';
+import SearchInput from "../../components/SearchInput";
 
 function EditDockingView () {
   const { state = {} } = useHistory().location
   const h = useHistory()
-	const { id, name:n, payload, type:t, endpoint:e } = state
+	const { id, name:n, payload, type:t = "yile", endpoint:e } = state
 	const p = payload ? JSON.parse(payload) : {}
 	const [name, setName] = useState(n)
 	const [endpoint, setEndpoint] = useState(e)
@@ -30,7 +30,7 @@ function EditDockingView () {
 		}
 
     let body = {
-			payload: JSON.stringify({ key: apiKey, api_token: apiToken }),
+			payload: JSON.stringify({ key: deleteBeforAfterSpace(apiKey), api_token: deleteBeforAfterSpace(apiToken) }),
       name,
 			endpoint: formatEndpoint(endpoint),
       type: type || "yile",
@@ -41,11 +41,6 @@ function EditDockingView () {
       setLoading(false)
       if (!r.error) {
         saveSuccess(jump)
-				setName(undefined)
-				setEndpoint(undefined)
-				setType(undefined)
-				setApiToken(undefined)
-				setApiKey(undefined)
       }
     }).catch(() => {
       setLoading(false)
@@ -58,6 +53,16 @@ function EditDockingView () {
 				let localEndpoint = endpoint.replace(/\.api\.94sq\.cn/g, "")
 				localEndpoint = localEndpoint.charAt(localEndpoint.length-1) === "/" ? localEndpoint.slice(0,-1) : localEndpoint
 				return localEndpoint + ".api.94sq.cn"
+			default:
+				return endpoint
+		}
+	}
+
+	const reverseFormatEndpoint = (endpoint="") => {
+		switch (type) {
+			case "yile":
+				let localEndpoint = endpoint.replace(/\.api\.94sq\.cn/g, "")
+				return localEndpoint
 			default:
 				return endpoint
 		}
@@ -95,14 +100,14 @@ function EditDockingView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>对接系统</div>
           </div>
-					<DropdownPromiseComponent initNums={[{name:"亿乐",id:"yile"}]} value={type} setValue={setType} placeholder="亿乐" />
+					<SearchInput initNums={[{name:"亿乐",id:"yile"}]} value={type} setValue={setType} />
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
             <span>*</span>
             <div className={c.itemText}>站点域名</div>
           </div>
-          <Input value={endpoint} onChange={e=>setEndpoint(e.target.value)} placeholder="请输入站点域名" className={c.itemInput}></Input>
+          <Input value={reverseFormatEndpoint(endpoint)} onChange={e=>setEndpoint(e.target.value)} placeholder="请输入站点域名" className={c.itemInput}></Input>
         </div>
         <div className={c.itemTips}>
           <div className={c.itemName} />

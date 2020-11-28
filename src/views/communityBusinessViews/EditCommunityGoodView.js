@@ -6,17 +6,13 @@ import * as R from 'kefir.ramda'
 import c from '../../styles/edit.module.css'
 import oc from '../../styles/oc.module.css'
 import { Input, Tooltip, Button, Upload, message, Radio, Checkbox, Breadcrumb } from 'antd'
-import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
-
-
-
 import edit1 from '../../icons/edit/edit1.png'
 import { saveSuccess, push, beforeUpload } from "../../utils/util";
 import { communityGoods, communityGoodsCategories } from "../../utils/api";
 import { useHistory } from "react-router-dom";
-import { MODULES } from "../../utils/config";
-import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
+import SearchInput from "../../components/SearchInput";
+import Quill from '../../components/Quill.jsx'
 
 let win
 
@@ -210,7 +206,7 @@ function EditCommunityGoodView () {
             <span>*</span>
             <div className={c.itemText}>商品分类</div>
           </div>
-          <DropdownPromiseComponent placeholder="请选择商品分类" fetchName={getGoodsSummaries} value={ctg_id} setValue={setCtgId}/>
+          <SearchInput placeholder="请选择商品分类" fetchName={getGoodsSummaries} value={ctg_id} setValue={setCtgId}/>
 					<Button type="primary" className={c.itemBtn} onClick={()=>{
 						push('/main/edit-category-community')
 					}}>新增分类</Button>
@@ -288,7 +284,7 @@ function EditCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>商品介绍</div>
           </div>
-          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={intro} onChange={e=>setIntroduction(e)}/>
+					<Quill value={intro} setValue={setIntroduction} />
         </div>
         <div className={c.hasMore}>
           <Checkbox className={c.hasMoreCheckBox} onChange={e=>setHasMore(e.target.checked)} checked={has_more}>更多设置</Checkbox>

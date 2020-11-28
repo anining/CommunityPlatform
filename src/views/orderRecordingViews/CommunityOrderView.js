@@ -23,10 +23,10 @@ import { refundAccept, orderSync, orderComments, communityGoodsOrders, community
 
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
-import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
 import { REFUND_STATUS, SCROLL, COMMUNITY_SYNC_STATUS, COMMUNITY_ORDER_STATUS,  COMMUNITY_AFTER_STATUS } from '../../utils/config'
 import ActionComponent from '../../components/ActionComponent'
 import TableComponent from '../../components/TableComponent'
+import SearchInput from "../../components/SearchInput"
 
 function CommunityOrderView () {
   const [visibleMsg, setVisibleMsg] = useState(false)
@@ -177,7 +177,8 @@ function CommunityOrderView () {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
-				selectedRows.length && setSelectRows(format(data).map(i => i.key))
+				setSelectRows([])
+				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		}).catch(() => setLoading(false))
@@ -473,7 +474,7 @@ function CommunityOrderView () {
                 <Input onPressEnter={()=>get(current)} placeholder="请输入商品名称" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/>
                 {/* <Input onPressEnter={()=>get(current)} placeholder="请输入下单编号" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/> */}
                 <Input onPressEnter={()=>get(current)} value={search_user_account} onChange={e=>setSearch_user_account(e.target.value)} placeholder="请输入下单用户" size="small" className={c.searchInput}/>
-                <DropdownPromiseComponent view placeholder="请选择商品分类" value={community_goods_category_id} setValue={setCommunity_goods_category_id} fetchName={getGoodsSummaries}/>
+                <SearchInput view placeholder="请选择商品分类" value={community_goods_category_id} setValue={setCommunity_goods_category_id} fetchName={getGoodsSummaries}/>
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择商品分类" style={{width:186}}/> */}
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单状态" style={{width:186}}/> */}
                 <DropdownComponent action={refundStatus} setAction={setRefundStatus} keys={[{"name":"退款中",key:"refunding"},{"name":"已退款",key:"refunded"},{"name":"已拒绝",key:"rejected"}]} placeholder="请选择售后状态" style={{width:186}}/>

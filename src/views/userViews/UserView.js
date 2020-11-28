@@ -229,7 +229,8 @@ function UserView () {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
-				selectedRows.length && setSelectRows(format(data).map(i => i.key))
+				setSelectRows([])
+				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		}).catch(() => setLoading(false))

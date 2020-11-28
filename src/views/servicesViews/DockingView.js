@@ -10,9 +10,9 @@ import TableHeaderComponent from "../../components/TableHeaderComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ActionComponent from '../../components/ActionComponent'
 import { docking, extPrvdStats } from '../../utils/api'
-import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
 import {dateFormat, push, saveSuccess } from '../../utils/util'
 import TableComponent from '../../components/TableComponent'
+import SearchInput from "../../components/SearchInput"
 
 function DockingView () {
   const [visible, setVisible] = useState(false)
@@ -108,7 +108,8 @@ function RTable ({  }) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
-				selectedRows.length && setSelectRows(format(data).map(i => i.key))
+				setSelectRows([])
+				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		}).catch(()=>setLoading(false))
@@ -206,7 +207,7 @@ function RTable ({  }) {
         <div className={c.search}>
           <div className={c.searchL}>
 						<Input placeholder="请输入名称" value={name} onChange={e=>setName(e.target.value)} onPressEnter={()=>get(current)} size="small" className={c.searchInput}/>
-						<DropdownPromiseComponent initNums={[{name:"亿乐",id:"yile"}]} placeholder="请选择对接平台" value={type} setValue={setType} view={true}/>
+						<SearchInput initNums={[{name:"亿乐",id:"yile"}]} placeholder="请选择对接平台" value={type} setValue={setType} view={true}/>
           </div>
           <div className={c.searchR}>
             <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>

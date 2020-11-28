@@ -4,7 +4,6 @@ import * as L from "partial.lenses"
 import * as R from 'kefir.ramda'
 import c from '../../styles/edit.module.css'
 import { Input, Tooltip, Button, Upload, message, Radio, Checkbox, Breadcrumb } from 'antd'
-import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
 import good46 from '../../icons/good/good46.png'
 import good47 from '../../icons/good/good47.png'
@@ -14,8 +13,8 @@ import edit1 from '../../icons/edit/edit1.png'
 import { beforeUpload, saveSuccess, push } from "../../utils/util";
 import { communityGoods,  cmntPadjs, communityGoodsCategories } from "../../utils/api";
 import { useHistory } from "react-router-dom";
-import { MODULES } from "../../utils/config";
-import DropdownPromiseComponent from '../../components/DropdownPromiseComponent'
+import SearchInput from "../../components/SearchInput"
+import Quill from '../../components/Quill.jsx'
 
 let win
 
@@ -250,7 +249,7 @@ function ImpCommunityGoodView () {
             <span>*</span>
             <div className={c.itemText}>商品分类</div>
           </div>
-          <DropdownPromiseComponent placeholder="请选择商品分类" fetchName={getGoodsSummaries} value={ctg_id} setValue={setCtgId}/>
+          <SearchInput placeholder="请选择商品分类" fetchName={getGoodsSummaries} value={ctg_id} setValue={setCtgId}/>
 					<Button type="primary" className={c.itemBtn} onClick={()=>push('/main/edit-category-community')}>新增分类</Button>
         </div>
 				<div className={c.item}>
@@ -258,7 +257,7 @@ function ImpCommunityGoodView () {
 						<span className={c.white}>*</span>
 						<div className={c.itemText}>调价模版</div>
 					</div>
-					<DropdownPromiseComponent placeholder="请选择调价模版" value={dockingTarget} fetchName={getCmntPadjs} setValue={setDockingTarget}/>
+					<SearchInput placeholder="请选择调价模版" value={dockingTarget} fetchName={getCmntPadjs} setValue={setDockingTarget}/>
 				</div>
 				<div className={c.itemTips}>
 					<div className={c.itemName} />
@@ -365,7 +364,7 @@ function ImpCommunityGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>商品介绍</div>
           </div>
-          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={intro} onChange={e=>setIntroduction(e)}/>
+					<Quill value={intro} setValue={setIntroduction} />
         </div>
         {/* <div className={c.item}> */}
         {/*   <div className={c.itemName}> */}

@@ -1,18 +1,29 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import c from '../../styles/edit.module.css'
 import cs from '../../styles/business.module.css'
-
 import good55 from '../../icons/good/good55.png'
-import { Button, Input, Tag, message } from 'antd'
+import good53 from '../../icons/good/good53.png'
+import { Button, Popconfirm, Input, Tag, message } from 'antd'
 import { tagGroups, tags as tagsApi } from "../../utils/api"
+import ModalComponent from '../../components/ModalComponent'
 
 function TableView () {
   const [inputGroupVisible, setInputGroupVisible] = useState(false)
   const [inputGroupValue, setInputGroupValue] = useState()
   const [tagsGroup, setTagsGroup] = useState([])
+	const [visible, setVisible] = useState(false)
   const saveInputGroupRef = useCallback(node => {
     node && node.focus()
   })
+  const [inputValue, setInputValue] = useState()
+  const [inputVisible, setInputVisible] = useState(false)
+  const [value, setValue] = useState()
+  const saveInputRef = useCallback(node => {
+    node && node.focus()
+  })
+	const template_id = useRef(null)
+	const template_i = useRef(null)
+	const template_index = useRef(null)
 
   useEffect(() => {
     get()
@@ -37,50 +48,6 @@ function TableView () {
     setInputGroupValue(undefined)
   }
 
-  return (
-    <div className={c.container}>
-      <div className={c.main}>
-        <div className={c.headerT}>
-          <div style={{zIndex:1}}>标签管理</div>
-          <div className={c.circle} />
-        </div>
-        <div className={c.tem_header}>
-          <img src={good55} alt="" />
-          <div>请点击“添加分组”添加一个新的分组；请点击“添加标签”添加一个新的标签；修改分组或标签，请点击要修改项目，输入要修改的内容；输入完成之后请点击“Enter”键保存输入的内容。</div>
-        </div>
-        <RGroup tagsGroup={tagsGroup} get={get} setTagsGroup={setTagsGroup}/>
-        {inputGroupVisible && (
-          <Input
-            ref={saveInputGroupRef}
-            type="text"
-            size="small"
-            maxLength={5}
-            className={cs.tInputGroup}
-            value={inputGroupValue}
-            placeholder="请输入分组名称"
-            onChange={e=>setInputGroupValue(e.target.value)}
-            onBlur={handleInputGroupConfirm}
-            onPressEnter={handleInputGroupConfirm}
-          />
-        )}
-        {!inputGroupVisible && (
-          <Tag onClick={()=>setInputGroupVisible(true)} className={cs.tAddGroup}>
-            <div>添加分组</div>
-          </Tag>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function RGroup ({ tagsGroup, get, setTagsGroup }) {
-  const [inputValue, setInputValue] = useState()
-  const [inputVisible, setInputVisible] = useState(false)
-  const [value, setValue] = useState()
-  const saveInputRef = useCallback(node => {
-    node && node.focus()
-  })
-
   function handleInputConfirm (index, id) {
     if (inputValue && !tagsGroup[index].tags.filter(i => i.name === inputValue).length) {
       tagsApi('add', undefined, { name: inputValue, group_id: id }).then(r => {
@@ -93,7 +60,11 @@ function RGroup ({ tagsGroup, get, setTagsGroup }) {
     setInputValue(undefined)
   }
 
-  function handleClose (id, index, i = -1) {
+  function handleClose () {
+		setVisible(false)
+		const id = template_id.current
+		const i = template_i.current || -1
+		const index = template_index.current
     const tags = [...tagsGroup]
     if (i > -1) {
       const v = tags[index].tags.splice(i, 1)
@@ -112,6 +83,7 @@ function RGroup ({ tagsGroup, get, setTagsGroup }) {
         }
       })
     }
+		template_i.current = null
   }
 
   const views = [];
@@ -124,7 +96,10 @@ function RGroup ({ tagsGroup, get, setTagsGroup }) {
       items.push(
         <Tag key={tag_id} closable onClose={e => {
           e.preventDefault();
-          handleClose(tag_id, index, i);
+					template_id.current = tag_id
+					template_index.current = index
+					template_i.current = i
+					setVisible(true)
         }} className={cs.tagChild}>
           {name}
         </Tag>
@@ -158,7 +133,9 @@ function RGroup ({ tagsGroup, get, setTagsGroup }) {
     views.push(
       <div key={`item${index}`} className={cs.tItemView}>
         <Button type="small" onClick={()=>{
-          handleClose(id,index)
+					template_id.current = id
+					template_index.current = index
+					setVisible(true)
         }} className={cs.tagTitle}>
           <div>{name}&#8195;x</div>
         </Button>
@@ -167,7 +144,47 @@ function RGroup ({ tagsGroup, get, setTagsGroup }) {
     )
   })
 
-  return views
+  return (
+    <div className={c.container}>
+      <div className={c.main}>
+        <div className={c.headerT}>
+          <div style={{zIndex:1}}>标签管理</div>
+          <div className={c.circle} />
+        </div>
+        <div className={c.tem_header}>
+          <img src={good55} alt="" />
+          <div>请点击“添加分组”添加一个新的分组；请点击“添加标签”添加一个新的标签；修改分组或标签，请点击要修改项目，输入要修改的内容；输入完成之后请点击“Enter”键保存输入的内容。</div>
+        </div>
+				{views}
+        {inputGroupVisible && (
+          <Input
+            ref={saveInputGroupRef}
+            type="text"
+            size="small"
+            maxLength={5}
+            className={cs.tInputGroup}
+            value={inputGroupValue}
+            placeholder="请输入分组名称"
+            onChange={e=>setInputGroupValue(e.target.value)}
+            onBlur={handleInputGroupConfirm}
+            onPressEnter={handleInputGroupConfirm}
+          />
+        )}
+        {!inputGroupVisible && (
+          <Tag onClick={()=>setInputGroupVisible(true)} className={cs.tAddGroup}>
+            <div>添加分组</div>
+          </Tag>
+        )}
+      </div>
+      <ModalComponent
+        src={good53}
+        title="确定继续删除 ?"
+        visible={visible}
+				onCancel={() => setVisible(false)}
+				onOk={handleClose}
+      />
+    </div>
+  )
 }
 
 export default TableView

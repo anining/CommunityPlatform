@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Button, Switch } from 'antd'
-import ReactQuill from 'react-quill';
 import cs from '../../styles/childWebSetting.module.css'
 import { storeConfig } from "../../utils/api";
 import { saveSuccess } from "../../utils/util";
-import { MODULES } from "../../utils/config";
+import Quill from '../../components/Quill.jsx'
 
 function StoreSettingView () {
   const [pics, setPics] = useState([])
@@ -93,7 +92,7 @@ function StoreSettingView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>维护公告</div>
           </div>
-          <ReactQuill className={c.quill} modules={MODULES} theme="snow" value={announcement} onChange={e=>setAnnouncement(e)}/>
+					<Quill value={announcement} setValue={setAnnouncement} />
         </div>
         <div className={c.item} style={{marginTop:32}}>
           <div className={c.itemName}>

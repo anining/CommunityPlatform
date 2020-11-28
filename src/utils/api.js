@@ -1,9 +1,57 @@
+import {customizeFetch} from "./customizeFetch";
 import { transformFetch } from './request'
 
 // 卖家登录
 export function login (account, password) {
-  return transformFetch("POST", "/login", { account, password })
+	return customizeFetch("POST", "/rpc/merchant_login", {account, password})
 }
+
+// 社区商品分类
+export function communityGoodsCategories (type, cid, table, body) {
+  switch (type) {
+    case "get":
+			return customizeFetch("GET", "/cmnt_ctgs", table)
+    case "add":
+			return customizeFetch("POST", "/cmnt_ctgs", body)
+    case "add":
+      // return transformFetch("POST", "/cmnt-ctgs", body);
+    case "modify":
+      // return transformFetch("PUT", `/cmnt-ctgs/${cid}`, body);
+    default:
+      // return transformFetch("DELETE", `/cmnt-ctgs?${body}`);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 当前管理员信息
 export function currentManager () {
@@ -47,20 +95,6 @@ export function loginlogs (page, size, manager_id, start_from, end_with) {
     data = { ...data, ...{ manager_id } }
   }
   return transformFetch("GET", "/loginlogs", data)
-}
-
-// 社区商品分类
-export function communityGoodsCategories (type, cid, table, body) {
-  switch (type) {
-    case "get":
-      return transformFetch("GET", "/cmnt-ctgs", table)
-    case "add":
-      return transformFetch("POST", "/cmnt-ctgs", body);
-    case "modify":
-      return transformFetch("PUT", `/cmnt-ctgs/${cid}`, body);
-    default:
-      return transformFetch("DELETE", `/cmnt-ctgs?${body}`);
-  }
 }
 
 // 社区下单模型

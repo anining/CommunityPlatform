@@ -90,7 +90,8 @@ function RTable () {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
-				selectedRows.length && setSelectRows(format(data).map(i => i.key))
+				setSelectRows([])
+				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		}).catch(()=>setLoading(false))
@@ -141,6 +142,11 @@ function RTable () {
       title: '修改时间',
 			ellipsis: true,
       dataIndex: 'updateTime',
+  },
+    {
+      title: '查看信息',
+			ellipsis: true,
+			render: (...args) => <div onClick={()=> push('/main/edit-markup-community', args[1])} className={c.view_text}>查看</div>
   }
 ];
 

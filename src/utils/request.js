@@ -1,4 +1,5 @@
 import { API_URL, DEVELOPER } from './config'
+import { createClient } from '@supabase/supabase-js'
 import { message } from 'antd'
 import { getter } from '../utils/store'
 import { push } from './util';
@@ -7,6 +8,7 @@ const ERROR_MSG = {
   incorrect_user_or_password: "账号或者密码错误",
   tag_exists: "重复的标签名称",
   token_expired: "登录过期",
+  invalid_token: "登录过期",
   incorrect_old_password: "原密码错误",
   account_exists: "账号已存在"
 }
@@ -52,7 +54,7 @@ async function transformFetch (method, url, data = {}) {
             } else {
               message.error(localDate.msg || error || "请求错误")
             }
-            if (error === "token_expired") {
+            if (error === "token_expired" || error === "invalid_token") {
               push('/login')
             }
           }
@@ -67,5 +69,15 @@ async function transformFetch (method, url, data = {}) {
     message.error("请求失败")
   }
 }
+
+// function customizeFetch () {
+// 	// Create a single supabase client for interacting with your database 
+// 	const options = {}
+// 	const supabase = createClient("https://xyzcompany.supabase.co", "public-anon-key", options)
+
+// 	const { data, error } = await supabase
+//   .from('cities')
+//   .select()
+// }
 
 export { transformFetch }

@@ -2,15 +2,14 @@ import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import * as U from 'karet.util'
 import { Input, Checkbox, Menu, Button, Upload, Tooltip, message, Radio, Breadcrumb } from 'antd'
-import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
 import good46 from '../../icons/good/good46.png'
 import good47 from '../../icons/good/good47.png'
 import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
-import { MODULES } from "../../utils/config";
 import DropdownComponent from "../../components/DropdownComponent";
 import { push } from "../../utils/util";
+import Quill from '../../components/Quill.jsx'
 
 let win
 
@@ -256,7 +255,7 @@ function EditCardGoodView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>商品介绍</div>
           </div>
-          <ReactQuill className={c.quill} modules={MODULES} theme="snow" value={quillValue} onChange={setQuillValue}/>
+					<Quill value={quillValue} setValue={setQuillValue} />
         </div>
         <div className={c.hasMore}>
           <Checkbox className={c.hasMoreCheckBox} onChange={e=>setHasMore(e.target.checked)} checked={has_more}>更多设置</Checkbox>

@@ -12,13 +12,12 @@ import { cmntPadjs } from "../../utils/api"
 
 function EditMarkupTemView () {
   const { state = {} } = useHistory().location
-  const { id,  params: p = []  } = state
-
-  const [name, setName] = useState()
-  const [type, setType] = useState("absolute")
+	const { id, factors: f = [], name: n, type: t = "absolute" } = state
+  const [name, setName] = useState(n)
+  const [type, setType] = useState(t)
   const [price, setPrice] = useState()
-  const [factors, setFactors] = useState([])
-  const [, setLoading] = useState(false)
+  const [factors, setFactors] = useState(f)
+  const [loading, setLoading] = useState(false)
 
 	const setPriceAt = (e, i) => {
 		const localFactors = [...factors]
@@ -86,14 +85,14 @@ function EditMarkupTemView () {
             <span>*</span>
             <div className={c.itemText}>模版名称</div>
           </div>
-          <Input maxLength={20} placeholder="请输入模版名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput} />
+          <Input maxLength={20} disabled={id} placeholder="请输入模版名称" onChange={e=>setName(e.target.value)} value={name} className={c.itemInput} />
         </div>
         <div className={c.item}>
           <div className={c.itemName} style={{width:'auto'}}>
             <span style={{color:'#fff'}}>*</span>
             <div className={c.itemText}>调价类型</div>
           </div>
-          <Radio.Group className={c.itemGrop} onChange={e=>setType(e.target.value)} value={type} style={{justifyContent:'flex-start'}}>
+          <Radio.Group disabled={id} className={c.itemGrop} onChange={e=>setType(e.target.value)} value={type} style={{justifyContent:'flex-start'}}>
             <Radio value="relative" className={c.itemRadio} style={{width:'33.333%'}}>百分比调价</Radio>
             <Radio value="absolute" className={c.itemRadio} style={{width:'33.333%'}}>固定调价</Radio>
           </Radio.Group>
@@ -106,32 +105,32 @@ function EditMarkupTemView () {
           <div>
             <div className={c.tem_line}>
               <div>&#8194; 假设商品进价为</div>
-              <Input placeholder="0" value={price} onChange={e=>setPrice(e.target.value)}/>
+              <Input placeholder="0" value={price} disabled={id} onChange={e=>setPrice(e.target.value)}/>
             </div>
             <div className={c.tem_line}>
               <div>&#12288;&#12288;&#12288;&#8194; 单价调价</div>
-							<Input placeholder="0" value={factors[0]} onChange={e=>setPriceAt(e,0)}/>
+							<Input placeholder="0" value={factors[0]} disabled={id} onChange={e=>setPriceAt(e,0)}/>
               <div>{type==="relative"?'% , ':', '}调价之后的单价为：</div>
               <span>{price?factors[0]?type==="absolute"?+price+ (+factors[0]):+price*(100+(+factors[0]))/100:price:factors[0]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good54} alt="" />
               <div>高级会员调价</div>
-              <Input placeholder="0" value={factors[1] } onChange={e=>setPriceAt(e,1)}/>
+              <Input placeholder="0" value={factors[1] } disabled={id} onChange={e=>setPriceAt(e,1)}/>
               <div>{type==="relative"?'% , ':', '}调价之后的高级会员统一密价为：</div>
               <span>{price?factors[1]?type==="absolute"?+price+ (+factors[1]):+price*(100+(+factors[1]))/100:price:factors[1]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good48} alt="" />
               <div>钻石会员调价</div>
-              <Input placeholder="0" value={factors[2] } onChange={e=>setPriceAt(e,2)}/>
+              <Input placeholder="0" value={factors[2] } disabled={id} onChange={e=>setPriceAt(e,2)}/>
               <div>{type==="relative"?'% , ':', '}调价之后的钻石会员统一密价为：</div>
               <span>{price?factors[2]?type==="absolute"?+price+ (+factors[2]):+price*(100+(+factors[2]))/100:price:factors[2]||0}</span>
             </div>
             <div className={c.tem_line}>
               <img src={good47} alt="" />
               <div>至尊会员调价</div>
-              <Input placeholder="0" value={factors[3] } onChange={e=>setPriceAt(e,3)}/>
+              <Input placeholder="0" disabled={id} value={factors[3] } onChange={e=>setPriceAt(e,3)}/>
               <div>{type==="relative"?'% , ':', '}调价之后的至尊会员统一密价为：</div>
               <span>{price?factors[3]?type==="absolute"?+price+ (+factors[3]):+price*(100+(+factors[3]))/100:price:factors[3]||0}</span>
             </div>
@@ -142,7 +141,7 @@ function EditMarkupTemView () {
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
-            <Button type="primary" className={c.submit} onClick={()=>save(true)}>保存调价模版</Button>
+            <Button disabled={id} type="primary" className={c.submit} onClick={()=>save(true)}>保存调价模版</Button>
           </div>
         </div>
       </div>

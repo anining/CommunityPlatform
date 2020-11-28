@@ -43,16 +43,22 @@ function LoginView () {
       setLoading(false)
       const { error, data } = r;
       if (!error) {
-        const { access_token, disclaimer_agreed, role } = data;
-        setter([['authorization', `Bearer ${access_token}`], ['disclaimer_agreed', disclaimer_agreed], ['role', role]], true);
-        const permissions = storage.getItem("permissions");
-        if (permissions) {
-          setter([['permissions', permissions]]);
-          push('/main')
-          get()
-        } else {
-          get(true)
-        }
+        // const { access_token, disclaimer_agreed, role } = data;
+        // setter([['authorization', `Bearer ${access_token}`], ['disclaimer_agreed', disclaimer_agreed], ['role', role]], true);
+        // const permissions = storage.getItem("permissions");
+        // if (permissions) {
+        //   setter([['permissions', permissions]]);
+        //   push('/main')
+        //   get()
+        // } else {
+        //   get(true)
+        // }
+				// 只获取到token
+        const {access_token} = data;
+        setter([['authorization', `Bearer ${access_token}`], ['role', "superuser"]], true);
+        setter([['permissions', PERMISSION]], true);
+        push('/main')
+				//
       }
     }).catch(e => {
       setLoading(false)

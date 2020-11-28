@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import c from '../../styles/edit.module.css'
 import { Input, Button, message, Breadcrumb } from 'antd'
-import ReactQuill from 'react-quill';
 import good5 from '../../icons/good/good5.png'
 import { announcements } from "../../utils/api";
 import { saveSuccess, push } from "../../utils/util";
-import { MODULES } from "../../utils/config";
+import Quill from '../../components/Quill.jsx'
 
 function AddNoticeView () {
   const [title, setTitle] = useState()
@@ -61,7 +60,7 @@ function AddNoticeView () {
             <span className={c.white}>*</span>
             <div className={c.itemText}>公告内容</div>
           </div>
-          <ReactQuill modules={MODULES} className={c.quill} theme="snow" value={content} onChange={e=>setContent(e)}/>
+					<Quill value={content} setValue={setContent} />
         </div>
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>

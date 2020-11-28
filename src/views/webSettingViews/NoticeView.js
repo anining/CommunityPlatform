@@ -3,11 +3,9 @@ import { Button, Table, message } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import { push, dateFormat, getSimpleText } from "../../utils/util";
-
 import { announcements } from '../../utils/api'
-
 import ActionComponent from '../../components/ActionComponent';
-import TableComponent from '../../components/TableComponent';
+import TableComponent from "../../components/TableComponent";
 
 function NoticeView () {
 
@@ -39,7 +37,8 @@ function RTable () {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
-				selectedRows.length && setSelectRows(format(data).map(i => i.key))
+				setSelectRows([])
+				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		}).catch(() => setLoading(false))

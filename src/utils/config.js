@@ -19,35 +19,9 @@ import good77 from '../icons/good/good77.png'
 import {parseDomain} from './util'
 
 const DEVELOPER = "test"
-// const { protocol, host } = window.location
-// const API_URL = DEVELOPER === "Production" ? `${protocol}://${host}/mng` : "https://test-omnivstore.prismslight.com/mng"
-// const API_URL = DEVELOPER === "Production" ? "https://beta-omnivstore.prismslight.com/mng" : "https://test-omnivstore.prismslight.com/mng"
-const LOCAL_URL = 'https://test-omnivstore.prismslight.com/mng';// 本地测试地址
-const HOST = window.location.host.includes('localhost:') ? LOCAL_URL : parseDomain(window.location.host);
-const API_URL = `http://api.${HOST}/mng`;
+const {protocol, host} = window.location
+const API_URL = "https://test2-omnivstore.prismslight.com";
 const JUMP_DELAY = 500
-const MODULES = {
-  toolbar: [
-        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-
-        // [{ 'header': 1 }, { 'header': 2 }], // custom button values
-        // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        // [{ 'script': 'sub' }, { 'script': 'super' }], // superscript/subscript
-        // [{ 'indent': '-1' }, { 'indent': '+1' }], // outdent/indent
-        // [{ 'direction': 'rtl' }], // text direction
-
-        // [{ 'size': ['small', false, 'large', 'huge'] }], // custom dropdown
-        // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-        // [{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
-        // [{ 'font': [] }],
-        // [{ 'align': [] }],
-
-        // ['clean'] // remove formatting button
-    ]
-}
 const PERMISSIONS = {
   orderlog: "订单记录",
   citecfg: "站点管理",
@@ -271,4 +245,4 @@ const COMMUNITY_SYNC_STATUS = {
 	}
 }
 
-export { COMMUNITY_SYNC_STATUS, COMMUNITY_AFTER_STATUS, COMMUNITY_ORDER_STATUS, CARD_STATUS, CONSUMPTION_TYPE, REFUND_STATUS, SCROLL, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY, MODULES }
+export { COMMUNITY_SYNC_STATUS, COMMUNITY_AFTER_STATUS, COMMUNITY_ORDER_STATUS, CARD_STATUS, CONSUMPTION_TYPE, REFUND_STATUS, SCROLL, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY}

@@ -340,6 +340,29 @@
   margin: 0 40px 24px 0;
 }
 
+.select_edit {
+  width: 29.25%;
+}
+
+.select_edit div[class="ant-select-selector"]{
+	height: 40px!important;
+}
+
+.select_edit span[class="ant-select-selection-item"]{
+	line-height: 40px!important;
+	height: 40px!important;
+}
+
+.select_edit input{
+	height: 40px!important;
+}
+
+.select_view {
+  width: 186px;
+  height: 32px;
+  margin: 0 40px 24px 0;
+}
+
 .statusBtn {
   width: 102px;
   height: 34px;

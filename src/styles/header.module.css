@@ -24,6 +24,11 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+	overflow: hidden;
+}
+
+.containerR div {
+	flex-shrink: 0;
 }
 
 .container::-webkit-scrollbar, .siderLayout::-webkit-scrollbar {
@@ -58,6 +63,7 @@
 }
 
 .siderLayout {
+	z-index: 999;
   overflow-y: auto;
   height: calc(100vh - 60px);
   position: fixed;

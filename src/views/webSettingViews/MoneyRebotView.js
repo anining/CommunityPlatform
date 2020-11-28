@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
-import {   Button, Upload, message } from 'antd'
-import { MODULES } from "../../utils/config";
+import {Button, Upload, message } from 'antd'
 import ImgCrop from 'antd-img-crop';
-
-import ReactQuill from 'react-quill';
 import good75 from '../../icons/good/good75.png'
 import cs from '../../styles/childWebSetting.module.css'
-
 import {botConfig} from '../../utils/api';
 import {beforeUpload, saveSuccess} from '../../utils/util';
 import ClipboardJS from 'clipboard'
+import Quill from '../../components/Quill.jsx'
 
 function MoneyRebotView () {
 	const [loading, setLoading] = useState(false)
@@ -117,7 +114,7 @@ function MoneyRebotView () {
         {/*   </div> */}
         {/* </div> */}
         <div className={c.item} style={{alignItems:'flex-start'}}>
-          <div className={c.itemName} style={{width:120}}>
+          <div className={c.itemName}>
             <span style={{color:'#fff'}}>*</span>
             <div className={c.itemText}>收款二维码</div>
           </div>
@@ -165,7 +162,7 @@ function MoneyRebotView () {
           </div>
         </div>
         <div className={c.item}>
-          <div className={c.itemName} style={{width:120}}>
+          <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>加款密钥</div>
           </div>
@@ -175,11 +172,11 @@ function MoneyRebotView () {
 					}}>点击复制</Button>
         </div>
         <div className={c.item} style={{alignItems:'flex-start'}}>
-          <div className={c.itemName} style={{width:120}}>
+          <div className={c.itemName}>
             <span className={c.white}>*</span>
             <div className={c.itemText}>充值教程</div>
           </div>
-          <ReactQuill className={c.quill} modules={MODULES} theme="snow" value={tutorial} onChange={e=>setTutorial(e)}/>
+					<Quill value={tutorial} setValue={setTutorial} />
         </div>
         {/* <div className={c.headerT} style={{marginTop:40}}> */}
         {/*   <div style={{zIndex:1}}>使用支付宝支付</div> */}
@@ -188,7 +185,7 @@ function MoneyRebotView () {
         {/* <Button type="primary" className={cs.path_btn}>申请地址</Button> */}
         {/* <div className={c.tips}>带“ * ”的项目必须填写。</div> */}
         {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName} style={{width:120}}> */}
+        {/*   <div className={c.itemName}> */}
         {/*     <span className={c.white}>*</span> */}
         {/*     <div className={c.itemText}>支付宝支付</div> */}
         {/*   </div> */}
@@ -198,21 +195,21 @@ function MoneyRebotView () {
         {/*   </div> */}
         {/* </div> */}
         {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName} style={{width:120}}> */}
+        {/*   <div className={c.itemName}> */}
         {/*     <span>*</span> */}
         {/*     <div className={c.itemText}>APPID</div> */}
         {/*   </div> */}
         {/*   <Input maxLength={20} onChange={e=>{}} placeholder="请输入APPID" className={c.itemInput}></Input> */}
         {/* </div> */}
         {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName} style={{width:120}}> */}
+        {/*   <div className={c.itemName}> */}
         {/*     <span>*</span> */}
         {/*     <div className={c.itemText}>支付宝公钥(RSA2)</div> */}
         {/*   </div> */}
         {/*   <Input maxLength={20} onChange={e=>{}} placeholder="请输入支付宝公钥(RSA2)" className={c.itemInput}></Input> */}
         {/* </div> */}
         {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName} style={{width:120}}> */}
+        {/*   <div className={c.itemName}> */}
         {/*     <span>*</span> */}
         {/*     <div className={c.itemText}>商户私钥(RSA2)</div> */}
         {/*   </div> */}
@@ -225,7 +222,7 @@ function MoneyRebotView () {
         {/* <Button type="primary" className={cs.path_btn}>申请地址</Button> */}
         {/* <div className={c.tips}>带“ * ”的项目必须填写。</div> */}
         {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName} style={{width:120}}> */}
+        {/*   <div className={c.itemName}> */}
         {/*     <span className={c.white}>*</span> */}
         {/*     <div className={c.itemText}>微信支付</div> */}
         {/*   </div> */}
@@ -235,42 +232,42 @@ function MoneyRebotView () {
         {/*   </div> */}
         {/* </div> */}
         {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName} style={{width:120}}> */}
+        {/*   <div className={c.itemName}> */}
         {/*     <span>*</span> */}
         {/*     <div className={c.itemText}>微信公众号APPID</div> */}
         {/*   </div> */}
         {/*   <Input maxLength={20} onChange={e=>{}} placeholder="请输入微信公众号APPID" className={c.itemInput}></Input> */}
         {/* </div> */}
         {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName} style={{width:120}}> */}
+        {/*   <div className={c.itemName}> */}
         {/*     <span>*</span> */}
         {/*     <div className={c.itemText}>微信支付商户号</div> */}
         {/*   </div> */}
         {/*   <Input maxLength={20} onChange={e=>{}} placeholder="请输入微信支付商户号" className={c.itemInput}></Input> */}
         {/* </div> */}
         {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName} style={{width:120}}> */}
+        {/*   <div className={c.itemName}> */}
         {/*     <span>*</span> */}
         {/*     <div className={c.itemText}>微信支付商户密钥</div> */}
         {/*   </div> */}
         {/*   <Input maxLength={20} onChange={e=>{}} placeholder="请输入微信支付商户密钥" className={c.itemInput}></Input> */}
         {/* </div> */}
         {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName} style={{width:120}}> */}
+        {/*   <div className={c.itemName}> */}
         {/*     <span>*</span> */}
         {/*     <div className={c.itemText}>微信公众号APPSECRET</div> */}
         {/*   </div> */}
         {/*   <Input maxLength={20} onChange={e=>{}} placeholder="请输入微信公众号APPSECRET" className={c.itemInput}></Input> */}
         {/* </div> */}
         {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName} style={{width:120}}> */}
+        {/*   <div className={c.itemName}> */}
         {/*     <span>*</span> */}
         {/*     <div className={c.itemText}>微信支付指定域名</div> */}
         {/*   </div> */}
         {/*   <Input maxLength={20} onChange={e=>{}} placeholder="请输入微信支付指定域名" className={c.itemInput}></Input> */}
         {/* </div> */}
         <div className={c.item} style={{marginTop:68}}>
-          <div className={c.itemName} style={{width:120}}>
+          <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
             <Button type="primary" onClick={save} loading={loading} className={c.submit}>保存</Button>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ReDoc</title>
+    <!-- needed for adaptive design -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
+    <redoc spec-url='http://petstore.swagger.io/v2/swagger.json'></redoc>
+    <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
+
+    <!--
+    ReDoc doesn't change outer page styles
+    -->
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+		<script>
+			function fetchSpec(url, jwt) {
+					fetch(url, {
+							headers: new Headers({
+									'Accept': 'application/json',
+									'Authorization': 'Bearer ' + jwt,
+								'Access-Control-Allow-Origin': "*"
+							})
+					})
+					.then((response) => response.json())
+					.then((responseJson) => {
+							Redoc.init(responseJson);
+					})
+					.catch((error) => {
+							console.error(error);
+					});
+			}
+			fetchSpec("https://test2-omnivstore.prismslight.com/", "eyJhbGciOiJIUzI1NiIsInR5cCI6Imp3dCJ9.eyJtZXJjaGFudF9pZCI6MSwicm9sZSI6Im1lcmNoYW50IiwiZXhwIjoxNjA3MTM1MTEwfQ.gAPhusUP0hwtrhxTVvZuX0xi6_ng-UjJUvNDvgJM0kI")
+
+		</script>
+  </body>
+</html>
