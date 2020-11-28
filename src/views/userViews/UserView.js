@@ -111,11 +111,11 @@ function UserView () {
         return USER_RANK[text].label
       }
   },
-    {
-      title: '消费总额',
-			ellipsis: true,
-      dataIndex: 'consumed',
-  },
+    // {
+    //   title: '消费总额',
+			// ellipsis: true,
+    //   dataIndex: 'consumed',
+  // },
     {
       title: '用户余额',
 			ellipsis: true,
@@ -132,9 +132,14 @@ function UserView () {
       render: (text, record ) => {
         return (
         <Space size="small">
-          <div onClick={()=>push('/main/edit-price-user',record)} className={c.view_text}>查看</div>
+          <div style={{cursor:'wait'}} className={c.view_text}>查看</div>
           <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div className={c.view_text} onClick={()=>push('/main/edit-price-user',record)} >修改</div>
+          <div style={{cursor:'wait'}} className={c.view_text} onClick={()=>{}}>修改</div>
+        {/* <Space size="small"> */}
+        {/*   <div onClick={()=>push('/main/edit-price-user',record)} className={c.view_text}>查看</div> */}
+        {/*   <div style={{height:14,width:1,background:'#D8D8D8'}}></div> */}
+        {/*   <div className={c.view_text} onClick={()=>push('/main/edit-price-user',record)} >修改</div> */}
+        {/* </Space> */}
         </Space>
         )
       }
@@ -198,16 +203,16 @@ function UserView () {
           {/*         ) */}
           {/*       } */}
           {/*     } > */}
-					<div onClick={()=>{
-            setSel(record)
-            setVisibleBalance(true)
+					<div style={{cursor: 'wait'}} onClick={()=>{
+            // setSel(record)
+            // setVisibleBalance(true)
 					}} className={c.clickText}>修改余额</div>
           {/* </Popconfirm> */}
           <div className={c.line} />
           {/* <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)}>修改等级</div> */}
-          <div className={c.clickText} onClick={()=>{
-            setSel(record)
-            setVisible(true)
+					<div style={{cursor: 'wait'}} className={c.clickText} onClick={()=>{
+            // setSel(record)
+            // setVisible(true)
           }}>修改等级</div>
           <div className={c.line} />
           {/* <div className={c.clickText} onClick={()=>push('/main/addUser',record)}>修改用户信息</div> */}
@@ -318,7 +323,8 @@ function UserView () {
 							</div>
 						</div>
 					</div>
-					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/>
+					{/* <ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/> */}
+					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
 					<TableComponent
 						loading={loading}
 						setPageSize={setPageSize}

@@ -4,6 +4,7 @@ import c from '../styles/edit.module.css'
 import {quillUpload} from "../utils/util.js";
 
 function Quill ({value, setValue}) {
+	// Todo: 聚焦问题,待解决
 	const quillRef = useRef(null)
 
 	const imageHandler = () => {

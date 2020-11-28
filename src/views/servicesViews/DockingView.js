@@ -4,7 +4,6 @@ import c from '../../styles/view.module.css'
 import oc from '../../styles/oc.module.css'
 import good36 from '../../icons/good/good36.png'
 import good37 from '../../icons/good/good37.png'
-
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import ModalPopComponent from "../../components/ModalPopComponent"
@@ -19,39 +18,39 @@ function DockingView () {
 	const [labels, setLabels] = useState([
     {
       label: '已对接',
-      number: 0,
+      number: '-',
       icon: good36,
       id: 111,
     },
     {
       label: '总对接商品',
-      number: 0,
+      number: '-',
       icon: good37,
       id: 222,
     }
 	])
 
-	useEffect(()=>{
-		extPrvdStats().then(r=>{
-			if(!r.error){
-				const { total_ext_prvd_amount, total_providing_amount } = r.data
-				setLabels([
-					{
-						label: '已对接',
-						number: total_ext_prvd_amount,
-						icon: good36,
-						id: 111,
-					},
-					{
-						label: '总对接商品',
-						number:total_providing_amount,
-						icon: good37,
-						id: 222,
-					}
-				])
-			}
-		})
-	},[])
+	// useEffect(()=>{
+	// 	extPrvdStats().then(r=>{
+	// 		if(!r.error){
+	// 			const { total_ext_prvd_amount, total_providing_amount } = r.data
+	// 			setLabels([
+	// 				{
+	// 					label: '已对接',
+	// 					number: total_ext_prvd_amount,
+	// 					icon: good36,
+	// 					id: 111,
+	// 				},
+	// 				{
+	// 					label: '总对接商品',
+	// 					number:total_providing_amount,
+	// 					icon: good37,
+	// 					id: 222,
+	// 				}
+	// 			])
+	// 		}
+	// 	})
+	// },[])
 
   function onCancel () {
     setVisible(false)
@@ -144,12 +143,12 @@ function RTable ({  }) {
 			ellipsis: true,
       dataIndex: 'type',
   },
-    {
-      title: '已对接商品',
-			ellipsis: true,
-      dataIndex: 'providing_amount',
-			render: text => text+"个"
-  },
+    // {
+    //   title: '已对接商品',
+			// ellipsis: true,
+    //   dataIndex: 'providing_amount',
+			// render: text => text+"个"
+  // },
     {
       title: '对接凭证',
 			ellipsis: true,
@@ -165,7 +164,9 @@ function RTable ({  }) {
 			title: "操作",
       render: (text, record ) => (
 				<Space size="small">
-					<div className={c.clickText} onClick={()=>push("/main/import-good",{...record,...{provider_type: "external_provider"}})}>导入商品</div>
+					<div style={{cursor: 'wait'}} className={c.clickText} onClick={()=>{
+						// push("/main/import-good",{...record,...{provider_type: "external_provider"}})
+					}}>导入商品</div>
           <div className={c.line} />
 					<div className={c.clickText} onClick={()=>push("/main/edit-docking",record)}>修改对接信息</div>
 				</Space>
@@ -183,7 +184,7 @@ function RTable ({  }) {
   function submit (key) {
     switch (key) {
       case "delete":
-        docking("delete", undefined, undefined, "ids=" + selectedRows.map(i => data[i].id).toString()).then(r => {
+        docking("delete", undefined, undefined, selectedRows.map(i => data[i].id).toString()).then(r => {
           if (!r.error) {
             saveSuccess(false)
             setSelectRows([])

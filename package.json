@@ -5,7 +5,6 @@
   "dependencies": {
     "@ant-design/charts": "^1.0.1",
     "@craco/craco": "^5.6.4",
-    "@supabase/supabase-js": "^1.0.5",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -16,14 +15,13 @@
     "clipboard": "^2.0.6",
     "craco-less": "^1.17.0",
     "crypto-js": "^4.0.0",
+    "jwt-decode": "^3.1.2",
     "karet": "^4.1.0",
     "karet.util": "^0.19.2",
     "kefir": "^3.8.7",
     "kefir.ramda": "^0.26.0",
     "partial.lenses": "^14.17.0",
     "postgrest-api-helper": "^1.0.1",
-    "postgrest-client": "^1.1.2",
-    "postgrester": "^1.5.0",
     "qiniu-js": "^3.1.2",
     "qrcode.react": "^1.0.0",
     "ramda": "^0.27.1",
@@ -43,11 +41,7 @@
     "eject": "craco eject"
   },
   "eslintConfig": {
-    "extends": "react-app",
-    "plugins": [
-      "autofix"
-    ],
-    "rules": {}
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [

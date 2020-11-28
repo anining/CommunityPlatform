@@ -5,7 +5,7 @@ import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
 import { communityGoodsCategories } from '../../utils/api'
-import { push, dateFormat } from "../../utils/util";
+import { push, saveSuccess, dateFormat } from "../../utils/util";
 import { styles } from "../../styles/modal"
 import ActionComponent from '../../components/ActionComponent'
 import TableComponent from '../../components/TableComponent'
@@ -64,7 +64,7 @@ function GoodCategoryView () {
   )
 }
 
-function RTable () {
+function RTable ({setVisible}) {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
@@ -92,7 +92,7 @@ function RTable () {
 				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
-		}).catch(()=>setLoading(false))
+		})
   }
 
   function format (arr = []) {
@@ -144,15 +144,14 @@ function RTable () {
 
 	function deleteCategory () {
 		setSelectRows([])
-		message.warning("敬请期待")
 		// setVisible(true)
-		// communityGoodsCategories("delete", undefined, undefined, "ids=" + selectedRows.map(i => data[i].id).toString()).then(r => {
-		// 	if (!r.error) {
-		// 		saveSuccess(false)
-		// 		setSelectRows([])
-		// 		get(current)
-		// 	}
-		// })
+		communityGoodsCategories("delete", undefined, undefined, selectedRows.map(i => data[i].id).toString()).then(r => {
+			if (!r.error) {
+				saveSuccess(false)
+				setSelectRows([])
+				get(current)
+			}
+		})
 	}
 
   function submit (key) {

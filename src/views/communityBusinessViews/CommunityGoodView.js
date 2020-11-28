@@ -47,25 +47,25 @@ function CommunityGoodView () {
   const [labels, setLabels] = useState([
     {
       label: '商品总数',
-      number: '0',
+      number: '-',
       icon: good3,
       id: 111,
     },
     {
       label: '已上架数',
-      number: '0',
+      number: '-',
       icon: good1,
       id: 222,
     },
     {
       label: '已下架数',
-      number: '0',
+      number: '-',
       icon: good2,
       id: 333,
     },
     {
       label: '维护中数',
-      number: '0',
+      number: '-',
       icon: good4,
       id: 444,
     }
@@ -182,7 +182,7 @@ function CommunityGoodView () {
 
   function get (current, size=pageSize) {
 		setLoading(true)
-		getNums()
+		// getNums()
 		setTableLoading(true)
     let body = { page: current, size }
     if (id) {

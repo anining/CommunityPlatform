@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import c from '../../styles/login.module.css'
+import jwt_decode from "jwt-decode";
 import { Input, message, Button } from 'antd';
 import auth2 from '../../icons/auth/auth2.png'
 import auth3 from '../../icons/auth/auth3.png'
@@ -53,12 +54,11 @@ function LoginView () {
         // } else {
         //   get(true)
         // }
-				// 只获取到token
         const {access_token} = data;
-        setter([['authorization', `Bearer ${access_token}`], ['role', "superuser"]], true);
+				const {exp, merchant_id, role} = jwt_decode(access_token);
+        setter([['authorization', `Bearer ${access_token}`], ['role', role], ['merchant_id', merchant_id]], true);
         setter([['permissions', PERMISSION]], true);
         push('/main')
-				//
       }
     }).catch(e => {
       setLoading(false)

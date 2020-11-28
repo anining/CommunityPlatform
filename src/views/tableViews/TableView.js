@@ -32,7 +32,14 @@ function TableView () {
   function get () {
     tagGroups('get').then(r => {
       const { data, error } = r;
-      !error && setTagsGroup(data)
+			if(!error) {
+				tagsApi("get").then(response => {
+					const { data: tags, error } = response;
+					if(!error) {
+						setTagsGroup(data.map(i => ({...i,...{tags: tags.filter(tag => tag.group_id === i.id)}})))
+					}
+				})
+			}
     })
   }
 

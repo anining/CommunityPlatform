@@ -1,5 +1,4 @@
 import { API_URL, DEVELOPER } from './config'
-import { createClient } from '@supabase/supabase-js'
 import { message } from 'antd'
 import { getter } from '../utils/store'
 import { push } from './util';
@@ -69,15 +68,5 @@ async function transformFetch (method, url, data = {}) {
     message.error("请求失败")
   }
 }
-
-// function customizeFetch () {
-// 	// Create a single supabase client for interacting with your database 
-// 	const options = {}
-// 	const supabase = createClient("https://xyzcompany.supabase.co", "public-anon-key", options)
-
-// 	const { data, error } = await supabase
-//   .from('cities')
-//   .select()
-// }
 
 export { transformFetch }

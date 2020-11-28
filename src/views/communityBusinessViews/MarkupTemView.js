@@ -6,7 +6,6 @@ import good6 from '../../icons/good/good6.png'
 import good31 from '../../icons/good/good31.png'
 import { cmntPadjs } from '../../utils/api'
 import { push, dateFormat, saveSuccess } from "../../utils/util";
-
 import { styles } from "../../styles/modal"
 import { TEM_TYPE } from "../../utils/config"
 import ActionComponent from '../../components/ActionComponent'
@@ -127,12 +126,12 @@ function RTable () {
 			ellipsis: true,
       dataIndex: 'used_by',
   },
-    {
-      title: '模版类型',
-			ellipsis: true,
-      dataIndex: 'type',
-      render: (text) => TEM_TYPE[text].label
-  },
+    // {
+    //   title: '模版类型',
+			// ellipsis: true,
+    //   dataIndex: 'type',
+    //   render: (text) => TEM_TYPE[text].label
+  // },
     {
       title: '创建时间',
 			ellipsis: true,
@@ -160,9 +159,7 @@ function RTable () {
   function submit (key) {
     switch (key) {
       case "delete":
-        const params = new URLSearchParams()
-        selectedRows.forEach(i => params.append("ids", data[i].id))
-        cmntPadjs("delete", undefined, undefined, params.toString()).then(r => {
+        cmntPadjs("delete", undefined, undefined, selectedRows.map(i => data[i].id).toString()).then(r => {
           if (!r.error) {
             saveSuccess(false)
             setSelectRows([])
@@ -170,8 +167,7 @@ function RTable () {
           }
         })
         break
-      default:
-        ;
+      default:;
     }
   }
 
@@ -199,7 +195,7 @@ function RTable () {
             </div>
           </div>
       </div>
-			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
 			<TableComponent
 				scroll={null}
 				setPageSize={setPageSize}

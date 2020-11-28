@@ -77,13 +77,13 @@ function RTable () {
     {
       title: '操作人账号',
 			ellipsis: true,
-      dataIndex: 'account',
+      dataIndex: 'merchant_id',
   },
     {
       title: '登录IP',
 			ellipsis: true,
       dataIndex: 'data',
-      render: (text  ) => JSON.parse(text).ip
+      render: text => text.ip
   },
     {
       title: '登录时间',
@@ -98,11 +98,13 @@ function RTable () {
         <div className={c.search} style={{borderBottomWidth:0}}>
           <div className={c.searchL}>
             <Input onPressEnter={()=>get(current)} placeholder="请输入操作人账号" onChange={e=>setManager_id(e.target.value)} value={manager_id} size="small" className={c.searchInput}/>
-            <DatePicker.RangePicker
-              format="YYYY-MM-DD"
-              onChange={dateChange}
-              value={moment}
-              className={c.dataPicker}/>
+						{/* <> */}
+						{/* 	<DatePicker.RangePicker */}
+						{/* 		format="YYYY-MM-DD" */}
+						{/* 		onChange={dateChange} */}
+						{/* 		value={moment} */}
+						{/* 		className={c.dataPicker}/> */}
+						{/* 	</> */}
           </div>
           <div className={c.searchR}>
             <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>

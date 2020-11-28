@@ -4,6 +4,7 @@ import { Input, Button, message, Breadcrumb } from 'antd'
 import good5 from '../../icons/good/good5.png'
 import { announcements } from "../../utils/api";
 import { saveSuccess, push } from "../../utils/util";
+import { storage } from '../../utils/storage'
 import Quill from '../../components/Quill.jsx'
 
 function AddNoticeView () {
@@ -17,7 +18,8 @@ function AddNoticeView () {
       return
     }
     setLoading(true)
-    announcements("add", undefined, undefined, { title, content }).then(r => {
+		const merchant_id = storage.getItem("merchant_id")
+		announcements("add", undefined, undefined, {title, content, merchant_id: merchant_id}).then(r => {
       setLoading(false)
       if (!r.error) {
         saveSuccess()

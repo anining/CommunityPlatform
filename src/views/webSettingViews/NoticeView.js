@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button, Table, message } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
-import { push, dateFormat, getSimpleText } from "../../utils/util";
+import { saveSuccess, push, dateFormat, getSimpleText } from "../../utils/util";
 import { announcements } from '../../utils/api'
 import ActionComponent from '../../components/ActionComponent';
 import TableComponent from "../../components/TableComponent";
@@ -32,7 +32,7 @@ function RTable () {
 
   function get (current) {
 		setLoading(true)
-    announcements("get", undefined, { current, pageSize }).then(r => {
+		announcements("get", undefined, { page: current, size: pageSize }).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
@@ -73,7 +73,7 @@ function RTable () {
     {
       title: '发送人',
 			ellipsis: true,
-      dataIndex: 'manager_account',
+      dataIndex: 'merchant_id',
   },
     {
       title: '创建时间',
@@ -82,19 +82,19 @@ function RTable () {
     },
   ];
 
-  const rowSelection = {
-    onChange: (selectedRowKeys ) => {
-      setSelectRows(selectedRowKeys)
-    }
-  };
-
   function submit (key) {
     switch (key) {
       case "delete":
-        message.warning('敬请期待');
+				setSelectRows([])
+				announcements("delete", undefined, undefined, selectedRows.map(i => data[i].id).toString()).then(r => {
+					if (!r.error) {
+						saveSuccess(false)
+						setSelectRows([])
+						get(current)
+					}
+				})
         break
       default:
-        ;
     }
   }
 

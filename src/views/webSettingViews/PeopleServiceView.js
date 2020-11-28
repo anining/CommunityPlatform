@@ -6,7 +6,6 @@ import { transformTime, push } from "../../utils/util"
 import { customerServices } from "../../utils/api"
 import TableComponent from '../../components/TableComponent'
 
-
 function PeopleServiceView () {
 
   return (

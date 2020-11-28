@@ -24,7 +24,7 @@ function SearchInput ({ initNums = [], style = {}, placeholder = "请选择", vi
 					setData([...initNums])
 				}
 			} else {
-				fetchName(1, 50).then(r=> {
+				fetchName(1, 500).then(r=> {
 						if (inputValue) {
 							setData([...r].filter(i => i.name.indexOf(inputValue) > -1))
 						} else {
