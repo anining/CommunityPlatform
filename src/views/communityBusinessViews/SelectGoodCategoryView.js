@@ -2,15 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Button, Table, Input } from 'antd'
 import c from '../../styles/view.module.css'
 import ce from '../../styles/edit.module.css'
-
-
 import good9 from '../../icons/good/good9.png'
 import { communityGoodsCategories } from '../../utils/api'
 import {  transformTime, saveSuccess } from "../../utils/util";
-
-
-
-
 
 function SelectGoodCategoryView () {
 

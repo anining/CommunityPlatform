@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom"
 
 function EditGoodCategoryView () {
   const { state = {} } = useHistory().location
-  const h = useHistory()
+  // const h = useHistory()
   const { id, name: n, weight: w } = state
   const [name, setName] = useState(n)
   const [weight, setWeight] = useState(w)
@@ -28,7 +28,7 @@ function EditGoodCategoryView () {
     communityGoodsCategories(id ? "modify" : "add", id, undefined, body).then(r => {
       setLoading(false)
       if (!r.error) {
-        saveSuccess(jump)
+        saveSuccess(jump, "/main/category-community")
       }
     }).catch(() => {
       setLoading(false)

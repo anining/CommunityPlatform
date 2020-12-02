@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Radio, Button, Table, Input, Space } from 'antd'
+import { Radio, Button, Input, Space } from 'antd'
 import c from '../../styles/view.module.css'
 import { USER_STATUS, SCROLL } from "../../utils/config"
 import oc from '../../styles/oc.module.css'
 import good23 from '../../icons/good/good23.png'
 import good24 from '../../icons/good/good24.png'
 import good9 from '../../icons/good/good9.png'
-
 import { users, updateUsers, usersBalances } from "../../utils/api";
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
@@ -15,7 +14,7 @@ import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 import { USER_RANK } from "../../utils/config"
 import ActionComponent from '../../components/ActionComponent'
-import TableComponent from '../../components/TableComponent'
+import Table from '../../components/Table'
 
 function UserView () {
   const [visible, setVisible] = useState(false)
@@ -36,8 +35,8 @@ function UserView () {
   const [seled, setSeled] = useState(0)
   const [account, setAccount] = useState()
   const [status, setStatus] = useState()
-  const [, setDate] = useState([])
-  const [, setMoment] = useState()
+  const [date, setDate] = useState([])
+  const [moment, setMoment] = useState()
   const [selectedRows, setSelectRows] = useState([]);
   const labels = [
     {
@@ -55,8 +54,8 @@ function UserView () {
   ]
 
   useEffect(() => {
-    get(current)
-  }, [])
+    get()
+  }, [pageSize, current])
 
   function submit (key) {
     let title = ""
@@ -68,6 +67,7 @@ function UserView () {
         title = "您确定要解封选中用户吗？";
         break;
       default:
+        title = "您确定要删除选中用户吗？";
     }
 
     setTitle(title)
@@ -107,9 +107,7 @@ function UserView () {
       title: '用户等级',
 			ellipsis: true,
       dataIndex: 'lv',
-      render: (text , index) => {
-        return USER_RANK[text].label
-      }
+      render: text => USER_RANK[text].label
   },
     // {
     //   title: '消费总额',
@@ -209,14 +207,12 @@ function UserView () {
 					}} className={c.clickText}>修改余额</div>
           {/* </Popconfirm> */}
           <div className={c.line} />
-          {/* <div className={c.clickText} onClick={()=>push('/main/editUserPrice',record)}>修改等级</div> */}
-					<div style={{cursor: 'wait'}} className={c.clickText} onClick={()=>{
-            // setSel(record)
-            // setVisible(true)
+					<div className={c.clickText} onClick={()=>{
+            setSel(record)
+            setVisible(true)
           }}>修改等级</div>
           <div className={c.line} />
-          {/* <div className={c.clickText} onClick={()=>push('/main/addUser',record)}>修改用户信息</div> */}
-          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{}}>修改信息</div>
+          <div className={c.clickText} onClick={()=>push('/main/edit-user', record)}>修改信息</div>
         </Space>
       )
     },
@@ -227,15 +223,21 @@ function UserView () {
     setMoment(data)
   }
 
-  function get (current) {
+  function get (page = current) {
 		setLoading(true)
-    users(current, pageSize, account, status).then(r => {
+    let body = { page, size: pageSize }
+    if (account) {
+      body = { ...body, ...{ account } }
+    }
+    if (status) {
+      body = { ...body, ...{ status } }
+    }
+    users("get", undefined, body).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
 				setSelectRows([])
-				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		}).catch(() => setLoading(false))
@@ -250,15 +252,15 @@ function UserView () {
   }
 
 	const addMoney = () => {
-		setAddBalance(undefined)
-		setAdd(false)
-		setVisibleBalance(false)
-		usersBalances(sel.id, add ? +addBalabce: -addBalabce).then(r=>{
-			if(!r.error) {
-				saveSuccess(false)
-				get(current)
-			}
-		})
+		// setAddBalance(undefined)
+		// setAdd(false)
+		// setVisibleBalance(false)
+		// usersBalances(sel.id, add ? +addBalabce: -addBalabce).then(r=>{
+		// 	if(!r.error) {
+		// 		saveSuccess(false)
+		// 		get(current)
+		// 	}
+		// })
 	}
 
   function onCancel () {
@@ -271,25 +273,48 @@ function UserView () {
   selected.forEach(i => text.push(i.account))
 
   function onOk () {
-    setVisible(false)
-    updateUsers({lv:seled},"ids=" + sel.id).then(r => {
-      if (!r.error) {
-        saveSuccess(false)
-        setSelectRows([])
-        get(current)
-      }
-    })
+    // users("modify", selectedRows.map(i => data[i].id).toString(), undefined, {status: key}).then(r => {
+    //   if (!r.error) {
+    //     saveSuccess(false)
+    //     setSelectRows([])
+    //     get(1)
+    //   }
+    // })
+    // setVisible(false)
+    // updateUsers({lv:seled},"ids=" + sel.id).then(r => {
+    //   if (!r.error) {
+    //     saveSuccess(false)
+    //     setSelectRows([])
+    //     get(current)
+    //   }
+    // })
   }
 
   function updateStatus () {
     setVisibleAction(false)
-    updateUsers({status:key},"ids=" + selected.map(i => i.id).toString()).then(r => {
-      if (!r.error) {
-        saveSuccess(false)
-        setSelectRows([])
-        get(current)
-      }
-    })
+    setSelectRows([])
+    switch (key) {
+      case "delete":
+        users("delete", undefined, undefined, selectedRows.map(i => data[i].id).toString()).then(r => {
+          if (!r.error) {
+            saveSuccess(false)
+            setSelectRows([])
+            get(1)
+          }
+        })
+        break
+      case "normal":
+      case "banned":
+        users("modify", selectedRows.map(i => data[i].id).toString(), undefined, {status: key}).then(r => {
+          if (!r.error) {
+            saveSuccess(false)
+            setSelectRows([])
+            get(1)
+          }
+        })
+        break
+      default:
+    }
   }
 
   return (
@@ -300,7 +325,10 @@ function UserView () {
 					<div className={c.searchView}>
 						<div className={c.search}>
 							<div className={c.searchL}>
-								<Input onPressEnter={()=>get(current)} maxLength={20} placeholder="请输入用户账号" onChange={e=>setAccount(e.target.value)} value={account} size="small" className={c.searchInput} />
+								<Input onPressEnter={()=>{
+                  setCurrent(1)
+                  get(1)
+                }} maxLength={20} placeholder="请输入用户账号" onChange={e=>setAccount(e.target.value)} value={account} size="small" className={c.searchInput} />
 								<DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户状态" style={{width:186}}/>
 								{/* <DropdownComponent setAction={setStatus} action={status} keys={[{key:"normal",name:"正常"},{key:"banned",name:"封禁"}]} placeholder="请选择用户等级" style={{width:186}}/> */}
 								{/* { */}
@@ -317,19 +345,21 @@ function UserView () {
 									<img src={good9} alt="" style={{width:14,marginRight:6}} />
 									}
 									type = "primary"
-									onClick={()=>get(current)}
+									onClick={()=> {
+                    setCurrent(1)
+                    get(1)
+                  }}
 									size = "small"
 									className={c.searchBtn}>搜索用户</Button>
 							</div>
 						</div>
 					</div>
-					{/* <ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/> */}
-					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
-					<TableComponent
+					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量封禁",key:"banned"}]}/>
+					{/* <ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量解封",key:"normal"},{name:"批量删除",key:"delete"},{name:"批量封禁",key:"banned"}]}/> */}
+					<Table
 						loading={loading}
 						setPageSize={setPageSize}
 						setCurrent={setCurrent}
-						getDataSource={get}
 						setSelectedRowKeys={setSelectRows}
 						selectedRowKeys={selectedRows}
 						columns={columns}
@@ -344,17 +374,17 @@ function UserView () {
         div={
           <div>
             <div className={oc.user_setting}>
-              <div style={{color:'#333'}}>当前选中用户：{sel.account||''}</div>
+              <div style={{color:'#333'}}>当前选中用户：{sel.account || ''}</div>
               <div className={oc.user_tips}>修改为</div>
               <div className={oc.selects}>
                 {
-                  [{id:0,label:"普通用户"},{id:1,label:"高级用户"},{id:2,label:"钻石用户"},{id:3,label:"至尊用户"}].map(i=><Button style={{color:seled===i.id?'#fff':'rgba(0, 0, 0, 0.25)',background:seled===i.id?'#2C68FF':"#fff"}} onClick={()=>setSeled(i.id)} className={oc.user_sel}>{i.label}</Button>)
+                  [{id:0,label:"普通用户"},{id:1,label:"高级用户"},{id:2,label:"钻石用户"},{id:3,label:"至尊用户"}].map(i=><Button key={i.id} style={{color:sel.id === i.id?'#fff':'rgba(0, 0, 0, 0.25)',background:sel.id === i.id ? '#2C68FF':"#fff"}} onClick={() => setSeled(i.id)} className={oc.user_sel}>{i.label}</Button>)
                 }
               </div>
             </div>
             <div className={oc.change_btn_view}>
-              <Button onClick={()=>setVisible(false)} className={oc.change_btn_cancel}>取消</Button>
-              <Button type = "primary" className = { oc.change_btn_ok } onClick={onOk}> 确定 < /Button>
+              <Button onClick={()=> setVisible(false)} className={oc.change_btn_cancel}>取消</Button>
+              <Button type="primary" className={oc.change_btn_ok} onClick={onOk}>确定</Button>
             </div>
           </div>
         }

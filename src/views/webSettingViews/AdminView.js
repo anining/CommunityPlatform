@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Space, Popconfirm } from 'antd'
+import { Button, Space, Popconfirm } from 'antd'
 import c from '../../styles/view.module.css'
 import { managers } from '../../utils/api'
 import good7 from '../../icons/good/good7.png'
 import home9 from '../../icons/home/home9.png'
 import good40 from '../../icons/good/good40.png'
 import { push, dateFormat, getKey } from "../../utils/util"
-import { PERMISSIONS, PERMISSIONS_ARRAY, SCROLL } from "../../utils/config"
-import TableComponent from '../../components/TableComponent'
+import { PERMISSIONS, PERMISSIONS_ARRAY } from "../../utils/config"
+import Table from '../../components/Table'
 
 function AdminView () {
 
@@ -156,12 +156,11 @@ function RTable () {
           </div>
         </div>
       </div>
-			<TableComponent
+			<Table
 				scroll={null}
 				setPageSize={setPageSize}
 				loading={loading}
 				setCurrent={setCurrent}
-				getDataSource={get}
 				columns={columns}
 				dataSource={data}
 				pageSize={pageSize}

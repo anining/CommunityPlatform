@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Space, Table,  Input } from 'antd'
+import { Button, Space, Input } from 'antd'
 import c from '../../styles/view.module.css'
 import oc from '../../styles/oc.module.css'
 import good36 from '../../icons/good/good36.png'
@@ -10,7 +10,7 @@ import ModalPopComponent from "../../components/ModalPopComponent"
 import ActionComponent from '../../components/ActionComponent'
 import { docking, extPrvdStats } from '../../utils/api'
 import {dateFormat, push, saveSuccess } from '../../utils/util'
-import TableComponent from '../../components/TableComponent'
+import Table from '../../components/Table'
 import SearchInput from "../../components/SearchInput"
 
 function DockingView () {
@@ -63,23 +63,23 @@ function DockingView () {
         <RTable />
       </div>
       <ModalPopComponent
-      div = {
-        <div className={oc.limit_view}>
-          <div className={oc.limit_item}>登录账号：<span>10</span></div>
-          <div className={oc.limit_item}>登录密码：<span>100000</span></div>
-          <div className={oc.limit_item}>&#12288;&#12288;&#12288;ID：<span>121334</span></div>
-          <div className={oc.limit_item}>&#12288;&#8194;token：<span>dsfadfasdf</span></div>
-        </div>
-      }
-      title = "对接凭证"
-      visible = { visible}
-      onCancel = { onCancel }
+        div={
+          <div className={oc.limit_view}>
+            <div className={oc.limit_item}>登录账号：<span>10</span></div>
+            <div className={oc.limit_item}>登录密码：<span>100000</span></div>
+            <div className={oc.limit_item}>&#12288;&#12288;&#12288;ID：<span>121334</span></div>
+            <div className={oc.limit_item}>&#12288;&#8194;token：<span>dsfadfasdf</span></div>
+          </div>
+        }
+        title="对接凭证"
+        visible={visible}
+        onCancel={onCancel}
       />
     </div>
   )
 }
 
-function RTable ({  }) {
+function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
 	const [loading, setLoading] = useState(true)
@@ -91,11 +91,11 @@ function RTable ({  }) {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [pageSize, current])
 
-  function get (current) {
+  function get (page = current) {
 		setLoading(true)
-    let body = { page: current, size: pageSize }
+    let body = { page, size: pageSize }
     if (name) {
       body = { ...body, ...{ name } }
     }
@@ -108,7 +108,6 @@ function RTable ({  }) {
         setTotal(total)
         setData(format(data))
 				setSelectRows([])
-				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		}).catch(()=>setLoading(false))
@@ -120,11 +119,6 @@ function RTable ({  }) {
       item.time = dateFormat(item.created_at)
     })
     return arr
-  }
-
-  function onChange (page ) {
-    setCurrent(page)
-    get(page)
   }
 
   const columns = [
@@ -143,12 +137,12 @@ function RTable ({  }) {
 			ellipsis: true,
       dataIndex: 'type',
   },
-    // {
-    //   title: '已对接商品',
-			// ellipsis: true,
-    //   dataIndex: 'providing_amount',
-			// render: text => text+"个"
-  // },
+    {
+      title: '已对接商品',
+			ellipsis: true,
+      dataIndex: 'offering',
+			render: text => text + "个"
+  },
     {
       title: '对接凭证',
 			ellipsis: true,
@@ -162,24 +156,17 @@ function RTable ({  }) {
   },
     {
 			title: "操作",
-      render: (text, record ) => (
+      render: (...args) => (
 				<Space size="small">
-					<div style={{cursor: 'wait'}} className={c.clickText} onClick={()=>{
-						// push("/main/import-good",{...record,...{provider_type: "external_provider"}})
+          <div style={{cursor: "wait"}} className={c.clickText} onClick={()=>{
+						// push("/main/import-good", {...args[1],...{provider_type: "external_provider"}})
 					}}>导入商品</div>
           <div className={c.line} />
-					<div className={c.clickText} onClick={()=>push("/main/edit-docking",record)}>修改对接信息</div>
+					<div className={c.clickText} onClick={()=>push("/main/edit-docking", args[1])}>修改对接信息</div>
 				</Space>
       )
     }
   ];
-
-  const rowSelection = {
-    onChange: (selectedRowKeys ) => {
-      setSelectRows(selectedRowKeys)
-    },
-    selectedRowKeys: selectedRows
-  };
 
   function submit (key) {
     switch (key) {
@@ -193,7 +180,6 @@ function RTable ({  }) {
         })
         break
       default:
-        ;
     }
   }
 
@@ -207,7 +193,10 @@ function RTable ({  }) {
       <div className={c.searchView}>
         <div className={c.search}>
           <div className={c.searchL}>
-						<Input placeholder="请输入名称" value={name} onChange={e=>setName(e.target.value)} onPressEnter={()=>get(current)} size="small" className={c.searchInput}/>
+						<Input placeholder="请输入名称" value={name} onChange={e=>setName(e.target.value)} onPressEnter={()=> {
+              setCurrent(1)
+              get(1)
+}} size="small" className={c.searchInput}/>
 						<SearchInput initNums={[{name:"亿乐",id:"yile"}]} placeholder="请选择对接平台" value={type} setValue={setType} view={true}/>
           </div>
           <div className={c.searchR}>
@@ -217,18 +206,20 @@ function RTable ({  }) {
               }
               type = "primary"
               size = "small"
-              onClick={()=>get(current)}
+              onClick={()=> {
+                setCurrent(1)
+                get(1)
+              }}
               className={c.searchBtn}>搜索</Button>
           </div>
         </div>
       </div>
 			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
-			<TableComponent
+			<Table
 				scroll={null}
 				setPageSize={setPageSize}
 				loading={loading}
 				setCurrent={setCurrent}
-				getDataSource={get}
 				setSelectedRowKeys={setSelectRows}
 				selectedRowKeys={selectedRows}
 				columns={columns}

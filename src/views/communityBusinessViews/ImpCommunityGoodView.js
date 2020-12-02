@@ -20,7 +20,7 @@ let win
 
 function ImpCommunityGoodView () {
   const { state = {} } = useHistory().location
-  const h = useHistory()
+  // const h = useHistory()
 	const { params, ext_prvd_id, provide_name, p_goods_id, p_name, p_price, p_min_order_amount, p_max_order_amount, p_pics, p_intro= "", provider_type, p_ctg_id, p_unit } = state
 
 	const [pics, setPics] = useState(p_pics.map(i => ({
@@ -186,7 +186,8 @@ function ImpCommunityGoodView () {
     let body = {
       name,
       status,
-			supp_goods: provider_type==="supplier" ? { provider_type, goods_id: p_goods_id } : { provider_type, ext_prvd_goods_id: p_goods_id, ext_prvd_id, params },
+      provider_type,
+			// supp_goods: provider_type==="supplier" ? { provider_type, goods_id: p_goods_id } : { provider_type, ext_prvd_goods_id: p_goods_id, ext_prvd_id, params },
       ctg_id,
       tag_ids,
 			prices: dockingTarget ? factors : [unit_price,0,0,0],
@@ -202,6 +203,9 @@ function ImpCommunityGoodView () {
 			unit_cost,
       batch_order,
       intro,
+    }
+    if (provider_type === "supplier") {
+      body = {...body, ...{supp_goods_id: ext_prvd_id}}
     }
     setLoading(true)
     const promise = communityGoods('add', undefined, undefined, body)

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Space, Table } from 'antd'
+import React, { useState, useEffect, useRef } from 'react'
+import { Button, Space } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
-import { transformTime, push } from "../../utils/util"
+import good53 from '../../icons/good/good53.png'
+import { saveSuccess, transformTime, push } from "../../utils/util"
 import { customerServices } from "../../utils/api"
-import TableComponent from '../../components/TableComponent'
+import ModalComponent from '../../components/ModalComponent'
+import Table from '../../components/Table'
 
 function PeopleServiceView () {
 
@@ -18,25 +20,40 @@ function PeopleServiceView () {
 }
 
 function RTable () {
+  const id = useRef((null))
   const [data, setData] = useState([])
+  const [total, setTotal] = useState(0)
 	const [pageSize, setPageSize] = useState(10)
 	const [loading, setLoading] = useState(true)
 	const [current, setCurrent] = useState(1)
+	const [visible, setVisible] = useState(false)
 
-	const get = () => {
+	const get = (page = current) => {
 		setLoading(true)
-    customerServices("get").then(r => {
+    let body = { page, size: pageSize }
+    customerServices("get", undefined, body).then(r => {
       const { error, data } = r;
 			if(!error) {
 				setData(format(data))
+        setTotal(total)
 			}
 			setLoading(false)
 		}).catch(() => setLoading(false))
 	}
 
+  const del = () => {
+		customerServices("delete", undefined, undefined, id.current).then(r => {
+			if (!r.error) {
+        setVisible(false)
+				saveSuccess(false)
+				get()
+			}
+		})
+  }
+
   useEffect(() => {
 		get()
-  }, [])
+  }, [current, pageSize])
 
   const columns = [
     {
@@ -66,11 +83,14 @@ function RTable () {
   },
     {
 			title: "操作",
-      render: (text, record, index) => (
+      render: (...args) => (
 				<Space size="small">
-          <div className={c.clickText} style={{cursor:'wait'}} onClick={()=>{}}>修改</div>
+          <div className={c.clickText} onClick={()=>push("/main/edit-people-setting", args[1])}>修改</div>
           <div className={c.line} />
-          <div style={{cursor:'wait',color:'#FF4D4F',textDecorationColor:"#FF4D4F"}} className={c.clickText} onClick={()=>{}}>删除</div>
+          <div className={c.clickText} onClick={() => {
+            id.current = args[1].id
+            setVisible(true)
+          }}>删除</div>
         </Space>
       )
     },
@@ -101,18 +121,24 @@ function RTable () {
           </div>
         </div>
       </div>
-			<TableComponent
+			<Table
 				scroll={null}
 				loading={loading}
 				columns={columns}
 				dataSource={data}
-				total={data.length}
-				getDataSource={get}
+				total={total}
 				setPageSize={setPageSize}
 				pageSize={pageSize}
 				current={current}
 				setCurrent={setCurrent}
 			/>
+      <ModalComponent
+        src={good53}
+        title="确定继续删除 ?"
+        visible={visible}
+				onCancel={() => setVisible(false)}
+        onOk={del}
+      />
     </div>
   )
 }

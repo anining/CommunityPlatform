@@ -9,7 +9,7 @@ import SearchInput from "../../components/SearchInput";
 
 function EditDockingView () {
   const { state = {} } = useHistory().location
-  const h = useHistory()
+  // const h = useHistory()
 	const { id, name:n, payload, type:t = "yile", endpoint:e } = state
 	const p = payload ? JSON.parse(payload) : {}
 	const [name, setName] = useState(n)

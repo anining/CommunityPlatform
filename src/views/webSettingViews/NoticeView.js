@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, message } from 'antd'
+import {Button} from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import { saveSuccess, push, dateFormat, getSimpleText } from "../../utils/util";
 import { announcements } from '../../utils/api'
 import ActionComponent from '../../components/ActionComponent';
-import TableComponent from "../../components/TableComponent";
+import Table from "../../components/Table";
 
 function NoticeView () {
 
@@ -27,18 +27,17 @@ function RTable () {
   const [total, setTotal] = useState(0)
 
   useEffect(() => {
-    get(current)
-  }, [])
+    get()
+  }, [pageSize, current])
 
-  function get (current) {
+  function get (page = current) {
 		setLoading(true)
-		announcements("get", undefined, { page: current, size: pageSize }).then(r => {
+		announcements("get", undefined, { page, size: pageSize }).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
 				setSelectRows([])
-				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		}).catch(() => setLoading(false))
@@ -50,11 +49,6 @@ function RTable () {
       item.time = dateFormat(item.created_at)
     })
     return arr
-  }
-
-  function onChange (page ) {
-    setCurrent(page)
-    get(page)
   }
 
   const columns = [
@@ -115,11 +109,10 @@ function RTable () {
         </div>
       </div>
 			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
-			<TableComponent
+			<Table
 				scroll={null}
 				setPageSize={setPageSize}
 				setCurrent={setCurrent}
-				getDataSource={get}
 				setSelectedRowKeys={setSelectRows}
 				selectedRowKeys={selectedRows}
 				columns={columns}

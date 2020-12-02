@@ -178,14 +178,14 @@ function base64encode(str) {
 	out = "";
 	while (i < len) {
 			c1 = str.charCodeAt(i++) & 0xff;
-			if (i == len) {
+			if (i === len) {
 					out += base64EncodeChars.charAt(c1 >> 2);
 					out += base64EncodeChars.charAt((c1 & 0x3) << 4);
 					out += "==";
 					break;
 			}
 			c2 = str.charCodeAt(i++);
-			if (i == len) {
+			if (i === len) {
 					out += base64EncodeChars.charAt(c1 >> 2);
 					out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
 					out += base64EncodeChars.charAt((c2 & 0xF) << 2);
@@ -320,4 +320,37 @@ function isUrl (url) {
    return /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/.test(url);
 }
 
-export {quillUpload, deleteBeforAfterSpace, regexNumber, parseDomain, isUrl, beforeUpload, genUpToken, decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed};
+// 定时器方案
+function _throttle (fn, wait) {
+  let timer = null;
+
+  return function () {
+    let context = this;
+    let args = arguments;
+    if (!timer) {
+      timer = setTimeout(function () {
+          fn.apply(context, args);
+          timer = null;
+      }, wait);
+    }
+  };
+}
+
+// 防抖函数
+function _debounce (func, wait) {
+    // 立即执行版本
+    let timerId = null;
+    let flag = true;
+    return function () {
+        clearTimeout(timerId);
+        if (flag) {
+            func.apply(this, arguments);
+            flag = false;
+        }
+        timerId = setTimeout(() => {
+            flag = true;
+        }, wait);
+    };
+}
+
+export {_debounce, _throttle, quillUpload, deleteBeforAfterSpace, regexNumber, parseDomain, isUrl, beforeUpload, genUpToken, decrypt, dateFormat, getSimpleText, getKey, saveSuccess, transformTime, goBack, push, _if, getPath, _toFixed};

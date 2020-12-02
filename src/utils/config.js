@@ -16,11 +16,11 @@ import good71 from '../icons/good/good71.png'
 import good72 from '../icons/good/good72.png'
 import good73 from '../icons/good/good73.png'
 import good77 from '../icons/good/good77.png'
-import {parseDomain} from './util'
+// import {parseDomain} from './util'
 
 const DEVELOPER = "test"
-const {protocol, host} = window.location
-const API_URL = "https://test2-omnivstore.prismslight.com";
+// const {protocol, host} = window.location
+const API_URL = "http://192.168.1.36:3000";
 const JUMP_DELAY = 500
 const PERMISSIONS = {
   orderlog: "订单记录",
@@ -94,6 +94,11 @@ const USER_STATUS = {
   banned: {
     color: "#FF4D4F",
     text: '封禁',
+    src: good70
+  },
+  delete: {
+    color: "#FF4D4F",
+    text: '删除',
     src: good70
   },
   normal: {

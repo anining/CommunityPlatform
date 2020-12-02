@@ -1,31 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Badge, Space, Popconfirm, Table,  Input, DatePicker } from 'antd'
+import { Button, Badge, Space, Popconfirm, Input, DatePicker } from 'antd'
 import c from '../../styles/view.module.css'
 import * as L from "partial.lenses"
 import * as R from 'kefir.ramda'
 import oc from '../../styles/oc.module.css'
 import good17 from '../../icons/good/good17.png'
-
-
 import good19 from '../../icons/good/good19.png'
-
 import good21 from '../../icons/good/good21.png'
 import good59 from '../../icons/good/good59.png'
-
 import good60 from '../../icons/good/good60.png'
 import { styles as ms } from '../../styles/modal'
-
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
 import { dateFormat, push, getKey, saveSuccess } from "../../utils/util";
 import { refundAccept, orderSync, orderComments, communityGoodsOrders, communityGoodsCategories, ordersStat } from "../../utils/api"
-
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 import { REFUND_STATUS, SCROLL, COMMUNITY_SYNC_STATUS, COMMUNITY_ORDER_STATUS,  COMMUNITY_AFTER_STATUS } from '../../utils/config'
 import ActionComponent from '../../components/ActionComponent'
-import TableComponent from '../../components/TableComponent'
+import Table from '../../components/Table'
 import SearchInput from "../../components/SearchInput"
 
 function CommunityOrderView () {
@@ -499,10 +493,9 @@ function CommunityOrderView () {
             </div>
           </div>
 					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{"name":"重新推送",key:"push"},{"name":"重新通信",key:"sync"}]}/>
-					<TableComponent
+					<Table
 						setPageSize={setPageSize}
 						setCurrent={setCurrent}
-						getDataSource={get}
 						loading={loading}
 						setSelectedRowKeys={setSelectRows}
 						selectedRowKeys={selectedRows}

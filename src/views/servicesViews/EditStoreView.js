@@ -9,11 +9,9 @@ import { providers } from "../../utils/api";
 
 function EditStoreView () {
   const { state = {} } = useHistory().location
-  const h = useHistory()
-  const { id, nickname: n, account: a } = state
-
+  const { id, name, account: a } = state
   const [loading, setLoading] = useState(false)
-  const [nickname, setNickname] = useState(n)
+  const [nickname, setNickname] = useState(name)
   const [account, setAccount] = useState(a)
 
   function save (jump) {
@@ -22,11 +20,11 @@ function EditStoreView () {
       return
     }
     setLoading(true)
-    providers(id ? "modify" : "add", id, undefined, { nickname, account }).then(r => {
+    let body = { name: nickname, password: "a123456", account }
+    id && delete body.password
+    providers(id ? "modify" : "add", id, undefined, body).then(r => {
       setLoading(false)
       if (!r.error) {
-        setNickname("")
-        setAccount("")
         saveSuccess(jump)
       }
     }).catch(() => {
@@ -72,13 +70,6 @@ function EditStoreView () {
           <div className={c.itemName} />
           <div style={{color:'#FF8D30'}}>供货商登录密码默认为a123456</div>
         </div>
-        {/* <div className={c.item}> */}
-        {/*   <div className={c.itemName}> */}
-        {/*     <span className={c.white}>*</span> */}
-        {/*     <div className={c.itemText}>备注</div> */}
-        {/*   </div> */}
-        {/*   <Input maxLength={20} value={account} onChange={e=>setAccount(e.target.value)} placeholder="请填写备注信息" className={c.itemInput}></Input> */}
-        {/* </div> */}
         <div className={c.item} style={{marginTop:68}}>
           <div className={c.itemName}>
           </div>

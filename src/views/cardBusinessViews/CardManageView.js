@@ -7,7 +7,6 @@ import good13 from '../../icons/good/good13.png'
 import good14 from '../../icons/good/good14.png'
 import good16 from '../../icons/good/good16.png'
 import good15 from '../../icons/good/good15.png'
-
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent"
 import DropdownComponent from "../../components/DropdownComponent"
@@ -103,10 +102,10 @@ function CardManageView () {
 
 function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
   const [selectedRows, setSelectRows] = useState([]);
-  const [data, setData] = useState([{ id: 1, name: 'name' }])
+  const [data] = useState([{ id: 1, name: 'name' }])
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
-  const [total, setTotal] = useState(0)
+  const [total] = useState(0)
 
   useEffect(() => {
     get(current)
@@ -126,12 +125,12 @@ function RTable ({ setVisible, setKey, setSrc, setSelected, setTitle }) {
     // })
   }
 
-  function format (arr) {
-    arr.forEach((item, index) => {
-      item.key = index
-    })
-    return arr
-  }
+  // function format (arr) {
+  //   arr.forEach((item, index) => {
+  //     item.key = index
+  //   })
+  //   return arr
+  // }
 
   function onChange (page ) {
     setCurrent(page)

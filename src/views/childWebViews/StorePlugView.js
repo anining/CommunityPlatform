@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import ImgCrop from 'antd-img-crop';
 import c from '../../styles/edit.module.css'
-
-import { Input,  Button, Upload, message } from 'antd'
-
+import { Input, Button, Upload } from 'antd'
 import edit1 from '../../icons/edit/edit1.png'
-
-import { beforeUpload,  saveSuccess } from "../../utils/util";
+import { beforeUpload, saveSuccess } from "../../utils/util";
 import { storeConfig } from "../../utils/api";
-
-
 
 function StorePlugView () {
   const [icons, setIcons] = useState([])

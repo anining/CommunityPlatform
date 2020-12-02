@@ -75,18 +75,18 @@ function TableView () {
     const tags = [...tagsGroup]
     if (i > -1) {
       const v = tags[index].tags.splice(i, 1)
-      setTagsGroup(tags);
       tagsApi("delete", id).then(r => {
         if (r.error) {
           tags[index].tags.splice(i, 0, v[0])
+          setTagsGroup(tags);
         }
       })
     } else {
       const v = tags.splice(index, 1)
-      setTagsGroup(tags);
       tagGroups("delete", id).then(r => {
         if (r.error) {
           tags.splice(index, 0, v[0])
+          setTagsGroup(tags);
         }
       })
     }

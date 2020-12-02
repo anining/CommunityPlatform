@@ -141,7 +141,7 @@ function EditMarkupTemView () {
           <div className={c.itemName}>
           </div>
           <div className={c.btnView}>
-            <Button disabled={id} type="primary" className={c.submit} onClick={()=>save(true)}>保存调价模版</Button>
+            <Button loading={loading} disabled={id} type="primary" className={c.submit} onClick={()=>save(true)}>保存调价模版</Button>
           </div>
         </div>
       </div>

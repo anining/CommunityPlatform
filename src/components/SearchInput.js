@@ -24,13 +24,10 @@ function SearchInput ({ initNums = [], style = {}, placeholder = "请选择", vi
 					setData([...initNums])
 				}
 			} else {
-				fetchName(1, 500).then(r=> {
-						if (inputValue) {
-							setData([...r].filter(i => i.name.indexOf(inputValue) > -1))
-						} else {
-							setData([...r])
-						}
-				})
+        if(fetchName.length > 3) {
+          alert("search in null")
+        }
+				fetchName(1, 500, inputValue).then(r=> setData([...r]))
 			}
 		}
 

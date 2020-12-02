@@ -9,18 +9,18 @@ import good48 from '../../icons/good/good48.png'
 import good68 from '../../icons/good/good68.png'
 import good74 from '../../icons/good/good74.png'
 import { saveSuccess, push } from "../../utils/util";
-import { addUsers } from "../../utils/api";
+import { users } from "../../utils/api";
 import ModalComponent from "../../components/ModalComponent"
 import {useHistory} from "react-router-dom"
 
 function AddUserView () {
   const { state = {} } = useHistory().location
-  const { id } = state
+  const { id, status: s = 'normal', account: a, lv: l = 0 } = state
   // TODO: 弹窗
   const [visible, setVisible] = useState(false)
-  const [account, setAccount] = useState()
-  const [lv, setLv] = useState(0)
-  const [status, setStatus] = useState("normal")
+  const [account, setAccount] = useState(a)
+  const [lv, setLv] = useState(l)
+  const [status, setStatus] = useState(s)
   const [loading, setLoading] = useState(false)
 
   function save (jump) {
@@ -28,8 +28,10 @@ function AddUserView () {
       message.warning("请完善信息")
       return
     }
+    const body = { account, lv, status, password: "a123456"}
+    id && delete body.password
     setLoading(true)
-    addUsers(account, lv, status).then(r => {
+    users(id ? "modify" : "add", id, undefined, body).then(r => {
       setLoading(false)
       if (!r.error) {
         saveSuccess(jump)
@@ -94,9 +96,9 @@ function AddUserView () {
             <div className={c.itemText}>登录密码</div>
           </div>
           <div style={{width:'29.25%'}}>
-            {
-              U.when(id,<Button type="primary" style={{width:120,height:40,marginBottom:6}}>重置密码</Button>)
-            }
+            {/* { */}
+            {/*   U.when(id,<Button type="primary" style={{width:120,height:40,marginBottom:6}}>重置密码</Button>) */}
+            {/* } */}
             <div style={{color:'#FF8D30'}}>用户登录默认密码 ： a123456；忘记密码可通过修改用户管理来重置密码。为保证账户安全，请提醒用户及时修改密码。。</div>
           </div>
         </div>

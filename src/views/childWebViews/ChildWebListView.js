@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Table, message, Input, Space } from 'antd'
-
 import c from '../../styles/view.module.css'
 import good28 from '../../icons/good/good28.png'
-
 import good30 from '../../icons/good/good30.png'
-
-
-
-
 import good9 from '../../icons/good/good9.png'
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Input, Modal,  message } from 'antd'
+import { Button, Input, Modal, message } from 'antd'
 import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good6 from '../../icons/good/good6.png'
@@ -8,7 +8,7 @@ import { communityGoodsCategories } from '../../utils/api'
 import { push, saveSuccess, dateFormat } from "../../utils/util";
 import { styles } from "../../styles/modal"
 import ActionComponent from '../../components/ActionComponent'
-import TableComponent from '../../components/TableComponent'
+import Table from '../../components/Table'
 
 function GoodCategoryView () {
   // TODO: 两个删除弹窗
@@ -64,7 +64,7 @@ function GoodCategoryView () {
   )
 }
 
-function RTable ({setVisible}) {
+function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
@@ -74,12 +74,12 @@ function RTable ({setVisible}) {
   const [search_name, setSearch_name] = useState()
 
   useEffect(() => {
-    get(current)
-  }, [])
+    get()
+  }, [current, pageSize])
 
-  function get (current) {
+  function get (page = current) {
 		setLoading(true)
-    let body = { page: current, size: pageSize }
+    let body = { page, size: pageSize }
     if (search_name) {
       body = { ...body, name: search_name }
     }
@@ -89,7 +89,6 @@ function RTable ({setVisible}) {
         setTotal(total)
         setData(format(data))
 				setSelectRows([])
-				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		})
@@ -149,7 +148,7 @@ function RTable ({setVisible}) {
 			if (!r.error) {
 				saveSuccess(false)
 				setSelectRows([])
-				get(current)
+				get()
 			}
 		})
 	}
@@ -169,13 +168,19 @@ function RTable ({setVisible}) {
       <div className={c.searchView}>
           <div className={c.search}>
             <div className={c.searchL}>
-              <Input onPressEnter={()=>get(current)} placeholder="请输入分类名称" value={search_name} onChange={e=>setSearch_name(e.target.value)} size="small" className={c.searchInput} />
+              <Input onPressEnter={()=> {
+                setCurrent(1)
+                get(1)
+              }} placeholder="请输入分类名称" value={search_name} onChange={e=>setSearch_name(e.target.value)} size="small" className={c.searchInput} />
               <Button
                 icon={
                   <img src={good31} alt="" style={{width:14,marginRight:6}} />
                 }
                 size = "small"
-                onClick={()=>get(current)}
+                onClick={()=> {
+                  setCurrent(1)
+                  get(1)
+                }}
                 className={c.searchBtn}>搜索分类</Button>
             </div>
             <div className={c.searchR}>
@@ -190,19 +195,18 @@ function RTable ({setVisible}) {
             </div>
           </div>
       </div>
-			<TableComponent
+			<Table
 				scroll={null}
+				current={current}
 				setPageSize={setPageSize}
 				setCurrent={setCurrent}
 				loading={loading}
-				getDataSource={get}
 				setSelectedRowKeys={setSelectRows}
 				selectedRowKeys={selectedRows}
 				columns={columns}
 				dataSource={data}
 				pageSize={pageSize}
 				total={total}
-				current={current}
 			/>
 			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
     </div>

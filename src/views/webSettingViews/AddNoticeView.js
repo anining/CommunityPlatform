@@ -52,14 +52,14 @@ function AddNoticeView () {
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span className={c.white}>*</span>
+            <span>*</span>
             <div className={c.itemText}>公告标题</div>
           </div>
           <Input maxLength={40} onChange={e=>setTitle(e.target.value)} value={title} placeholder="请输入公告标题" className={c.itemInput}></Input>
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span className={c.white}>*</span>
+            <span>*</span>
             <div className={c.itemText}>公告内容</div>
           </div>
 					<Quill value={content} setValue={setContent} />

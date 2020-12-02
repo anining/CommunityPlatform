@@ -4,7 +4,6 @@ import c from '../../styles/view.module.css'
 import good19 from '../../icons/good/good19.png'
 import good9 from '../../icons/good/good9.png'
 import good62 from '../../icons/good/good62.png'
-
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent"
 import { transformTime } from "../../utils/util"

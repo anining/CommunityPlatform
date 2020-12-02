@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import c from '../../styles/edit.module.css'
 import cs from '../../styles/business.module.css'
-
-
 import edit24 from '../../icons/edit/edit24.png'
-
 import edit26 from '../../icons/edit/edit26.png'
 import { Button } from 'antd'
 import { tagGroups } from "../../utils/api"

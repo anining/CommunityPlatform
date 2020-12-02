@@ -126,7 +126,7 @@ function EditCommunityGoodView () {
       name,
       ctg_id,
       status,
-			supp_goods: provider_type==="supplier" ? { provider_type, goods_id: supp_goods_id } : { provider_type, ext_prvd_goods_id, ext_prvd_id, params },
+			// supp_goods: provider_type==="supplier" ? { provider_type, goods_id: supp_goods_id } : { provider_type, ext_prvd_goods_id, ext_prvd_id, params },
       tag_ids,
       prices: factors,
 			unit: unit || "个",
@@ -144,6 +144,9 @@ function EditCommunityGoodView () {
     }
     if( prices ) {
       body = {...body,...{padj_id: dockingTarget}}
+    }
+    if (provider_type === "supplier") {
+      body = {...body, ...{supp_goods_id}}
     }
     setLoading(true)
     const promise = communityGoods(id ? "modify" : 'add', id, undefined, body)
@@ -211,22 +214,22 @@ function EditCommunityGoodView () {
 						push('/main/edit-category-community')
 					}}>新增分类</Button>
         </div>
-				<div className={c.item} style={{alignItems:'flex-start'}}>
-					<div className={c.itemName}>
-            <span className={c.white}>*</span>
-						<div className={c.itemText}>下单参数</div>
-					</div>
-					<div className={oc.edit_view}>
-						{
-							localParams.map((i, index)=>{
-								return <div key={index} style={{width:"100%"}} className={oc.basic_msg_text_edit}><div>参数{index+1}</div><div className={oc.basic_msg_text_edit_name}>{i.name}:</div><div>{i.placeholder}</div></div>
-						})
-						}
-					</div>
-					<Button type="primary" disabled={true} style={{width:120}} className={c.itemBtn} onClick={()=>{
-						push('/main/editGoodCategory')
-					}}>同步下单参数</Button>
-				</div>
+				{/* <div className={c.item} style={{alignItems:'flex-start'}}> */}
+				{/* 	<div className={c.itemName}> */}
+            {/* <span className={c.white}>*</span> */}
+				{/* 		<div className={c.itemText}>下单参数</div> */}
+				{/* 	</div> */}
+				{/* 	<div className={oc.edit_view}> */}
+				{/* 		{ */}
+				{/* 			localParams.map((i, index)=>{ */}
+				{/* 				return <div key={index} style={{width:"100%"}} className={oc.basic_msg_text_edit}><div>参数{index+1}</div><div className={oc.basic_msg_text_edit_name}>{i.name}:</div><div>{i.placeholder}</div></div> */}
+				{/* 		}) */}
+				{/* 		} */}
+				{/* 	</div> */}
+				{/* 	<Button type="primary" disabled={true} style={{width:120}} className={c.itemBtn} onClick={()=>{ */}
+				{/* 		push('/main/editGoodCategory') */}
+				{/* 	}}>同步下单参数</Button> */}
+				{/* </div> */}
         <div className={c.item}>
           <div className={c.itemName}>
             <span className={c.white}>*</span>

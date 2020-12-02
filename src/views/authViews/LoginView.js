@@ -8,7 +8,6 @@ import auth4 from '../../icons/auth/auth4.png'
 import { login, currentManager } from '../../utils/api'
 import { setter } from '../../utils/store'
 import { push } from "../../utils/util";
-import { storage } from "../../utils/storage";
 import { PERMISSION } from "../../utils/config"
 
 function LoginView () {

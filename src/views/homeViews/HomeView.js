@@ -9,63 +9,60 @@ import home5 from '../../icons/home/home5.png'
 import home7 from '../../icons/home/home7.png'
 import home8 from '../../icons/home/home8.png'
 import home9 from '../../icons/home/home9.png'
-
-
-
 import { getter } from "../../utils/store";
 import {push} from "../../utils/util"
 
 function HomeView () {
   const { nickname } = getter(["nickname"])
-  const obj = ["#FF4D4F", "#52C41A"]
-  const columns = [
-    {
-      title: '商品ID',
-      dataIndex: 'id',
-      align: 'center',
-  },
-    {
-      title: '业务类型',
-      dataIndex: 'id',
-      align: 'center',
-  },
-    {
-      title: '商品名称',
-      dataIndex: 'name',
-      align: 'center',
-  },
-    {
-      title: '涨跌值',
-      align: 'center',
-      dataIndex: 'price',
-      render: (text, record, index) => {
-        return '-'
-      }
-      // render: (text, record, index) => {
-      //   const { text: t, color } = getKey(text, obj)
-      //   const { status, t } = text
-      //   return <div style={}>{t}</div>
-      // }
-  },
-    {
-      title: '新的价格',
-      align: 'center',
-      dataIndex: 'price',
-      render: (text, record, index) => {
-        return '-'
-      }
-      // render: (text, record, index) => {
-      //   const { text: t, color } = getKey(text, obj)
-      //   const { status, t } = text
-      //   return <div style={}>{t}</div>
-      // }
-  },
-    {
-      title: '变化时间',
-      align: 'center',
-      dataIndex: 'time',
-  },
-];
+  // const obj = ["#FF4D4F", "#52C41A"]
+  // const columns = [
+  //   {
+  //     title: '商品ID',
+  //     dataIndex: 'id',
+  //     align: 'center',
+  // },
+  //   {
+  //     title: '业务类型',
+  //     dataIndex: 'id',
+  //     align: 'center',
+  // },
+  //   {
+  //     title: '商品名称',
+  //     dataIndex: 'name',
+  //     align: 'center',
+  // },
+  //   {
+  //     title: '涨跌值',
+  //     align: 'center',
+  //     dataIndex: 'price',
+  //     render: (text, record, index) => {
+  //       return '-'
+  //     }
+  //     // render: (text, record, index) => {
+  //     //   const { text: t, color } = getKey(text, obj)
+  //     //   const { status, t } = text
+  //     //   return <div style={}>{t}</div>
+  //     // }
+  // },
+  //   {
+  //     title: '新的价格',
+  //     align: 'center',
+  //     dataIndex: 'price',
+  //     render: (text, record, index) => {
+  //       return '-'
+  //     }
+  //     // render: (text, record, index) => {
+  //     //   const { text: t, color } = getKey(text, obj)
+  //     //   const { status, t } = text
+  //     //   return <div style={}>{t}</div>
+  //     // }
+  // },
+  //   {
+  //     title: '变化时间',
+  //     align: 'center',
+  //     dataIndex: 'time',
+  // },
+// ];
 
   const data = [
     {
@@ -112,37 +109,37 @@ function HomeView () {
       .then((json) => setOrderData(json))
   };
 
-  const config = {
-    height: 400,
-    data: recharge_data,
-    padding: 'auto',
-    xField: 'Date',
-    yField: 'scales',
-    xAxis: { tickCount: 5 },
-    slider: {
-      start: 0.1,
-      end: 0.5,
-    },
-    color: '#2FC25B',
-  };
+  // const config = {
+  //   height: 400,
+  //   data: recharge_data,
+  //   padding: 'auto',
+  //   xField: 'Date',
+  //   yField: 'scales',
+  //   xAxis: { tickCount: 5 },
+  //   slider: {
+  //     start: 0.1,
+  //     end: 0.5,
+  //   },
+  //   color: '#2FC25B',
+  // };
 
-  const orderConfig = {
-    height: 400,
-    data: order_data,
-    xField: 'year',
-    yField: 'value',
-    seriesField: 'category',
-    xAxis: { type: 'time' },
-    legend: { position: 'top-right' },
-    yAxis: {
-      tickCount: 9,
-    },
-    slider: {
-      start: 0.1,
-      end: 0.5,
-    },
-    color: ['#2FC25B', '#FF8D30'],
-  };
+  // const orderConfig = {
+  //   height: 400,
+  //   data: order_data,
+  //   xField: 'year',
+  //   yField: 'value',
+  //   seriesField: 'category',
+  //   xAxis: { type: 'time' },
+  //   legend: { position: 'top-right' },
+  //   yAxis: {
+  //     tickCount: 9,
+  //   },
+  //   slider: {
+  //     start: 0.1,
+  //     end: 0.5,
+  //   },
+  //   color: ['#2FC25B', '#FF8D30'],
+  // };
 
   for (let i = 0; i < 3; i++) {
     data.push({
@@ -157,28 +154,28 @@ function HomeView () {
     })
   }
 
-  const orders = [
-    {
-      label: '待处理订单',
-      number: '6,560',
-      icon: home3,
-    },
-    {
-      label: '退款中订单',
-      number: '6,560',
-      icon: home1,
-    },
-    {
-      label: '通信失败订单',
-      number: '6,560',
-      icon: home5,
-    },
-    {
-      label: '库存预警',
-      number: '6,560',
-      icon: home4,
-    },
-  ]
+  // const orders = [
+  //   {
+  //     label: '待处理订单',
+  //     number: '6,560',
+  //     icon: home3,
+  //   },
+  //   {
+  //     label: '退款中订单',
+  //     number: '6,560',
+  //     icon: home1,
+  //   },
+  //   {
+  //     label: '通信失败订单',
+  //     number: '6,560',
+  //     icon: home5,
+  //   },
+  //   {
+  //     label: '库存预警',
+  //     number: '6,560',
+  //     icon: home4,
+  //   },
+  // ]
 
   return (
     <div className="container">

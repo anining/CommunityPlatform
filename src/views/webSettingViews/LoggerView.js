@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Table, Input, DatePicker } from 'antd'
+import React, { useState, useEffect, useRef } from 'react'
+import { Button, DatePicker, Input } from 'antd'
 import c from '../../styles/view.module.css'
 import good9 from '../../icons/good/good9.png'
 import { loginlogs } from "../../utils/api"
-import { dateFormat } from "../../utils/util"
-import TableComponent from '../../components/TableComponent'
+import { dateFormat, _debounce, regexNumber } from "../../utils/util"
+import Table from '../../components/Table'
 
 function LoggerView () {
 
@@ -22,18 +22,20 @@ function RTable () {
   const [current, setCurrent] = useState(1)
 	const [loading, setLoading] = useState(true)
   const [pageSize, setPageSize] = useState(10)
+  const [sort, setSort] = useState([])
   const [total, setTotal] = useState(0)
   const [manager_id, setManager_id] = useState()
   const [date, setDate] = useState([])
   const [moment, setMoment] = useState()
+  const num = useRef(_debounce(get, 500))
 
   useEffect(() => {
-    get(current)
-  }, [])
+    get()
+  }, [pageSize, current, JSON.stringify(sort)])
 
-  function get (current) {
+  function get (page = current) {
 		setLoading(true)
-    loginlogs(current, pageSize, manager_id, date[0], date[1]).then(r => {
+    loginlogs(page, pageSize, manager_id, date[0], date[1], sort).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
@@ -57,14 +59,9 @@ function RTable () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = dateFormat(item.created_at)
+      item.created_at = dateFormat(item.created_at)
     })
     return arr
-  }
-
-  function onChange (page) {
-    setCurrent(page)
-    get(page)
   }
 
   // const obj = ["#FF4D4F", "#FF8D30", '#000'];
@@ -73,6 +70,9 @@ function RTable () {
       title: 'ID',
 			ellipsis: true,
       dataIndex: 'id',
+      sorter: {
+        multiple: 1,
+      }
   },
     {
       title: '操作人账号',
@@ -88,7 +88,10 @@ function RTable () {
     {
       title: '登录时间',
 			ellipsis: true,
-      dataIndex: 'time',
+      dataIndex: 'created_at',
+      sorter: {
+        multiple: 4,
+      }
     },
   ];
 
@@ -97,14 +100,15 @@ function RTable () {
       <div className={c.searchView}>
         <div className={c.search} style={{borderBottomWidth:0}}>
           <div className={c.searchL}>
-            <Input onPressEnter={()=>get(current)} placeholder="请输入操作人账号" onChange={e=>setManager_id(e.target.value)} value={manager_id} size="small" className={c.searchInput}/>
-						{/* <> */}
-						{/* 	<DatePicker.RangePicker */}
-						{/* 		format="YYYY-MM-DD" */}
-						{/* 		onChange={dateChange} */}
-						{/* 		value={moment} */}
-						{/* 		className={c.dataPicker}/> */}
-						{/* 	</> */}
+            <Input onPressEnter={()=> {
+              setCurrent(1)
+              get()
+            }} placeholder="请输入操作人账号" onChange={e=>setManager_id(regexNumber(e.target.value))} value={manager_id} size="small" className={c.searchInput}/>
+            <DatePicker.RangePicker
+              format="YYYY-MM-DD"
+              onChange={dateChange}
+              value={moment}
+              className={c.dataPicker}/>
           </div>
           <div className={c.searchR}>
             <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>
@@ -112,17 +116,20 @@ function RTable () {
               icon={<img src={good9} alt="" style={{width:14,marginRight:6}} />}
               type="primary"
               size="small"
-              onClick={()=>get(current)}
+              onClick={()=> {
+                setCurrent(1)
+                get()
+              }}
               className={c.searchBtn}>搜索记录</Button>
           </div>
         </div>
       </div>
-			<TableComponent
+			<Table
 				scroll={null}
+        setSort={setSort}
 				setPageSize={setPageSize}
 				loading={loading}
 				setCurrent={setCurrent}
-				getDataSource={get}
 				columns={columns}
 				dataSource={data}
 				pageSize={pageSize}

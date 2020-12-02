@@ -24,7 +24,7 @@ export function communityGoodsCategories (type, cid, table, body) {
 export function docking (type, gid, table, body) {
   switch (type) {
     case "get":
-			return customizeFetch("GET", "/ext_prvds", table)
+			return customizeFetch("GET", "/verbose_ext_prvds", table)
     case "add":
 			return customizeFetch("POST", "/ext_prvds", body)
     case "modify":
@@ -43,8 +43,6 @@ export function communityGoods (type, gid, table, body) {
       return customizeFetch("POST", "/cmnt_goods", body);
     case "modify":
       return customizeFetch("PATCH", "/cmnt_goods", body, gid);
-    case "modifys":
-      // return transformFetch("PATCH", `/cmnt_goods?${table}`, body);
     default:
 			return customizeFetch("DELETE", "/cmnt_goods", body);
   }
@@ -66,25 +64,29 @@ export function cmntPadjs (type, pid, table, body) {
 export function customerServices (type, cid, table, body) {
   switch (type) {
     case "get":
-      return customizeFetch("GET", "/customer_services")
+      return customizeFetch("GET", "/customer_services", table)
+    case "delete":
+      return customizeFetch("DELETE", "/customer_services", body)
+    case "modify":
+      return customizeFetch("PATCH", "/customer_services", body, cid);
     default:
-      return transformFetch("POST", "/customer_services", body);
+      return customizeFetch("POST", "/customer_services", body);
   }
 }
 
 // 获取登录日志
-export function loginlogs (page, size, manager_id, start_from, end_with) {
+export function loginlogs (page, size, manager_id, start_from, end_with, sorter) {
   let data = { page, size }
   if (end_with) {
-		data = { ...data, ...{updated_at: end_with} }
+		data = { ...data, ...{end_with} }
   }
   if (start_from) {
-		data = { ...data, ...{created_at: start_from} }
+		data = { ...data, ...{start_from} }
   }
   if (manager_id) {
 		data = { ...data, ...{ merchant_id: manager_id } }
   }
-  return customizeFetch("GET", "/oplogs", data)
+  return customizeFetch("GET", "/oplogs", data, undefined, sorter)
 }
 
 // 标签分组
@@ -111,21 +113,18 @@ export function tags (type, tid, body) {
   }
 }
 
-// 获取用户列表
-export function users (page, size, account, status) {
-  let data = { page, size }
-  if (account) {
-    data = { ...data, ...{ account } }
+//用户
+export function users (type, cid, table, body) {
+  switch (type) {
+    case "get":
+			return customizeFetch("GET", "/verbose_customers", table)
+    case "add":
+			return customizeFetch("POST", "/customers", body)
+    case "modify":
+			return customizeFetch("PATCH", "/customers", body, cid)
+    default:
+			return customizeFetch("DELETE", "/customers", body)
   }
-  if (status) {
-    data = { ...data, ...{ status } }
-  }
-  return customizeFetch("GET", "/verbose_customers", data)
-}
-
-// 添加用户
-export function addUsers (account, lv, status) {
-	return customizeFetch("POST", "/customers", {account, lv, status, password: "a123456"})
 }
 
 // 公告
@@ -140,47 +139,53 @@ export function announcements (type, cid, table, body) {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 批量修改用户信息
-export function updateUsers (lv, body) {
-  return transformFetch("PATCH", "/users?" + body, lv)
+// 供货商
+export function providers (type, id, table, body) {
+  switch (type) {
+    case "get":
+      return customizeFetch("GET", "/suppliers", table);
+    case "add":
+      return customizeFetch("POST", "/suppliers", body);
+    case "modify":
+      return customizeFetch("PATCH", "/suppliers", body, id);
+    default:
+      return customizeFetch("DELETE", "/suppliers", body);
+  }
 }
+
+// 供货商商品摘要
+export function goodsSummaries (body) {
+  return customizeFetch("GET", "/verbose_supp_goods", body)
+}
+
+// 店铺设置
+export function storeConfig (type, body) {
+  switch (type) {
+    case "get":
+      return customizeFetch("POST", "/rpc/store_configs")
+    default:
+      return customizeFetch("POST", "/rpc/set_store_configs", body)
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 用户加减款
 export function usersBalances (id, amount) {
@@ -240,40 +245,6 @@ export function permissions () {
   return transformFetch("GET", "/permissions")
 }
 
-// 社区下单模型
-export function communityParamTemplates (type, pid, table, body) {
-  switch (type) {
-    case "get":
-      return transformFetch("GET", "/cmnt-ptpls", table)
-    case "add":
-      return transformFetch("POST", "/cmnt-ptpls", body)
-    case "modify":
-      return transformFetch("PUT", `/cmnt-ptpls/${pid}`, body)
-    default:
-      return transformFetch("DELETE", `/cmnt-ptpls?${body}`)
-  }
-}
-
-// 供货商摘要
-export function providerSummaries () {
-  return transformFetch("GET", "/supp-summaries")
-}
-
-// 供货商商品摘要
-export function goodsSummaries (id) {
-  return transformFetch("GET", `/supps/${id}/goods-summaries`)
-}
-
-// 店铺设置
-export function storeConfig (type, body) {
-  switch (type) {
-    case "get":
-      return transformFetch("GET", "/store-config")
-    default:
-      return transformFetch("PUT", "/store-config", body)
-  }
-}
-
 // 获取社区订单列表
 export function communityGoodsOrders (page, size, id, refund_status, search_user_account, search_goods_name, community_goods_category_id, status, start_from, end_with) {
   let data = { page, size }
@@ -312,20 +283,6 @@ export function orderHis (order_id) {
 // 商户主动退款
 export function refundAccept (id,amount) {
   return transformFetch("PUT", `/cmnt-orders/${id}/refund/accept`, { amount })
-}
-
-// 供货商
-export function providers (type, id, table, body) {
-  switch (type) {
-    case "get":
-      return transformFetch("GET", "/supps", table);
-    case "add":
-      return transformFetch("POST", "/supps", body);
-    case "modify":
-      return transformFetch("PUT", `/supps/${id}`, body);
-    default:
-      // return transformFetch("DELETE", `/community-goods-categories/${cid}`);
-  }
 }
 
 //供货商结算
@@ -370,11 +327,6 @@ export function extPrvdStats () {
 	return transformFetch("GET", `/ext-prvd-stat`);
 }
 
-// 供货商商品明细
-export function suppGood (id) {
-	return transformFetch("GET", `/supp-goods/${id}`);
-}
-
 // 批量修改订单备注
 export function orderComments (ids, comment) {
 	return transformFetch("PUT", `/cmnt-order-comments?${ids}`, {ids, comment});
@@ -388,11 +340,6 @@ export function ordersStat () {
 // 获取社区商品统计信息
 export function goodsStat () {
 	return transformFetch("GET", `/cmnt-goods-stat`);
-}
-
-// 批量删除社区商品
-export function delGoods (ids) {
-	return transformFetch("DELETE", `/cmnt-goods?${ids}`);
 }
 
 // 修改社区商品价格

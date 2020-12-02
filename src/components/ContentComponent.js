@@ -10,16 +10,12 @@ import GoodCategoryView from '../views/communityBusinessViews/GoodCategoryView'
 import EditGoodCategoryView from '../views/communityBusinessViews/EditGoodCategoryView'
 import CommunityGoodView from '../views/communityBusinessViews/CommunityGoodView'
 import EditCommunityGoodView from '../views/communityBusinessViews/EditCommunityGoodView'
-
-
 import ChildWebListView from '../views/childWebViews/ChildWebListView'
 import EditChildWebView from '../views/childWebViews/EditChildWebView'
-
 import StoreSettingView from '../views/childWebViews/StoreSettingView'
 import CardGoodView from '../views/cardBusinessViews/CardGoodView'
 import EditCardGoodView from '../views/cardBusinessViews/EditCardGoodView'
 import CardManageView from '../views/cardBusinessViews/CardManageView'
-
 import CardCategoryView from '../views/cardBusinessViews/CardCategoryView'
 import EditCardCategoryView from '../views/cardBusinessViews/EditCardCategoryView'
 import EditUserPriceView from '../views/userViews/EditUserPriceView'
@@ -40,7 +36,6 @@ import PassWordView from "../views/webSettingViews/PassWordView"
 import LoggerView from "../views/webSettingViews/LoggerView"
 import AboutView from "../views/webSettingViews/AboutView"
 import BusinessSettingView from "../views/webSettingViews/BusinessSettingView"
-
 import DataStatisticsView from "../views/statisticsViews/DataStatisticsView"
 import MoneyStatisticsView from "../views/statisticsViews/MoneyStatisticsView"
 import UserStatisticsView from "../views/statisticsViews/UserStatisticsView"
@@ -53,7 +48,6 @@ import { getter } from "../utils/store"
 import ErrorView from "../views/systemSettingViews/ErrorView"
 import MarkupTemView from "../views/communityBusinessViews/MarkupTemView"
 import EditMarkupTemView from "../views/communityBusinessViews/EditMarkupTemView"
-
 import StorePlugView from "../views/childWebViews/StorePlugView"
 import ImportView from "../views/servicesViews/ImportView"
 import ImpCommunityGoodView from '../views/communityBusinessViews/ImpCommunityGoodView'

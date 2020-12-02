@@ -15,14 +15,14 @@ function AddPeopleServiceView () {
   const [loading, setLoading] = useState(false)
 
   function save (jump) {
-    if (!name || !contact) {
+    if (!name || !contact || !comment) {
       message.warning("请完善信息")
       return
     }
     let body = { name, contact }
     comment && (body = { ...body, ...{ comment } })
     setLoading(true)
-    customerServices(id ? 'modify' : 'add', undefined, undefined, { name, contact, comment }).then(r => {
+    customerServices(id ? 'modify' : 'add', id, undefined, { name, contact, comment }).then(r => {
       setLoading(false)
       if (!r.error) {
         saveSuccess(jump)
@@ -71,7 +71,7 @@ function AddPeopleServiceView () {
         </div>
         <div className={c.item}>
           <div className={c.itemName}>
-            <span style={{color:'#fff'}}>*</span>
+            <span>*</span>
             <div className={c.itemText}>客服备注</div>
           </div>
           <Input placeholder="请输入客服备注" onChange={e=>setComment(e.target.value)} value={comment} maxLength={80} className={c.itemInput}></Input>

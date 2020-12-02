@@ -1,6 +1,6 @@
 import * as React from 'karet'
 import { useState, useEffect } from 'react'
-import { Button, Table, Input, Breadcrumb, Space } from 'antd'
+import { Button, Input, Breadcrumb, Space } from 'antd'
 import c from '../../styles/view.module.css'
 import oc from '../../styles/oc.module.css'
 import cs from '../../styles/edit.module.css'
@@ -14,7 +14,7 @@ import { communityDiscPrices, addDiscPrices, deleteDiscPrices } from "../../util
 import { saveSuccess, push } from "../../utils/util";
 import { USER_RANK, SCROLL } from '../../utils/config'
 import ModalPopComponent from "../../components/ModalPopComponent"
-import TableComponent from '../../components/TableComponent'
+import Table from '../../components/Table'
 
 function EditUserPriceView () {
   const { state = {} } = useHistory().location
@@ -303,10 +303,9 @@ function RTable ({setCurrent, loading, setPageSize, get, setGoods_name, current,
             </div>
           </div>
       </div>
-			<TableComponent
+			<Table
 				setPageSize={setPageSize}
 				setCurrent={setCurrent}
-				getDataSource={get}
 				columns={columns}
 				loading={loading}
 				dataSource={data}

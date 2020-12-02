@@ -1,22 +1,17 @@
 import React, {useState, useEffect} from 'react'
-import {Button, Table, message, Input} from 'antd'
+import {Button, message, Input} from 'antd'
 import c from '../../styles/view.module.css'
 import good38 from '../../icons/good/good38.png'
 import good39 from '../../icons/good/good39.png'
-
 import good9 from '../../icons/good/good9.png'
 import good57 from '../../icons/good/good57.png'
 import good58 from '../../icons/good/good58.png'
-
 import TableHeaderComponent from "../../components/TableHeaderComponent";
-
 import {paySettle, providers} from "../../utils/api"
-
 import Space from "antd/es/space"
 import {getPath, saveSuccess, push} from "../../utils/util"
 import ActionComponent from '../../components/ActionComponent'
-import {SCROLL} from '../../utils/config'
-import TableComponent from '../../components/TableComponent'
+import Table from '../../components/Table'
 
 function StoreView() {
 
@@ -68,13 +63,13 @@ function RTable() {
 
   useEffect(() => {
     get(current)
-  }, [])
+  }, [pageSize, current])
 
-  function get(current) {
+  function get(page = current) {
 		setLoading(true)
-    let body = {page: current, size: pageSize}
+    let body = {page, size: pageSize}
     if (nickname) {
-      body = { ...body, ...{ nickname } }
+      body = { ...body, ...{ name: nickname } }
     }
     providers("get", undefined, body).then(r => {
       if (!r.error) {
@@ -82,7 +77,6 @@ function RTable() {
         setTotal(total)
         setData(format(data))
 				setSelectRows([])
-				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		}).catch(()=>setLoading(false))
@@ -95,31 +89,26 @@ function RTable() {
     return arr
   }
 
-  function onChange(page ) {
-    setCurrent(page)
-    get(page)
-  }
-
-  const obj = [
-    {
-      text: '关闭',
-      color: '#595959',
-    },
-    {
-      text: '正常',
-      color: '#2C68FF'
-    }
-  ]
-  const obj1 = [
-    {
-      text: '是',
-      color: '#595959',
-    },
-    {
-      text: '否',
-      color: '#595959'
-    }
-  ]
+  // const obj = [
+  //   {
+  //     text: '关闭',
+  //     color: '#595959',
+  //   },
+  //   {
+  //     text: '正常',
+  //     color: '#2C68FF'
+  //   }
+  // ]
+  // const obj1 = [
+  //   {
+  //     text: '是',
+  //     color: '#595959',
+  //   },
+  //   {
+  //     text: '否',
+  //     color: '#595959'
+  //   }
+  // ]
   const columns = [
     {
       title: '供货商编号',
@@ -129,18 +118,18 @@ function RTable() {
     {
       title: '供货商名称',
 			ellipsis: true,
-      dataIndex: 'nickname',
+      dataIndex: 'name',
     },
     {
       title: '供货商账号',
 			ellipsis: true,
       dataIndex: 'account',
     },
-    {
-      title: '供货商商品数',
-			ellipsis: true,
-      dataIndex: 'providing_amount',
-    },
+    // {
+    //   title: '供货商商品数',
+			// ellipsis: true,
+    //   dataIndex: 'providing_amount',
+    // },
     {
       title: '总消耗',
 			ellipsis: true,
@@ -161,9 +150,7 @@ function RTable() {
       title: '申请结算',
 			ellipsis: true,
       dataIndex: 'value_stlreqed',
-      render: (text , index) => {
-        return <div>{text || 0}</div>
-      }
+      render: text => text || 0
     },
     {
       title: '供货状态',
@@ -190,21 +177,21 @@ function RTable() {
 			fixed: 'right',
       render: (...arg) => (
         <Space size="small" className={c.space}>
-          <div className={c.clickText} onClick={()=>push("/main/edit-store",arg[1])}>修改信息</div>
+          <div className={c.clickText} onClick={()=>push("/main/edit-store", arg[1])}>修改信息</div>
           <div className={c.line} />
-					<div className={c.clickText} onClick={()=>push("/main/import-good",{...arg[1],...{provider_type: "supplier"}})}>导入商品</div>
+					<div className={c.clickText} onClick={()=>push("/main/import-good", {...arg[1], ...{ provider_type: "supplier" }})}>导入商品</div>
           <div className={c.line} />
-          <div className={c.clickText} onClick={() => {
-            if(!getPath(['0', 'value_stlreqed'], arg)) {
-              message.info('暂无可结算金额');
-              return false;
-            }
-            paySettle(arg[0]['id']).then(r=>{
-              if (!r.error) {
-                saveSuccess(false)
-                get(current)
-              }
-            })
+          <div style={{cursor: 'wait'}} className={c.clickText} onClick={() => {
+            // if(!getPath(['0', 'value_stlreqed'], arg)) {
+            //   message.info('暂无可结算金额');
+            //   return false;
+            // }
+            // paySettle(arg[0]['id']).then(r=>{
+            //   if (!r.error) {
+            //     saveSuccess(false)
+            //     get(current)
+            //   }
+            // })
           }}>
             立即结算
           </div>
@@ -212,13 +199,6 @@ function RTable() {
       )
     }
   ];
-
-  const rowSelection = {
-    onChange: (selectedRowKeys ) => {
-      setSelectRows(selectedRowKeys)
-    },
-    selectedRowKeys: selectedRows
-  };
 
   function submit(key) {
     switch (key) {
@@ -238,14 +218,21 @@ function RTable() {
       <div className={c.searchView}>
         <div className={c.search}>
           <div className={c.searchL}>
-            <Input placeholder="请输入名称" value={nickname} onChange={e=>setNickname(e.target.value)} onPressEnter={()=>get(current)} size="small" className={c.searchInput}/>
+            <Input placeholder="请输入名称" value={nickname} onChange={e=>setNickname(e.target.value)} onPressEnter={()=> {
+              setCurrent(1)
+              get(1)
+            }} size="small" className={c.searchInput}/>
           </div>
           <div className={c.searchR}>
             <Button size="small" className={c.resetBtn} onClick={reset}>重置</Button>
-            <Button icon={<img src={good9} alt="" style={{width: 14, marginRight: 6}}/>}
+            <Button 
+              icon={<img src={good9} alt="" style={{width: 14, marginRight: 6}}/>}
               type="primary"
               size="small"
-              onClick={() => get(current)}
+              onClick={() => {
+                setCurrent(1)
+                get(1)
+              }}
               className={c.searchBtn}
             >
               搜索
@@ -254,10 +241,9 @@ function RTable() {
         </div>
       </div>
 			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
-			<TableComponent
+			<Table
 				setPageSize={setPageSize}
 				setCurrent={setCurrent}
-				getDataSource={get}
 				loading={loading}
 				setSelectedRowKeys={setSelectRows}
 				selectedRowKeys={selectedRows}

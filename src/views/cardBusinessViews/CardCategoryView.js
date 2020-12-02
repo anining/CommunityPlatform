@@ -4,8 +4,6 @@ import c from '../../styles/view.module.css'
 import good7 from '../../icons/good/good7.png'
 import good31 from '../../icons/good/good31.png'
 import { push, transformTime } from "../../utils/util"
-
-
 import ActionComponent from '../../components/ActionComponent'
 
 function CardCategoryView () {
@@ -18,7 +16,7 @@ function CardCategoryView () {
   )
 }
 
-function RTable ({  }) {
+function RTable () {
   const [selectedRows, setSelectRows] = useState([]);
   const [, ] = useState()
   const [data, ] = useState([])
@@ -44,13 +42,13 @@ function RTable ({  }) {
     // })
   }
 
-  function format (arr) {
-    arr.forEach((item, index) => {
-      item.key = index
-      item.time = transformTime(item.created_at)
-    })
-    return arr
-  }
+  // function format (arr) {
+  //   arr.forEach((item, index) => {
+  //     item.key = index
+  //     item.time = transformTime(item.created_at)
+  //   })
+  //   return arr
+  // }
 
   function onChange (page ) {
     setCurrent(page)
