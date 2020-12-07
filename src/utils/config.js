@@ -143,7 +143,7 @@ const REFUND_STATUS = {
     text: '已拒绝',
   }
 }
-const SCROLL = {x:"120%"}
+const SCROLL = { x: 1624 }
 const CONSUMPTION_TYPE = {
 	charge: {
 		color: "#52C41A",
@@ -249,5 +249,18 @@ const COMMUNITY_SYNC_STATUS = {
 		text: '已停止',
 	}
 }
+const CONTACTS = {
+  "goods-community": "https://easydoc.xyz/s/85631950/b7F85hU0/nGkRDjmE",
+  "category-community": "https://easydoc.xyz/s/85631950/b7F85hU0/HzDBiNoK",
+  "markup-community": "https://easydoc.xyz/s/85631950/b7F85hU0/eHeEtlOz",
+  "label": "https://easydoc.xyz/s/85631950/b7F85hU0/ydnOOLLx",
+  "store": "https://easydoc.xyz/s/85631950/b7F85hU0/7tOGXRvl",
+  "docking": "https://easydoc.xyz/s/85631950/b7F85hU0/xxrFJ6pS",
+  "community-recording": "https://easydoc.xyz/s/85631950/b7F85hU0/UVM0rofK",
+  "user": "https://easydoc.xyz/s/85631950/b7F85hU0/9bpqAjgO",
+  "store-setting": "https://easydoc.xyz/s/85631950/b7F85hU0/5CQSR9T2",
+  "plug-setting": "https://easydoc.xyz/s/85631950/b7F85hU0/Dzg5dG3i",
+  "rebot-setting": "https://easydoc.xyz/s/85631950/b7F85hU0/JXAlaL1r"
+}
 
-export { COMMUNITY_SYNC_STATUS, COMMUNITY_AFTER_STATUS, COMMUNITY_ORDER_STATUS, CARD_STATUS, CONSUMPTION_TYPE, REFUND_STATUS, SCROLL, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY}
+export { CONTACTS, COMMUNITY_SYNC_STATUS, COMMUNITY_AFTER_STATUS, COMMUNITY_ORDER_STATUS, CARD_STATUS, CONSUMPTION_TYPE, REFUND_STATUS, SCROLL, PERMISSION, TEM_TYPE, PERMISSIONS_ARRAY, USER_STATUS, USER_RANK, CARDS_STATUS, GOODS_STATUS, API_URL, PERMISSIONS, DEVELOPER, JUMP_DELAY}

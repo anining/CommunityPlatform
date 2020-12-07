@@ -17,31 +17,31 @@ function CapitalFlowView () {
   const data = [
     {
       label: '今日下单额',
-      number: '0',
+      number: '-',
       icon: good66,
       id: 111,
     },
     {
       label: '今日退款额',
-      number: '0',
+      number: '-',
       icon: good67,
       id: 222,
     },
     {
       label: '今日充值',
-      number: '0',
+      number: '-',
       icon: good65,
       id: 333,
     },
     {
       label: '今日加款',
-      number: '0',
+      number: '-',
       icon: good64,
       id: 333,
     },
     {
       label: '今日减款',
-      number: '0',
+      number: '-',
       icon: good63,
       id: 333,
     }
@@ -58,7 +58,6 @@ function CapitalFlowView () {
 }
 
 function RTable () {
-  const [, ] = useState([]);
   const [data, setData] = useState([])
   const [current, setCurrent] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -68,12 +67,12 @@ function RTable () {
   const [moment, setMoment] = useState()
 
   useEffect(() => {
-    get(current)
-  }, [])
+    get()
+  }, [pageSize, current])
 
-  function get (current) {
+  function get (page = current) {
 		setLoading(true)
-    balanceChanges(current, pageSize, date[0], date[1]).then(r => {
+    balanceChanges(page, pageSize, date[0], date[1]).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
@@ -86,7 +85,7 @@ function RTable () {
   function format (arr) {
     arr.forEach((item, index) => {
       item.key = index
-      item.time = transformTime(item.created_at)
+      item.created_at = transformTime(item.created_at)
     })
     return arr
   }
@@ -95,7 +94,8 @@ function RTable () {
     {
       title: '用户账号',
 			ellipsis: true,
-      dataIndex: 'user_account',
+      dataIndex: 'customers',
+      render: text => text.account
   },
     {
       title: '变动数额',
@@ -130,16 +130,6 @@ function RTable () {
   },
   ];
 
-  // function submit (key) {
-  //   switch (key) {
-  //     case "delete":
-  //       message.success('批量删除操作');
-  //       break
-  //     default:
-  //       ;
-  //   }
-  // }
-
   function reset () {
     setMoment(undefined)
     setDate([])
@@ -167,12 +157,14 @@ function RTable () {
           </div>
           <div className={c.searchR}>
             <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>
-            <Button icon={
-                <img src={good9} alt="" style={{width:14,marginRight:6}} />
-              }
-              type = "primary"
-              size = "small"
-              onClick={()=>get(current)}
+            <Button 
+              icon={<img src={good9} alt="" style={{width:14,marginRight:6}} />}
+              type="primary"
+              size="small"
+              onClick={()=> {
+                setCurrent(1)
+                get(1)
+              }}
               className={c.searchBtn}>搜索记录</Button>
           </div>
         </div>

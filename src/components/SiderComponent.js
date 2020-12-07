@@ -162,18 +162,21 @@ function SiderComponent ({ collapsed  }) {
         {/* )) } */}
 				{/* </> */}
 				{/* <> */}
-				{/* 	{ U.when(R.includes('orderlog',permissions), ( */}
-				{/* 			<Menu.SubMenu onTitleClick={onTitleClick} key="recording" title={<Title keys="recording" label="订单记录" />}> */}
-				{/* 				<Menu.Item key="community-recording">社区订单</Menu.Item> */}
-				{/* 				{/1* <Menu.Item key="card-recording">卡密订单</Menu.Item> *1/} */}
-				{/* 			</Menu.SubMenu> */}
-				{/* 	)) } */}
-				{/* 	{ U.when(R.includes('capitalflow',permissions), ( */}
-				{/* 			<Menu.Item key="flow" icon={<Icon keys="flow" />}> */}
-				{/* 				资金记录 */}
-				{/* 			</Menu.Item> */}
-				{/* 	)) } */}
-				{/* </> */}
+        {
+          U.when(R.includes('orderlog',permissions), (
+            <Menu.SubMenu onTitleClick={onTitleClick} key="recording" title={<Title keys="recording" label="订单记录" />}>
+              {/* <Menu.Item key="community-recording">社区订单</Menu.Item> */}
+              {/* <Menu.Item key="card-recording">卡密订单</Menu.Item> */}
+            </Menu.SubMenu>
+          ))
+        }
+        {
+          U.when(R.includes('capitalflow',permissions), (
+            <Menu.Item key="flow" icon={<Icon keys="flow" />}>
+              资金记录
+            </Menu.Item>
+					))
+        }
         {
           U.when(R.includes('usermng',permissions), (
             <Menu.Item key="user" icon={<Icon keys="user" />} >
@@ -201,13 +204,13 @@ function SiderComponent ({ collapsed  }) {
           ))
         }
         <Menu.SubMenu onTitleClick={onTitleClick} key="system" title={<Title keys="system" label="系统设置" />}>
-         {/* { */} 
-         {/*   U.when(R.equals(role, "superuser"), <Menu.Item key="admin-system">系统管理员</Menu.Item>) */}
-         {/* } */}
+          { 
+            U.when(R.equals(role, "superuser"), <Menu.Item key="admin-system">系统管理员</Menu.Item>)
+          }
           <Menu.Item key="logger-system">登录日志</Menu.Item>
          {/* <Menu.Item key="business-system">业务配置</Menu.Item> */}
          {/* <Menu.Item key="about-system">系统信息</Menu.Item> */}
-         {/* <Menu.Item key="password-system">修改密码</Menu.Item> */}
+         <Menu.Item key="password-system">修改密码</Menu.Item>
         </Menu.SubMenu>
       </Menu>
     )

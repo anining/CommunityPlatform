@@ -42,9 +42,9 @@ function EditUserPriceView () {
     setVisible(false)
   }
 
-  function get (current) {
+  function get (page = current) {
 		setLoading(true)
-    communityDiscPrices(current, pageSize, id, goods_id, goods_name, good_category_id).then(r => {
+    communityDiscPrices(page, pageSize, id, goods_id, goods_name, good_category_id).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
@@ -127,7 +127,7 @@ function EditUserPriceView () {
         </div>
         <div className={c.header} style={{marginTop:24,flexDirection:'column',paddingLeft:24}}>
           <div className={cs.headerT} style={{marginTop:24}}>
-            <div style={{zIndex:1}}>用户商品用户密价</div>
+            <div style={{zIndex:1}}>用户密价</div>
             <div className={cs.circle} />
           </div>
           <div style={{display:'flex',alignItems:'center',marginTop:38}}>
@@ -154,8 +154,8 @@ function EditUserPriceView () {
 function RTable ({setCurrent, loading, setPageSize, get, setGoods_name, current, pageSize, data, total, goods_name, setVisible,  setSelected  }) {
 
   useEffect(() => {
-    get(current)
-  }, [])
+    get()
+  }, [current, pageSize])
 
   function insertSave (goods_id, index, disc_price_id) {
     // setVisible(data.map((item, i) => false))
@@ -180,11 +180,6 @@ function RTable ({setCurrent, loading, setPageSize, get, setGoods_name, current,
     //     }
     //   })
     // }
-  }
-
-  function onChange (page ) {
-    setCurrent(page)
-    get(page)
   }
 
   function reset () {
@@ -288,7 +283,10 @@ function RTable ({setCurrent, loading, setPageSize, get, setGoods_name, current,
         <div className={c.searchView}>
           <div className={c.search} style={{borderBottom:'none'}}>
             <div className={c.searchL}>
-              <Input placeholder="请输入商品名称" onChange={e=>setGoods_name(e.target.value)} value={goods_name} size="small" className={c.searchInput} onPressEnter={()=>get(current)}/>
+              <Input placeholder="请输入商品名称" onChange={e=>setGoods_name(e.target.value)} value={goods_name} size="small" className={c.searchInput} onPressEnter={()=> {
+                setCurrent(1)
+                get(1)
+              }}/>
               {/* <SelectComponent click={click} id={good_category_id} name={good_category_name} placeholder="请选择商品分类" style={{width:186}}/> */}
             </div>
             <div className={c.searchR}>
@@ -296,9 +294,12 @@ function RTable ({setCurrent, loading, setPageSize, get, setGoods_name, current,
               <Button icon={
                 <img src={good9} alt="" style={{width:14,marginRight:6}} />
               }
-              type = "primary"
-                onClick={()=>get(current)}
-              size = "small"
+              type="primary"
+              onClick={()=> {
+                setCurrent(1)
+                get(1)
+              }}
+              size="small"
               className={c.searchBtn}>搜索商品</Button>
             </div>
           </div>

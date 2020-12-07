@@ -4,7 +4,7 @@ import cs from '../../styles/business.module.css'
 import edit24 from '../../icons/edit/edit24.png'
 import edit26 from '../../icons/edit/edit26.png'
 import { Button } from 'antd'
-import { tagGroups } from "../../utils/api"
+import { tagGroups, tags as tagsApi } from "../../utils/api"
 
 function SelectTableView () {
   const [tagsGroup, setTagsGroup] = useState([])
@@ -13,7 +13,14 @@ function SelectTableView () {
   useEffect(() => {
     tagGroups('get').then(r => {
       const { data, error } = r;
-      !error && setTagsGroup(data)
+			if (!error) {
+				tagsApi("get").then(response => {
+					const { data: tags, error } = response;
+					if(!error) {
+						setTagsGroup(data.map(i => ({...i,...{tags: tags.filter(tag => tag.group_id === i.id)}})))
+					}
+				})
+			}
     })
   }, [])
 

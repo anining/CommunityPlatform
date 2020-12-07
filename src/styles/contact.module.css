@@ -1,0 +1,33 @@
+.img {
+  width: 70px;
+}
+
+.view {
+  width: 100px;
+  position: fixed;
+  right: -60px;
+  bottom: 120px;
+  z-index: 9;
+}
+
+.view:hover {
+  animation:mymove 1000ms forwards;
+}
+
+@keyframes mymove {
+  from {
+    right: -60px;
+  }
+  to {
+    right: 0px;
+  }
+}
+ 
+@-webkit-keyframes mymove {/* Safari 与 Chrome */
+  from {
+    right: -60px;
+  }
+  to {
+    right: 0px;
+  }
+}

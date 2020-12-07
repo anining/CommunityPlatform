@@ -253,12 +253,13 @@ function ImportView () {
   }
 
   const columns = [
-    // {
-    //   title: '导入状态',
-			// ellipsis: true,
-    //   dataIndex: 'imported',
+    {
+      title: '导入状态',
+			ellipsis: true,
+      dataIndex: 'imported',
+      render: () => "-"
 			// render: (text) => text ? `已导入${text}次` : "未导入"
-  // },
+  },
     {
       title: '商品编号',
 			ellipsis: true,

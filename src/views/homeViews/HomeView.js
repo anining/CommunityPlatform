@@ -10,10 +10,11 @@ import home7 from '../../icons/home/home7.png'
 import home8 from '../../icons/home/home8.png'
 import home9 from '../../icons/home/home9.png'
 import { getter } from "../../utils/store";
-import {push} from "../../utils/util"
+import { storage } from "../../utils/storage"
+import { currentManager } from "../../utils/api"
+import {dateFormat, push} from "../../utils/util"
 
 function HomeView () {
-  const { nickname } = getter(["nickname"])
   // const obj = ["#FF4D4F", "#52C41A"]
   // const columns = [
   //   {
@@ -88,8 +89,25 @@ function HomeView () {
   ];
   const [recharge_data, setRechargeData] = useState([]);
   const [order_data, setOrderData] = useState([]);
+  const [name, setName] = useState("")
+  const [lastLoginIp, setLastLoginIp] = useState("")
+  const [lastLoginAt, setLastLoginAt] = useState("")
+
+  function get () {
+		const merchant_id = storage.getItem("merchant_id")
+    currentManager({id: merchant_id}).then(r => {
+      const { data, error } = r
+      if (!error && data) {
+        const { name, last_login_ip, last_login_at} = data[0]
+        setName(name)
+        setLastLoginAt(dateFormat(last_login_at))
+        setLastLoginIp(last_login_ip)
+      }
+    })
+  }
 
   useEffect(() => {
+    get()
     asyncFetch();
     orderAsyncFetch();
   }, []);
@@ -183,7 +201,7 @@ function HomeView () {
           <img src={home8} alt="" className={c.avatar}/>
           <div className={c.headerU}>
             <div className={c.headerUN}>
-              <div>欢迎您，{nickname}，祝您开心每一天！</div>
+              <div>欢迎您，{name}，祝您开心每一天！</div>
               <div className={c.headerUNTips}>旗舰版</div>
             </div>
             <div className={c.headerUT}>到期时间：<div style={{color:'#34374A'}}>公测期间免费使用</div>　<span style={{cursor:'pointer'}} onClick={()=>message.warning("敬请期待!")}>续费</span></div>
@@ -192,8 +210,8 @@ function HomeView () {
           <div className={c.line}/>
           <div className={c.headerL}>
             <div className={c.headerLTips}>上次登录信息</div>
-            <div className={c.headerLPath}>暂无</div>
-            {/* <div className={c.headerLTime}>2020.01.15 15:15:23</div> */}
+            <div className={c.headerLTime}>{lastLoginIp}</div>
+            <div className={c.headerLTime}>{lastLoginAt}</div>
           </div>
           <Button disabled={true} size="small" type="primary" className={c.headerBtn} onClick={()=>push('/main/dataSetting')}>主页看板设置</Button>
           <img src={home7} alt="" className={c.headerBg}/>

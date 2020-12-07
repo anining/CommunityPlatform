@@ -3,17 +3,17 @@ import c from '../../styles/edit.module.css'
 import { Input, Transfer, Button, message, Breadcrumb } from 'antd'
 import 'react-quill/dist/quill.snow.css';
 import good5 from '../../icons/good/good5.png'
-import { permissions, managers } from "../../utils/api";
+import { permissions, managers, merchantPermissions } from "../../utils/api";
 import { saveSuccess, getKey, push } from "../../utils/util";
 import { useHistory } from "react-router-dom";
 import { PERMISSIONS } from "../../utils/config";
 
 function AddAdminView () {
   const { state = {} } = useHistory().location
-  const { account, id, nickname, permissions: p } = state
-  const initPermissions = p ? JSON.parse(p) : []
+  const { account, id, name: n, permissions: p } = state
+  const initPermissions = p || []
   const [number, setNumber] = useState(account) // 管理员账号
-  const [name, setName] = useState(nickname) // 管理员名称
+  const [name, setName] = useState(n) // 管理员名称
   const [purview, setPurview] = useState([]) // 权限列表
   const [targetKeys, setTargetKeys] = useState([]) // 选中权限列表
   const [loading, setLoading] = useState(false)
@@ -48,16 +48,49 @@ function AddAdminView () {
   function save () {
     if (!name || !number) {
       message.warning("请完善信息")
-      return;
+      return
     }
     setLoading(true)
-    let body = { account: number, nickname: name, permissions: targetKeys.map(i => purview[i].val) }
-    managers(id ? "modify" : "add", id, body).then(r => {
-      setLoading(false)
-      setNumber(undefined)
-      setName(undefined)
-      setTargetKeys([]);
-      !r.error && saveSuccess()
+
+    let managersData = { name }
+    if (!id) {
+      managersData = {...managersData, ...{account: number, password: "a123456", role: "user"}}
+    }
+    managers(id ? "modify" : "add", id, undefined, managersData).then(r => {
+      if (!r.error) {
+        if (id) {
+          // modify
+          merchantPermissions("delete", undefined, undefined, initPermissions.map(i => i.id).toString()).then(response => {
+            if (!response.error) {
+              if (targetKeys.length) {
+                merchantPermissions("add", id, undefined, targetKeys.map(i => ({merchant_id: id, permission: purview[i].val}))).then(response => {
+                  setLoading(false)
+                  !response.error && saveSuccess()
+                }).catch(() => setLoading(false))
+              } else {
+                setLoading(false)
+                saveSuccess()
+              }
+            } else {
+              setLoading(false)
+            }
+          }).catch(() => setLoading(false))
+        } else {
+          // add
+          if (targetKeys.length) {
+            const { id: merchant_id } = r.data
+            merchantPermissions("add", merchant_id, undefined, targetKeys.map(i => ({merchant_id, permission: purview[i].val}))).then(response => {
+              setLoading(false)
+              !response.error && saveSuccess()
+            }).catch(() => setLoading(false))
+          } else {
+            setLoading(false)
+            saveSuccess()
+          }
+        }
+      } else {
+        setLoading(false)
+      }
     }).catch(() => {
       setLoading(false)
     })
@@ -65,7 +98,7 @@ function AddAdminView () {
 
   function handleChange (nextTargetKeys) {
     setTargetKeys(nextTargetKeys)
-  };
+  }
 
   return (
     <div className={c.container}>

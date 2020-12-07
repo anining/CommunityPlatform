@@ -134,13 +134,6 @@ function RTable () {
   }
 ];
 
-  const rowSelection = {
-    onChange: (selectedRowKeys ) => {
-      setSelectRows(selectedRowKeys)
-    },
-    selectedRowKeys: selectedRows
-  };
-
 	function deleteCategory () {
 		setSelectRows([])
 		// setVisible(true)

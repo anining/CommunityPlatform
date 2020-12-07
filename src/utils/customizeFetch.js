@@ -7,7 +7,7 @@ import PGHelper, { gte, lte } from 'postgrest-api-helper';
 const linkClient = () => {};
 const axiosInstance = axios.create({});
 const helper = new PGHelper(axiosInstance);
-const onlyEq = ["id", "supplier_id", "created_at", "updated_at", "merchant_id", "type", "status", "refundable", "ctg_id"]
+const onlyEq = ["id", "cmnt_ctgs__id__foreign_key", "goods_id", "supplier_id", "refund_status", "created_at", "updated_at", "merchant_id", "type", "status", "refundable", "ctg_id"]
 const ERROR_MSG = {
   '28P01': "账号或者密码错误",
   '23505': "重复的名称",
@@ -28,6 +28,10 @@ function recursion(f, arrays) {
     if (i === "end_with") {
       return recursion(f, arrays.slice(1))
     }
+    if (String(i).indexOf("foreign_key") > -1) {
+      return recursion(f[onlyEq.includes(i) ? "eq" : "like"](`${i.split("__")[0]}.${i.split("__")[1]}:${i}`), arrays.slice(1))
+    }
+
 		return recursion(f[onlyEq.includes(i) ? "eq" : "like"](i), arrays.slice(1))
 	}
 
@@ -39,7 +43,6 @@ const afterRequest = (resolved, rejected, response) => {
     const [e, r] = response
     if(e) {
       const { status, data } = e.response
-      console.log(status, data)
       const { code, message: m } = data
       if (status in ERROR_STATUS) {
         message.error(ERROR_STATUS[status])
@@ -49,7 +52,7 @@ const afterRequest = (resolved, rejected, response) => {
           message.error(ERROR_MSG[code] || ERROR_MSG[m])
         } else {
           console.log(e.response)
-          message.error("服务器维护中,请稍后再试!")
+          message.error("请求失败!")
         }
       }
       rejected({error: code || m, data: null})
@@ -61,19 +64,48 @@ const afterRequest = (resolved, rejected, response) => {
   }
 }
 
-function customizeFetch (method, url, data={}, id, sorter = []) {
+function deleteKeys (arrays) {
+  Object.values(arrays).forEach((v, i) => {
+    if (v === "foreign_get") {
+      delete arrays[Object.keys(arrays)[i]]
+      return deleteKeys(arrays)
+    }
+  })
+}
+
+function selectParameter(data) {
+  const templateTable = {...data}
+  const queries = {...data}
+  Object.keys(queries).forEach(i => {
+    i === "end_with" && (queries[i] = new Date(new Date(queries[i]).getTime() + (3600000 * 24)).toJSON().substr(0, 10))
+  })
+  delete templateTable.page
+  delete templateTable.size
+  const foreign_keys = Object.keys(templateTable).filter(i => String(i).indexOf("foreign_key") > -1)
+  const foreigns = foreign_keys.filter(i => templateTable[i] === "foreign_get").map(i => {
+    if (String(i).indexOf("foreign_keys") > -1) {
+      return `${i.split("__")[0]}(${i.split("__")[1]},${i.split("__")[2]})`
+    }
+    return `${i.split("__")[0]}(${i.split("__")[1]})`
+  })
+  deleteKeys(templateTable)
+	return [foreigns, templateTable, queries]
+}
+
+function customizeFetch (method, url, data={}, id, sor = []) {
+  const sorter = sor ? sor.length ? sor.filter(i => i.field === "created_at").length ? sor : [...sor,...[{field: "created_at", order: "desc"}]] : [{field: "created_at", order: "desc"}] : []
 	const {authorization} = getter(['authorization'])
-	const api = API_URL + url
+	const api = API_URL + "/rest" + url
 
 	switch(method) {
 		case "GET":
 			const {page, size} = data
-			const templateTable = {...data}
-			delete templateTable.page
-			delete templateTable.size
-
 			return new Promise((resolved, rejected) => {
-        recursion(helper.get(api).setQueries(data).pagination(page, size, true).order(...sorter.map(i => `${i.field}.${i.order === "ascend" ? "asc" : "desc"}`)).addHeader('authorization', authorization.get()), Object.keys(templateTable)).then(r => afterRequest(resolved, rejected, r))
+        recursion(helper.get(api).setQueries(selectParameter(data)[2]).select('*',...selectParameter(data)[0]).pagination(page, size, true).order(...sorter.map(i => `${i.field}.${i.order === "ascend" ? "asc" : "desc"}`)).addHeader('authorization', authorization.get()), Object.keys(selectParameter(data)[1])).then(r => afterRequest(resolved, rejected, r))
+			})
+		case "POST_RETURN":
+			return new Promise((resolved, rejected) => {
+				helper.post(api).addHeader('Prefer', "return=representation").addHeader('Accept', "application/vnd.pgrst.object+json").addHeader('authorization', authorization.get()).setBody(data).then(r => afterRequest(resolved, rejected, r))
 			})
 		case "POST":
 			return new Promise((resolved, rejected) => {

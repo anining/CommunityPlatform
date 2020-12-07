@@ -89,23 +89,23 @@ function CommunityGoodView () {
 			return
 		}
 		setVisibleC(false)
-		goodsPrice(sel.id, unit_cost, factors, dockingTarget).then(r=>{
-			if(!r.error){
+    communityGoods("modify", sel.id, undefined, {unit_cost, prices: factors, padj_id: dockingTarget}).then(r => {
+      if (!r.error) {
 				setUnit_cost(undefined)
 				setFactors([])
 				setDockingTarget(undefined)
 				saveSuccess(false)
-				get(current)
-			}
-		})
+				get(1)
+        setSelectRows([])
+      }
+    })
 	}
 
   useEffect(() => {
     if (dockingTarget) {
-      const values = marks.filter(i => i.id === dockingTarget)
+      const values = marks.filter(i => i.id == dockingTarget)
 			if(values && values[0]) {
 				const { type, factors } = values[0]
-				console.log(type, factors)
 				let localValues = [0, 0, 0, 0];
 				for (let j = 0; j < 4; j++) {
 					if (type === "absolute") {
@@ -175,24 +175,24 @@ function CommunityGoodView () {
     return cmntPadjs("get", undefined, body).then(r => {
       if (!r.error) {
         setMarks(r.data)
-				return [...[{name: "未选择"}], ...r.data]
+				return [...r.data]
       }
       return []
     }).catch(()=> [])
   }
 
-  function get (current) {
+  function get (page = current) {
 		setLoading(true)
-		// getNums()
-    let body = { page: current, size: pageSize }
-    if (id) {
-      body = { ...body, ...{ id } }
-    }
+		getNums()
+    let body = { page, size: pageSize, cmnt_ctgs__name__foreign_key: "foreign_get",  cmnt_padjs__name__foreign_key: "foreign_get" }
+    // if (id) {
+    //   body = { ...body, ...{ id } }
+    // }
     if (search_name) {
       body = { ...body, ...{ name: search_name } }
     }
     if (community_goods_category_id) {
-      body = { ...body, ...{ ctg_id: community_goods_category_id } }
+      body = { ...body, ...{ cmnt_ctgs__id__foreign_key: community_goods_category_id } }
     }
     if (status) {
       body = { ...body, ...{ status } }
@@ -200,13 +200,13 @@ function CommunityGoodView () {
     if (refundable === "refundable" || refundable === "no_refundable") {
       body = { ...body, ...{ refundable: refundable === "refundable" } }
     }
+    console.log(body)
     communityGoods("get", undefined, body).then(r => {
       setLoading(false)
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
-				// selectedRows.length && setSelectRows(format(data).filter(i => selectedRows.includes(i.key)).map(i => i.key))
 				setSelectRows([])
         }	
     }).catch(() => {
@@ -228,7 +228,7 @@ function CommunityGoodView () {
   function getHis (record) {
 		setSel(record)
     const { id } = record
-    priceHistories("cmnt", id).then(r=>{
+    priceHistories(id).then(r=>{
       if (!r.error) {
         setHis(r.data)
 				setVisibleLimit(true)
@@ -244,7 +244,7 @@ function CommunityGoodView () {
   }
 
   useEffect(() => {
-    get(current)
+    get()
   }, [pageSize, current])
 
   function submit (key) {
@@ -282,14 +282,14 @@ function CommunityGoodView () {
     {
       title: '商品名称',
       dataIndex: 'name',
-			width: 200,
 			render: (text, record) => <div title={text} className={c.hiddenText}>{record.recommended ? <img src={good45} style={{width:20,marginRight:8}} alt="" />:null}{text}</div>
   },
-    // {
-    //   title: '商品分类',
-			// ellipsis: true,
-    //   dataIndex: 'ctg_name',
-  // },
+    {
+      title: '商品分类',
+			ellipsis: true,
+      dataIndex: 'cmnt_ctgs',
+      render: text => text.name,
+  },
     {
       title: '进价',
 			ellipsis: true,
@@ -318,16 +318,16 @@ function CommunityGoodView () {
         return <Badge status={status} text={t}/>
       }
   },
-    // {
-    //   title: '商品来源',
-			// ellipsis: true,
-    //   dataIndex: 'provider_name'
-  // },
+    {
+      title: '商品来源',
+			ellipsis: true,
+      dataIndex: 'provider_type'
+  },
     {
       title: '调价模版',
 			ellipsis: true,
-      dataIndex: 'padj_name',
-			render: text => text || "-"
+      dataIndex: 'cmnt_padjs',
+			render: text => (text && text.name) || "-"
   },
     {
       title: '自助退款',
@@ -335,14 +335,14 @@ function CommunityGoodView () {
       dataIndex: 'refundable',
       render: (text) => <div style={{color:text?"#595959":"#C8C8C8"}}>{text?"允许退款":"不允许退款"}</div>
   },
-    // {
-    //   title: '更多信息',
-			// ellipsis: true,
-    //   dataIndex: '',
-			// render: (...args) => <div onClick={()=>{
-				// getHis(args[1])
-			// }} className={c.view_text}>查看</div>
-  // },
+    {
+      title: '更多信息',
+			ellipsis: true,
+      dataIndex: '',
+			render: (...args) => <div onClick={()=>{
+				getHis(args[1])
+			}} className={c.view_text}>查看</div>
+  },
     {
 			title: () => <span style={{marginLeft:32}}>操作</span>,
 			width: 282,
@@ -351,17 +351,17 @@ function CommunityGoodView () {
 				<Space size="small" className={c.space}>
           <div className={c.clickText} onClick={()=>push('/main/edit-goods-community', record)}>修改商品</div>
           <div className={c.line} />
-          <div style={{cursor: "wait"}} className={c.clickText} onClick={()=>{
-            // setSel(record)
-            // setVisibleS(true)
+          <div className={c.clickText} onClick={()=>{
+            setSel(record)
+            setVisibleS(true)
           }}>修改状态</div>
           <div className={c.line} />
-          <div style={{cursor: "wait"}} onClick={()=>{
-            // setSel(record)
-						// setUnit_cost(record.unit_cost)
-						// setFactors(record.prices)
-						// setDockingTarget(record.padj_id)
-            // setVisibleC(true)
+          <div onClick={()=>{
+            setSel(record)
+						setUnit_cost(record.unit_cost)
+						setFactors(record.prices)
+						setDockingTarget(record.padj_id)
+            setVisibleC(true)
 					}} className={c.clickText}>修改价格</div>
         </Space>
       )
@@ -419,7 +419,7 @@ function CommunityGoodView () {
       return
     }
     setVisibleS(false)
-    communityGoods("modifys", undefined, "ids=" + sel.id, { status: statusSelected }).then(r => {
+    communityGoods("modify", sel.id, undefined, {status: statusSelected}).then(r => {
       if (!r.error) {
         saveSuccess(false)
         get(current)
@@ -621,45 +621,45 @@ function CommunityGoodView () {
 						}
 				</div>
 			</Modal>
-					<Modal
-						visible={visibleS}
-						footer={null}
-						centered={true}
-						onCancel={onCancel}
-					>
-						<div style={styles.view}>
-							<div style={styles.statusLabel}>
-								<img src={auth12} alt="" style={styles.inputImg} />
-								修改状态
-							</div>
-							<div>
-								<div className={c.statusModelTips}>商品状态：<span style={{color}}>{t}</span></div>
-								{/* <div className={c.statusModelTips}>选中订单：{sel.id}&#8195;&#8195;订单状态：<span style={{color}}>{t}</span></div> */}
-								<div className={c.statusModelTitle}>修改为</div>
-								<div>
-									<Button className={c.statusBtn} onClick={()=>setSTatusSelected("available")} style={{
-										color:statusSelected==="available"?"#fff":"rgba(0, 0, 0, 0.25)",
-										background:statusSelected==="available"?"#2C68FF":"#fff",
-										borderColor:statusSelected==="available"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
-									}}>已上架</Button>
-									<Button className={c.statusBtn} onClick={()=>setSTatusSelected("unavailable")} style={{
-										color:statusSelected==="unavailable"?"#fff":"rgba(0, 0, 0, 0.25)",
-										background:statusSelected==="unavailable"?"#2C68FF":"#fff",
-										borderColor:statusSelected==="unavailable"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
-									}}>已下架</Button>
-									<Button className={c.statusBtn} onClick={()=>setSTatusSelected("paused")} style={{
-										color:statusSelected==="paused"?"#fff":"rgba(0, 0, 0, 0.25)",
-										background:statusSelected==="paused"?"#2C68FF":"#fff",
-										borderColor:statusSelected==="paused"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
-									}}>维护中</Button>
-								</div>
-							</div>
-							<div style={{marginTop:8}}>
-								<Button onClick={()=>setVisibleS(false)} style={styles.cancelBtn}>取消</Button>
-								<Button type="primary" style={styles.okBtn} onClick={()=>modalOk()}>确定</Button>
-							</div>
-						</div>
-					</Modal>
+      <Modal
+        visible={visibleS}
+        footer={null}
+        centered={true}
+        onCancel={onCancel}
+      >
+        <div style={styles.view}>
+          <div style={styles.statusLabel}>
+            <img src={auth12} alt="" style={styles.inputImg} />
+            修改状态
+          </div>
+          <div>
+            <div className={c.statusModelTips}>商品状态：<span style={{color}}>{t}</span></div>
+            {/* <div className={c.statusModelTips}>选中订单：{sel.id}&#8195;&#8195;订单状态：<span style={{color}}>{t}</span></div> */}
+            <div className={c.statusModelTitle}>修改为</div>
+            <div>
+              <Button className={c.statusBtn} onClick={()=>setSTatusSelected("available")} style={{
+                color:statusSelected==="available"?"#fff":"rgba(0, 0, 0, 0.25)",
+                background:statusSelected==="available"?"#2C68FF":"#fff",
+                borderColor:statusSelected==="available"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
+              }}>已上架</Button>
+              <Button className={c.statusBtn} onClick={()=>setSTatusSelected("unavailable")} style={{
+                color:statusSelected==="unavailable"?"#fff":"rgba(0, 0, 0, 0.25)",
+                background:statusSelected==="unavailable"?"#2C68FF":"#fff",
+                borderColor:statusSelected==="unavailable"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
+              }}>已下架</Button>
+              <Button className={c.statusBtn} onClick={()=>setSTatusSelected("paused")} style={{
+                color:statusSelected==="paused"?"#fff":"rgba(0, 0, 0, 0.25)",
+                background:statusSelected==="paused"?"#2C68FF":"#fff",
+                borderColor:statusSelected==="paused"?"#2C68FF":"rgba(0, 0, 0, 0.15)",
+              }}>维护中</Button>
+            </div>
+          </div>
+          <div style={{marginTop:8}}>
+            <Button onClick={()=>setVisibleS(false)} style={styles.cancelBtn}>取消</Button>
+            <Button type="primary" style={styles.okBtn} onClick={()=>modalOk()}>确定</Button>
+          </div>
+        </div>
+      </Modal>
     </div >
   )
 }

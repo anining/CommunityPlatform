@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Button, Space, Popconfirm } from 'antd'
+import good53 from '../../icons/good/good53.png'
 import c from '../../styles/view.module.css'
 import { managers } from '../../utils/api'
 import good7 from '../../icons/good/good7.png'
 import home9 from '../../icons/home/home9.png'
 import good40 from '../../icons/good/good40.png'
-import { push, dateFormat, getKey } from "../../utils/util"
+import { push, saveSuccess, dateFormat, getKey } from "../../utils/util"
 import { PERMISSIONS, PERMISSIONS_ARRAY } from "../../utils/config"
 import Table from '../../components/Table'
+import ModalComponent from '../../components/ModalComponent'
 
 function AdminView () {
 
@@ -21,33 +23,57 @@ function AdminView () {
 }
 
 function RTable () {
+  const id = useRef((null))
   const [data, setData] = useState([])
 	const [pageSize, setPageSize] = useState(10)
 	const [loading, setLoading] = useState(true)
 	const [current, setCurrent] = useState(1)
   const [purview, setPurview] = useState([])
   const [visible, setVisible] = useState([])
+  const [total, setTotal] = useState(0)
+	const [visibleDel, setVisibleDel] = useState(false)
 
-	const get = () => {
+  const del = () => {
+    setVisibleDel(false)
+		managers("delete", undefined, undefined, id.current).then(r => {
+			if (!r.error) {
+				saveSuccess(false)
+				get()
+			}
+		})
+  }
+
+	const get = (page = current) => {
 		setLoading(true)
-    managers("get").then(r => {
-      const { error, data } = r;
-      !error && setData(format(data));
+    managers("get", undefined, {page, size: pageSize, merchant_permissions__id__permission__foreign_keys: "foreign_get"}).then(r => {
 			setLoading(false)
+      if (!r.error) {
+      const { total, data } = r;
+        setData(format(data))
+        setTotal(total)
+      }
 		}).catch(() => setLoading(false))
 	}
 
   useEffect(() => {
 		get()
-  }, [])
+  }, [pageSize, current])
+
+  function resetPassWord (id) {
+    managers("modify", id, undefined, {password: "a123456"}).then(r => {
+      if (!r.error) {
+        saveSuccess(false)
+      } 
+    }) 
+  }
 
   function detail (permissions,role, index) {
-    setPurview(role === "superuser" ? PERMISSIONS_ARRAY : JSON.parse(permissions))
+    setPurview(role === "superuser" ? PERMISSIONS_ARRAY : permissions)
     setVisible(data.map((item, i) => index === i))
   }
 
   function change (record) {
-    push('/main/edit-admin-system', record)
+    push('/main/edit-admin-system', {...record, ...{permissions: record.merchant_permissions}})
   }
 
   function close () {
@@ -76,13 +102,13 @@ function RTable () {
     {
       title: '管理员名称',
 			ellipsis: true,
-      dataIndex: 'nickname',
+      dataIndex: 'name',
   },
     {
       title: '管理员权限',
 			ellipsis: true,
       render: (text, record, index) => {
-        const { permissions, role } = record
+        const { merchant_permissions: permissions, role } = record
         const views = []
         purview.forEach((item, index) => {
           const title = getKey(item.permission, PERMISSIONS)
@@ -128,13 +154,16 @@ function RTable () {
 			width: 226,
 			fixed: 'right',
       dataIndex: 'id',
-      render: (text, record ) => (
+      render: (...args) => (
 				<Space size="small" className={c.space}>
-          <div className={c.clickText} onClick={()=>change(record)}>修改</div>
+          <div className={c.clickText} onClick={()=>change(args[1])}>修改</div>
           <div className={c.line} />
-          <div className={c.clickText} style={{cursor:'wait'}} onClick={()=>{}}>重置密码</div>
+          <div className={c.clickText} onClick={() => resetPassWord(args[0])}>重置密码</div>
           <div className={c.line} />
-          <div style={{cursor:'wait'}} className={c.clickText} onClick={()=>{}}>删除</div>
+          <div className={c.clickText} onClick={()=>{
+            id.current = args[1].id
+            setVisibleDel(true)
+          }}>删除</div>
         </Space>
       )
       }
@@ -164,9 +193,16 @@ function RTable () {
 				columns={columns}
 				dataSource={data}
 				pageSize={pageSize}
-				total={data.length}
+				total={total}
 				current={current}
 			/>
+      <ModalComponent
+        src={good53}
+        title="确定继续删除 ?"
+        visible={visibleDel}
+				onCancel={() => setVisibleDel(false)}
+        onOk={del}
+      />
     </div>
   )
 }

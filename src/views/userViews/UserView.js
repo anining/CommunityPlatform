@@ -9,7 +9,7 @@ import good9 from '../../icons/good/good9.png'
 import { users, updateUsers, usersBalances } from "../../utils/api";
 import TableHeaderComponent from "../../components/TableHeaderComponent";
 import DropdownComponent from "../../components/DropdownComponent";
-import { transformTime, push, getKey, saveSuccess } from "../../utils/util"
+import { transformTime, push, getKey, saveSuccess, regexNumber } from "../../utils/util"
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 import { USER_RANK } from "../../utils/config"
@@ -109,11 +109,12 @@ function UserView () {
       dataIndex: 'lv',
       render: text => USER_RANK[text].label
   },
-    // {
-    //   title: '消费总额',
-			// ellipsis: true,
-    //   dataIndex: 'consumed',
-  // },
+    {
+      title: '消费总额',
+			ellipsis: true,
+      dataIndex: 'consumed',
+      render: () => "-"
+  },
     {
       title: '用户余额',
 			ellipsis: true,
@@ -127,18 +128,13 @@ function UserView () {
     {
       title: '社区商品密价',
 			ellipsis: true,
-      render: (text, record ) => {
+      render: (...args) => {
         return (
-        <Space size="small">
-          <div style={{cursor:'wait'}} className={c.view_text}>查看</div>
-          <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
-          <div style={{cursor:'wait'}} className={c.view_text} onClick={()=>{}}>修改</div>
-        {/* <Space size="small"> */}
-        {/*   <div onClick={()=>push('/main/edit-price-user',record)} className={c.view_text}>查看</div> */}
-        {/*   <div style={{height:14,width:1,background:'#D8D8D8'}}></div> */}
-        {/*   <div className={c.view_text} onClick={()=>push('/main/edit-price-user',record)} >修改</div> */}
-        {/* </Space> */}
-        </Space>
+          <Space size="small">
+            <div onClick={()=>push('/main/edit-price-user', args[1])} className={c.view_text}>查看</div>
+            <div style={{height:14,width:1,background:'#D8D8D8'}}></div>
+            <div className={c.view_text} onClick={()=>push('/main/edit-price-user', args[1])} >修改</div>
+          </Space>
         )
       }
   },
@@ -201,9 +197,9 @@ function UserView () {
           {/*         ) */}
           {/*       } */}
           {/*     } > */}
-					<div style={{cursor: 'wait'}} onClick={()=>{
-            // setSel(record)
-            // setVisibleBalance(true)
+					<div onClick={()=>{
+            setSel(record)
+            setVisibleBalance(true)
 					}} className={c.clickText}>修改余额</div>
           {/* </Popconfirm> */}
           <div className={c.line} />
@@ -252,15 +248,15 @@ function UserView () {
   }
 
 	const addMoney = () => {
-		// setAddBalance(undefined)
-		// setAdd(false)
-		// setVisibleBalance(false)
-		// usersBalances(sel.id, add ? +addBalabce: -addBalabce).then(r=>{
-		// 	if(!r.error) {
-		// 		saveSuccess(false)
-		// 		get(current)
-		// 	}
-		// })
+		setAddBalance(undefined)
+		setAdd(false)
+		setVisibleBalance(false)
+    usersBalances(sel.id, add ? "add_fund" : "sub_fund", add ? +addBalabce : -addBalabce).then(r=>{
+			if(!r.error) {
+				saveSuccess(false)
+				get(current)
+			}
+		})
 	}
 
   function onCancel () {
@@ -273,21 +269,14 @@ function UserView () {
   selected.forEach(i => text.push(i.account))
 
   function onOk () {
-    // users("modify", selectedRows.map(i => data[i].id).toString(), undefined, {status: key}).then(r => {
-    //   if (!r.error) {
-    //     saveSuccess(false)
-    //     setSelectRows([])
-    //     get(1)
-    //   }
-    // })
-    // setVisible(false)
-    // updateUsers({lv:seled},"ids=" + sel.id).then(r => {
-    //   if (!r.error) {
-    //     saveSuccess(false)
-    //     setSelectRows([])
-    //     get(current)
-    //   }
-    // })
+    setVisible(false)
+    users("modify", sel.id, undefined, {lv: seled}).then(r => {
+      if (!r.error) {
+        saveSuccess(false)
+        setSelectRows([])
+        get(1)
+      }
+    })
   }
 
   function updateStatus () {
@@ -378,7 +367,7 @@ function UserView () {
               <div className={oc.user_tips}>修改为</div>
               <div className={oc.selects}>
                 {
-                  [{id:0,label:"普通用户"},{id:1,label:"高级用户"},{id:2,label:"钻石用户"},{id:3,label:"至尊用户"}].map(i=><Button key={i.id} style={{color:sel.id === i.id?'#fff':'rgba(0, 0, 0, 0.25)',background:sel.id === i.id ? '#2C68FF':"#fff"}} onClick={() => setSeled(i.id)} className={oc.user_sel}>{i.label}</Button>)
+                  [{id:0,label:"普通用户"},{id:1,label:"高级用户"},{id:2,label:"钻石用户"},{id:3,label:"至尊用户"}].map(i=><Button key={i.id} style={{color:sel === i.id?'#fff':'rgba(0, 0, 0, 0.25)',background:sel === i.id ? '#2C68FF':"#fff"}} onClick={() => setSeled(i.id)} className={oc.user_sel}>{i.label}</Button>)
                 }
               </div>
             </div>
@@ -406,32 +395,30 @@ function UserView () {
         div={
           <div>
             <div className={oc.remark}>
-              <div>余额数值：</div>
+              <div>余额操作：</div>
 							<Radio.Group value={add} onChange={e=>setAdd(e.target.value)} style={{marginLeft:12}}>
                 <Radio value={true}>加款</Radio>
-                <Radio value={false}>
-                  减款
-                </Radio>
+                <Radio value={false}>减款</Radio>
               </Radio.Group>
             </div>
             <div className={oc.remark} style={{paddingTop:0}}>
               <div>余额数值：</div>
-							<Input onChange={e=>setAddBalance(e.target.value)} value={addBalabce} placeholder="请输入变动数值"/>
+							<Input maxLength={5} onChange={e=>setAddBalance(regexNumber(e.target.value, true))} value={addBalabce} placeholder="请输入变动数值"/>
             </div>
 						<div className={oc.remark_tips} style={{marginLeft:85}}>当前选中用户： <span> {sel.id}({sel.account}) </span></div>
-              <div className = { oc.change_btn_view } style={{marginTop: 70}}>
+              <div className={oc.change_btn_view} style={{marginTop: 70}}>
 								<Button className={oc.change_btn_cancel} onClick={()=>{
 									setAddBalance(undefined)
 									setAdd(false)
 									setVisibleBalance(false)
 								}}>取消</Button>
-                <Button type = "primary" onClick={addMoney} className={oc.change_btn_ok}>确定</Button>
+                <Button type="primary" onClick={addMoney} className={oc.change_btn_ok}>确定</Button>
               </div>
           </div>
         }
-        title = "用户余额"
-        visible = { visible_balance }
-        onCancel = { onCancel }
+        title="用户余额"
+        visible={visible_balance}
+        onCancel={onCancel}
       />
     </div>
   )

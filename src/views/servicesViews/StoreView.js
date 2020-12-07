@@ -62,7 +62,7 @@ function RTable() {
   const [total, setTotal] = useState(0)
 
   useEffect(() => {
-    get(current)
+    get()
   }, [pageSize, current])
 
   function get(page = current) {
@@ -125,11 +125,14 @@ function RTable() {
 			ellipsis: true,
       dataIndex: 'account',
     },
-    // {
-    //   title: '供货商商品数',
-			// ellipsis: true,
-    //   dataIndex: 'providing_amount',
-    // },
+    {
+      title: '供货商商品数',
+			ellipsis: true,
+      dataIndex: 'providing_amount',
+      render: (text, record, index) => {
+        return '-'
+      }
+    },
     {
       title: '总消耗',
 			ellipsis: true,
@@ -181,17 +184,17 @@ function RTable() {
           <div className={c.line} />
 					<div className={c.clickText} onClick={()=>push("/main/import-good", {...arg[1], ...{ provider_type: "supplier" }})}>导入商品</div>
           <div className={c.line} />
-          <div style={{cursor: 'wait'}} className={c.clickText} onClick={() => {
-            // if(!getPath(['0', 'value_stlreqed'], arg)) {
-            //   message.info('暂无可结算金额');
-            //   return false;
-            // }
-            // paySettle(arg[0]['id']).then(r=>{
-            //   if (!r.error) {
-            //     saveSuccess(false)
-            //     get(current)
-            //   }
-            // })
+          <div className={c.clickText} onClick={() => {
+            if(!getPath(['0', 'value_stlreqed'], arg)) {
+              message.info('暂无可结算金额');
+              return
+            }
+            paySettle(arg[0]['id']).then(r=>{
+              if (!r.error) {
+                saveSuccess(false)
+                get(current)
+              }
+            })
           }}>
             立即结算
           </div>
@@ -203,7 +206,15 @@ function RTable() {
   function submit(key) {
     switch (key) {
       case "delete":
-        message.success('批量删除操作');
+        setSelectRows([])
+        // setVisible(true)
+        providers("delete", undefined, undefined, selectedRows.map(i => data[i].id).toString()).then(r => {
+          if (!r.error) {
+            saveSuccess(false)
+            setSelectRows([])
+            get()
+          }
+        })
         break
       default:
     }
@@ -240,7 +251,7 @@ function RTable() {
           </div>
         </div>
       </div>
-			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[]}/>
+			<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{name:"批量删除",key:"delete"}]}/>
 			<Table
 				setPageSize={setPageSize}
 				setCurrent={setCurrent}

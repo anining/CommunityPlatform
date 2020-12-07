@@ -105,7 +105,7 @@ function EditMarkupTemView () {
           <div>
             <div className={c.tem_line}>
               <div>&#8194; 假设商品进价为</div>
-              <Input placeholder="0" value={price} disabled={id} onChange={e=>setPrice(e.target.value)}/>
+              <Input placeholder="0" value={price} disabled={id} onChange={e=>setPrice(regexNumber(e.target.value, true))}/>
             </div>
             <div className={c.tem_line}>
               <div>&#12288;&#12288;&#12288;&#8194; 单价调价</div>

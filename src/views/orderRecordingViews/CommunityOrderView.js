@@ -18,7 +18,6 @@ import { refundAccept, orderSync, orderComments, communityGoodsOrders, community
 import ModalPopComponent from "../../components/ModalPopComponent"
 import ModalComponent from "../../components/ModalComponent"
 import { REFUND_STATUS, SCROLL, COMMUNITY_SYNC_STATUS, COMMUNITY_ORDER_STATUS,  COMMUNITY_AFTER_STATUS } from '../../utils/config'
-import ActionComponent from '../../components/ActionComponent'
 import Table from '../../components/Table'
 import SearchInput from "../../components/SearchInput"
 
@@ -26,6 +25,7 @@ function CommunityOrderView () {
   const [visibleMsg, setVisibleMsg] = useState(false)
   const [visible_push, setVisiblePush] = useState(false)
   const [visible_ref, setVisibleRef] = useState(false)
+  const [visible_other, setVisibleOther] = useState(false)
   const [visible, setVisible] = useState(false)
   const [remark, setRemark] = useState()
   const [refundNum, setRefundNum] = useState()
@@ -34,25 +34,25 @@ function CommunityOrderView () {
 	const [labels, setLabels] = useState([
     {
       label: '订单总数',
-      number: '0',
+      number: '-',
       icon: good19,
       id: 111,
     },
     {
       label: '待处理订单',
-      number: '0',
+      number: '-',
       icon: good21,
       id: 222,
     },
     {
       label: '退款中',
-      number: '0',
+      number: '-',
       icon: good17,
       id: 333,
     },
     {
       label: '通信失败',
-      number: '0',
+      number: '-',
       icon: good59,
       id: 444,
     },
@@ -121,16 +121,16 @@ function CommunityOrderView () {
     setWidth
   )
 
-  function getGoodsSummaries(page,size) {
-    return communityGoodsCategories("get",undefined,{page,size}).then(r => {
+  function getGoodsSummaries(page, size, name) {
+    const body = {page, size, name}
+    !name && delete body.name
+    return communityGoodsCategories("get", undefined, body).then(r => {
       if (!r.error) {
         return r.data
       }
       return []
     }).catch(()=>[])
   }
-
-  console.log(sel)
 
   function refund () {
     setVisibleRef(false)
@@ -144,8 +144,8 @@ function CommunityOrderView () {
   }
 
   useEffect(() => {
-    get(current)
-  }, [])
+    get()
+  }, [pageSize, current])
 
   function addRemark () {
 		orderComments("ids="+sel.id, remark).then(r=> {
@@ -163,16 +163,41 @@ function CommunityOrderView () {
     setMoment(data)
   }
 
-  function get (current) {
+  function get (page = current) {
 		setLoading(true)
 		getNums()
-		communityGoodsOrders(current, pageSize, id, refundStatus, search_user_account, search_goods_name, community_goods_category_id, status, date[0], date[1]).then(r => {
+
+    let body = { page, size: pageSize }
+    if (id) {
+      body = { ...body, ...{ id } }
+    }
+    // if (search_goods_name) {
+    //   body = { ...body, ...{ verbose_cmnt_goods__name__foreign_key: search_goods_name } }
+    // }
+    // if (search_user_account) {
+    //   body = { ...body, ...{ user_account: search_user_account } }
+    // }
+    // if (community_goods_category_id) {
+    //   body = { ...body, ...{ cmnt_ctgs__id__foreign_key: community_goods_category_id } }
+    // }
+    if (refundStatus) {
+      body = { ...body, ...{ refund_status: refundStatus } }
+    }
+    if (status) {
+      body = { ...body, ...{ status } }
+    }
+    if (date[0]) {
+      body = { ...body, ...{ start_from: date[0] } }
+    }
+    if (date[1]) {
+      body = { ...body, ...{ end_with: date[1] } }
+    }
+		communityGoodsOrders("get", undefined, body).then(r => {
       if (!r.error) {
         const { data, total } = r
         setTotal(total)
         setData(format(data))
 				setSelectRows([])
-				// selectedRows.length && setSelectRows(format(data).map(i => i.key))
       }
 			setLoading(false)
 		}).catch(() => setLoading(false))
@@ -212,18 +237,6 @@ function CommunityOrderView () {
     // })
     // // localVisible[index] = true
     // setVisible(localVisible)
-  }
-
-  const rowSelection = {
-    onChange: (selectedRowKeys ) => {
-      setSelectRows(selectedRowKeys)
-    },
-    selectedRowKeys: selectedRows
-  };
-
-  function onChange (page ) {
-    setCurrent(page)
-    get(page)
   }
 
 	const ordersPush = (sels = selected) => {
@@ -280,25 +293,25 @@ function CommunityOrderView () {
 			ellipsis: true,
       dataIndex: 'user_account',
   },
-    // {
-    //   title: '下单信息',
-			// ellipsis: true,
-    //   render: (text, record, index) => {
-    //     return <div onClick={()=>{
-    //       setSel(record)
-    //       setVisibleMsg(true)
-    //     }} className={c.view_text}>查看</div>
-  // }
-// }, {
-  // title: '拓展信息',
-			// ellipsis: true,
-  // render: (text, record, index) => {
-    // return <div onClick={()=>{
-    //   setSel(record)
-    //   setVisibleOther(true)
-    // }} className={c.view_text}>查看</div>
-  // }
-// }, 
+    {
+      title: '下单信息',
+			ellipsis: true,
+      render: (text, record, index) => {
+        return <div onClick={()=>{
+          setSel(record)
+          setVisibleMsg(true)
+        }} className={c.view_text}>查看</div>
+  }
+}, {
+  title: '拓展信息',
+			ellipsis: true,
+  render: (text, record, index) => {
+    return <div onClick={()=>{
+      setSel(record)
+      setVisibleOther(true)
+    }} className={c.view_text}>查看</div>
+  }
+}, 
 		{
   title: '下单数量',
 			ellipsis: true,
@@ -464,10 +477,19 @@ function CommunityOrderView () {
           <div className={c.searchView}>
             <div className={c.search}>
               <div className={c.searchL}>
-                <Input value={id} onChange={e=>setId(e.target.value)} onPressEnter={()=>get(current)} placeholder="请输入订单编号" size="small" className={c.searchInput}/>
-                <Input onPressEnter={()=>get(current)} placeholder="请输入商品名称" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/>
+                <Input value={id} onChange={e=>setId(e.target.value)} onPressEnter={()=> {
+                  setCurrent(1)
+                  get(1)
+                }} placeholder="请输入订单编号" size="small" className={c.searchInput}/>
+                <Input onPressEnter={()=> {
+                  setCurrent(1)
+                  get(1)
+                }} placeholder="请输入商品名称" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/>
                 {/* <Input onPressEnter={()=>get(current)} placeholder="请输入下单编号" value={search_goods_name} onChange={e=>setSearch_goods_name(e.target.value)} size="small" className={c.searchInput}/> */}
-                <Input onPressEnter={()=>get(current)} value={search_user_account} onChange={e=>setSearch_user_account(e.target.value)} placeholder="请输入下单用户" size="small" className={c.searchInput}/>
+                <Input onPressEnter={()=> {
+                  setCurrent(1)
+                  get(1)
+                }} value={search_user_account} onChange={e=>setSearch_user_account(e.target.value)} placeholder="请输入下单用户" size="small" className={c.searchInput}/>
                 <SearchInput view placeholder="请选择商品分类" value={community_goods_category_id} setValue={setCommunity_goods_category_id} fetchName={getGoodsSummaries}/>
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择商品分类" style={{width:186}}/> */}
                 {/* <DropdownComponent action={status} setAction={setStatus} keys={[{"name":"待处理",key:"pending"},{"name":"进行中",key:"processing"},{"name":"已完成",key:"completed"},{"name":"已关闭",key:"closed"}]} placeholder="请选择订单状态" style={{width:186}}/> */}
@@ -482,17 +504,19 @@ function CommunityOrderView () {
               </div>
               <div className={c.searchR}>
                 <Button size="small" onClick={reset} className={c.resetBtn}>重置</Button>
-                <Button icon={
-                    <img src={good9} alt="" style={{width:14,marginRight:6}} />
-                  }
-                  type = "primary"
-                  size = "small"
-                  onClick={()=>get(current)}
+                <Button
+                  icon={<img src={good9} alt="" style={{width:14,marginRight:6}} />}
+                  type="primary"
+                  size="small"
+                  onClick={()=> {
+                    setCurrent(1)
+                    get(1)
+                  }}
                   className={c.searchBtn}>搜索订单</Button>
               </div>
             </div>
           </div>
-					<ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{"name":"重新推送",key:"push"},{"name":"重新通信",key:"sync"}]}/>
+					{/* <ActionComponent selectedRows={selectedRows} setSelectRows={setSelectRows} submit={submit} keys={[{"name":"重新推送",key:"push"},{"name":"重新通信",key:"sync"}]}/> */}
 					<Table
 						setPageSize={setPageSize}
 						setCurrent={setCurrent}
@@ -507,7 +531,6 @@ function CommunityOrderView () {
 					/>
         </div>
     </div>
-
       <ModalPopComponent
         div={
           <div className={oc.limit_view}>

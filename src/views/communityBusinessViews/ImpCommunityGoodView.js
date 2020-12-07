@@ -10,7 +10,7 @@ import good47 from '../../icons/good/good47.png'
 import ImgCrop from 'antd-img-crop';
 import good48 from '../../icons/good/good48.png'
 import edit1 from '../../icons/edit/edit1.png'
-import { beforeUpload, saveSuccess, push } from "../../utils/util";
+import { beforeUpload, saveSuccess, push, regexNumber } from "../../utils/util";
 import { communityGoods,  cmntPadjs, communityGoodsCategories } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 import SearchInput from "../../components/SearchInput"
@@ -59,7 +59,7 @@ function ImpCommunityGoodView () {
   // const [selectedProviders, setSelectedProviders] = useState()
 
   const setPriceAt = i => R.pipe(
-    e => L.set([i], +e.target.value, factors),
+    e => L.set([i], regexNumber(e.target.value, true), factors),
     setFactors,
   )
 
@@ -121,9 +121,8 @@ function ImpCommunityGoodView () {
 
   useEffect(() => {
     if (dockingTarget) {
-      const values = marks.filter(i => i.id === dockingTarget)
+      const values = marks.filter(i => i.id == dockingTarget)
       const { type, factors } = values[0]
-			console.log(type, factors)
       let localValues = [0, 0, 0, 0];
       for (let j = 0; j < 4; j++) {
         if (type === "absolute") {
@@ -450,13 +449,13 @@ function ImpCommunityGoodView () {
                   <div className={c.itemText}>状态</div>
                 </div>
                 <Radio.Group onChange={e=>setStatus(e.target.value)} value={status} className={c.itemGrop}>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已上架 ： 用户可以看见并且购买该商品。">
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} title="已上架 ： 用户可以看见并且购买该商品。">
                     <Radio value="available" className={c.itemRadio}>已上架</Radio>
                   </Tooltip>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="已下架 ： 用户不可以看见并且不能购买该商品。">
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} title="已下架 ： 用户不可以看见并且不能购买该商品。">
                     <Radio value="paused" className={c.itemRadio}>已下架</Radio>
                   </Tooltip>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="维护中 ： 用户可以看见但是不能购买该商品。">
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} title="维护中 ： 用户可以看见但是不能购买该商品。">
                     <Radio value="unavailable" className={c.itemRadio}>维护中</Radio>
                   </Tooltip>
                 </Radio.Group>
@@ -478,10 +477,10 @@ function ImpCommunityGoodView () {
                   <div className={c.itemText}>自助退款</div>
                 </div>
                 <Radio.Group value={refundable} onChange={e=>setRefundable(e.target.value)} className={c.itemGrop} style={{justifyContent:'flex-start'}}>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="允许自助退款：用户可以对这个商品对应的订单发起一次退款申请。">
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} title="允许自助退款：用户可以对这个商品对应的订单发起一次退款申请。">
                     <Radio value={true} className={c.itemRadio} style={{width:'33.333%'}}>允许自助退款</Radio>
                   </Tooltip>
-                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} color="#F7FAFF" title="不允许自助退款：用户不可以对这个商品对应的订单发起退款申请。">
+                  <Tooltip placement="bottomRight" arrowPointAtCenter={true} title="不允许自助退款：用户不可以对这个商品对应的订单发起退款申请。">
                     <Radio value={false} className={c.itemRadio} style={{width:'33.333%'}}>不允许自助退款</Radio>
                   </Tooltip>
                 </Radio.Group>

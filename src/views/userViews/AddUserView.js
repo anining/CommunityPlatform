@@ -44,6 +44,16 @@ function AddUserView () {
     })
   }
 
+  const resetPassword = () => {
+    users("modify", id, undefined, {password: "a123456"}).then(r => {
+      if (!r.error) {
+        saveSuccess(false)
+      }
+    }).catch(() => {
+      setLoading(false)
+    })
+  }
+
   function onCancel () {
     setVisible(false)
   }
@@ -90,15 +100,15 @@ function AddUserView () {
           </div>
           <Input maxLength={20} onChange={e=>setAccount(e.target.value)} value={account} placeholder="请输入用户账号" className={c.itemInput}></Input>
         </div>
-        <div className={c.item}>
+        <div className={c.item} style={{alignItems: id ? "flex-start" : "center"}}>
           <div className={c.itemName}>
             <span style={{color:'#fff'}}>*</span>
             <div className={c.itemText}>登录密码</div>
           </div>
           <div style={{width:'29.25%'}}>
-            {/* { */}
-            {/*   U.when(id,<Button type="primary" style={{width:120,height:40,marginBottom:6}}>重置密码</Button>) */}
-            {/* } */}
+            {
+              U.when(id, <Button onClick={resetPassword} type="primary" style={{width:120,height:40,marginBottom:6}}>重置密码</Button>)
+            }
             <div style={{color:'#FF8D30'}}>用户登录默认密码 ： a123456；忘记密码可通过修改用户管理来重置密码。为保证账户安全，请提醒用户及时修改密码。。</div>
           </div>
         </div>

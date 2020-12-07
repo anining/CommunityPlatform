@@ -5,8 +5,9 @@ import { Input, message, Button } from 'antd';
 import auth2 from '../../icons/auth/auth2.png'
 import auth3 from '../../icons/auth/auth3.png'
 import auth4 from '../../icons/auth/auth4.png'
-import { login, currentManager } from '../../utils/api'
+import { login, currentManager, supManagers, merchantPermissions } from '../../utils/api'
 import { setter } from '../../utils/store'
+import { storage } from '../../utils/storage'
 import { push } from "../../utils/util";
 import { PERMISSION } from "../../utils/config"
 
@@ -43,34 +44,23 @@ function LoginView () {
       setLoading(false)
       const { error, data } = r;
       if (!error) {
-        // const { access_token, disclaimer_agreed, role } = data;
-        // setter([['authorization', `Bearer ${access_token}`], ['disclaimer_agreed', disclaimer_agreed], ['role', role]], true);
-        // const permissions = storage.getItem("permissions");
-        // if (permissions) {
-        //   setter([['permissions', permissions]]);
-        //   push('/main')
-        //   get()
-        // } else {
-        //   get(true)
-        // }
         const {access_token} = data;
-				const {exp, merchant_id, role} = jwt_decode(access_token);
-        setter([['authorization', `Bearer ${access_token}`], ['role', role], ['merchant_id', merchant_id]], true);
-        setter([['permissions', PERMISSION]], true);
-        push('/main')
+				const {merchant_id} = jwt_decode(access_token);
+        setter([['authorization', `Bearer ${access_token}`], ['merchant_id', merchant_id]], true);
+        get(merchant_id)
       }
-    }).catch(e => {
+    }).catch(() => {
       setLoading(false)
     })
   }
 
-  function get (jump) {
-    currentManager().then(r => {
+  function get (id) {
+    currentManager({id, merchant_permissions__merchant_id__foreign_key: "foreign_get"}).then(r => {
       const { data, error } = r
-      if (!error) {
-        const { permissions, nickname, role,  created_at } = data
-        setter([["nickname", nickname], ['permissions', role === "superuser" ? PERMISSION : permissions]], true);
-        jump && push('/main')
+      if (!error && data) {
+        const { role, merchant_permissions } = data[0]
+        setter([["role", role], ['permissions', role === "superuser" ? PERMISSION : merchant_permissions]], true);
+        push('/main')
       }
     })
   }

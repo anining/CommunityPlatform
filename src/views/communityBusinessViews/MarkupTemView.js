@@ -9,6 +9,7 @@ import { push, dateFormat, saveSuccess } from "../../utils/util";
 import { styles } from "../../styles/modal"
 import ActionComponent from '../../components/ActionComponent'
 import Table from '../../components/Table'
+import { TEM_TYPE } from "../../utils/config"
 
 function MarkupTemView () {
   // TODO: 两个弹窗
@@ -114,17 +115,17 @@ function RTable () {
 			ellipsis: true,
       dataIndex: 'name',
   },
-    // {
-    //   title: '包含商品',
-			// ellipsis: true,
-    //   dataIndex: 'used_by',
-  // },
-    // {
-    //   title: '模版类型',
-			// ellipsis: true,
-    //   dataIndex: 'type',
-    //   render: (text) => TEM_TYPE[text].label
-  // },
+    {
+      title: '包含商品',
+			ellipsis: true,
+      dataIndex: 'used_by',
+  },
+    {
+      title: '模版类型',
+			ellipsis: true,
+      dataIndex: 'type',
+      render: (text) => TEM_TYPE[text].label
+  },
     {
       title: '创建时间',
 			ellipsis: true,
